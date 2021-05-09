@@ -26,7 +26,7 @@ export default {
 }
 </script>
 <style lang="scss">
-  @import '@/styles/var.scss';
+  @import '@/styles/variables.scss';
    #home{
 
   }

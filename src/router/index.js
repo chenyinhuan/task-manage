@@ -169,7 +169,7 @@ export const routes = [
   {
     path: '/user-manage',
     component: Layout,
-    redirect: '/user-manage',
+    redirect: '/user-manage/add-account',
     name: 'UserManage',
     meta: {
       title: '用户管理',
@@ -187,7 +187,7 @@ export const routes = [
       },
       {
         path: 'add-account',
-        component: () => import( /* webpackChunkName: "UserManage" */ '@/views/task-repository/task-list'),
+        component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/add-account'),
         hidden: true,
         meta: {
           title: '新增账户',
@@ -233,8 +233,9 @@ export const routes = [
     ]
   },
   {
-    path: '/user-centers',
-    component: () => import( /* webpackChunkName: "login" */ '@/views/login/index'),
+    path: '/user-center',
+    name: 'UserManage',
+    component: () => import( /* webpackChunkName: "user-center" */ '@/views/user-center/index'),
     hidden: false,
     meta: {
       title: '个人中心',

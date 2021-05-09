@@ -43,7 +43,7 @@ export default {
 }
 </script>
 <style lang="scss">
-  @import '@/styles/var.scss';
+  @import '@/styles/variables.scss';
    #login{
     background-color: #EEF1F4;
 	width: 100%;

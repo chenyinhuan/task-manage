@@ -99,7 +99,7 @@ export default {
 }
 </script>
 <style lang="scss">
-  @import '@/styles/var.scss';
+  @import '@/styles/variables.scss';
    #original{
     .el-table {
       .el-table__header-wrapper tr th:nth-last-child(2) {

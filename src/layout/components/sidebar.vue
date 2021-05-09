@@ -63,11 +63,16 @@
             <span slot="title">用户管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="user-1"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-1' && !isCollapse">账户配置</el-menu-item>
-            <el-menu-item index="user-2"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-2' && !isCollapse">角色配置</el-menu-item>
-            <el-menu-item index="user-3"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-3' && !isCollapse">组织配置</el-menu-item>
+            <el-menu-item index="user-1" @click="go('/user-manage/add-account')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-1' && !isCollapse">账户配置</el-menu-item>
+            <el-menu-item index="user-2" @click="go('/user-manage/role-setting')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-2' && !isCollapse">角色配置</el-menu-item>
+            <el-menu-item index="user-3" @click="go('/user-manage/organization-setting')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-3' && !isCollapse">组织配置</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
+        <el-menu-item index="user">
+          <img v-if="activeMenu.indexOf('user') == -1" src="@/images/sider-bar/user.png"/>
+          <img v-if="activeMenu.indexOf('user') != -1" src="@/images/sider-bar/user-active.png"/>
+          <span slot="title">个人中心</span>
+        </el-menu-item>
       </el-menu>
     </el-scrollbar>
   </div>
@@ -137,7 +142,7 @@
 </script>
 
 <style lang="scss">
-  @import '@/styles/var.scss';
+  @import '@/styles/variables.scss';
 
   #sidebar {
     .el-menu-vertical-demo:not(.el-menu--collapse) {

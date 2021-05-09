@@ -44,7 +44,7 @@
   }
 </script>
 <style lang="scss" scoped>
-  @import '@/styles/var.scss';
+  @import '@/styles/variables.scss';
 
   #rolePermissionSetting {
     padding: 36px 25px 36px 50px;
@@ -53,6 +53,7 @@
     background-color: #FFFFFF;
     border-radius: 12px;
     box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
+    min-height: 768px;
     .foot{
       margin-top: 60px;
       .el-button{

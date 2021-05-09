@@ -136,7 +136,7 @@
 	}
 </script>
 <style lang="scss" scoped>
-	@import '@/styles/var.scss';
+	@import '@/styles/variables.scss';
 
 	#taskDtlList {
 		padding: 36px 25px 36px 50px;

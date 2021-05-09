@@ -161,7 +161,7 @@
 	}
 </script>
 <style lang="scss" scoped>
-	@import '@/styles/var.scss';
+	@import '@/styles/variables.scss';
 
 	#myAssignment {
 		padding: 30px;

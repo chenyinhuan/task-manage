@@ -74,7 +74,7 @@
 	}
 </script>
 <style lang="scss">
-	@import '@/styles/var.scss';
+	@import '@/styles/variables.scss';
 
 	#navbar {
 		position: relative;
