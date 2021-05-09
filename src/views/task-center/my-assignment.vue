@@ -254,7 +254,7 @@
 				.el-button {
 					background-color: #0079FE;
 					padding: 5px;
-					font-size: 12px;
+					font-size: 14px;
 				}
 
 			}

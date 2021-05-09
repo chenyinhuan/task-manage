@@ -185,7 +185,7 @@
 				background-color: #0079FE;
 				padding: 5px;
 				color: #FFFFFF;
-				font-size: 12px;
+				font-size: 14px;
 			}
 			.percent {
 				display: flex;

@@ -79,6 +79,21 @@
     background-color: #FFFFFF;
     border-radius: 12px;
     box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
+    >>>.el-checkbox__input.is-checked {
+      .el-checkbox__inner {
+        background-color: #108EE9;
+            border-color: #108EE9;
+      }
+    }
+    .el-checkbox__input.is-checked+.el-checkbox__label {
+      color: #108EE9;
+    }
+    >>>.el-input-group__append, >>>.el-input-group__prepend {
+      background-color: #CDCDD5;
+      color: #FFFFFF;
+      border-color: #CDCDD5;
+      padding: 0px 14px;
+    }
     h3{
       font-size: 32px;
       color: #34335B;

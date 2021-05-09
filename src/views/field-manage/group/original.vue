@@ -114,7 +114,7 @@ export default {
     		// background-color: #0079FE;
     		padding: 0px;
     		color: #0079FE;
-    		font-size: 12px;
+    		font-size: 14px;
     	}
     	.percent {
     		display: flex;
