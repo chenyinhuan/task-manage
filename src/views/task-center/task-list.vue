@@ -16,6 +16,9 @@
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="primary" @click.stop="go(scope.row)">进入任务</el-button>
 					</div>
+          <div v-if="item.slot && item.prop=='result'">
+          	<el-button type="primary" @click.stop="goTarget(scope.row)">查看</el-button>
+          </div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 				</template>
 			</el-table-column>
@@ -107,10 +110,16 @@
 					},
 					{
 						label: '{任务指标名称0}-完成率',
-						prop: 'opct',
+						prop: 'weight',
 						width: '176',
 
 					},
+          {
+          	label: '任务指标考核结果',
+          	prop: 'result',
+            slot: true,
+            width: '176',
+          },
 					{
 						label: '操作',
 						prop: 'opt',
@@ -140,6 +149,14 @@
       go(row) {
         this.$router.push({
           path: `/task-center/task-dtl-list`,
+          query: {
+            id: row.id
+          }
+        })
+      },
+      goTarget(row) {
+        this.$router.push({
+          path: `/task-center/task-target-list`,
           query: {
             id: row.id
           }

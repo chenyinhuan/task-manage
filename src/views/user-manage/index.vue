@@ -97,6 +97,9 @@
           height: 32px;
           line-height: 32px;
         }
+        >>> .el-input__icon {
+          line-height: 30px;
+        }
       }
       .el-input {
         width: 440px;

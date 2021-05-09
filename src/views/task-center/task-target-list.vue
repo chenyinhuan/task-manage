@@ -61,12 +61,12 @@
 					{
 						label: '考核批次数',
 						prop: 'specName',
-						width: '156'
+						width: '140'
 					},
 					{
 						label: '关联记录数',
 						prop: 'explain',
-						width: '181',
+						width: '140',
 					},
 					{
 						label: '考核开始时间',
@@ -153,7 +153,7 @@
 				margin-left: 20px;
 			}
 		}
-		
+
 		.el-table {
 
 			.el-button {
@@ -171,7 +171,7 @@
 					width: 8px;
 					height: 8px;
 					border-radius: 50%;
-					
+
 					&.green {
 						background-color: #21D487;
 					}
@@ -191,7 +191,7 @@
 				width: 84px;
 				height: 109px;
 			}
-			
+
 			p {
 				color: #9596AB;
 				font-size: 20px;
@@ -200,6 +200,6 @@
 				font-weight: 400;
 			}
 		}
-		
+
 	}
 </style>
