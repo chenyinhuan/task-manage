@@ -178,7 +178,7 @@ export const routes = [
     children: [
       {
         path: '',
-        component: () => import( /* webpackChunkName: "login" */ '@/views/user-manage/index'),
+        component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/index'),
         hidden: false,
         meta: {
           title: '账户配置',
@@ -187,7 +187,7 @@ export const routes = [
       },
       {
         path: 'add-account',
-        component: () => import( /* webpackChunkName: "login" */ '@/views/task-repository/task-list'),
+        component: () => import( /* webpackChunkName: "UserManage" */ '@/views/task-repository/task-list'),
         hidden: true,
         meta: {
           title: '新增账户',
@@ -196,7 +196,7 @@ export const routes = [
       },
       {
         path: 'associated-anchor',
-        component: () => import( /* webpackChunkName: "login" */ '@/views/user-manage/associated-anchor'),
+        component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/associated-anchor'),
         hidden: true,
           title: '关联主播',
           meta: {
@@ -205,7 +205,7 @@ export const routes = [
       },
       {
         path: 'organization-setting',
-        component: () => import( /* webpackChunkName: "login" */ '@/views/task-repository/task-list'),
+        component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/organization-setting'),
         hidden: false,
         meta: {
           title: '组织配置',
@@ -214,7 +214,7 @@ export const routes = [
       },
       {
         path: 'role-setting',
-        component: () => import( /* webpackChunkName: "login" */ '@/views/task-repository/task-list'),
+        component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/role-setting'),
         hidden: false,
         meta: {
           title: '角色配置',
@@ -223,7 +223,7 @@ export const routes = [
       },
       {
         path: 'role-permission-setting',
-        component: () => import( /* webpackChunkName: "login" */ '@/views/task-repository/task-list'),
+        component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/role-permission-setting'),
         hidden: false,
         meta: {
           title: '角色权限配置',
