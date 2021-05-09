@@ -141,7 +141,7 @@
           return
         }
         EventBus.$emit('date-click', e, format(this.date, 'yyyy-MM-dd'))
-      }
+      },
     },
     mounted() {
       this.calcVolume()
@@ -149,7 +149,8 @@
     },
     destroyed() {
       window.removeEventListener('resize', this.calcVolume)
-    }
+    },
+
   }
 </script>
 <style lang="less">

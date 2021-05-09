@@ -17,8 +17,7 @@
 					v-for="(item,index) in tableColumn" :key="index">
 					<template slot-scope="scope">
 						<div v-if="item.slot && item.prop=='opt'">
-							<el-button type="primary" v-if="scope.$index == 1">进入任务</el-button>
-							<el-button type="primary" v-else>查看任务明细</el-button>
+							<el-button type="primary" @click.stop="go(scope.row)">查看明细</el-button>
 						</div>
 						<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 					</template>
@@ -100,6 +99,7 @@
 					},
 					{
 						label: '考核/应考核批次数',
+            width: 210,
 						prop: 'toothTypeName',
 					},
 					{
@@ -148,7 +148,15 @@
 			},
 			search() {
 				console.log(this.keyword)
-			}
+			},
+      go(row) {
+        this.$router.push({
+          path: '/task-center/my-assignment-list',
+          query: {
+            
+          }
+        })
+      }
 		}
 	}
 </script>
@@ -206,7 +214,7 @@
 			box-sizing: border-box;
 			box-shadow: 0px 2px 3px 2px rgba(0, 0, 0, 0.03);
 			padding: 36px 49px 80px 46px;
-			
+
 			.hd {
 				display: flex;
 				align-items: center;

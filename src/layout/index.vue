@@ -68,7 +68,7 @@
 		}
 		.app-main {
 			background-color: #F8FAFB;
-			width: 100%;
+			width: 1620px;
 		}
 	}
 </style>

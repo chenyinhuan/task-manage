@@ -15,7 +15,7 @@
           	<div class="dot" :class="[scope.$index == 0?'green':'',scope.$index == 1?'red':'',scope.$index == 2?'blue':'']"></div><span> 完成（100%）</span>
           </div>
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="primary" v-if="scope.$index == 1">进入任务</el-button>
+						<el-button type="primary" v-if="scope.$index == 1" @click="go(scope.row)">进入任务</el-button>
 						<el-button type="primary" v-else>查看任务明细</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
@@ -115,6 +115,14 @@
 			},
 			handleCurrentChange(val) {
 				console.log(`当前页: ${val}`);
+			},
+			go(row) {
+			  this.$router.push({
+			    path: `/task-center/task-dtl-list`,
+			    query: {
+			      id: row.id
+			    }
+			  })
 			}
 		}
 	}
@@ -151,7 +159,7 @@
 			.el-button {
 				background-color: #0079FE;
 				padding: 5px;
-				font-size: 12px;
+				// font-size: 12px;
 			}
 			.percent {
 				display: flex;

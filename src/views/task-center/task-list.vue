@@ -14,7 +14,7 @@
 				<template slot-scope="scope">
 					<div v-if="item.slot && item.prop=='explain'"><a>查看说明</a></div>
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="primary">进入任务</el-button>
+						<el-button type="primary" @click.stop="go(scope.row)">进入任务</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 				</template>
@@ -136,7 +136,15 @@
 			},
 			handleCurrentChange(val) {
 				console.log(`当前页: ${val}`);
-			}
+			},
+      go(row) {
+        this.$router.push({
+          path: `/task-center/task-dtl-list`,
+          query: {
+            id: row.id
+          }
+        })
+      }
 		}
 	}
 </script>
@@ -225,7 +233,7 @@
 			.el-button {
 				background-color: #0079FE;
 				padding: 5px;
-				font-size: 12px;
+				// font-size: 12px;
 			}
 		}
 		.tempty {
@@ -235,7 +243,7 @@
 				width: 84px;
 				height: 109px;
 			}
-			
+
 			p {
 				color: #9596AB;
 				font-size: 20px;
@@ -244,6 +252,6 @@
 				font-weight: 400;
 			}
 		}
-		
+
 	}
 </style>

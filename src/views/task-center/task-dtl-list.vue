@@ -2,15 +2,15 @@
 	<div id="taskDtlList" :style="{'height': tableData.length==0?'661px':''}">
 		<section class="hd">
 			<p>任务详情</p>
-			<el-button type="primary">新增记录</el-button>
+			<el-button type="primary" @click="add()">新增记录</el-button>
 		</section>
 		<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="text">查看</el-button>
-						<el-button type="text">编辑</el-button>
+						<el-button type="text" @click="go('scan', scope.row)">查看</el-button>
+						<el-button type="text" @click="go('edit', scope.row)">编辑</el-button>
 						<el-button type="text">删除</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
@@ -79,11 +79,12 @@
 					{
 						label: '创建时间',
 						prop: 'weight',
-						
+
 					},
 					{
 						label: '操作',
 						prop: 'opt',
+            width: 140,
 						slot: true,
 					},
 				],
@@ -106,7 +107,23 @@
 			},
 			handleCurrentChange(val) {
 				console.log(`当前页: ${val}`);
-			}
+			},
+      add() {
+        this.$router.push({
+          path: '/task-center/add-record',
+          query: {
+            
+          }
+        })
+      },
+      go(type, row) {
+        this.$router.push({
+          path: type=='scan'?'/task-center/task-dtl':'/task-center/add-record',
+          query: {
+            id: row.id
+          }
+        })
+      }
 		}
 	}
 </script>
@@ -144,13 +161,12 @@
 			}
 			.el-button {
 				background-color: #0079FE;
-				padding: 6px 22px;
+				padding: 8px 21px;
 				font-size: 14px;
 			}
 		}
-		
-		.el-table {
 
+		.el-table {
 			.el-button {
 				font-size: 14px;
 			}
@@ -162,7 +178,7 @@
 				width: 84px;
 				height: 109px;
 			}
-			
+
 			p {
 				color: #9596AB;
 				font-size: 20px;
@@ -171,6 +187,6 @@
 				font-weight: 400;
 			}
 		}
-		
+
 	}
 </style>

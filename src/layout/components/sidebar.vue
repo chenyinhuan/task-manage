@@ -26,11 +26,11 @@
             <span slot="title">任务中心</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="task-1"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'task-1' && !isCollapse">我的任务</el-menu-item>
-            <el-menu-item index="task-2"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'task-2' && !isCollapse">我的派发任务</el-menu-item>
+            <el-menu-item index="task-1" @click="go('/task-center/my-task')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'task-1' && !isCollapse">我的任务</el-menu-item>
+            <el-menu-item index="task-2" @click="go('/task-center/my-assignment')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'task-2' && !isCollapse">我的派发任务</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-menu-item index="field">
+        <el-menu-item index="field" @click="go('/field-manage')">
           <img v-if="activeMenu.indexOf('field') == -1" src="@/images/sider-bar/field.png"/>
           <img src="@/images/sider-bar/field-active.png" v-if="activeMenu.indexOf('field') != -1"/>
           <span slot="title">字段库管理</span>
@@ -125,48 +125,8 @@
     },
     methods: {
       ...mapActions('module', ['generateRoutes']),
-      handleOpen(key, keyPath) {
-        // console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-        // console.log(key, keyPath);
-      },
-      hasOneShowingChild(children = [], parent) {
-        const showingChildren = children.filter(item => {
-          if (item.hidden) {
-            return false
-          } else {
-            // Temp set(will be used if only has one showing child)
-            this.onlyOneChild = item
-            return true
-          }
-        })
-
-        // When there is only one child router, the child router is displayed by default
-        if (showingChildren.length === 1) {
-          return true
-        }
-
-        // Show parent if there are no child router to display
-        if (showingChildren.length === 0) {
-          this.onlyOneChild = {
-            ...parent,
-            path: '',
-            noShowingChildren: true
-          }
-          return true
-        }
-
-        return false
-      },
-      resolvePath(routePath) {
-        if (isExternal(routePath)) {
-          return routePath
-        }
-        if (isExternal(this.basePath)) {
-          return this.basePath
-        }
-        return path.resolve(this.basePath, routePath)
+      go(path) {
+        this.$router.push(path)
       },
       selectMenu(index, indexPath) {
         console.log(index, indexPath)

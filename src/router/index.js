@@ -42,7 +42,6 @@ export const routes = [
         component: () => import( /* webpackChunkName: "task-center" */ '@/views/task-center/task-list'),
         hidden: true,
         name: 'TaskList',
-        redirect: '/task-center/my-task/task-list',
         meta: {
           title: '任务列表',
         },
@@ -63,7 +62,6 @@ export const routes = [
           '@/views/task-center/task-dtl-list'),
         hidden: true,
         name: 'TaskDtlList',
-        redirect: '/task-center/my-task/task-list/task-dtl-list',
         meta: {
           title: '任务详情',
         },

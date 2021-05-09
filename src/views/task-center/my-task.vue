@@ -22,7 +22,8 @@
 			<div class="calendar-list">
 				<schedule-calendar :events="events"
 				:dateItemRender="itemRender"
-				@event-dragend="changeDate"></schedule-calendar>
+				@event-dragend="changeDate"
+        @date-click="dateClick"></schedule-calendar>
 				<!-- <ul class="week">
 					<li v-for="(item,index) in week" :key="index">{{item.name}}</li>
 				</ul>
@@ -202,6 +203,15 @@
               ...this.events[updateIndex],
               date
           })
+      },
+      dateClick(e,val) {
+        console.log(val)
+        this.$router.push({
+          path: `/task-center/task-list`,
+		  query: {
+			  date: val
+		  }
+        })
       }
 		}
 	}
