@@ -196,10 +196,10 @@ export const routes = [
       },
       {
         path: 'associated-anchor',
-        component: () => import( /* webpackChunkName: "login" */ '@/views/task-repository/task-list'),
+        component: () => import( /* webpackChunkName: "login" */ '@/views/user-manage/associated-anchor'),
         hidden: true,
-        meta: {
           title: '关联主播',
+          meta: {
           noCache: true
         }
       },
