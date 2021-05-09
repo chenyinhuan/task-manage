@@ -126,7 +126,17 @@ export const routes = [
         title: '字段库管理',
         noCache: true
       }
-    }]
+    },
+    {
+      path: 'add-field',
+      component: () => import( /* webpackChunkName: "login" */ '@/views/field-manage/add-field'),
+      hidden: false,
+      meta: {
+        title: '新增字段',
+        noCache: true
+      }
+    }
+    ]
   },
   {
     path: '/task-repository',

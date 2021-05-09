@@ -6,7 +6,7 @@
         <div class="item-add" :class="[index == 1?'active':'']" @click="changeTab(1)"><span>衍生字段</span></div>
       </div>
       <div class="right">
-        <el-button type="primary">新增</el-button>
+        <el-button type="primary" @click="addField">新增</el-button>
         <el-input v-model="keyword" placeholder="考核批次" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
       </div>
 		</section>
@@ -42,6 +42,9 @@
 
 		},
 		methods: {
+      addField(){
+        this.$router.push('/field-manage/add-field')
+      },
       changeTab(index) {
         this.index = index;
       },
