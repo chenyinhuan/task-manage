@@ -6,7 +6,7 @@
 		    <el-input v-model="keyword" placeholder="任务状态" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
 		    <el-input v-model="keyword" placeholder="任务来源" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
 		  </div>
-			<el-button type="primary">新增任务</el-button>
+			<el-button type="primary" @click="addTask">新增任务</el-button>
 		</section>
 		<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
@@ -16,9 +16,11 @@
 						<div class="dot" :class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'',scope.$index == 2?'blue':'']"></div><span> {{scope.$index == 0?'进行中':''}}{{scope.$index == 1?'已取消，已结束':''}}{{scope.$index == 2?'待开始':''}}</span>
 					</div>
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="text">查看</el-button>
-					  <el-button type="text">编辑</el-button>
-					  <el-button type="text">删除</el-button>
+						<el-button type="text" v-if="scope.$index != 2">查看</el-button>
+					  <el-button type="text" v-if="scope.$index != 2">编辑</el-button>
+					  <el-button type="text" v-if="scope.$index != 2">取消</el-button>
+            <el-button type="text" v-if="scope.$index == 2">查看说明</el-button>
+            <el-button type="text" v-if="scope.$index == 2">派发任务</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 				</template>
@@ -125,7 +127,12 @@
 			},
 			search() {
 				console.log(this.keyword)
-			}
+			},
+      addTask() {
+        this.$router.push({
+          path: '/task-repository/add-task'
+        })
+      }
 		}
 	}
 </script>
@@ -175,10 +182,10 @@
 		}
 
 		.el-table {
-      .el-table__header-wrapper tr th:nth-last-child(2) {
+      >>>.el-table__header-wrapper tr th:nth-last-child(2) {
         text-align: center !important;
       }
-      .el-table__row {
+      >>>.el-table__row {
         td:nth-last-child(1) {
           text-align: center !important;
         }

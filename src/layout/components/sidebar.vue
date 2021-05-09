@@ -47,8 +47,8 @@
             <span slot="title">任务库管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="manage-1"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'manage-1' && !isCollapse">任务列表</el-menu-item>
-            <el-menu-item index="manage-2"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'manage-2' && !isCollapse">任务模板</el-menu-item>
+            <el-menu-item index="manage-1" @click="go('/task-repository/task-list')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'manage-1' && !isCollapse">任务列表</el-menu-item>
+            <el-menu-item index="manage-2" @click="go('/task-repository/task-template')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'manage-2' && !isCollapse">任务模板</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-menu-item index="report">

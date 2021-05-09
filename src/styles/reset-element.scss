@@ -9,6 +9,27 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .el-breadcrumb__inner.is-link:hover, .el-breadcrumb__inner a:hover {
 	color: #FF7D00;
 }
+.el-input {
+	.el-input__inner::placeholder {
+		color: #999999;
+	}
+	 /* 谷歌 */
+	.el-input__inner::-webkit-input-placeholder {
+		color: #999999;
+	}
+	 /* 火狐 */
+	.el-input__inner:-moz-placeholder {
+		color: #999999;
+	}
+	 /*ie*/
+	.el-input__inner:-ms-input-placeholder {
+		color: #999999;
+	}
+	.el-input__icon {
+		color: #666666;
+	}
+}
+
 .el-input__inner {
   border: 1px solid #D9D9D9;
 }
@@ -28,6 +49,42 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 		padding: 15px 0px;
 		color: #34335B;
 	}
+}
+.el-date-picker {
+  .el-date-picker__header {
+    button:hover,.el-date-picker__header-label:hover {
+      color: #0079FE !important;
+    }
+    
+  }
+}
+.el-date-table {
+  td.today span {
+    color: #E89003;
+  }
+  td.current:not(.disabled) span {
+    background-color: #0079FE;
+  }
+  .available:hover {
+    color: #0079FE !important;
+  }
+}
+.el-radio {
+  .el-radio__input.is-checked .el-radio__inner {
+    background-color: #FFFFFF;
+  }
+  .el-radio__input.is-checked .el-radio__inner::after {
+    width: 6px;
+    height: 6px;
+    background-color: #0079FE;
+  }
+
+  .el-radio__label {
+    color: #34335B;
+  }
+  .el-radio__input.is-checked+.el-radio__label {
+    color: #34335B;
+  }
 }
 
 .el-pagination {
