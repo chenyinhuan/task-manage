@@ -19,47 +19,53 @@
         <sidebar-item v-for="route in permissionRoutes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu> -->
       <el-menu :default-active="activeMenu" @select="selectMenu" class="el-menu-vertical-demo" :text-color="variables.menuText" :active-text-color="variables.subMenuActiveText" :collapse="isCollapse" :background-color="variables.menuBg">
-        <el-submenu index="1">
+        <el-submenu index="task">
           <template slot="title">
-            <img src="@/images/sider-bar/task.png"/>
+            <img v-if="!isCollapse || activeMenu.indexOf('task-') == -1" src="@/images/sider-bar/task.png"/>
+            <img src="@/images/sider-bar/task-active.png" v-if="isCollapse && activeMenu.indexOf('task-') != -1"/>
             <span slot="title">任务中心</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="1-1"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == '1-1' && !isCollapse">我的任务</el-menu-item>
-            <el-menu-item index="1-2"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == '1-2' && !isCollapse">我的派发任务</el-menu-item>
+            <el-menu-item index="task-1"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'task-1' && !isCollapse">我的任务</el-menu-item>
+            <el-menu-item index="task-2"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'task-2' && !isCollapse">我的派发任务</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-menu-item index="2">
-          <img src="@/images/sider-bar/field.png"/>
+        <el-menu-item index="field">
+          <img v-if="activeMenu.indexOf('field') == -1" src="@/images/sider-bar/field.png"/>
+          <img src="@/images/sider-bar/field-active.png" v-if="activeMenu.indexOf('field') != -1"/>
           <span slot="title">字段库管理</span>
         </el-menu-item>
-        <el-menu-item index="3">
-          <img src="@/images/sider-bar/targrt.png"/>
+        <el-menu-item index="targrt">
+          <img v-if="activeMenu.indexOf('targrt') == -1" src="@/images/sider-bar/targrt.png"/>
+          <img v-if="activeMenu.indexOf('targrt') != -1" src="@/images/sider-bar/targrt-active.png"/>
           <span slot="title">指标库管理</span>
         </el-menu-item>
-        <el-submenu index="4">
+        <el-submenu index="manage">
           <template slot="title">
-            <img src="@/images/my-task/m.png"/>
+            <img v-if="!isCollapse || activeMenu.indexOf('manage-') == -1" src="@/images/sider-bar/manage.png"/>
+            <img src="@/images/sider-bar/manage-active.png" v-if="isCollapse && activeMenu.indexOf('manage-') != -1"/>
             <span slot="title">任务库管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="4-1"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == '4-1' && !isCollapse">任务列表</el-menu-item>
-            <el-menu-item index="4-2"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == '4-2' && !isCollapse">任务模板</el-menu-item>
+            <el-menu-item index="manage-1"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'manage-1' && !isCollapse">任务列表</el-menu-item>
+            <el-menu-item index="manage-2"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'manage-2' && !isCollapse">任务模板</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-menu-item index="5">
-          <img src="@/images/sider-bar/report.png"/>
+        <el-menu-item index="report">
+          <img v-if="activeMenu.indexOf('report') == -1" src="@/images/sider-bar/report.png"/>
+          <img v-if="activeMenu.indexOf('report') != -1" src="@/images/sider-bar/report-active.png"/>
           <span slot="title">统计报表</span>
         </el-menu-item>
-        <el-submenu index="6">
+        <el-submenu index="user">
           <template slot="title">
-            <img src="../../images/sider-bar/user.png"/>
+            <img v-if="!isCollapse || activeMenu.indexOf('user-') == -1" src="../../images/sider-bar/user.png"/>
+            <img v-if="isCollapse && activeMenu.indexOf('user-') != -1" src="@/images/sider-bar/user-active.png"/>
             <span slot="title">用户管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="6-1"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == '6-1' && !isCollapse">账户配置</el-menu-item>
-            <el-menu-item index="6-2"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == '6-2' && !isCollapse">角色配置</el-menu-item>
-            <el-menu-item index="6-3"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == '6-3' && !isCollapse">组织配置</el-menu-item>
+            <el-menu-item index="user-1"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-1' && !isCollapse">账户配置</el-menu-item>
+            <el-menu-item index="user-2"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-2' && !isCollapse">角色配置</el-menu-item>
+            <el-menu-item index="user-3"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-3' && !isCollapse">组织配置</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
       </el-menu>
