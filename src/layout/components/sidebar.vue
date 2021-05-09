@@ -81,9 +81,10 @@
   import {
     mapGetters,
     mapActions
-  } from 'vuex'
-  import variables from '@/styles/variables.scss'
-  import SidebarItem from './group/SidebarItem'
+  } from 'vuex';
+  import variables from '@/styles/variables.scss';
+  import SidebarItem from './group/SidebarItem';
+  import Cookies from 'js-cookie'
   export default {
     name: 'sidebar',
     components: {
@@ -91,7 +92,7 @@
     },
     data() {
       return {
-        activeMenu: '1-1',
+        activeMenu: Cookies.get('activeMenu')?Cookies.get('activeMenu'):'1-1',
         menuList: [
           {
             img: '@/images/sider-bar/task.png',
@@ -134,7 +135,8 @@
         this.$router.push(path)
       },
       selectMenu(index, indexPath) {
-        console.log(index, indexPath)
+        console.log(index, indexPath);
+        Cookies.set('activeMenu',index);
         this.activeMenu = index;
       }
     }
