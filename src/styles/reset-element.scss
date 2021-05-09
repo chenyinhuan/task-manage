@@ -1,0 +1,60 @@
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import "~element-ui/packages/theme-chalk/src/index";
+
+.el-breadcrumb__inner.is-link, .el-breadcrumb__inner a {
+	color: #34335B;
+}
+.el-breadcrumb__inner.is-link:hover, .el-breadcrumb__inner a:hover {
+	color: #FF7D00;
+}
+.el-input__inner:focus,.el-input__inner:hover {
+	border-color: #FF8C00 !important;
+}
+.el-table {
+	.cell {
+		font-size: 14px;
+		line-height: 20px;
+	}
+	&.el-table--medium th{
+		padding: 20px 0px;
+		color: #9596AB;
+	} 
+	&.el-table--medium td {
+		padding: 15px 0px;
+		color: #34335B;
+	}
+}
+
+.el-pagination {
+	text-align: right;
+	margin-top: 60px;
+	font-size: 14px;
+	.el-pager li {
+		color: #606266;
+		font-size: 14px;
+		font-weight: 400;
+	}
+	.el-pager li.active {
+		color: #FF8C00;
+	}
+	.el-pager li:hover {
+		color: #FF8C00;
+	}
+	.el-input__inner {
+		border-radius: 3px;
+	}
+	.btn-prev,.btn-next {
+		color: #606266;	
+	}
+	button:disabled {
+		color: #C0C4CC;
+	}
+	.el-pagination__editor {
+		margin: 0px 4px;
+	}
+	span:not([class*=suffix]),button {
+		font-size: 14px;
+	}
+}
