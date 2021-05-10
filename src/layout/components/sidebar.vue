@@ -63,7 +63,7 @@
             <span slot="title">用户管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="user-1" @click="go('/user-manage/add-account')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-1' && !isCollapse">账户配置</el-menu-item>
+            <el-menu-item index="user-1" @click="go('/user-manage/account-config')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-1' && !isCollapse">账户配置</el-menu-item>
             <el-menu-item index="user-2" @click="go('/user-manage/role-setting')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-2' && !isCollapse">角色配置</el-menu-item>
             <el-menu-item index="user-3" @click="go('/user-manage/organization-setting')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-3' && !isCollapse">组织配置</el-menu-item>
           </el-menu-item-group>

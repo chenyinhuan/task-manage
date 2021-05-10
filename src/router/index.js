@@ -188,7 +188,7 @@ export const routes = [
   {
     path: '/user-manage',
     component: Layout,
-    redirect: '/user-manage/add-account',
+    redirect: '/user-manage/account-config',
     name: 'UserManage',
     meta: {
       title: '用户管理',
@@ -196,7 +196,7 @@ export const routes = [
     },
     children: [
       {
-        path: '',
+        path: 'account-config',
         component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/index'),
         hidden: false,
         meta: {

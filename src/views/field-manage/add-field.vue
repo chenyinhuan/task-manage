@@ -7,7 +7,7 @@
         <el-checkbox :label="1">原生字段</el-checkbox>
         <el-checkbox :label="2">衍生字段</el-checkbox>
       </el-checkbox-group>
-      <span class="label">原生字段的基础上，经过计算逻辑可以变化生成衍生字段</span>
+      <span class="label">{{checkList[0]==1?'直接创建的字段为原生字段':'原生字段的基础上，经过计算逻辑可以变化生成衍生字段'}}</span>
     </section>
     <section>
       <p>字段显示名</p>
@@ -16,7 +16,7 @@
     <section>
       <p>字段名</p>
       <el-input v-model="form.taskName" placeholder="请输入字段名" maxlength="20" show-word-limit>
-        <template style=" background: #D9D9D9;" slot="prepend">basic_</template>
+        <template style=" background: #D9D9D9;" slot="prepend">{{checkList[0]==1?'basic_':'complex_'}}</template>
       </el-input>
     </section>
     <section v-if="checkList[0] == 1">
