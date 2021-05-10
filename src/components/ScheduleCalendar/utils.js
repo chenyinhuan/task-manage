@@ -83,7 +83,7 @@ export const monthlyCalendar = (year, month, startWeek) => {
     const prevDays = calcDays(prevMonth)
     const prevOver = (firstWeek(year, month) || 7) - startWeek
     const nextMonth = calcNextMonth(year, month)
-
+    let nextNum = 0;
     for (let p = prevDays - prevOver + 1; p <= prevDays; p++) {
         result.push({
             date: new Date(prevMonth.year, prevMonth.month, p),
@@ -99,13 +99,14 @@ export const monthlyCalendar = (year, month, startWeek) => {
     }
 
     for (let n = 1, nl = 42 - result.length; n <= nl; n++) {
+        nextNum++;
         result.push({
             date: new Date(nextMonth.year, nextMonth.month, n),
             type: NEXT_DATE_TYPE
         })
     }
 
-    return result
+    return {result: result, nextNum: nextNum}
 }
 
 const tryParse = obj => (typeof obj === 'string' ? new Date(obj) : obj)
