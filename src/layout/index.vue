@@ -59,7 +59,7 @@
 		  position: fixed;
 		  top: 0;
 		  right: 0;
-		  z-index: 9;
+		  z-index: 100;
 		  width: calc(100% - 250px);
 		  transition: width 0.28s;
 		}

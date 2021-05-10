@@ -1,5 +1,5 @@
 <template>
-  <div class="schedule-calendar-date" :class="[type, { today: isToday, dragged: draggedIndex === index }]"
+  <div class="schedule-calendar-date" :class="[type,{'current-first':date.getDate() == 1 && type=='current'} , { today: isToday, dragged: draggedIndex === index }]"
     @dragover.prevent="" @dragenter.prevent="dragenter" @drop="onDrop" @click="cellClick">
     <div class="schedule-calendar-date-hd">
       <div class="schedule-calendar-date-label">{{type != 'prev' && type != 'next' ?date.getDate():''}}</div>
@@ -19,7 +19,7 @@
         <ul class="task-info">
         	<li>
         		<div class="dot" style="background-color: #00B043;"></div>
-        		<p>任务指标今日待考核5{{date.getDate()}}</p>
+        		<p>任务指标今日待考核5</p>
         	</li>
         	<li>
         		<div class="dot" style="background-color: #FF9300;"></div>
@@ -32,7 +32,7 @@
         </ul>
         <div v-if="!isToday && type != 'prev' && type != 'next'" class="progress" slot="reference">
           <el-progress type="circle" color="#FF8C00" :stroke-width="4" :width="40" :percentage="70"></el-progress>
-          <span class="des">进行中任务数:5{{date.getDate()}}</span>
+          <span class="des">进行中任务数:5</span>
         </div>
       </el-popover>
       <!-- <div v-show="expanded" class="schedule-calendar-details-hd">{{ dateString }}</div>
@@ -134,6 +134,7 @@
         EventBus.$emit('item-drop', e, format(this.date, 'yyyy-MM-dd'), this.type, this.index)
       },
       cellClick(e) {
+        if(this.type != 'current') return 
         // 此时为收缩单页格，不触发 date-click
         if (Store.hasExpand) {
           // 设为 false，下次正常触发 date-click
@@ -226,18 +227,29 @@
       height: 124px;
       padding: 16px 17px 13px 18px;
       border-top: 1px solid @sc-border-color;
-      border-left: 1px solid @sc-border-color;
+      border-right: 1px solid @sc-border-color;
       user-select: none;
-      &:nth-child(7n + 1) {
+      &.current-first {
+        border-left: 1px solid @sc-border-color;
+      }
+      &:nth-child(7n+1) {
         border-left: none;
       }
-
+      &:nth-child(7n) {
+        border-right: none;
+      }
       &.prev,
       &.next {
         color: #FFFFFF;
         background: #FFFFFF;
       }
-
+       &.prev {
+        border-top: 0px;
+        border-right: 0px;
+      }
+      &.next {
+        border-right: 0px solid @sc-border-color;
+      }
       &-label {
         width: @sc-data-label-size;
         height: @sc-data-label-size;
@@ -246,7 +258,7 @@
         text-align: center;
         border-radius: 50%;
       }
-
+      
       &.today {
         .schedule-calendar-date-label {
           color: @sc-body-color;

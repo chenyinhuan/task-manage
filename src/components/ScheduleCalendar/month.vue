@@ -33,12 +33,13 @@ export default {
             viewTransition: 'sc-moveTo',
             draggedIndex: -1,
             direction: 'Left',
-            animated: false
+            animated: false,
         }
     },
     computed: {
         days() {
-            return monthlyCalendar(this.year, this.month, this.startWeek)
+            let data = monthlyCalendar(this.year, this.month, this.startWeek)
+            return data.result
         },
         animationClass() {
             return this.viewTransition + this.direction
