@@ -5,7 +5,7 @@
         <el-input v-model="keyword" placeholder="模版名称" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
         <el-input v-model="keyword" placeholder="模版状态" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
       </div>
-			<el-button type="primary">新增模板</el-button>
+			<el-button type="primary" @click="go()">新增模板</el-button>
 		</section>
 		<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
@@ -104,7 +104,10 @@
 			},
 			search() {
 				console.log(this.keyword)
-			}
+			},
+      go() {
+        this.$router.push('/task-repository/add-template')
+      }
 		}
 	}
 </script>
@@ -154,7 +157,7 @@
 		}
 
 		.el-table {
-      .el-table__header-wrapper tr th:nth-last-child(2) {
+      .el-table__header-wrapper tr th:nth-last-child(1) {
         text-align: center !important;
       }
       .el-table__row {

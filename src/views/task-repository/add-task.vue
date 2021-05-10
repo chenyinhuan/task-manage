@@ -54,7 +54,8 @@
         </el-radio-group>
     </section>
     <div class="foot">
-      <el-button type="primary">创建</el-button>
+      <el-button type="primary">提交任务</el-button>
+      <el-button class="cancel">取消</el-button>
     </div>
     <el-dialog
       title="提示"
@@ -107,7 +108,7 @@
         this.addDialog = true;
       },
       handleClose() {
-        
+
       }
     }
   }
@@ -135,8 +136,13 @@
       .el-button{
         width: 124px;
         height: 40px;
+        font-size: 18px;
         background: #0079FE;
         border-radius: 6px;
+        &.cancel {
+          background-color: #F8FAFB;
+          color: #9596AB;
+        }
       }
     }
     section{

@@ -182,7 +182,7 @@
 		}
 
 		.el-table {
-      >>>.el-table__header-wrapper tr th:nth-last-child(2) {
+      >>>.el-table__header-wrapper tr th:nth-last-child(1) {
         text-align: center !important;
       }
       >>>.el-table__row {

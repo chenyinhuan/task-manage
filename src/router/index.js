@@ -173,6 +173,15 @@ export const routes = [
           title: '新增任务',
           noCache: true
         }
+      },
+      {
+        path: 'add-template',
+        component: () => import( /* webpackChunkName: "login" */ '@/views/task-repository/add-template'),
+        hidden: true,
+        meta: {
+          title: '新增模版',
+          noCache: true
+        }
       }
     ]
   },
