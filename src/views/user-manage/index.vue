@@ -34,9 +34,6 @@
               <div v-if="item.slot && item.prop=='weight'" class="percent">
                 <div class="dot" :class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'']"></div><span> {{scope.$index == 1?'未上架':'正常'}}</span>
               </div>
-              <div v-if="item.slot && item.prop=='status'">
-                <i class="iconfont"></i>{{scope.row[item.prop]}}
-              </div>
               <div v-if="item.slot && item.prop=='related'">
                 <el-button type="text" @click="assocoated(scope.row)">关联</el-button>
               </div>
@@ -206,10 +203,14 @@
       .tree{
         width: 403px;
         padding-right: 110px;
-        .el-tree-node__expand-icon{
-          color: #666777;
+        .expanded{
+          color: #D8D8D8;
         }
-        .el-tree-node__content:hover{
+        .el-tree-node__label{
+          color: #666777;
+          line-height: 20px;
+        }
+        .el-tree-node__content:hover, .is-current{
           background: #F5F7FA;
         }
         .el-input{

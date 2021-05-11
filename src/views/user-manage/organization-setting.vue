@@ -182,10 +182,14 @@
       .tree{
         width: 403px;
         padding-right: 110px;
-        .el-tree-node__expand-icon{
-          color: #666777;
+        .expanded{
+          color: #D8D8D8;
         }
-        .el-tree-node__content:hover{
+        .el-tree-node__label{
+          color: #666777;
+          line-height: 20px;
+        }
+        .el-tree-node__content:hover, .is-current{
           background: #F5F7FA;
         }
         .el-input{

@@ -31,7 +31,7 @@
                 <div class="dot" :class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'']"></div><span> {{scope.$index == 1?'未上架':'正常'}}</span>
               </div>
               <div v-if="item.slot && item.prop=='setting'">
-                <el-button type="text">配置</el-button>
+                <el-button @click="permissionConfig(scope.row)" type="text">配置</el-button>
               </div>
               <div v-if="item.slot && item.prop=='opt'">
                 <el-button type="text">编辑</el-button>
@@ -159,6 +159,9 @@
       }
     },
     methods: {
+      permissionConfig(item){
+        this.$router.push('/user-manage/role-permission-setting')
+      },
       assocoated(item){
         this.$router.push('/user-manage/associated-anchor')
       },
@@ -194,10 +197,14 @@
       .tree{
         width: 403px;
         padding-right: 110px;
-        .el-tree-node__expand-icon{
-          color: #666777;
+        .expanded{
+          color: #D8D8D8;
         }
-        .el-tree-node__content:hover{
+        .el-tree-node__label{
+          color: #666777;
+          line-height: 20px;
+        }
+        .el-tree-node__content:hover, .is-current{
           background: #F5F7FA;
         }
         .el-input{

@@ -2,11 +2,17 @@
   <div id="rolePermissionSetting">
     <section>
       <p>系统页面权限</p>
-      <ul>
-        <li>商户管理</li>
-        <li>商户管理</li>
-        <li>商户管理</li>
-      </ul>
+      <div class="tree">
+        <el-tree
+          :data="data"
+          show-checkbox
+          default-expand-all
+          node-key="id"
+          ref="tree"
+          highlight-current
+          :props="defaultProps">
+        </el-tree>
+      </div>
     </section>
     <section>
       <p>数据权限</p>
@@ -21,7 +27,45 @@
   export default {
     data() {
       return {
-        taskName: '',
+        data: [{
+          id: 1,
+          label: '一级 1',
+          children: [{
+            id: 4,
+            label: '二级 1-1',
+            children: [{
+              id: 9,
+              label: '三级 1-1-1'
+            }, {
+              id: 10,
+              label: '三级 1-1-2'
+            }]
+          }]
+        }, {
+          id: 2,
+          label: '一级 2',
+          children: [{
+            id: 5,
+            label: '二级 2-1'
+          }, {
+            id: 6,
+            label: '二级 2-2'
+          }]
+        }, {
+          id: 3,
+          label: '一级 3',
+          children: [{
+            id: 7,
+            label: '二级 3-1'
+          }, {
+            id: 8,
+            label: '二级 3-2'
+          }]
+        }],
+        defaultProps: {
+          children: 'children',
+          label: 'label'
+        },
         form: {
           taskName: '',
           remark: '',
@@ -62,7 +106,7 @@
       }
     }
     section{
-      ul{
+      .tree{
         width: 440px;
         background: #F5F5F5;
         border-radius: 4px;
@@ -70,11 +114,8 @@
         margin-bottom: 32px;
         font-size: 14px;
         color: #666777;
-        li{
-          margin-bottom: 14px;
-          &:last-child{
-            margin-bottom: 0;
-          }
+        .el-tree{
+          background: transparent;
         }
       }
       p{
