@@ -4,7 +4,7 @@
 
 const path = require('path')
 
-const ipPath = 'https://internal-test.51hgp.com/';//本地
+const ipPath = 'http://121.40.46.87/';//本地
 // const ipPath = 'https://www.51hgp.com';
 
 module.exports = {
@@ -14,11 +14,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-          '/apigb': {
+          '/': {
           target: ipPath,
           changeOrigin: true,
           pathRewrite: {
-            '^/apigb': '/'
+            '^/': '/'
           }
         }, '/ERPWeb2': {
         target: ipPath,
@@ -51,7 +51,7 @@ module.exports = {
     cacheBusting: true,
 
     cssSourceMap: true
-		
+
   },
 
   build: {

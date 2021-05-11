@@ -1,7 +1,7 @@
 <template>
   <div id="addTemplate">
-    <step1 v-if="step == 1"></step1>
-    <step2 v-if="step == 2"></step2>
+    <step1 v-if="step == 1" @next="next"></step1>
+    <step2 v-if="step == 2" @pre="pre"></step2>
   </div>
 </template>
 <script>
@@ -27,7 +27,12 @@
 
     },
     methods: {
-
+      next() {
+        this.step = 2;
+      },
+      pre() {
+        this.step = 1;
+      }
     }
   }
 </script>

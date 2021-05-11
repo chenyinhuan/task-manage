@@ -51,11 +51,11 @@
             <el-menu-item index="manage-2" @click="go('/task-repository/task-template')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'manage-2' && !isCollapse">任务模板</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-menu-item index="report">
+        <!-- <el-menu-item index="report">
           <img v-if="activeMenu.indexOf('report') == -1" src="@/images/sider-bar/report.png"/>
           <img v-if="activeMenu.indexOf('report') != -1" src="@/images/sider-bar/report-active.png"/>
           <span slot="title">统计报表</span>
-        </el-menu-item>
+        </el-menu-item> -->
         <el-submenu index="user">
           <template slot="title">
             <img v-if="!isCollapse || activeMenu.indexOf('user-') == -1" src="../../images/sider-bar/user.png"/>

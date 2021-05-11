@@ -10,8 +10,9 @@ export const routes = [
   // pc登录
   {
     path: '/login',
+    name: 'Login',
     component: () => import( /* webpackChunkName: "login" */ '@/views/login/index'),
-    hidden: true,
+    // hidden: true,
     meta: {
       title: '登录',
       noCache: true

@@ -6,7 +6,7 @@
 			   <img class="logo" src="@/images/login/logo.png">
 			   <p>任务管理系统</p>
 			   <div>
-				   <el-input v-model="phone" class="phone">
+				   <el-input v-model="phonenumber" class="phone">
 					   <template slot="prepend"><div class="pre"><span>+86</span><div class="line"></div></div></template>
 				   </el-input>
 				   <el-input v-model="password" show-password class="password"></el-input>
@@ -18,27 +18,33 @@
     </div>
 </template>
 <script>
-
+import {apiLogin} from '@/api/user-manage'
 export default {
   data(){
    return {
-     phone: '',
+     phonenumber: '',
 	 password: ''
    }
   },
   created(){
-    
+
   },
   mounted() {
-    
+
   },
   computed:{
-    
+
   },
   methods:{
     goLogin() {
-		this.$router.push('/')
-	}
+      let params = {
+        password: this.password,
+        phonenumber: this.phonenumber
+      }
+      apiLogin().then(res => {
+         this.$router.push('/')
+      })
+    }
   }
 }
 </script>
@@ -53,19 +59,19 @@ export default {
 	position: relative;
 	.main {
 		position: absolute;
-		top: 50%;   
-		left: 50%;   
-		-webkit-transform: translate(-50%, -50%);   
-		-moz-transform: translate(-50%, -50%);   
-		-ms-transform: translate(-50%, -50%);   
-		-o-transform: translate(-50%, -50%);   
-		transform: translate(-50%, -50%); 
+		top: 50%;
+		left: 50%;
+		-webkit-transform: translate(-50%, -50%);
+		-moz-transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+		-o-transform: translate(-50%, -50%);
+		transform: translate(-50%, -50%);
 		background-color: #FFFFFF;
 		border-radius: 40px;
 		width: 1000px;
 		height: 700px;
 		display: flex;
-		
+
 		img {
 			width: 380px;
 			height: 700px;
@@ -85,13 +91,13 @@ export default {
 				line-height: 33px;
 				font-weight: bold;
 			}
-			
+
 			.el-input {
 				margin-bottom: 22px;
 				width: 400px;
 				height: 58px;
 				font-size: 16px;
-				
+
 				.el-input__clear {
 					font-size: 16px;
 				}

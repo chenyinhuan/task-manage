@@ -2,31 +2,25 @@
   <div id="step2">
     <p class="title">模版信息</p>
     <section>
-      <p>模版名称</p>
-      <el-input v-model="form.taskName" placeholder="请输入任务名称" maxlength="20" show-word-limit></el-input>
+      <p>任务指标名称</p>
+      <el-input class="input" v-model="form.taskName" placeholder="请输入任务指标名称" maxlength="20" show-word-limit></el-input>
     </section>
     <section>
-      <p>模版说明</p>
-      <el-input v-model="form.taskName" placeholder="请输入任务说明" maxlength="20" show-word-limit></el-input>
-    </section>
-    <section style="margin-bottom: 32px;">
-      <p>表单字段（原生字段）</p>
-      <div class="field">
-        <div class="field-item">
-          <span></span>
-        </div>
-        <div class="add-field">+ 新增表单字段</div>
+      <p>任务指标计算</p>
+      <div class="content">
+
       </div>
     </section>
     <section>
-      <p>监测字段（衍生字段）</p>
-      <div class="field">
-        <div class="add-field">+ 新增表单字段</div>
-      </div>
+      <p>任务指标考核结束时间</p>
+      <el-date-picker
+        v-model="form.date"
+        type="date"
+        placeholder="请填写日期">
+      </el-date-picker>
     </section>
     <div class="foot">
-      <el-button>上一步</el-button>
-      <el-button type="primary">创建</el-button>
+      <el-button type="primary">保存模版</el-button>
       <el-button class="cancel">取消</el-button>
     </div>
   </div>
@@ -38,11 +32,7 @@
         taskName: '',
         form: {
           taskName: '',
-          remark: '',
-          template: '',
-          radio: '',
-          startDate: '',
-          endDate: ''
+          date: ''
         },
         addDialog: false
       }
@@ -103,7 +93,7 @@
         line-height: 28px;
         margin-bottom: 20px;
       }
-      .el-input {
+      .input {
         width: 440px;
         height: 32px;
         border-radius: 4px;
@@ -115,17 +105,24 @@
           line-height: 32px;
         }
       }
-      .field {
+      .content {
         background-color: #F5F5F5;
         width: 860px;
-        padding: 5px 0px 40px 30px;
-        &-item {
-          color: #9596AB;
-          font-size: 14px;
-        }
-        .add-field {
-          color: #0079FE;
-          font-size: 16px;
+        padding: 20px 30px 40px 30px;
+        margin-bottom: 32px;
+      }
+      .el-date-editor {
+        position: relative;
+        &.el-input {
+          width: 125px;
+          >>>.el-input__inner {
+            padding-left: 10px;
+          }
+          >>>.el-input__prefix {
+            left: unset;
+            right: 0px;
+            color: #333333;
+          }
         }
       }
     }

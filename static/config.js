@@ -1,9 +1,7 @@
 var GLOBAL_CONFIG = {
 
   //======================= 本地开发路径 =========================
-  API_BASE_Tabel: '/apigb',
-  LOGIN_URL: '/ERPWeb2',
-	FEIBIAO_WEB_URL: 'http://localhost:8081/', //非标
+  API_BASE_Tabel: '/',
   //======================= 开发 =========================
   // API_BASE_Tabel: 'https://internal-dev.51hgp.com',
   // FEIBIAO_WEB_URL: 'https://internal-dev.51hgp.com/customizedweb', //非标

@@ -4,7 +4,7 @@ import { Loading,Message } from 'element-ui';
 import store from '@/store';
 
 const api = axios.create({
-  baseURL: window.$globalConfig.API_BASE_Tabel,
+  baseURL: '',
   timeout: 10000,
   withCredentials: true,
 });
@@ -36,11 +36,11 @@ api.interceptors.request.use(
       // config.headers = { 'Authorization': 'Bearer ' + store.state.home.token } // 所有请求添加token验证
     }
     if(config.params){ // 请求接口携带token
-      config.params['_origin_source'] = window.$globalConfig['_origin_source']
+      config.params['_origin_source'] = ''
       config.params['_r'] = new Date().getTime()
 			config.params['terminalType'] = 1
     } else {
-      config.params = {'_origin_source': window.$globalConfig['_origin_source'], '_r': new Date().getTime(),terminalType:1}
+      config.params = {'_origin_source': '', '_r': new Date().getTime(),terminalType:1}
     }
 	  return config
   },
