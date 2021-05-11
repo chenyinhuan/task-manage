@@ -232,11 +232,29 @@ export const routes = [
         }
       },
       {
+        path: 'add-organization',
+        component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/add-organization'),
+        hidden: true,
+        meta: {
+          title: '新增',
+          noCache: true
+        }
+      },
+      {
         path: 'role-setting',
         component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/role-setting'),
         hidden: false,
         meta: {
           title: '角色配置',
+          noCache: true
+        }
+      },
+      {
+        path: 'add-role',
+        component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/add-role'),
+        hidden: true,
+        meta: {
+          title: '新增',
           noCache: true
         }
       },

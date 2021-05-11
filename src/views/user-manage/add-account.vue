@@ -1,5 +1,5 @@
 <template>
-  <div id="accountConfig">
+  <div id="addAccount">
     <section>
       <p>账户号</p>
       <el-input v-model="form.taskName" placeholder="请输入使用人手机号" maxlength="20" show-word-limit></el-input>
@@ -20,7 +20,7 @@
       <p>匹配角色</p>
       <el-select v-model="form.template" placeholder="选择部门"></el-select>
       <el-select v-model="form.template" placeholder="选择角色"></el-select>
-      <a class="add">+新增</a>
+<!--      <a class="add">+新增</a>-->
     </section>
     <div class="foot">
       <el-button type="primary">创建</el-button>
@@ -56,7 +56,7 @@
 <style lang="scss" scoped>
   @import '@/styles/variables.scss';
 
-  #accountConfig {
+  #addAccount {
     padding: 36px 25px 36px 50px;
     margin: 30px 0px 30px 30px;
     width: calc(100% - 72px);
