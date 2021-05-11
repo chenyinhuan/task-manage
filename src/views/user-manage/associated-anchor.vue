@@ -1,5 +1,5 @@
 <template>
-  <div id="tasktemplate1" :style="{'height': tableData.length==0?'661px':''}">
+  <div id="associatedAnchor" :style="{'height': tableData.length==0?'661px':''}">
     <section class="hd">
       <div>
         <el-input v-model="keyword" placeholder="请输入主播名" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
@@ -121,7 +121,7 @@
 <style lang="scss" scoped>
   @import '@/styles/variables.scss';
 
-  #tasktemplate {
+  #associatedAnchor {
     padding: 36px 25px 36px 50px;
     margin: 30px 0px 30px 30px;
     width: calc(100% - 72px);
