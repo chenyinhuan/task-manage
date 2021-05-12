@@ -2,11 +2,7 @@
   <div id="organizationSetting">
     <div class="main">
       <div class="tree">
-        <el-input
-          placeholder="请输入"
-          v-model="filterText">
-        </el-input>
-
+        <el-input prefix-icon="el-icon-search" placeholder="请输入" v-model="filterText"></el-input>
         <el-tree
           class="filter-tree"
           :data="data"
@@ -195,11 +191,22 @@
         .el-input{
           width: 237px;
           height: 40px;
-          >>>.el-input__inner {
+          border-radius: 6px;
+          margin-bottom: 24px;
+          .el-input__prefix{
+            left: 13px;
+          }
+          .el-input__inner {
             font-size: 14px;
-            padding-left: 8px;
             height: 40px;
             line-height: 40px;
+            border: 1px solid #CDCDD5;
+            padding-left: 46px;
+          }
+          .el-input__icon{
+            font-size: 20px;
+            line-height: 40px;
+            color: #9596AB;
           }
         }
       }

@@ -17,9 +17,6 @@
           </li>
         </ul>
       </section>
-      <div class="foot">
-        <el-button type="primary">创建</el-button>
-      </div>
   </div>
 </template>
 <script>
