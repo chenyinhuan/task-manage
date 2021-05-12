@@ -1,6 +1,25 @@
 <template>
   <div id="userCenter">
-
+      <section>
+        <p>个人中心</p>
+        <ul class="info">
+          <li>
+            <h3>账户名</h3>
+            <p>张三</p>
+          </li>
+          <li>
+            <h3>手机号</h3>
+            <p>18888888888</p>
+          </li>
+          <li>
+            <h3>密码</h3>
+            <p><a>修改</a></p>
+          </li>
+        </ul>
+      </section>
+      <div class="foot">
+        <el-button type="primary">创建</el-button>
+      </div>
   </div>
 </template>
 <script>
@@ -27,7 +46,7 @@
   @import '@/styles/variables.scss';
 
   #userCenter {
-    padding: 36px 25px 36px 50px;
+    padding: 40px 25px 36px 60px;
     margin: 30px 0px 30px 30px;
     width: calc(100% - 72px);
     background-color: #FFFFFF;
@@ -41,6 +60,25 @@
         height: 40px;
         background: #0079FE;
         border-radius: 6px;
+      }
+    }
+    .info{
+      li{
+        padding: 15px 0;
+        h3{
+          font-size: 12px;
+          line-height: 17px;
+          color: #CDCDD5;
+          margin-bottom: 4px;
+        }
+        p{
+          font-size: 14px;
+          line-height: 20px;
+          color: #34335B;
+          a{
+            color: #0079FE;
+          }
+        }
       }
     }
     section{

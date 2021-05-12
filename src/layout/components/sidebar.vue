@@ -68,7 +68,7 @@
             <el-menu-item index="user-3" @click="go('/user-manage/organization-setting')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-3' && !isCollapse">组织配置</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-menu-item index="user">
+        <el-menu-item index="user" @click="go('/user-center')">
           <img v-if="activeMenu.indexOf('user') == -1" src="@/images/sider-bar/user.png"/>
           <img v-if="activeMenu.indexOf('user') != -1" src="@/images/sider-bar/user-active.png"/>
           <span slot="title">个人中心</span>

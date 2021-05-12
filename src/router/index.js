@@ -273,12 +273,21 @@ export const routes = [
   {
     path: '/user-center',
     name: 'UserManage',
-    component: () => import( /* webpackChunkName: "user-center" */ '@/views/user-center/index'),
-    hidden: false,
+    component: Layout,
+    redirect: '/user-center/personal',
     meta: {
       title: '个人中心',
       noCache: true
-    }
+    },
+    children: [{
+      path: 'personal',
+      component: () => import( /* webpackChunkName: "user-center" */ '@/views/user-center/index'),
+      hidden: false,
+      meta: {
+        title: '任务列表',
+        noCache: true
+      }
+    }]
   },
   // 匹配所有重定向首页
   {
