@@ -19,60 +19,26 @@
         <sidebar-item v-for="route in permissionRoutes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu> -->
       <el-menu :default-active="activeMenu" @select="selectMenu" class="el-menu-vertical-demo" :text-color="variables.menuText" :active-text-color="variables.subMenuActiveText" :collapse="isCollapse" :background-color="variables.menuBg">
-        <el-submenu index="task">
-          <template slot="title">
-            <img v-if="!isCollapse || activeMenu.indexOf('task-') == -1" src="@/images/sider-bar/task.png"/>
-            <img src="@/images/sider-bar/task-active.png" v-if="isCollapse && activeMenu.indexOf('task-') != -1"/>
-            <span slot="title">任务中心</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="task-1" @click="go('/task-center/my-task')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'task-1' && !isCollapse">我的任务</el-menu-item>
-            <el-menu-item index="task-2" @click="go('/task-center/my-assignment')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'task-2' && !isCollapse">我的派发任务</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
-        <el-menu-item index="field" @click="go('/field-manage')">
-          <img v-if="activeMenu.indexOf('field') == -1" src="@/images/sider-bar/field.png"/>
-          <img src="@/images/sider-bar/field-active.png" v-if="activeMenu.indexOf('field') != -1"/>
-          <span slot="title">字段库管理</span>
-        </el-menu-item>
-        <el-menu-item index="targrt">
-          <img v-if="activeMenu.indexOf('targrt') == -1" src="@/images/sider-bar/targrt.png"/>
-          <img v-if="activeMenu.indexOf('targrt') != -1" src="@/images/sider-bar/targrt-active.png"/>
-          <span slot="title">指标库管理</span>
-        </el-menu-item>
-        <el-submenu index="manage">
-          <template slot="title">
-            <img v-if="!isCollapse || activeMenu.indexOf('manage-') == -1" src="@/images/sider-bar/manage.png"/>
-            <img src="@/images/sider-bar/manage-active.png" v-if="isCollapse && activeMenu.indexOf('manage-') != -1"/>
-            <span slot="title">任务库管理</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="manage-1" @click="go('/task-repository/task-list')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'manage-1' && !isCollapse">任务列表</el-menu-item>
-            <el-menu-item index="manage-2" @click="go('/task-repository/task-template')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'manage-2' && !isCollapse">任务模板</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
-        <!-- <el-menu-item index="report">
-          <img v-if="activeMenu.indexOf('report') == -1" src="@/images/sider-bar/report.png"/>
-          <img v-if="activeMenu.indexOf('report') != -1" src="@/images/sider-bar/report-active.png"/>
-          <span slot="title">统计报表</span>
-        </el-menu-item> -->
-        <el-submenu index="user">
-          <template slot="title">
-            <img v-if="!isCollapse || activeMenu.indexOf('user-') == -1" src="../../images/sider-bar/user.png"/>
-            <img v-if="isCollapse && activeMenu.indexOf('user-') != -1" src="@/images/sider-bar/user-active.png"/>
-            <span slot="title">用户管理</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="user-1" @click="go('/user-manage/account-config')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-1' && !isCollapse">账户配置</el-menu-item>
-            <el-menu-item index="user-2" @click="go('/user-manage/role-setting')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-2' && !isCollapse">角色配置</el-menu-item>
-            <el-menu-item index="user-3" @click="go('/user-manage/organization-setting')"><img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == 'user-3' && !isCollapse">组织配置</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
-        <el-menu-item index="user">
-          <img v-if="activeMenu.indexOf('user') == -1" src="@/images/sider-bar/user.png"/>
-          <img v-if="activeMenu.indexOf('user') != -1" src="@/images/sider-bar/user-active.png"/>
-          <span slot="title">个人中心</span>
-        </el-menu-item>
+        <template v-for="(item, index) in menuList">
+          <el-submenu :index="item.index" :key="index" v-if="item.children && item.children.length>0">
+            <template slot="title">
+              <img v-if="!isCollapse || activeMenu.indexOf(`${item.index}-`) == -1" :src="item.img"/>
+              <img :src="tem.activeImg" v-if="isCollapse && activeMenu.indexOf(`${item.index}-`) != -1"/>
+              <span slot="title">{{item.title}}</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item :index="`${item.index}-${cindex+1}`" @click="go(citem.path)" v-for="(citem, cindex) in item.children" :key="cindex">
+                <img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == citem.index && !isCollapse">
+                <span>{{citem.title}}</span>
+              </el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <el-menu-item :index="item.index" @click="go(item.path)" :key="index" v-else>
+            <img v-if="activeMenu.indexOf(item.index) == -1" :src="item.img"/>
+            <img :src="item.activeImg" v-if="activeMenu.indexOf(item.index) != -1"/>
+            <span slot="title">{{item.title}}</span>
+          </el-menu-item>
+        </template>
       </el-menu>
     </el-scrollbar>
   </div>
@@ -81,7 +47,7 @@
   import {
     mapGetters,
     mapActions
-  } from 'vuex';
+  } from 'vuex'
   import variables from '@/styles/variables.scss';
   import SidebarItem from './group/SidebarItem';
   import Cookies from 'js-cookie'
@@ -92,16 +58,90 @@
     },
     data() {
       return {
-        activeMenu: Cookies.get('activeMenu')?Cookies.get('activeMenu'):'1-1',
+        activeMenu: Cookies.get('activeMenu')?Cookies.get('activeMenu'):'task-1',
         menuList: [
           {
-            img: '@/images/sider-bar/task.png',
+            img: require('../../images/sider-bar/task.png'),
+            activeImg: require('../../images/sider-bar/task-active.png'),
+            index: 'task',
             title: '任务中心',
+            path: '/task-center/my-task',
             children: [
               {
+                index: 'task-1',
                 title: '我的任务',
+                path: '/task-center/my-task',
+              },
+              {
+                index: 'task-2',
+                title: '我的派发任务',
+                path: '/task-center/my-assignment',
               }
             ]
+          },
+          {
+            img: require('../../images/sider-bar/field.png'),
+            activeImg: require('../../images/sider-bar/field-active.png'),
+            index: 'field',
+            title: '字段库管理',
+            path: '/field-manage',
+          },
+          {
+            img: require('../../images/sider-bar/targrt.png'),
+            activeImg: require('../../images/sider-bar/targrt-active.png'),
+            index: 'targrt',
+            title: '指标库管理',
+            path: '/targrt-manage',
+          },
+          {
+            img: require('../../images/sider-bar/manage.png'),
+            activeImg: require('../../images/sider-bar/manage-active.png'),
+            index: 'manage',
+            title: '任务库管理',
+            path: '/task-repository/task-list',
+            children: [
+              {
+                index: 'manage-1',
+                title: '任务列表',
+                path: '/task-repository/task-list',
+              },
+              {
+                index: 'manage-2',
+                title: '任务模板',
+                path: '/task-repository/task-template',
+              }
+            ]
+          },
+          {
+            img: require('../../images/sider-bar/user.png'),
+            activeImg: require('../../images/sider-bar/user-active.png'),
+            index: 'user',
+            title: '用户管理',
+            path: '/user-manage/account-config',
+            children: [
+              {
+                index: 'user-1',
+                title: '账户配置',
+                path: '/user-manage/account-config',
+              },
+              {
+                index: 'user-2',
+                title: '角色配置',
+                path: '/user-manage/role-setting',
+              },
+              {
+                index: 'user-2',
+                title: '组织配置',
+                path: '/user-manage/organization-setting',
+              }
+            ]
+          },
+          {
+            img: require('../../images/sider-bar/user.png'),
+            activeImg: require('../../images/sider-bar/user-active.png'),
+            index: 'user',
+            title: '个人中心',
+            path: '/user-center',
           }
         ]
       };
@@ -132,6 +172,8 @@
     methods: {
       ...mapActions('module', ['generateRoutes']),
       go(path) {
+        console.log(path)
+        Cookies.set('activePath',path)
         this.$router.push(path)
       },
       selectMenu(index, indexPath) {
