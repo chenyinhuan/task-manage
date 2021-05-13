@@ -2,11 +2,7 @@
   <div id="accountConfig">
     <div class="main">
       <div class="tree">
-        <el-input
-          placeholder="请输入"
-          v-model="filterText">
-        </el-input>
-
+        <el-input prefix-icon="el-icon-search" placeholder="请输入" v-model="filterText"></el-input>
         <el-tree
           class="filter-tree"
           :data="data"
@@ -17,15 +13,15 @@
         </el-tree>
       </div>
       <div class="table-list">
-        <section class="search">
+        <section>
           <p>业务三部</p>
+        </section>
+        <div class="foot search">
+          <el-button type="primary" @click="addAccount">添加账号</el-button>
           <div>
             <el-input class="account" v-model="form.taskName" placeholder="请输入账号名"></el-input>
             <el-input v-model="form.taskName" placeholder="请输入登录账号"></el-input>
           </div>
-        </section>
-        <div class="foot">
-          <el-button type="primary" @click="addAccount">添加账号</el-button>
         </div>
         <el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
           <el-table-column :prop="item.prop" :label="item.label" :width="item.width"
@@ -216,11 +212,22 @@
         .el-input{
           width: 237px;
           height: 40px;
-          >>>.el-input__inner {
+          border-radius: 6px;
+          margin-bottom: 24px;
+          .el-input__prefix{
+            left: 13px;
+          }
+          .el-input__inner {
             font-size: 14px;
-            padding-left: 8px;
             height: 40px;
             line-height: 40px;
+            border: 1px solid #CDCDD5;
+            padding-left: 46px;
+          }
+          .el-input__icon{
+            font-size: 20px;
+            line-height: 40px;
+            color: #9596AB;
           }
         }
       }
@@ -239,8 +246,16 @@
     .search{
       display: flex;
       justify-content: space-between;
+      align-items: center;
       .el-input{
-        width: 200px;
+        width: 240px;
+        height: 32px;
+        .el-input__inner {
+          font-size: 14px;
+          height: 32px;
+          line-height: 32px;
+          border: 1px solid #CDCDD5;
+        }
         &.account{
           margin-right: 15px;
         }

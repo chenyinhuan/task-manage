@@ -19,7 +19,7 @@
         <sidebar-item v-for="route in permissionRoutes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu> -->
       <el-menu :default-active="activeMenu" @select="selectMenu" class="el-menu-vertical-demo" :text-color="variables.menuText" :active-text-color="variables.subMenuActiveText" :collapse="isCollapse" :background-color="variables.menuBg">
-        <template v-for="(item, index) in menuList">
+<template v-for="(item, index) in menuList">
           <el-submenu :index="item.index" :key="index" v-if="item.children && item.children.length>0">
             <template slot="title">
               <img v-if="!isCollapse || activeMenu.indexOf(`${item.index}-`) == -1" :src="item.img"/>

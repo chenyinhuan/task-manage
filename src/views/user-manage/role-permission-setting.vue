@@ -98,6 +98,9 @@
     border-radius: 12px;
     box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
     min-height: 768px;
+    .el-tree-node__content:hover,.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{
+      background-color: transparent;
+    }
     .foot{
       margin-top: 60px;
       .el-button{
