@@ -13,7 +13,72 @@
 export default {
   data() {
     return {
-      levelList: null
+      levelList: [],
+      routes: [
+        {
+          // 任务日历
+          path: '/task-center/my-task',
+          matched: [
+            {
+              name: '任务中心',
+              path: '/task-center/my-task',
+              active: true
+            },
+            {
+              name: '我的任务中心',
+              path: '',
+              active: false
+            },
+            {
+              name: '我的列表',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 任务列表
+          path: '/task-center/task-list',
+          matched: [
+            {
+              name: '任务中心',
+              path: '/task-center/my-task',
+              active: true
+            },
+            {
+              name: '我的任务中心',
+              path: '',
+              active: false
+            },
+            {
+              name: '我的列表',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 任务列表
+          path: '/task-center/task-list',
+          matched: [
+            {
+              name: '任务中心',
+              path: '/task-center/my-task',
+              active: true
+            },
+            {
+              name: '我的任务中心',
+              path: '',
+              active: false
+            },
+            {
+              name: '我的列表',
+              path: '',
+              active: false
+            }
+          ]
+        }
+      ]
     }
   },
   watch: {
