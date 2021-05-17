@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Layout from '@/layout';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import store from '@/store';
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) { // 路由错误信息拦截
@@ -300,6 +301,8 @@ router.afterEach((to, from) => {
 
 });
 router.beforeEach((to, from, next) => {
+  console.log(store.state.module.permissionRoutes);
+  console.log(store.state.module.permissionRoutes.find(n => n.index == Cookies.get('activeMenu').split('-')[0]))
   // if(Cookies.set('activePath') && Cookies.set('activePath') != to.fullPath)
   // {
   //   this.$router.push(Cookies.set('activePath'))
