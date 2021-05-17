@@ -1,9 +1,9 @@
 <template>
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
-      <el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path">
-        <span v-if="item.redirect==='noRedirect'||index==levelList.length-1" class="no-redirect">{{ item.meta.title }}</span>
-        <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
+      <el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path + index">
+        <span v-if="!item.active" class="no-redirect">{{ item.name }}</span>
+        <a v-else @click.prevent="handleLink(item)" style="font-weight: bold;color:#34335B;">{{ item.name }}</a>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
@@ -24,34 +24,13 @@ export default {
               path: '/task-center/my-task',
               active: true
             },
+            // {
+            //   name: '我的任务中心',
+            //   path: '',
+            //   active: false
+            // },
             {
-              name: '我的任务中心',
-              path: '',
-              active: false
-            },
-            {
-              name: '我的列表',
-              path: '',
-              active: false
-            }
-          ]
-        },
-        {
-          // 任务列表
-          path: '/task-center/task-list',
-          matched: [
-            {
-              name: '任务中心',
-              path: '/task-center/my-task',
-              active: true
-            },
-            {
-              name: '我的任务中心',
-              path: '',
-              active: false
-            },
-            {
-              name: '我的列表',
+              name: '我的任务',
               path: '',
               active: false
             }
@@ -77,7 +56,434 @@ export default {
               active: false
             }
           ]
-        }
+        },
+        {
+          // 任务指标列表
+          path: '/task-center/task-target-list',
+          matched: [
+            {
+              name: '任务中心',
+              path: '/task-center/my-task',
+              active: true
+            },
+            {
+              name: '我的任务',
+              path: '',
+              active: false
+            },
+            {
+              name: '任务列表',
+              path: '',
+              active: false
+            },
+            {
+              name: '任务指标列表',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 任务详情列表
+          path: '/task-center/task-dtl-list',
+          matched: [
+            {
+              name: '任务中心',
+              path: '/task-center/my-task',
+              active: true
+            },
+            {
+              name: '我的任务',
+              path: '',
+              active: false
+            },
+            {
+              name: '任务列表',
+              path: '',
+              active: false
+            },
+            {
+              name: '任务详情',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 任务详情-查看
+          path: '/task-center/task-dtl',
+          matched: [
+            {
+              name: '任务中心',
+              path: '/task-center/my-task',
+              active: true
+            },
+            {
+              name: '我的任务',
+              path: '',
+              active: false
+            },
+            {
+              name: '任务列表',
+              path: '',
+              active: false
+            },
+            {
+              name: '任务详情',
+              path: '',
+              active: false
+            },
+            {
+              name: '查看',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 任务详情-新增记录
+          path: '/task-center/add-record',
+          matched: [
+            {
+              name: '任务中心',
+              path: '/task-center/my-task',
+              active: true
+            },
+            {
+              name: '我的任务',
+              path: '',
+              active: false
+            },
+            {
+              name: '任务列表',
+              path: '',
+              active: false
+            },
+            {
+              name: '任务详情',
+              path: '',
+              active: false
+            },
+            {
+              name: '新增记录',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 我的派发任务
+          path: '/task-center/my-assignment',
+          matched: [
+            {
+              name: '任务中心',
+              path: '/task-center/my-task',
+              active: true
+            },
+            {
+              name: '我的派发任务',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 派发任务明细
+          path: '/task-center/my-assignment',
+          matched: [
+            {
+              name: '任务中心',
+              path: '/task-center/my-task',
+              active: true
+            },
+            {
+              name: '我的派发任务',
+              path: '',
+              active: false
+            },
+            {
+              name: '派发任务明细',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 字段库管理
+          path: '/field-manage',
+          matched: [
+            {
+              name: '字段库管理',
+              path: '/field-manage',
+              active: true
+            }
+          ]
+        },
+        {
+          // 字段库管理-新增字段
+          path: '/field-manage/add-field',
+          matched: [
+            {
+              name: '字段库管理',
+              path: '/field-manage',
+              active: true
+            },
+            {
+              name: '新增字段',
+              path: '/field-manage/add-field',
+              active: false
+            }
+          ]
+        },
+        {
+          // 指标库管理
+          path: '/field-manage',
+          matched: [
+            {
+              name: '指标库管理',
+              path: '/field-manage',
+              active: true
+            }
+          ]
+        },
+        {
+          // 任务库管理
+          path: '/task-repository/task-list',
+          matched: [
+            {
+              name: '任务库管理',
+              path: '/task-repository/task-list',
+              active: true
+            },
+            {
+              name: '任务列表',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 任务库管理-新增任务
+          path: '/task-repository/add-task',
+          matched: [
+            {
+              name: '任务库管理',
+              path: '/task-repository/task-list',
+              active: true
+            },
+            {
+              name: '任务列表',
+              path: '',
+              active: false
+            },
+            {
+              name: '新增任务',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 任务库管理-任务模板
+          path: '/task-repository/task-template',
+          matched: [
+            {
+              name: '任务库管理',
+              path: '/task-repository/task-list',
+              active: true
+            },
+            {
+              name: '任务模板',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 任务库管理-新增模板
+          path: '/task-repository/add-template',
+          matched: [
+            {
+              name: '任务库管理',
+              path: '/task-repository/task-list',
+              active: true
+            },
+            {
+              name: '任务模板',
+              path: '',
+              active: false
+            },
+            {
+              name: '新增模板',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 用户管理-账户配置
+          path: '/user-manage/account-config',
+          matched: [
+            {
+              name: '用户管理',
+              path: '/user-manage/account-config',
+              active: true
+            },
+            {
+              name: '账户配置',
+              path: '',
+              active: false
+            },
+          ]
+        },
+        {
+          // 用户管理-新增账户
+          path: '/user-manage/add-account',
+          matched: [
+            {
+              name: '用户管理',
+              path: '/user-manage/account-config',
+              active: true
+            },
+            {
+              name: '账户配置',
+              path: '',
+              active: false
+            },
+            {
+              name: '新增',
+              path: '',
+              active: false
+            },
+          ]
+        },
+        {
+          // 用户管理-关联主播
+          path: '/user-manage/associated-anchor',
+          matched: [
+            {
+              name: '用户管理',
+              path: '/user-manage/account-config',
+              active: true
+            },
+            {
+              name: '账户配置',
+              path: '',
+              active: false
+            },
+            {
+              name: '关联主播',
+              path: '',
+              active: false
+            },
+          ]
+        },
+        {
+          // 用户管理-组织配置
+          path: '/user-manage/organization-setting',
+          matched: [
+            {
+              name: '用户管理',
+              path: '/user-manage/account-config',
+              active: true
+            },
+            {
+              name: '组织配置',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 用户管理-新增组织
+          path: '/user-manage/add-organization',
+          matched: [
+            {
+              name: '用户管理',
+              path: '/user-manage/account-config',
+              active: true
+            },
+            {
+              name: '组织配置',
+              path: '',
+              active: false
+            },
+            {
+              name: '新增',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 用户管理-角色配置
+          path: '/user-manage/role-setting',
+          matched: [
+            {
+              name: '用户管理',
+              path: '/user-manage/account-config',
+              active: true
+            },
+            {
+              name: '角色配置',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 用户管理-新增角色
+          path: '/user-manage/add-role',
+          matched: [
+            {
+              name: '用户管理',
+              path: '/user-manage/account-config',
+              active: true
+            },
+            {
+              name: '角色配置',
+              path: '',
+              active: false
+            },
+            {
+              name: '新增',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 用户管理-权限配置
+          path: '/user-manage/role-permission-setting',
+          matched: [
+            {
+              name: '用户管理',
+              path: '/user-manage/account-config',
+              active: true
+            },
+            {
+              name: '角色配置',
+              path: '',
+              active: false
+            },
+            {
+              name: '权限配置',
+              path: '',
+              active: false
+            }
+          ]
+        },
+        {
+          // 个人中心
+          path: '/user-center',
+          matched: [
+            {
+              name: '个人中心',
+              path: '/user-center',
+              active: true
+            }
+          ]
+        },
       ]
     }
   },
@@ -96,10 +502,8 @@ export default {
   methods: {
     getBreadcrumb() {
       // only show routes with meta.title
-      let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
-      const first = matched[0]
-
-      this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
+      let matched = this.routes.find(item => item.path == this.$route.fullPath);
+      this.levelList = matched.matched;
       console.log(this.levelList)
     },
     handleLink(item) {

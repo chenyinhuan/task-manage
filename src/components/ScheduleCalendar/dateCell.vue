@@ -225,7 +225,7 @@
       height: ~'calc(100% / 6)';
       min-width: 94px;
       height: 124px;
-      padding: 16px 17px 13px 30px;
+      padding: 16px 17px 13px 17px;
       border-top: 1px solid @sc-border-color;
       border-right: 1px solid @sc-border-color;
       user-select: none;

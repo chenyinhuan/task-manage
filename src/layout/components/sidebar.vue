@@ -19,11 +19,11 @@
         <sidebar-item v-for="route in permissionRoutes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu> -->
       <el-menu :default-active="activeMenu" @select="selectMenu" class="el-menu-vertical-demo" :text-color="variables.menuText" :active-text-color="variables.subMenuActiveText" :collapse="isCollapse" :background-color="variables.menuBg">
-<template v-for="(item, index) in menuList">
+        <template v-for="(item, index) in menuList">
           <el-submenu :index="item.index" :key="index" v-if="item.children && item.children.length>0">
             <template slot="title">
               <img v-if="!isCollapse || activeMenu.indexOf(`${item.index}-`) == -1" :src="item.img"/>
-              <img :src="tem.activeImg" v-if="isCollapse && activeMenu.indexOf(`${item.index}-`) != -1"/>
+              <img :src="item.activeImg" v-if="isCollapse && activeMenu.indexOf(`${item.index}-`) != -1"/>
               <span slot="title">{{item.title}}</span>
             </template>
             <el-menu-item-group>
@@ -137,9 +137,9 @@
             ]
           },
           {
-            img: require('../../images/sider-bar/user.png'),
-            activeImg: require('../../images/sider-bar/user-active.png'),
-            index: 'user',
+            img: require('../../images/sider-bar/center.png'),
+            activeImg: require('../../images/sider-bar/center-active.png'),
+            index: 'center',
             title: '个人中心',
             path: '/user-center',
           }

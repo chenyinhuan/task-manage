@@ -144,7 +144,7 @@ export const routes = [
     path: '/task-repository',
     component: Layout,
     redirect: '/task-repository/task-list',
-    name: 'FieldManage',
+    name: 'TaskManage',
     meta: {
       title: '任务库管理',
       icon: 'lock',
@@ -273,19 +273,15 @@ export const routes = [
   },
   {
     path: '/user-center',
-    name: 'UserManage',
+    name: 'UserCenter',
     component: Layout,
     redirect: '/user-center/personal',
-    meta: {
-      title: '个人中心',
-      noCache: true
-    },
     children: [{
-      path: 'personal',
-      component: () => import( /* webpackChunkName: "user-center" */ '@/views/user-center/index'),
+      path: '',
+      component: () => import( /* webpackChunkName: "login" */ '@/views/user-center/index'),
       hidden: false,
       meta: {
-        title: '任务列表',
+        title: '个人中心',
         noCache: true
       }
     }]
