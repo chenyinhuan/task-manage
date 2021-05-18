@@ -12,54 +12,62 @@
     <section style="margin-bottom: 32px;">
       <p>表单字段（原生字段）</p>
       <div class="field">
-        <div class="field-item" v-for="(item, index) in originalField" :key="index">
-          <div class="field-sitem">
-            <span>商品ID{{item.id}}</span>
-            <el-input v-model="form.taskName" placeholder="请输入商品ID"></el-input>
-          </div>
-          <div class="field-sitem">
-            <span>是否必填ID</span>
-            <el-radio-group v-model="form.radio">
-                <el-radio :label="3">b必填</el-radio>
-                <el-radio :label="6">非必填</el-radio>
-            </el-radio-group>
-          </div>
-          <div class="field-sitem">
-            <div style="height: 20px;"> </div>
-            <div class="delete"><i class="el-icon-error"></i>删除</div>
-          </div>
-          <div class="field-sitem">
-            <div style="height: 20px;"> </div>
-            <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sort(index, index + 1)"></i><i class="el-icon-caret-bottom" @click="sort(index, index - 1)" v-if="index != originalField.length -1"></i></div>
-          </div>
-        </div>
+        <draggable v-model="originalField"  chosenClass="chosen" forceFallback="true" group="people" animation="1000" @start="onStart" @end="onEnd">
+          <transition-group>
+            <div class="field-item" v-for="(item, index) in originalField" :key="index">
+              <div class="field-sitem">
+                <span>商品ID{{item.id}}</span>
+                <el-input v-model="form.taskName" placeholder="请输入商品ID"></el-input>
+              </div>
+              <div class="field-sitem">
+                <span>是否必填ID</span>
+                <el-radio-group v-model="form.radio">
+                    <el-radio :label="3">b必填</el-radio>
+                    <el-radio :label="6">非必填</el-radio>
+                </el-radio-group>
+              </div>
+              <div class="field-sitem">
+                <div style="height: 20px;"> </div>
+                <div class="delete"><i class="el-icon-error"></i>删除</div>
+              </div>
+              <div class="field-sitem">
+                <div style="height: 20px;"> </div>
+                <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sort(index, index + 1)"></i><i class="el-icon-caret-bottom" @click="sort(index, index - 1)" v-if="index != originalField.length -1"></i></div>
+              </div>
+            </div>
+          </transition-group>
+        </draggable>
         <div class="add-field" @click="addField(1)">+ 新增表单字段</div>
       </div>
     </section>
     <section>
       <p>监测字段（衍生字段）</p>
       <div class="field">
-        <div class="field-item" v-for="(item, index) in extendField" :key="index">
-          <div class="field-sitem">
-            <span>字段显示名</span>
-            <div class="name">直播间是否装扮{{item.id}}</div>
-          </div>
-          <div class="field-sitem">
-            <span>是否必填ID</span>
-            <el-radio-group v-model="form.radio">
-                <el-radio :label="3">b必填</el-radio>
-                <el-radio :label="6">非必填</el-radio>
-            </el-radio-group>
-          </div>
-          <div class="field-sitem">
-            <div style="height: 20px;"> </div>
-            <div class="delete"><i class="el-icon-error"></i>删除</div>
-          </div>
-          <div class="field-sitem">
-            <div style="height: 20px;"> </div>
-            <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sortExtend(index, index + 1)"></i><i class="el-icon-caret-bottom" @click="sortExtend(index, index - 1)" v-if="index != extendField.length - 1"></i></div>
-          </div>
-        </div>
+        <draggable v-model="extendField"  chosenClass="chosen" forceFallback="true" group="people" animation="1000" @start="onStart" @end="onEnd">
+          <transition-group>
+            <div class="field-item" v-for="(item, index) in extendField" :key="index">
+              <div class="field-sitem">
+                <span>字段显示名</span>
+                <div class="name">直播间是否装扮{{item.id}}</div>
+              </div>
+              <div class="field-sitem">
+                <span>是否必填ID</span>
+                <el-radio-group v-model="form.radio">
+                    <el-radio :label="3">b必填</el-radio>
+                    <el-radio :label="6">非必填</el-radio>
+                </el-radio-group>
+              </div>
+              <div class="field-sitem">
+                <div style="height: 20px;"> </div>
+                <div class="delete"><i class="el-icon-error"></i>删除</div>
+              </div>
+              <div class="field-sitem">
+                <div style="height: 20px;"> </div>
+                <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sortExtend(index, index + 1)"></i><i class="el-icon-caret-bottom" @click="sortExtend(index, index - 1)" v-if="index != extendField.length - 1"></i></div>
+              </div>
+            </div>
+          </transition-group>
+        </draggable>
         <div class="add-field" @click="addField(2)">+ 新增检测字段</div>
       </div>
     </section>
@@ -108,7 +116,11 @@
   </div>
 </template>
 <script>
+  import draggable from 'vuedraggable'
   export default {
+    components: {
+      draggable,
+    },
     data() {
       return {
         taskName: '',
@@ -177,6 +189,7 @@
             prop: 'toothTypeName',
           }
         ],
+        drag: false
       }
     },
     created() {
@@ -189,6 +202,14 @@
 
     },
     methods: {
+      //开始拖拽事件
+      onStart(){
+        this.drag=true;
+      },
+      //拖拽结束事件
+      onEnd() {
+        this.drag=false;
+      },
       openDialog() {
         this.addDialog = true;
       },
