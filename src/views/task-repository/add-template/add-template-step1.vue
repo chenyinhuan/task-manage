@@ -14,7 +14,7 @@
       <div class="field">
         <div class="field-item" v-for="(item, index) in originalField" :key="index">
           <div class="field-sitem">
-            <span>商品ID</span>
+            <span>商品ID{{item.id}}</span>
             <el-input v-model="form.taskName" placeholder="请输入商品ID"></el-input>
           </div>
           <div class="field-sitem">
@@ -30,10 +30,10 @@
           </div>
           <div class="field-sitem">
             <div style="height: 20px;"> </div>
-            <div class="drag"><i class="el-icon-caret-top"></i><div class="line"></div><i class="el-icon-caret-bottom"></i></div>
+            <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sort(index, index + 1)"></i><div class="line" v-if="index != 0 && index != originalField.length -1"></div><i class="el-icon-caret-bottom" @click="sort(index, index - 1)" v-if="index != originalField.length -1"></i></div>
           </div>
         </div>
-        <div class="add-field" @click="addOriginfield()">+ 新增表单字段</div>
+        <div class="add-field" @click="addField(1)">+ 新增表单字段</div>
       </div>
     </section>
     <section>
@@ -42,7 +42,7 @@
         <div class="field-item" v-for="(item, index) in extendField" :key="index">
           <div class="field-sitem">
             <span>字段显示名</span>
-            <div class="name">直播间是否装扮</div>
+            <div class="name">直播间是否装扮{{item.id}}</div>
           </div>
           <div class="field-sitem">
             <span>是否必填ID</span>
@@ -57,10 +57,10 @@
           </div>
           <div class="field-sitem">
             <div style="height: 20px;"> </div>
-            <div class="drag"><i class="el-icon-caret-top"></i><div class="line"></div><i class="el-icon-caret-bottom"></i></div>
+            <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sortExtend(index, index + 1)"></i><div class="line" v-if="index != 0 && index != extendField.length - 1"></div><i class="el-icon-caret-bottom" @click="sortExtend(index, index - 1)" v-if="index != extendField.length - 1"></i></div>
           </div>
         </div>
-        <div class="add-field" @click="addField()">+ 新增表单字段</div>
+        <div class="add-field" @click="addField(2)">+ 新增检测字段</div>
       </div>
     </section>
     <div class="foot">
@@ -68,6 +68,43 @@
       <el-button type="primary" @click="next()">下一步</el-button>
       <el-button class="cancel">取消</el-button>
     </div>
+    <el-dialog
+      :title="`选择${type==1?'表单':'检测'}字段（${type==1?'原生字段':'衍生字段'}）`"
+      :visible.sync="dialogVisible"
+      width="782px"
+      :before-close="handleClose">
+      <div class="dialog-content">
+        <el-input v-model="keyword" placeholder="任务名称" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+        <el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0 && type==1">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column :prop="item.prop" :label="item.label" :width="item.width" v-for="(item,index) in tableColumn"
+            :key="index">
+            <template slot-scope="scope">
+              <div>{{ scope.row[item.prop] }}</div>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0 && type==2">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column :prop="item.prop" :label="item.label" :width="item.width" v-for="(item,index) in tableColumn1"
+            :key="index">
+            <template slot-scope="scope">
+              <div>{{ scope.row[item.prop] }}</div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -83,9 +120,63 @@
           startDate: '',
           endDate: ''
         },
-        originalField: Array(3),
-        extendField: Array(4),
-        addDialog: false
+        originalField: [
+          {id:1},{id:2}
+        ],
+        extendField: [{id:1},{id:2},{id:3}],
+        addDialog: false,
+        type: '',
+        dialogVisible: false,
+        keyword: '',
+        tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }],
+        tableColumn: [ // 表格列数据
+          {
+            label: '字段显示名',
+            prop: 'strengthName',
+          },
+          {
+            label: '数据类型',
+            prop: 'specName',
+          },
+          {
+            label: '表单类型',
+            prop: 'explain',
+          },
+          {
+            label: '字段描述',
+            prop: 'toothTypeName',
+          }
+        ],
+        tableColumn1: [ // 表格列数据
+          {
+            label: '字段显示名',
+            prop: 'strengthName',
+          },
+          {
+            label: '数据类型',
+            prop: 'specName',
+          },
+          {
+            label: '字段描述',
+            prop: 'toothTypeName',
+          }
+        ],
       }
     },
     created() {
@@ -102,17 +193,29 @@
         this.addDialog = true;
       },
       handleClose() {
-
+        this.dialogVisible = false
       },
-      addOriginfield() {
-
-      },
-      addField() {
-
+      addField(val) {
+        this.type = val;
+        this.dialogVisible = true;
       },
       next() {
         this.$emit('next');
-      }
+      },
+      search() {
+
+      },
+      sort(index, refIndex) {
+        let list = this.originalField;
+        [list[index], list[refIndex]] = [list[refIndex], list[index]];
+        this.originalField = JSON.parse(JSON.stringify(list));
+        console.log(this.originalField)
+      },
+      sortExtend(index, refIndex) {
+        let list = this.extendField;
+        [list[index], list[refIndex]] = [list[refIndex], list[index]];
+        this.extendField = JSON.parse(JSON.stringify(list));
+      },
     }
   }
 </script>
@@ -173,6 +276,7 @@
           margin-top: 15px;
           color: #0079FE;
           font-size: 16px;
+          cursor: pointer;
         }
         &-item {
           display: flex;
@@ -257,6 +361,27 @@
         }
       }
     }
+    .dialog-content {
+      >>>.el-input__inner {
+        height: 40px;
+        line-height: 40px;
+        width: 160px;
+        border-radius: 5px;
+        background-color: #F8FAFB;
+        border: 0px;
+        font-size: 14px;
+        padding-left: 43px;
+      }
 
+      >>>.el-input__prefix {
+        left: 11px;
+      }
+
+      >>>.el-input__icon {
+        font-size: 20px;
+        line-height: 40px;
+        color: #9596AB;
+      }
+    }
   }
 </style>

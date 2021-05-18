@@ -89,9 +89,9 @@
       color: #108EE9;
     }
     >>>.el-input-group__append, >>>.el-input-group__prepend {
-      background-color: #CDCDD5;
+      background-color: #D9D9D9;
       color: #FFFFFF;
-      border-color: #CDCDD5;
+      border-color: #D9D9D9;
       padding: 0px 14px;
     }
     h3{
