@@ -142,6 +142,35 @@ export const routes = [
     ]
   },
   {
+    path: '/target-manage',
+    component: Layout,
+    redirect: '/target-manage',
+    name: 'TargetManage',
+    meta: {
+      title: '指标库管理',
+      icon: 'lock',
+    },
+    children: [{
+      path: '',
+      component: () => import( /* webpackChunkName: "login" */ '@/views/target-manage/index'),
+      hidden: false,
+      meta: {
+        title: '指标库管理',
+        noCache: true
+      }
+    },
+    {
+      path: 'add-target',
+      component: () => import( /* webpackChunkName: "login" */ '@/views/target-manage/add-target'),
+      hidden: false,
+      meta: {
+        title: '新增指标',
+        noCache: true
+      }
+    }
+    ]
+  },
+  {
     path: '/task-repository',
     component: Layout,
     redirect: '/task-repository/task-list',
@@ -301,8 +330,8 @@ router.afterEach((to, from) => {
 
 });
 router.beforeEach((to, from, next) => {
-  console.log(store.state.module.permissionRoutes);
-  console.log(store.state.module.permissionRoutes.find(n => n.index == Cookies.get('activeMenu').split('-')[0]))
+  // console.log(store.state.module.permissionRoutes);
+  // console.log(store.state.module.permissionRoutes.find(n => n.index == Cookies.get('activeMenu').split('-')[0]))
   // if(Cookies.set('activePath') && Cookies.set('activePath') != to.fullPath)
   // {
   //   this.$router.push(Cookies.set('activePath'))

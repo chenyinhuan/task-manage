@@ -237,11 +237,11 @@ export default {
         },
         {
           // 指标库管理
-          path: '/field-manage',
+          path: '/target-manage',
           matched: [
             {
               name: '指标库管理',
-              path: '/field-manage',
+              path: '/target-manage',
               active: true
             }
           ]

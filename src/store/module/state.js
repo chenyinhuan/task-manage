@@ -36,7 +36,7 @@ export default {
             activeImg: require('../../images/sider-bar/targrt-active.png'),
             index: 'targrt',
             title: '指标库管理',
-            path: '/targrt-manage',
+            path: '/target-manage',
           },
           {
             img: require('../../images/sider-bar/manage.png'),
