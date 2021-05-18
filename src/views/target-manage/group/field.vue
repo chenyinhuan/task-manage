@@ -39,12 +39,12 @@
         color: #34335B;
         line-height: 28px;
         margin-bottom: 20px;
-        margin-top: 32px;
       }
       .el-select{
         width: 240px;
         height: 32px;
         border-radius: 4px;
+        margin-bottom: 32px;
         >>>.el-input__inner {
           font-size: 14px;
           padding-left: 8px;
@@ -62,6 +62,7 @@
         width: 440px;
         height: 32px;
         border-radius: 4px;
+        margin-bottom: 32px;
         .el-input__inner {
           font-size: 14px;
           padding-left: 8px;
