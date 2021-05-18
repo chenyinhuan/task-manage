@@ -1,14 +1,88 @@
 <template>
-	<div id="targetManage">
-
-	</div>
+  <div id="targetManage" :style="{'height': tableData.length==0?'661px':''}">
+    <section class="hd">
+      <div>
+        <el-input v-model="keyword" placeholder="指标名称" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+      </div>
+      <el-button type="primary" @click="addTask">新增</el-button>
+    </section>
+    <el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
+      <el-table-column :prop="item.prop" :label="item.label" :width="item.width"
+                       v-for="(item,index) in tableColumn" :key="index">
+        <template slot-scope="scope">
+          <div v-if="item.slot && item.prop=='weight'" class="percent">
+            <div class="dot" :class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'',scope.$index == 2?'blue':'']"></div><span> {{scope.$index == 0?'进行中':''}}{{scope.$index == 1?'已取消，已结束':''}}{{scope.$index == 2?'待开始':''}}</span>
+          </div>
+          <div v-if="item.slot && item.prop=='opt'">
+            <el-button type="text" v-if="scope.$index != 2">编辑</el-button>
+            <el-button type="text" v-if="scope.$index != 2">删除</el-button>
+          </div>
+          <div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
+                   :current-page.sync="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
+    </el-pagination>
+    <div class="tempty" v-if="tableData.length==0 && isShow">
+      <img src="@/images/my-task/illustration.png">
+      <p>还没有任务明细～</p>
+    </div>
+  </div>
 </template>
 <script>
 	export default {
 		components: {},
 		data() {
 			return {
-				keyword: ''
+				keyword: '',
+        tableData: [{
+          date: '2016-05-02',
+          name: '佣金求和',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '佣金求和',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '佣金求和',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '佣金求和',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }],
+        tableColumn: [ // 表格列数据
+          {
+            label: '指标名称',
+            prop: 'name',
+          },
+          {
+            label: '指标说明',
+            prop: 'specName',
+          },
+          {
+            label: '数据类型',
+            prop: 'explain',
+          },
+          {
+            label: '创建人/创建时间',
+            prop: 'toothTypeName',
+          },
+          {
+            label: '修改人/修改后时间',
+            prop: 'surfaceTreatmentName',
+          },
+          {
+            label: '操作',
+            prop: 'opt',
+            align: 'center',
+            slot: true,
+          },
+        ],
+        currentPage: 1,
+        isShow: false
 			}
 		},
 		created() {
@@ -21,6 +95,15 @@
 
 		},
 		methods: {
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
+      addTask(){
+
+      },
 			search() {
 				console.log(this.keyword)
 			}
@@ -46,7 +129,20 @@
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-
+      .el-input{
+        width: 160px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 6px;
+        >>>.el-input__inner{
+          background: #F8FAFB;
+          height: 40px;
+          line-height: 40px;
+        }
+        >>>.el-input__prefix{
+        color: #9596AB;
+      }
+      }
 			.left {
 				display: inline-flex;
 				position: relative;
@@ -55,6 +151,7 @@
 					cursor: pointer;
 					position: relative;
 				}
+
 			}
 
 			.right {
