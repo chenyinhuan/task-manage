@@ -247,6 +247,22 @@ export default {
           ]
         },
         {
+          // 指标库管理-新增指标
+          path: '/target-manage/add-target',
+          matched: [
+            {
+              name: '新增指标',
+              path: '/target-manage',
+              active: true
+            },
+            {
+              name: '新增指标',
+              path: '/target-manage/add-target',
+              active: false
+            }
+          ]
+        },
+        {
           // 任务库管理
           path: '/task-repository/task-list',
           matched: [
