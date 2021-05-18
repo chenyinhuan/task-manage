@@ -9,6 +9,7 @@
         <el-radio-button label="3">根据数据库表创建</el-radio-button>
       </el-radio-group>
     </section>
+    <field v-show="radio1 == 1"></field>
     <target v-show="radio1 == 2"></target>
     <database v-show="radio1 == 3"></database>
     <div class="foot">
@@ -18,11 +19,13 @@
   </div>
 </template>
 <script>
+  import field from '@/views/target-manage/group/field.vue'
   import target from '@/views/target-manage/group/target.vue'
   import database from '@/views/target-manage/group/database.vue'
   export default {
     name: 'addTarget',
     components:{
+      field,
       target,
       database
     },

@@ -102,7 +102,9 @@
         console.log(`当前页: ${val}`);
       },
       addTask(){
-
+        this.$router.push({
+          path: '/target-manage/add-target'
+        })
       },
 			search() {
 				console.log(this.keyword)
