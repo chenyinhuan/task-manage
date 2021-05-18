@@ -30,7 +30,7 @@
           </div>
           <div class="field-sitem">
             <div style="height: 20px;"> </div>
-            <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sort(index, index + 1)"></i><div class="line" v-if="index != 0 && index != originalField.length -1"></div><i class="el-icon-caret-bottom" @click="sort(index, index - 1)" v-if="index != originalField.length -1"></i></div>
+            <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sort(index, index + 1)"></i><i class="el-icon-caret-bottom" @click="sort(index, index - 1)" v-if="index != originalField.length -1"></i></div>
           </div>
         </div>
         <div class="add-field" @click="addField(1)">+ 新增表单字段</div>
@@ -57,7 +57,7 @@
           </div>
           <div class="field-sitem">
             <div style="height: 20px;"> </div>
-            <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sortExtend(index, index + 1)"></i><div class="line" v-if="index != 0 && index != extendField.length - 1"></div><i class="el-icon-caret-bottom" @click="sortExtend(index, index - 1)" v-if="index != extendField.length - 1"></i></div>
+            <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sortExtend(index, index + 1)"></i><i class="el-icon-caret-bottom" @click="sortExtend(index, index - 1)" v-if="index != extendField.length - 1"></i></div>
           </div>
         </div>
         <div class="add-field" @click="addField(2)">+ 新增检测字段</div>
@@ -344,6 +344,8 @@
               }
             }
             .drag {
+              display: flex;
+              flex-direction: column;
               text-align: center;
               i {
                 color: #9596AB;
