@@ -1,7 +1,7 @@
 import api from '../';
 
 /**
- * 获取用户信息
+ * 登录
  * @params params
  */
-export const apiLogin = (params) => api.get(`/user/login`, {params})
+export const apiLogin = (params) => api.post(`/sys/login`, params)

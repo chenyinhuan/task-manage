@@ -1,7 +1,7 @@
 var GLOBAL_CONFIG = {
 
   //======================= 本地开发路径 =========================
-  API_BASE_Tabel: '/',
+  API_BASE_Tabel: '/task-admin',
   //======================= 开发 =========================
   // API_BASE_Tabel: 'https://internal-dev.51hgp.com',
   // FEIBIAO_WEB_URL: 'https://internal-dev.51hgp.com/customizedweb', //非标

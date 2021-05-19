@@ -3,8 +3,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-
-const ipPath = 'http://121.40.46.87/';//本地
+const ipPath = 'http://121.40.46.87:8180/';//本地
 // const ipPath = 'https://www.51hgp.com';
 
 module.exports = {
@@ -14,11 +13,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-          '/': {
+          '/task-admin': {
           target: ipPath,
           changeOrigin: true,
           pathRewrite: {
-            '^/': '/'
+            '^/task-admin': '/'
           }
         }, '/ERPWeb2': {
         target: ipPath,
