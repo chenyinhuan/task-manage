@@ -4,7 +4,7 @@ import { Loading,Message } from 'element-ui';
 import store from '@/store';
 
 const api = axios.create({
-  baseURL: '',
+  baseURL: window.$globalConfig.API_BASE_Tabel,
   timeout: 10000,
   withCredentials: true,
 });
@@ -36,11 +36,9 @@ api.interceptors.request.use(
       // config.headers = { 'Authorization': 'Bearer ' + store.state.home.token } // 所有请求添加token验证
     }
     if(config.params){ // 请求接口携带token
-      config.params['_origin_source'] = ''
       config.params['_r'] = new Date().getTime()
-			config.params['terminalType'] = 1
     } else {
-      config.params = {'_origin_source': '', '_r': new Date().getTime(),terminalType:1}
+      config.params = {'_r': new Date().getTime()}
     }
 	  return config
   },
@@ -50,34 +48,10 @@ api.interceptors.request.use(
 // 请求返回拦截，目前需要结合各项目自身来处理...
 api.interceptors.response.use(
   res => {
-    if(res.data&&res.data.status==17777) {
-      router.push({path: '/resetLogin',query: { type: 'unBind'}})
-    }
-    if(res.data&&res.data.status==17776) {
-      router.push({path: '/resetLogin',query: { type: 'login'}})
-    }
-		if(res.data&&res.data.status==19999) {
-		  if(clearMessage){
-        Message.closeAll();
-      }
-      clearMessage = Message.warning(res.data.message)
-      if(clearTime){
-        clearTimeout(clearTime);
-      }
-      clearTime = setTimeout(() => {
-        router.push({
-          name: 'vipShop',
-        })
-      },1000);
-    }
     if (loadingInstance) loadingInstance.close();
     return Promise.resolve(res);
   },
   err => {
-   if (err.toString().indexOf('401') > -1) {
-     router.push("/countrySearch");
-     store.dispatch('home/loginUot');
-   }
    if (loadingInstance) loadingInstance.close();
    return Promise.reject(err)
   },

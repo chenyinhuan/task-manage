@@ -4,11 +4,9 @@
 
 const path = require('path')
 const ipPath = 'http://121.40.46.87:8180/';//本地
-// const ipPath = 'https://www.51hgp.com';
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -19,11 +17,6 @@ module.exports = {
           pathRewrite: {
             '^/task-admin': '/'
           }
-        }, '/ERPWeb2': {
-        target: ipPath,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/ERPWeb2': '/ERPWeb2'
         }
       }
     },

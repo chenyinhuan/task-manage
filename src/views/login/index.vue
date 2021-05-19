@@ -41,7 +41,7 @@ export default {
         password: this.password,
         phonenumber: this.phonenumber
       }
-      apiLogin().then(res => {
+      apiLogin(params).then(res => {
          this.$router.push('/')
       })
     }
