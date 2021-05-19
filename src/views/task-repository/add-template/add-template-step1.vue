@@ -14,7 +14,7 @@
       <div class="field">
         <draggable v-model="originalField"  chosenClass="chosen" forceFallback="true" group="people" animation="1000" @start="onStart" @end="onEnd">
           <transition-group>
-            <div class="field-item" v-for="(item, index) in originalField" :key="index">
+            <div class="field-item" v-for="(item) in originalField" :key="item.id">
               <div class="field-sitem">
                 <span>商品ID{{item.id}}</span>
                 <el-input v-model="form.taskName" placeholder="请输入商品ID"></el-input>
@@ -32,7 +32,7 @@
               </div>
               <div class="field-sitem">
                 <div style="height: 20px;"> </div>
-                <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sort(index, index + 1)"></i><i class="el-icon-caret-bottom" @click="sort(index, index - 1)" v-if="index != originalField.length -1"></i></div>
+                <!-- <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sort(index, index + 1)"></i><i class="el-icon-caret-bottom" @click="sort(index, index - 1)" v-if="index != originalField.length -1"></i></div> -->
               </div>
             </div>
           </transition-group>
@@ -45,7 +45,7 @@
       <div class="field">
         <draggable v-model="extendField"  chosenClass="chosen" forceFallback="true" group="people" animation="1000" @start="onStart" @end="onEnd">
           <transition-group>
-            <div class="field-item" v-for="(item, index) in extendField" :key="index">
+            <div class="field-item" v-for="(item) in extendField" :key="item.id">
               <div class="field-sitem">
                 <span>字段显示名</span>
                 <div class="name">直播间是否装扮{{item.id}}</div>
@@ -63,7 +63,7 @@
               </div>
               <div class="field-sitem">
                 <div style="height: 20px;"> </div>
-                <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sortExtend(index, index + 1)"></i><i class="el-icon-caret-bottom" @click="sortExtend(index, index - 1)" v-if="index != extendField.length - 1"></i></div>
+                <!-- <div class="drag"><i class="el-icon-caret-top" v-if="index != 0" @click="sortExtend(index, index + 1)"></i><i class="el-icon-caret-bottom" @click="sortExtend(index, index - 1)" v-if="index != extendField.length - 1"></i></div> -->
               </div>
             </div>
           </transition-group>
@@ -306,6 +306,7 @@
           font-size: 14px;
           border-bottom: 1px solid #FFFFFF;
           padding-top: 15px;
+		  cursor: move;
           .field-sitem {
             display: flex;
             flex-direction: column;
