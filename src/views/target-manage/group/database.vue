@@ -3,7 +3,9 @@
     <div style="display: flex;">
       <section>
         <p>选择连接库</p>
-        <el-select v-model="form.name" placeholder="选择连接库"></el-select>
+        <el-select v-model="form.dataId" placeholder="选择连接库" @change="getFieldList">
+          <el-option v-for="(item,index) in databaseList" :label="item.name" :value="item.id" :key="index"></el-option>
+        </el-select>
       </section>
       <section style="margin-left: 32px;">
         <p>选择表字段</p>
@@ -22,18 +24,28 @@
       <p>数据类型</p>
       <el-input v-model="form.dataType" disabled></el-input>
     </section>
+    <target-field-select :visible.sync="visible"></target-field-select>
   </div>
 </template>
 <script>
+  import targetFieldSelect from "@/views/target-manage/group/targetFieldSelect";
   export default {
     name: 'database',
+    components:{
+      targetFieldSelect
+    },
     data() {
       return {
+        databaseList:[
+          {id: 1, name: 'test1'},
+          {id: 2, name: 'test2'}
+        ],
         list: [],
         form: {
           name: '',
           dataType: 'number'
-        }
+        },
+        visible: false
       }
     },
     created() {
@@ -46,7 +58,9 @@
 
     },
     methods: {
-
+      getFieldList(){
+        this.visible = true
+      }
     }
   }
 </script>
