@@ -317,10 +317,10 @@ export const routes = [
     }]
   },
   // 匹配所有重定向首页
-  // {
-  //   path: '*',
-  //   redirect: '/task-center'
-  // }
+  {
+    path: '*',
+    redirect: '/task-center'
+  }
 ]
 
 const router = new Router({
