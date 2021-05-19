@@ -15,7 +15,7 @@ module.exports = {
           target: ipPath,
           changeOrigin: true,
           pathRewrite: {
-            '^/task-admin': '/'
+            '^/task-admin': '/task-admin'
           }
         }
       }
