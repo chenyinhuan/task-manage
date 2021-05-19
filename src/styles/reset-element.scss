@@ -50,6 +50,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 		color: #34335B;
 	}
 }
+.el-button--primary {
+  background-color: #0079FE;
+}
 .el-date-picker {
   .el-date-picker__header {
     button:hover,.el-date-picker__header-label:hover {

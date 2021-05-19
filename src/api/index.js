@@ -49,7 +49,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   res => {
     if (loadingInstance) loadingInstance.close();
-    return Promise.resolve(res);
+    return Promise.resolve(res.data);
   },
   err => {
    if (loadingInstance) loadingInstance.close();

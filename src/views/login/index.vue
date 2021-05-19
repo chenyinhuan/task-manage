@@ -39,10 +39,16 @@ export default {
     goLogin() {
       let params = {
         password: this.password,
-        phonenumber: this.phonenumber
+        username: this.phonenumber
       }
       apiLogin(params).then(res => {
-         this.$router.push('/')
+        if(res.code == 500) return this.$message.warning(res.msg)
+        if(res.code == 0) {
+          this.$message.success('登录成功！');
+          setTimeout(() => {
+            this.$router.push('/');
+          },1000)
+        }
       })
     }
   }
