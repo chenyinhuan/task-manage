@@ -11,12 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-          '/task-admin': {
-          target: ipPath,
-          changeOrigin: true,
-          pathRewrite: {
-            '^/task-admin': '/task-admin'
-          }
+      '/task-admin': {
+        target: ipPath,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/task-admin': '/task-admin'
         }
       }
     },
