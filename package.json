@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "echarts": "^4.9.0",
+    "el-tree-transfer": "^2.4.7",
     "element-ui": "^2.13.2",
     "js-cookie": "^2.2.1",
     "js-md5": "^0.7.3",
