@@ -14,8 +14,8 @@
 				<div class="foot search">
 					<el-button type="primary" @click="addAccount">添加账号</el-button>
 					<div>
-						<el-input class="account" v-model="form.taskName" placeholder="请输入账号名"></el-input>
-						<el-input v-model="form.taskName" placeholder="请输入登录账号"></el-input>
+						<el-input class="account" v-model="form.username" placeholder="请输入账号名" @keyup.enter.native="search"></el-input>
+						<el-input v-model="form.username" placeholder="请输入登录账号" @keyup.enter.native="search"></el-input>
 					</div>
 				</div>
 				<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
@@ -23,8 +23,8 @@
 						v-for="(item,index) in tableColumn" :key="index">
 						<template slot-scope="scope">
 							<div v-if="item.slot && item.prop=='weight'" class="percent">
-								<div class="dot" :class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'']">
-								</div><span> {{scope.$index == 1?'未上架':'正常'}}</span>
+								<div class="dot" :class="[scope.row == 1?'green':'',scope.row == 1?'grey':'']">
+								</div><span> {{scope.row == 1?'正常':'未上架'}}</span>
 							</div>
 							<div v-if="item.slot && item.prop=='related'">
 								<el-button type="text" @click="assocoated(scope.row)">关联</el-button>
@@ -38,7 +38,7 @@
 					</el-table-column>
 				</el-table>
 				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-					v-if="tableData.length>0" :current-page.sync="currentPage" :page-size="100"
+					v-if="tableData.length>0" :current-page.sync="currentPage" :page-size="limit"
 					layout="prev, pager, next, jumper" :total="total">
 				</el-pagination>
 			</div>
@@ -87,15 +87,16 @@
 				},
 				currentPage: 1,
 				total: 0,
+				limit: 10,
 				tableData: [],
 				tableColumn: [ // 表格列数据
 					{
 						label: '账号名/账号',
-						prop: 'deptName',
+						prop: 'username',
 					},
 					{
 						label: '角色',
-						prop: 'specName',
+						prop: 'roleIdList',
 					},
 					{
 						label: '所属组织',
@@ -129,11 +130,8 @@
 						slot: true,
 					},
 				],
-				taskName: '',
 				form: {
-					taskName: '',
-					remark: '',
-					template: ''
+					username: '',
 				}
 			}
 		},
@@ -150,6 +148,9 @@
 		},
 		methods: {
 			init() {
+				let params = {
+					username: this.form.username
+				}
 				getAccountList().then(res => {
 					if (res.code != 0) return this.$message.warning(res.msg);
 					this.tableData = res.page.list;
@@ -174,6 +175,10 @@
 				this.currentPage = val;
 				console.log(`当前页: ${val}`);
 			},
+			search() {
+				this.currentPage = 1;
+				this.init();
+			}
 		}
 	}
 </script>
