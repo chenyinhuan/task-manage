@@ -2,23 +2,19 @@
   <div id="addRole">
     <section>
       <p>角色名</p>
-      <el-input v-model="form.taskName" placeholder="请输入角色名" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="roleName" placeholder="请输入角色名" maxlength="20" show-word-limit></el-input>
     </section>
     <div class="foot">
-      <el-button type="primary">创建</el-button>
+      <el-button type="primary" @click="addRole">创建</el-button>
     </div>
   </div>
 </template>
 <script>
+import {saveAddRole} from '@/api/user-manage/role/index'
   export default {
     data() {
       return {
-        taskName: '',
-        form: {
-          taskName: '',
-          remark: '',
-          template: ''
-        }
+        roleName: '',
       }
     },
     created() {
@@ -31,7 +27,14 @@
 
     },
     methods: {
+      addRole(){
+        if(!this.roleName) return this.$message.warning('角色名不能为空');
+        saveAddRole({roleName: this.roleName}).then(res=>{
+          if(res.data==200){
 
+          }
+        })
+      }
     }
   }
 </script>

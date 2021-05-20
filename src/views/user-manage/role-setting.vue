@@ -26,25 +26,26 @@
               <div v-if="item.slot && item.prop=='weight'" class="percent">
                 <div class="dot" :class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'']"></div><span> {{scope.$index == 1?'未上架':'正常'}}</span>
               </div>
-              <div v-if="item.slot && item.prop=='setting'">
+              <div v-if="item.slot && item.prop=='menuIdList'">
                 <el-button @click="permissionConfig(scope.row)" type="text">配置</el-button>
               </div>
               <div v-if="item.slot && item.prop=='opt'">
                 <el-button type="text">编辑</el-button>
-                <el-button type="text">删除</el-button>
+                <el-button type="text" @click="deleteCurRow(scope.row)">删除</el-button>
               </div>
               <div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
             </template>
           </el-table-column>
         </el-table>
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
-                       :current-page.sync="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
+                       :current-page.sync="searchParams.page" :page-size="searchParams.limit" layout="prev, pager, next, jumper" :total="total">
         </el-pagination>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {getRoleList,deleteRole} from '@/api/user-manage/role/index'
   export default {
     data() {
       return {
@@ -81,36 +82,20 @@
           children: 'children',
           label: 'label'
         },
-        currentPage: 0,
-        tableData: [{
-          date: '2016-05-02',
-          userName: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          userName: '王小虎',
-          status: '完成'
-        }, {
-          date: '2016-05-01',
-          userName: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          userName: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
+        total: 0,
+        tableData: [],
         tableColumn: [ // 表格列数据
           {
             label: '角色编号',
-            prop: 'userName',
+            prop: 'roleId',
           },
           {
             label: '角色',
-            prop: 'specName',
+            prop: 'roleName',
           },
           {
             label: '所属组织',
-            prop: 'explain',
+            prop: 'deptName',
           },
           {
             label: '创建人',
@@ -118,7 +103,7 @@
           },
           {
             label: '创建时间',
-            prop: 'weight'
+            prop: 'createTime'
           },
           {
             label: '关联账户数',
@@ -126,7 +111,7 @@
           },
           {
             label: '权限管理',
-            prop: 'setting',
+            prop: 'menuIdList',
             slot: true,
           },
           {
@@ -140,11 +125,15 @@
           taskName: '',
           remark: '',
           template: ''
+        },
+        searchParams:{
+          page: 1,
+          limit: 10
         }
       }
     },
     created() {
-
+      this.init()
     },
     mounted() {
 
@@ -155,6 +144,20 @@
       }
     },
     methods: {
+      init() {
+        getRoleList(this.searchParams).then(res => {
+          if (res.code != 0) return this.$message.warning(res.msg);
+          this.tableData = res.page.list;
+          this.total = res.totalCount;
+        })
+      },
+      deleteCurRow(row){
+        deleteRole({rowId: row.rowId}).then(res=>{
+          if (res.code != 0) return this.$message.warning(res.msg);
+          this.$message.success('删除成功！');
+          this.init()
+        })
+      },
       permissionConfig(item){
         this.$router.push('/user-manage/role-permission-setting')
       },

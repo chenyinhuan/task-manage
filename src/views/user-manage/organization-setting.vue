@@ -23,25 +23,26 @@
           <el-table-column :prop="item.prop" :label="item.label" :width="item.width"
                            v-for="(item,index) in tableColumn" :key="index">
             <template slot-scope="scope">
-              <div v-if="item.slot && item.prop=='weight'" class="percent">
-                <div class="dot" :class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'']"></div><span> {{scope.$index == 1?'未上架':'正常'}}</span>
-              </div>
               <div v-if="item.slot && item.prop=='opt'">
                 <el-button type="text">编辑</el-button>
                 <el-button type="text">删除</el-button>
+              </div>
+              <div v-if="item.slot && item.prop=='name'">
+                <span>{{scope.row.name}}/{{scope.row.deptId}}</span>
               </div>
               <div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
-                       :current-page.sync="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
-        </el-pagination>
+<!--        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"-->
+<!--                       :current-page.sync="searchParams.page" :page-size="searchParams.limit" layout="prev, pager, next, jumper" :total="total">-->
+<!--        </el-pagination>-->
       </div>
     </div>
   </div>
 </template>
 <script>
+  import {getDeptList} from '@/api/user-manage/organization/index'
   export default {
     data() {
       return {
@@ -78,32 +79,16 @@
           children: 'children',
           label: 'label'
         },
-        currentPage: 0,
-        tableData: [{
-          date: '2016-05-02',
-          userName: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          userName: '王小虎',
-          status: '完成'
-        }, {
-          date: '2016-05-01',
-          userName: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          userName: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
+        total: 0,
+        tableData: [],
         tableColumn: [ // 表格列数据
           {
             label: '组织名称/id',
-            prop: 'userName',
+            prop: 'name',
           },
           {
             label: '所属组织',
-            prop: 'specName',
+            prop: 'parentName',
           },
           {
             label: '手机号',
@@ -124,15 +109,14 @@
           },
         ],
         taskName: '',
-        form: {
-          taskName: '',
-          remark: '',
-          template: ''
-        }
+        // searchParams:{
+        //   page: 1,
+        //   limit: 10
+        // }
       }
     },
     created() {
-
+      this.init()
     },
     mounted() {
 
@@ -143,6 +127,11 @@
       }
     },
     methods: {
+      init() {
+        getDeptList().then(res => {
+          this.tableData = res;
+        })
+      },
       assocoated(item){
         this.$router.push('/user-manage/associated-anchor')
       },
