@@ -330,7 +330,17 @@ router.afterEach((to, from) => {
 
 });
 router.beforeEach((to, from, next) => {
-  // console.log(store.state.module.permissionRoutes);
+  // let name = '';
+  // if(Cookies.get('activeMenu') && Cookies.get('activeMenu').split('-').length>0) name = Cookies.get('activeMenu').split('-')[0];
+  let module = store.state.module.permissionRoutes.find(n => n.path.indexOf(to.matched[0].path));
+  console.log(store.state.module.permissionRoutes,to.matched[0].path,module)
+  // if(module) {
+	 //  if(module.children) module.children
+	 //  else Cookies.set('activeMenu', module.index)
+  // }else {
+	 //  this.$router.push('/login');
+	 //  return;
+  // }
   // console.log(store.state.module.permissionRoutes.find(n => n.index == Cookies.get('activeMenu').split('-')[0]))
   // if(Cookies.set('activePath') && Cookies.set('activePath') != to.fullPath)
   // {

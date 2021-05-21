@@ -81,7 +81,6 @@
       permissionRoutes: {
         handler: function(route) {
           this.menuList = JSON.parse(JSON.stringify(route));
-          console.log(this.menuList)
         },
         immediate: true
       }
