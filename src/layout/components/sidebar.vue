@@ -51,6 +51,7 @@
   import variables from '@/styles/variables.scss';
   import SidebarItem from './group/SidebarItem';
   import Cookies from 'js-cookie'
+  import {getNav} from '@/api/common/index.js'
   export default {
     name: 'sidebar',
     components: {
@@ -76,6 +77,7 @@
     },
     created() {
       // this.generateRoutes();
+      this.getMenu();
     },
     watch: {
       permissionRoutes: {
@@ -87,6 +89,12 @@
     },
     methods: {
       ...mapActions('module', ['generateRoutes']),
+      getMenu() {
+        getNav().then(res => {
+          // this.
+          console.log(res)
+        })
+      },
       go(path) {
         Cookies.set('activePath',path)
         this.$router.push(path)

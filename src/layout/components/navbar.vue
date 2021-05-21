@@ -5,12 +5,12 @@
 		<breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
 		<div class="right-menu">
-			<template>
+			<!-- <template>
 				<search id="header-search" class="right-menu-item" />
 			</template>
 			<div class="right-menu-item">
 				<img class="bell" src="@/images/my-task/bell.png">
-			</div>
+			</div> -->
 			<el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
 				<div class="avatar-wrapper">
 					<img src="@/images/login/logo.png" class="user-avatar">

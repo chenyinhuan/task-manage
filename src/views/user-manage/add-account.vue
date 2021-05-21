@@ -2,7 +2,8 @@
   <div id="addAccount">
     <section>
       <p>账户号</p>
-      <el-input v-model="form.mobile" placeholder="请输入使用人手机号" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.mobile" placeholder="请输入使用人手机号" maxlength="11" show-word-limit></el-input>
+      <span class="error" v-show="validate">请输入合法手机号</span>
     </section>
     <section>
       <p>用户姓名</p>
@@ -60,7 +61,8 @@
         },
         deptlist: [],
         roleList: [],
-        isEdit: 0
+        isEdit: 0,
+        validate: false
       }
     },
     created() {
@@ -83,6 +85,14 @@
         })
       },
       create() {
+        var reg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
+        if (!reg.test(this.form.mobile)) {
+            console.log('手机号格式不正确')
+          return this.validate = true;
+        } else {
+            console.log('手机号格式正确')
+          return this.validate = false;
+        }
         let roleIdList = this.permission.map(item => {
           return item.roleIdList
         })
@@ -96,7 +106,9 @@
           email: this.form.email
         }
         if(this.isEdit) {
+          updateAccount().then(res => {
 
+          })
         }else {
           addAccount(params).then(res => {
             if(res.code == 0) {
@@ -181,6 +193,12 @@
         // margin-top: 24px;
       }
     }
-
+    .error {
+      position: absolute;
+      color: $red;
+      font-size: 12px;
+      bottom: 7px;
+      left: 0px;
+    }
   }
 </style>

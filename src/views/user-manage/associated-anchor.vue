@@ -17,6 +17,7 @@
           :on-exceed="handleExceed">
           <el-button size="small" type="primary">导入主播名单</el-button>
         </el-upload>
+        <el-button size="small" type="primary" @click="addAnchor">新增主播</el-button>
       </div>
     </section>
     <el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
@@ -42,6 +43,21 @@
       <img src="@/images/my-task/illustration.png">
       <p>还没有任务明细～</p>
     </div>
+    <el-dialog
+    class="add-dialog"
+    title="新增主播"
+    :visible.sync="addDialog"
+    width="782px"
+    :before-close="handleClose">
+      <div class="add">
+        <el-input v-model="name"></el-input>
+        <span v-if="tip" class="error">主播名称已存在!</span>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="confirm">确 定</el-button
+          >
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -90,7 +106,10 @@
         ],
         currentPage: 0,
         isShow: false,
-        keyword: ''
+        keyword: '',
+        addDialog: false,
+        name: '',
+        tip: false
       }
     },
     created() {
@@ -114,10 +133,37 @@
       },
       search() {
         console.log(this.keyword)
+      },
+      addAnchor() {
+        this.addDialog = true;
+      },
+      confirm() {
+        this.tip = true;
+        // this.handleClose();
+      },
+      handleClose() {
+        this.addDialog = false;
+        this.tip = false;
+        this.name = '';
       }
     }
   }
 </script>
+<style lang="scss">
+.dialog-footer {
+  border-top: 1px solid #D9D9D9;
+  padding: 12px 24px;
+  margin: 32px 0px 0px;
+  text-align: right;
+  >>> .el-button--primary {
+    width: 124px;
+    height: 40px;
+    font-size: 18px;
+    background: #0079fe;
+    border-radius: 6px;
+  }
+}
+</style>
 <style lang="scss" scoped>
   @import '@/styles/variables.scss';
 
@@ -227,6 +273,26 @@
         line-height: 28px;
         margin-top: 39px;
         font-weight: 400;
+      }
+    }
+    .add-dialog {
+      >>>.el-dialog__body {
+        padding: 0px;
+      }
+      .add {
+        position: relative;
+        .error {
+          position: absolute;
+          left: 0px;
+          margin-top: 43px;
+          left: 24px;
+          color: $red;
+        }
+        .el-input {
+          width: 240px;
+          margin-left: 24px;
+
+        }
       }
     }
 
