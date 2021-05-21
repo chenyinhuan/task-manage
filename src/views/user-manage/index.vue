@@ -15,28 +15,18 @@
 					<el-button type="primary" @click="addAccount()">添加账号</el-button>
 					<div>
 						<el-input class="account" v-model="form.username" placeholder="请输入账号名" @keyup.enter.native="search"></el-input>
-<<<<<<< HEAD
-						<el-input v-model="form.username" placeholder="请输入登录账号" @keyup.enter.native="search"></el-input>
-=======
 						<el-input v-model="form.mobile" placeholder="请输入登录账号" @keyup.enter.native="search"></el-input>
->>>>>>> ba2ed2c7e39ef4f9e7601efc640abe0da771fa5e
 					</div>
 				</div>
 				<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
 					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 						v-for="(item,index) in tableColumn" :key="index">
 						<template slot-scope="scope">
-<<<<<<< HEAD
-							<div v-if="item.slot && item.prop=='weight'" class="percent">
-								<div class="dot" :class="[scope.row == 1?'green':'',scope.row == 1?'grey':'']">
-								</div><span> {{scope.row == 1?'正常':'未上架'}}</span>
-=======
-              <div v-if="item.slot && item.prop=='username'">
-              {{scope.row.username}}<br/>{{scope.row.mobile}}</div>
+							<div v-if="item.slot && item.prop=='username'">
+							{{scope.row.username}}<br/>{{scope.row.mobile}}</div>
 							<div v-if="item.slot && item.prop=='status'" class="percent">
 								<div class="dot" :class="[scope.row.status == 1?'green':'']">
 								</div><span> {{scope.row.status == 1?'正常':'禁用'}}</span>
->>>>>>> ba2ed2c7e39ef4f9e7601efc640abe0da771fa5e
 							</div>
 							<div v-if="item.slot && item.prop=='related'">
 								<el-button type="text" @click="assocoated(scope.row)">关联</el-button>
@@ -100,20 +90,13 @@
 				},
 				currentPage: 1,
 				total: 0,
-<<<<<<< HEAD
-				limit: 10,
-=======
-        limit: 10,
->>>>>>> ba2ed2c7e39ef4f9e7601efc640abe0da771fa5e
+        		limit: 10,
 				tableData: [],
 				tableColumn: [ // 表格列数据
 					{
 						label: '账号名/账号',
 						prop: 'username',
-<<<<<<< HEAD
-=======
-            slot: true
->>>>>>> ba2ed2c7e39ef4f9e7601efc640abe0da771fa5e
+           				slot: true
 					},
 					{
 						label: '角色',
@@ -176,21 +159,14 @@
         this.init();
       },
 			init() {
-<<<<<<< HEAD
 				let params = {
-					username: this.form.username
+				page: this.currentPage,
+				limit: this.limit,
+				username: this.form.username,
+				// order: 'asc',
+				// _search: false
 				}
-				getAccountList().then(res => {
-=======
-        let params = {
-          page: this.currentPage,
-          limit: this.limit,
-          username: this.form.username,
-          // order: 'asc',
-          // _search: false
-        }
 				getAccountList(params).then(res => {
->>>>>>> ba2ed2c7e39ef4f9e7601efc640abe0da771fa5e
 					if (res.code != 0) return this.$message.warning(res.msg);
 					this.tableData = res.page.list;
 					this.total = res.page.totalCount;
@@ -213,194 +189,191 @@
 			},
 			handleCurrentChange(val) {
 				this.currentPage = val;
-        this.init();
+        		this.init();
 				console.log(`当前页: ${val}`);
 			},
-<<<<<<< HEAD
 			search() {
 				this.currentPage = 1;
 				this.init();
+			},
+			del(item){
+				this.$confirm('确定删除该用户吗？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					let params = [item.userId]
+					delAccount(params).then(res => {
+					if(res.code == 500) return this.$message.warning(res.msg);
+					else this.$message.success('删除成功！')
+					})
+				})
 			}
-=======
-      del(item){
-        this.$confirm('确定删除该用户吗？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let params = [item.userId]
-          delAccount(params).then(res => {
-            if(res.code == 500) return this.$message.warning(res.msg);
-            else this.$message.success('删除成功！')
-          })
-        })
-      }
->>>>>>> ba2ed2c7e39ef4f9e7601efc640abe0da771fa5e
 		}
 	}
 </script>
 <style lang="scss">
-	@import '@/styles/variables.scss';
+@import "@/styles/variables.scss";
 
-	#accountConfig {
-		padding: 36px 25px 36px 50px;
-		margin: 30px 0px 30px 30px;
-		width: calc(100% - 72px);
-		background-color: #FFFFFF;
-		border-radius: 12px;
-		box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
+#accountConfig {
+  padding: 36px 25px 36px 50px;
+  margin: 30px 0px 30px 30px;
+  width: calc(100% - 72px);
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
 
-		.main {
-			display: flex;
+  .main {
+    display: flex;
 
-			/*justify-content: space-between;*/
-			.tree {
-				width: 237px;
-				margin-right: 110px;
+    /*justify-content: space-between;*/
+    .tree {
+      width: 237px;
+      margin-right: 110px;
 
-				.expanded {
-					color: #D8D8D8;
-				}
+      .expanded {
+        color: #d8d8d8;
+      }
 
-				.el-tree-node__label {
-					color: #666777;
-					line-height: 20px;
-				}
+      .el-tree-node__label {
+        color: #666777;
+        line-height: 20px;
+      }
 
-				.el-tree-node__content:hover,
-				.is-current {
-					background: #F5F7FA;
-				}
+      .el-tree-node__content:hover,
+      .is-current {
+        background: #f5f7fa;
+      }
 
-				.el-input {
-					width: 237px;
-					height: 40px;
-					border-radius: 6px;
-					margin-bottom: 24px;
+      .el-input {
+        width: 237px;
+        height: 40px;
+        border-radius: 6px;
+        margin-bottom: 24px;
 
-					.el-input__prefix {
-						left: 13px;
-					}
+        .el-input__prefix {
+          left: 13px;
+        }
 
-					.el-input__inner {
-						font-size: 14px;
-						height: 40px;
-						line-height: 40px;
-						border: 1px solid #CDCDD5;
-						padding-left: 46px;
-					}
+        .el-input__inner {
+          font-size: 14px;
+          height: 40px;
+          line-height: 40px;
+          border: 1px solid #cdcdd5;
+          padding-left: 46px;
+        }
 
-					.el-input__icon {
-						font-size: 20px;
-						line-height: 40px;
-						color: #9596AB;
-					}
-				}
-			}
-
-			.table-list {
-				width: 1192px;
-
-				.iconfont {
-					display: inline-block;
-					width: 8px;
-					height: 8px;
-					background: #21D487;
-					border-radius: 50%;
-					margin-right: 10px;
-				}
-			}
-		}
-
-		.search {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-
-			.el-input {
-				width: 240px;
-				height: 32px;
-
-				.el-input__inner {
-					font-size: 14px;
-					height: 32px;
-					line-height: 32px;
-					border: 1px solid #CDCDD5;
-				}
-
-				&.account {
-					margin-right: 15px;
-				}
-			}
-		}
-
-		.foot {
-			.el-button {
-				width: 96px;
-				height: 40px;
-				background: #0079FE;
-				border-radius: 6px;
-			}
-		}
-
-		section {
-			.add {
-				font-size: 14px;
-				font-weight: 500;
-				color: #0079FE;
-				line-height: 20px;
-			}
-
-			p {
-				font-size: 20px;
-				font-weight: 600;
-				color: #34335B;
-				line-height: 28px;
-				margin-bottom: 14px;
-			}
-
-			.el-select {
-				width: 181px;
-				height: 32px;
-				border-radius: 4px;
-				margin-right: 15px;
-
-				>>>.el-input__inner {
-					font-size: 14px;
-					padding-left: 8px;
-					height: 32px;
-					line-height: 32px;
-				}
-			}
-
-			.el-input {
-				width: 440px;
-				height: 32px;
-				border-radius: 4px;
-
-				>>>.el-input__inner {
-					font-size: 14px;
-					padding-left: 8px;
-					height: 32px;
-					line-height: 32px;
-				}
-			}
-		}
-    .percent {
-    	display: flex;
-    	align-items: center;
-    	span {
-    		margin-left: 6px;
-    	}
-    	.dot {
-    		width: 8px;
-    		height: 8px;
-    		border-radius: 50%;
-        background-color: #CDCDD5;
-    		&.green {
-    			background-color: #21D487;
-    		}
-    	}
+        .el-input__icon {
+          font-size: 20px;
+          line-height: 40px;
+          color: #9596ab;
+        }
+      }
     }
-	}
+
+    .table-list {
+      width: 1192px;
+
+      .iconfont {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #21d487;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .el-input {
+      width: 240px;
+      height: 32px;
+
+      .el-input__inner {
+        font-size: 14px;
+        height: 32px;
+        line-height: 32px;
+        border: 1px solid #cdcdd5;
+      }
+
+      &.account {
+        margin-right: 15px;
+      }
+    }
+  }
+
+  .foot {
+    .el-button {
+      width: 96px;
+      height: 40px;
+      background: #0079fe;
+      border-radius: 6px;
+    }
+  }
+
+  section {
+    .add {
+      font-size: 14px;
+      font-weight: 500;
+      color: #0079fe;
+      line-height: 20px;
+    }
+
+    p {
+      font-size: 20px;
+      font-weight: 600;
+      color: #34335b;
+      line-height: 28px;
+      margin-bottom: 14px;
+    }
+
+    .el-select {
+      width: 181px;
+      height: 32px;
+      border-radius: 4px;
+      margin-right: 15px;
+
+      >>> .el-input__inner {
+        font-size: 14px;
+        padding-left: 8px;
+        height: 32px;
+        line-height: 32px;
+      }
+    }
+
+    .el-input {
+      width: 440px;
+      height: 32px;
+      border-radius: 4px;
+
+      >>> .el-input__inner {
+        font-size: 14px;
+        padding-left: 8px;
+        height: 32px;
+        line-height: 32px;
+      }
+    }
+  }
+  .percent {
+    display: flex;
+    align-items: center;
+    span {
+      margin-left: 6px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #cdcdd5;
+      &.green {
+        background-color: #21d487;
+      }
+    }
+  }
+}
 </style>
