@@ -2,45 +2,70 @@
   <div id="addAccount">
     <section>
       <p>账户号</p>
-      <el-input v-model="form.taskName" placeholder="请输入使用人手机号" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.mobile" placeholder="请输入使用人手机号" maxlength="20" show-word-limit></el-input>
     </section>
     <section>
       <p>用户姓名</p>
-      <el-input v-model="form.taskName" placeholder="请输入用户姓名" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.username" placeholder="请输入用户姓名" maxlength="20" show-word-limit></el-input>
     </section>
     <section>
       <p>登录密码</p>
-      <el-input v-model="form.taskName" type="password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.password" type="password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
     </section>
     <section>
       <p>确认登录密码</p>
-      <el-input v-model="form.taskName" type="password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.conPassword" type="password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
     </section>
     <section>
       <p>匹配角色</p>
-      <el-select v-model="form.template" placeholder="选择部门"></el-select>
-      <el-select v-model="form.template" placeholder="选择角色"></el-select>
-<!--      <a class="add">+新增</a>-->
+      <div v-for="(item, index) in permission" :key="index">
+        <el-select v-model="item.deptId" placeholder="选择部门">
+          <el-option v-for="(ditem,dindex) in deptlist" :key="dindex" :label="ditem.name"
+        :value="ditem.deptId"></el-option>
+        </el-select>
+        <el-select v-model="item.roleIdList" placeholder="选择角色">
+          <el-option v-for="(ritem,rindex) in roleList" :key="rindex" :label="ritem.roleName"
+        :value="ritem.roleId"></el-option>
+        </el-select>
+      </div>
+      <el-button class="add-role" type="primary" @click="addRole()">+新增</el-button>
     </section>
     <div class="foot">
-      <el-button type="primary">创建</el-button>
+      <el-button type="primary" @click="create">{{isEdit?'保存':'创建'}}</el-button>
     </div>
   </div>
 </template>
 <script>
+  import {getDeptList} from '@/api/user-manage/organization/index.js';
+  import {getRoleList} from '@/api/user-manage/role/index.js';
+  import {addAccount,updateAccount} from '@/api/user-manage/account/index.js'
   export default {
     data() {
       return {
         taskName: '',
+        permission: [
+          {
+            deptId: '',
+            roleIdList: ''
+          }
+        ],
         form: {
-          taskName: '',
-          remark: '',
-          template: ''
-        }
+          mobile: '',
+          username: '',
+          password: '',
+          conPassword: '',
+          deptId: '',
+          roleIdList: '',
+          email: '5688888@qq.com'
+        },
+        deptlist: [],
+        roleList: [],
+        isEdit: 0
       }
     },
     created() {
-
+      this.init();
+      this.isEdit = this.$route.query.isEdit;
     },
     mounted() {
 
@@ -49,7 +74,43 @@
 
     },
     methods: {
+      init() {
+        getDeptList().then(res => {
+          this.deptlist = res;
+        })
+        getRoleList().then(res => {
+          this.roleList = res.page.list;
+        })
+      },
+      create() {
+        let roleIdList = this.permission.map(item => {
+          return item.roleIdList
+        })
+        let params = {
+          mobile: this.form.mobile,
+          username: this.form.username,
+          password: this.form.password,
+          conPassword: this.form.conPassword,
+          deptId: this.permission[0].deptId,
+          roleIdList: roleIdList,
+          email: this.form.email
+        }
+        if(this.isEdit) {
 
+        }else {
+          addAccount(params).then(res => {
+            if(res.code == 0) {
+              this.$message.success('创建成功！');
+              setTimeout(() => {
+                this.$router.go(-1)
+              },2000)
+            }else this.$message.warning(res.msg)
+          })
+        }
+      },
+      addRole() {
+        this.permission.push({deptId: '',roleIdList: ''})
+      }
     }
   }
 </script>
@@ -74,6 +135,7 @@
       }
     }
     section{
+      position: relative;
       .add{
         font-size: 14px;
         font-weight: 500;
@@ -92,6 +154,7 @@
         height: 32px;
         border-radius: 4px;
         margin-right: 15px;
+        margin-bottom: 12px;
         >>>.el-input__inner {
           font-size: 14px;
           padding-left: 8px;
@@ -113,6 +176,9 @@
           height: 32px;
           line-height: 32px;
         }
+      }
+      .add-role {
+        // margin-top: 24px;
       }
     }
 
