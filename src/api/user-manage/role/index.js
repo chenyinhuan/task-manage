@@ -14,3 +14,8 @@ export const saveAddRole = (params) => api.post(`/sys/role/save`, params)
  * @params params
  */
 export const deleteRole = (params) => api.post(`/sys/role/delete`, params)
+/**
+ * 当前账户角色选择
+ * @params params
+ */
+export const getRoleSelect = (params) => api.get(`/sys/role/select`, params)

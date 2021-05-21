@@ -3,13 +3,8 @@
     <div class="main">
       <div class="tree">
         <el-input prefix-icon="el-icon-search" placeholder="请输入" v-model="filterText"></el-input>
-        <el-tree
-          class="filter-tree"
-          :data="data"
-          :props="defaultProps"
-          default-expand-all
-          :filter-node-method="filterNode"
-          ref="tree">
+        <el-tree class="filter-tree" :data="data" :props="defaultProps"
+          default-expand-all :filter-node-method="filterNode" ref="tree">
         </el-tree>
       </div>
       <div class="table-list">
@@ -23,9 +18,6 @@
           <el-table-column :prop="item.prop" :label="item.label" :width="item.width"
                            v-for="(item,index) in tableColumn" :key="index">
             <template slot-scope="scope">
-              <div v-if="item.slot && item.prop=='weight'" class="percent">
-                <div class="dot" :class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'']"></div><span> {{scope.$index == 1?'未上架':'正常'}}</span>
-              </div>
               <div v-if="item.slot && item.prop=='menuIdList'">
                 <el-button @click="permissionConfig(scope.row)" type="text">配置</el-button>
               </div>
@@ -45,7 +37,7 @@
   </div>
 </template>
 <script>
-import {getRoleList,deleteRole} from '@/api/user-manage/role/index'
+import {getRoleList,deleteRole,getRoleSelect} from '@/api/user-manage/role/index'
   export default {
     data() {
       return {
@@ -121,11 +113,6 @@ import {getRoleList,deleteRole} from '@/api/user-manage/role/index'
           },
         ],
         taskName: '',
-        form: {
-          taskName: '',
-          remark: '',
-          template: ''
-        },
         searchParams:{
           page: 1,
           limit: 10
@@ -152,10 +139,16 @@ import {getRoleList,deleteRole} from '@/api/user-manage/role/index'
         })
       },
       deleteCurRow(row){
-        deleteRole({rowId: row.rowId}).then(res=>{
-          if (res.code != 0) return this.$message.warning(res.msg);
-          this.$message.success('删除成功！');
-          this.init()
+        this.$confirm('确定删除该角色吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteRole({roleId: row.roleId}).then(res => {
+            if(res.code == 500) return this.$message.warning(res.msg);
+            this.$message.success('删除成功！')
+            this.init()
+          })
         })
       },
       permissionConfig(item){

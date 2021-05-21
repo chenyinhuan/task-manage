@@ -3,14 +3,8 @@
     <div class="main">
       <div class="tree">
         <el-input prefix-icon="el-icon-search" placeholder="请输入" v-model="filterText"></el-input>
-        <el-tree
-          class="filter-tree"
-          :data="data"
-          :props="defaultProps"
-          default-expand-all
-          :filter-node-method="filterNode"
-          ref="tree">
-        </el-tree>
+        <el-tree class="filter-tree" :data="data" :props="defaultProps"
+                 default-expand-all :filter-node-method="filterNode" ref="tree"></el-tree>
       </div>
       <div class="table-list">
         <section class="search">
@@ -25,7 +19,7 @@
             <template slot-scope="scope">
               <div v-if="item.slot && item.prop=='opt'">
                 <el-button type="text">编辑</el-button>
-                <el-button type="text">删除</el-button>
+                <el-button type="text" @click="del(scope.row)">删除</el-button>
               </div>
               <div v-if="item.slot && item.prop=='name'">
                 <span>{{scope.row.name}}/{{scope.row.deptId}}</span>
@@ -42,7 +36,7 @@
   </div>
 </template>
 <script>
-  import {getDeptList} from '@/api/user-manage/organization/index'
+  import {getDeptList,deleteDept} from '@/api/user-manage/organization/index'
   export default {
     data() {
       return {
@@ -130,6 +124,19 @@
       init() {
         getDeptList().then(res => {
           this.tableData = res;
+        })
+      },
+      del(item){
+        this.$confirm('确定删除该部门吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteDept({deptId: item.deptId}).then(res => {
+            if(res.code == 500) return this.$message.warning(res.msg);
+            else this.$message.success('删除成功！')
+            this.init()
+          })
         })
       },
       assocoated(item){
