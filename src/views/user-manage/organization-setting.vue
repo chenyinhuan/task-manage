@@ -3,8 +3,8 @@
     <div class="main">
       <div class="tree">
         <el-input prefix-icon="el-icon-search" placeholder="请输入" v-model="filterText"></el-input>
-        <el-tree class="filter-tree" :data="data" :props="defaultProps"
-                 default-expand-all :filter-node-method="filterNode" ref="tree"></el-tree>
+        <el-tree class="filter-tree" :data="data" :props="defaultProps" default-expand-all
+                 :filter-node-method="filterNode" ref="tree" @node-click="handleNodeClick" node-key="id"></el-tree>
       </div>
       <div class="table-list">
         <section class="search">
@@ -18,7 +18,7 @@
                            v-for="(item,index) in tableColumn" :key="index">
             <template slot-scope="scope">
               <div v-if="item.slot && item.prop=='opt'">
-                <el-button type="text">编辑</el-button>
+                <el-button type="text" @click="editRow(scope.row)">编辑</el-button>
                 <el-button type="text" @click="del(scope.row)">删除</el-button>
               </div>
               <div v-if="item.slot && item.prop=='name'">
@@ -28,9 +28,6 @@
             </template>
           </el-table-column>
         </el-table>
-<!--        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"-->
-<!--                       :current-page.sync="searchParams.page" :page-size="searchParams.limit" layout="prev, pager, next, jumper" :total="total">-->
-<!--        </el-pagination>-->
       </div>
     </div>
   </div>
@@ -41,37 +38,10 @@
     data() {
       return {
         filterText: '',
-        data: [{
-          id: 1,
-          label: '一级 2',
-          children: [{
-            id: 3,
-            label: '二级 2-1',
-            children: [{
-              id: 4,
-              label: '三级 3-1-1'
-            }, {
-              id: 5,
-              label: '三级 3-1-2',
-              disabled: true
-            }]
-          }, {
-            id: 2,
-            label: '二级 2-2',
-            disabled: true,
-            children: [{
-              id: 6,
-              label: '三级 3-2-1'
-            }, {
-              id: 7,
-              label: '三级 3-2-2',
-              disabled: true
-            }]
-          }]
-        }],
+        data: [],
         defaultProps: {
           children: 'children',
-          label: 'label'
+          label: 'name'
         },
         total: 0,
         tableData: [],
@@ -103,10 +73,7 @@
           },
         ],
         taskName: '',
-        // searchParams:{
-        //   page: 1,
-        //   limit: 10
-        // }
+        deptId:''
       }
     },
     created() {
@@ -121,10 +88,19 @@
       }
     },
     methods: {
+      // 点击节点名称触发的事件
+      handleNodeClick: function (data) {
+        this.deptId = data.deptId
+        // console.log(data);
+      },
       init() {
         getDeptList().then(res => {
           this.tableData = res;
+          this.data = this.$dealingwithadult(res);
         })
+      },
+      editRow(item){
+        this.$router.push('/user-manage/add-organization?item='+JSON.stringify(item))
       },
       del(item){
         this.$confirm('确定删除该部门吗？', '提示', {
@@ -147,7 +123,7 @@
         return data.label.indexOf(value) !== -1;
       },
       addOrganization(){
-        this.$router.push('/user-manage/add-organization')
+        this.$router.push('/user-manage/add-organization?type=1&deptId='+this.deptId)
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);

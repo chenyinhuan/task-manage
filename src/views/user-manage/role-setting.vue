@@ -3,8 +3,8 @@
     <div class="main">
       <div class="tree">
         <el-input prefix-icon="el-icon-search" placeholder="请输入" v-model="filterText"></el-input>
-        <el-tree class="filter-tree" :data="data" :props="defaultProps"
-          default-expand-all :filter-node-method="filterNode" ref="tree">
+        <el-tree class="filter-tree" :data="data" :props="defaultProps" default-expand-all
+                 :filter-node-method="filterNode" ref="tree" @node-click="handleNodeClick" node-key="id">
         </el-tree>
       </div>
       <div class="table-list">
@@ -22,7 +22,7 @@
                 <el-button @click="permissionConfig(scope.row)" type="text">配置</el-button>
               </div>
               <div v-if="item.slot && item.prop=='opt'">
-                <el-button type="text">编辑</el-button>
+                <el-button type="text" @click="editRow(scope.row)">编辑</el-button>
                 <el-button type="text" @click="deleteCurRow(scope.row)">删除</el-button>
               </div>
               <div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
@@ -38,6 +38,7 @@
 </template>
 <script>
 import {getRoleList,deleteRole,getRoleSelect} from '@/api/user-manage/role/index'
+import {getDeptList} from '@/api/user-manage/organization/index'
   export default {
     data() {
       return {
@@ -72,7 +73,7 @@ import {getRoleList,deleteRole,getRoleSelect} from '@/api/user-manage/role/index
         }],
         defaultProps: {
           children: 'children',
-          label: 'label'
+          label: 'name'
         },
         total: 0,
         tableData: [],
@@ -116,11 +117,13 @@ import {getRoleList,deleteRole,getRoleSelect} from '@/api/user-manage/role/index
         searchParams:{
           page: 1,
           limit: 10
-        }
+        },
+        deptId: ''
       }
     },
     created() {
       this.init()
+      this.getDeptList();
     },
     mounted() {
 
@@ -131,6 +134,19 @@ import {getRoleList,deleteRole,getRoleSelect} from '@/api/user-manage/role/index
       }
     },
     methods: {
+      // 点击节点名称触发的事件
+      handleNodeClick: function (data) {
+        this.deptId = data.deptId
+        console.log(data);
+      },
+      getDeptList() {
+        getDeptList().then(res => {
+          this.data = this.$dealingwithadult(res);
+          console.log(this.data)
+          this.deptId = this.data[0].deptId
+          this.deptName = this.data[0].name
+        })
+      },
       init() {
         getRoleList(this.searchParams).then(res => {
           if (res.code != 0) return this.$message.warning(res.msg);
@@ -151,6 +167,9 @@ import {getRoleList,deleteRole,getRoleSelect} from '@/api/user-manage/role/index
           })
         })
       },
+      editRow(item){
+        this.$router.push('/user-manage/add-role?item='+JSON.stringify(item))
+      },
       permissionConfig(item){
         this.$router.push('/user-manage/role-permission-setting')
       },
@@ -162,7 +181,7 @@ import {getRoleList,deleteRole,getRoleSelect} from '@/api/user-manage/role/index
         return data.label.indexOf(value) !== -1;
       },
       addRole(){
-        this.$router.push('/user-manage/add-role')
+        this.$router.push('/user-manage/add-role?type=1&deptId='+this.deptId+'&deptName='+this.deptName)
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);

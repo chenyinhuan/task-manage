@@ -19,3 +19,8 @@ export const deleteRole = (params) => api.post(`/sys/role/delete`, params)
  * @params params
  */
 export const getRoleSelect = (params) => api.get(`/sys/role/select`, params)
+/**
+ * 修改
+ * @params params
+ */
+export const updateRole = (params) => api.post(`/sys/role/update`, params)
