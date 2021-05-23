@@ -28,6 +28,7 @@ import {saveAddRole,updateRole} from '@/api/user-manage/role/index'
       this.type = this.$route.query.type
       if(this.$route.query.item) this.formData = JSON.parse(this.$route.query.item);
       if(this.$route.query.deptId) this.formData.deptId = this.$route.query.deptId;
+      if(this.$route.query.deptName) this.formData.deptName = this.$route.query.deptName;
     },
     mounted() {
 
