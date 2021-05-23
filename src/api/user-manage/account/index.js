@@ -24,3 +24,9 @@ export const addAccount = (params) => api.post(`/sys/user/save`, params);
  */
 export const updateAccount = (params) => api.post(`/sys/user/update`, params);
 
+/**
+ * 通过id获取指定账户消息
+ * @params userId
+ */
+export const getUserInfo = (params) => api.get(`/sys/user/info/${params.userId}`, params)
+

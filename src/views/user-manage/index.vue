@@ -3,7 +3,7 @@
 		<div class="main">
 			<div class="tree">
 				<el-input prefix-icon="el-icon-search" placeholder="请输入" v-model="filterText"></el-input>
-				<el-tree class="filter-tree" :data="data" :props="defaultProps" default-expand-all
+				<el-tree class="filter-tree" :data="data" :highlight-current="true" :props="defaultProps" node-key="deptId" default-expand-all
 					:filter-node-method="filterNode" @node-click="handleNodeClick" ref="tree">
 				</el-tree>
 			</div>
@@ -112,11 +112,12 @@
 				form: {
 					mobile: '',
 					username: '',
-				}
+				},
+        deptId: ''
 			}
 		},
 		created() {
-      this.init();
+
       this.getDeptList();
 		},
 		mounted() {
@@ -136,13 +137,23 @@
       getDeptList() {
         getDeptList().then(res => {
           this.data = this.$dealingwithadult(res);
+          this.deptId = this.data[0].deptId;
+          this.init();
+          this.setCheckedKeys();
         })
+      },
+      setCheckedNodes() {
+        this.$refs.tree.setCheckedNodes([this.data[0]]);
+      },
+      setCheckedKeys() {
+        this.$refs.tree.setCheckedKeys([this.deptId]);
       },
 			init() {
         let params = {
           page: this.currentPage,
           limit: this.limit,
           username: this.form.username,
+          deptId: this.deptId
           // order: 'asc',
           // _search: false
         }
@@ -156,12 +167,12 @@
 				this.$router.push('/user-manage/associated-anchor')
 			},
 			filterNode(value, data) {
-        console.log(value,data)
 				if (!value) return true;
-				return data.label.indexOf(value) !== -1;
+				return data.name.indexOf(value) !== -1;
 			},
       handleNodeClick(data) {
-        console.log(data)
+        console.log(data);
+        this.deptId = data.deptId;
       },
 			addAccount(item) {
         this.$router.push(`/user-manage/add-account?isEdit=${item?1:0}&id=${item && item.userId?item.userId:''}`)
@@ -185,7 +196,10 @@
           let params = [item.userId]
           delAccount(params).then(res => {
             if(res.code == 500) return this.$message.warning(res.msg);
-            else this.$message.success('删除成功！')
+            else {
+              this.$message.success('删除成功！');
+              this.init();
+            }
           })
         })
       }

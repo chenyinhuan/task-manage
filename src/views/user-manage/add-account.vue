@@ -9,11 +9,11 @@
       <p>用户姓名</p>
       <el-input v-model="form.username" placeholder="请输入用户姓名" maxlength="20" show-word-limit></el-input>
     </section>
-    <section>
+    <section v-if="isEdit != 1">
       <p>登录密码</p>
       <el-input v-model="form.password" type="password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
     </section>
-    <section>
+    <section v-if="isEdit != 1">
       <p>确认登录密码</p>
       <el-input v-model="form.conPassword" type="password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
     </section>
@@ -39,7 +39,7 @@
 <script>
   import {getDeptList} from '@/api/user-manage/organization/index.js';
   import {getRoleList} from '@/api/user-manage/role/index.js';
-  import {addAccount,updateAccount} from '@/api/user-manage/account/index.js'
+  import {addAccount,updateAccount,getUserInfo} from '@/api/user-manage/account/index.js'
   export default {
     data() {
       return {
@@ -56,7 +56,7 @@
           password: '',
           conPassword: '',
           deptId: '',
-          roleIdList: '',
+          roleIdList: [],
           email: '5688888@qq.com'
         },
         deptlist: [],
@@ -68,6 +68,22 @@
     created() {
       this.init();
       this.isEdit = this.$route.query.isEdit;
+      this.userId = this.$route.query.id
+      if(this.isEdit == 1) {
+        getUserInfo({userId: this.$route.query.id}).then(res => {
+          if(res.code == 0) {
+            this.form = {
+              mobile: res.user.mobile,
+              username: res.user.username,
+              password: res.user.password,
+              conPassword: res.user.password,
+              deptId: res.user.deptId,
+              roleIdList: res.user.roleIdList,
+              email: res.user.email
+            }
+          }
+        })
+      }
     },
     mounted() {
 
@@ -91,7 +107,7 @@
           return this.validate = true;
         } else {
             console.log('手机号格式正确')
-          return this.validate = false;
+          this.validate = false;
         }
         let roleIdList = this.permission.map(item => {
           return item.roleIdList
@@ -101,13 +117,21 @@
           username: this.form.username,
           password: this.form.password,
           conPassword: this.form.conPassword,
-          deptId: this.permission[0].deptId,
-          roleIdList: roleIdList,
+          deptId: this.form.deptId,
+          roleIdList: this.form.roleIdList,
           email: this.form.email
         }
-        if(this.isEdit) {
-          updateAccount().then(res => {
-
+        if(this.isEdit != 0) {
+          let temp = JSON.parse(JSON.stringify(params));
+          temp.userId = this.userId;
+          updateAccount(temp).then(res => {
+            if(res.code == 0) {
+              this.$message.success('修改成功！');
+              setTimeout(() => {
+                this.$route.go(-1);
+              },2000)
+            }
+            else this.$message.warning(res.msg)
           })
         }else {
           addAccount(params).then(res => {
