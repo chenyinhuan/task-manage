@@ -4,7 +4,7 @@
 			<div class="tree">
 				<el-input prefix-icon="el-icon-search" placeholder="请输入" v-model="filterText"></el-input>
 				<el-tree class="filter-tree" :data="data" :props="defaultProps" default-expand-all
-					:filter-node-method="filterNode" ref="tree">
+					:filter-node-method="filterNode" @node-click="handleNodeClick" ref="tree">
 				</el-tree>
 			</div>
 			<div class="table-list">
@@ -57,37 +57,10 @@
 		data() {
 			return {
 				filterText: '',
-				data: [{
-					id: 1,
-					label: '一级 2',
-					children: [{
-						id: 3,
-						label: '二级 2-1',
-						children: [{
-							id: 4,
-							label: '三级 3-1-1'
-						}, {
-							id: 5,
-							label: '三级 3-1-2',
-							disabled: true
-						}]
-					}, {
-						id: 2,
-						label: '二级 2-2',
-						disabled: true,
-						children: [{
-							id: 6,
-							label: '三级 3-2-1'
-						}, {
-							id: 7,
-							label: '三级 3-2-2',
-							disabled: true
-						}]
-					}]
-				}],
+				data: [],
 				defaultProps: {
 					children: 'children',
-					label: 'label'
+					label: 'name'
 				},
 				currentPage: 1,
 				total: 0,
@@ -162,7 +135,8 @@
       },
       getDeptList() {
         getDeptList().then(res => {
-          this.tableData = res;
+          // console.log(this.$dealingwithadult([{ id: 1, name: '1', },{ id: 2, name: '1-1', parentId: 1 },{ id: 3, name: '1-1-1', parentId: 2 },{ id: 4, name: '1-2', parentId: 1 },{ id: 5, name: '1-2-2', parentId: 4 },{ id: 6, name: '1-1-1-1', parentId: 3 },{ id: 7, name: '2', }]))
+          this.data = this.$dealingwithadult(res);
         })
       },
 			init() {
@@ -183,9 +157,13 @@
 				this.$router.push('/user-manage/associated-anchor')
 			},
 			filterNode(value, data) {
+        console.log(value,data)
 				if (!value) return true;
 				return data.label.indexOf(value) !== -1;
 			},
+      handleNodeClick(data) {
+        console.log(data)
+      },
 			addAccount(item) {
         this.$router.push(`/user-manage/add-account?isEdit=${item?1:0}&id=${item && item.userId?item.userId:''}`)
 			},
