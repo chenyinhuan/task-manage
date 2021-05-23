@@ -137,6 +137,7 @@ import {getDeptList} from '@/api/user-manage/organization/index'
       // 点击节点名称触发的事件
       handleNodeClick: function (data) {
         this.deptId = data.deptId
+        this.deptName = data.name
         console.log(data);
       },
       getDeptList() {
@@ -160,7 +161,7 @@ import {getDeptList} from '@/api/user-manage/organization/index'
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteRole({roleId: row.roleId}).then(res => {
+          deleteRole([row.roleId]).then(res => {
             if(res.code == 500) return this.$message.warning(res.msg);
             this.$message.success('删除成功！')
             this.init()
