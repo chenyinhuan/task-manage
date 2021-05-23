@@ -135,7 +135,6 @@
       },
       getDeptList() {
         getDeptList().then(res => {
-          // console.log(this.$dealingwithadult([{ id: 1, name: '1', },{ id: 2, name: '1-1', parentId: 1 },{ id: 3, name: '1-1-1', parentId: 2 },{ id: 4, name: '1-2', parentId: 1 },{ id: 5, name: '1-2-2', parentId: 4 },{ id: 6, name: '1-1-1-1', parentId: 3 },{ id: 7, name: '2', }]))
           this.data = this.$dealingwithadult(res);
         })
       },
