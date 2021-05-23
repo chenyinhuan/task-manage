@@ -112,19 +112,19 @@
         let roleIdList = this.permission.map(item => {
           return item.roleIdList
         })
-        let params = {
-          mobile: this.form.mobile,
-          username: this.form.username,
-          password: this.form.password,
-          conPassword: this.form.conPassword,
-          deptId: this.form.deptId,
-          roleIdList: this.form.roleIdList,
-          email: this.form.email
-        }
+
         if(this.isEdit != 0) {
-          let temp = JSON.parse(JSON.stringify(params));
-          temp.userId = this.userId;
-          updateAccount(temp).then(res => {
+          let params = {
+            mobile: this.form.mobile,
+            username: this.form.username,
+            password: this.form.password,
+            conPassword: this.form.conPassword,
+            deptId: this.form.deptId,
+            roleIdList: this.form.roleIdList,
+            email: this.form.email,
+            userId: this.userId
+          }
+          updateAccount(params).then(res => {
             if(res.code == 0) {
               this.$message.success('修改成功！');
               setTimeout(() => {
@@ -134,6 +134,16 @@
             else this.$message.warning(res.msg)
           })
         }else {
+          let params = {
+            mobile: this.form.mobile,
+            username: this.form.username,
+            password: this.form.password,
+            conPassword: this.form.conPassword,
+            deptId: this.permission[0].deptId,
+            roleIdList: roleIdList,
+            email: this.form.email,
+            status: 0
+          }
           addAccount(params).then(res => {
             if(res.code == 0) {
               this.$message.success('创建成功！');

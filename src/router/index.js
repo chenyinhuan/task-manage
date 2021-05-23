@@ -324,10 +324,12 @@ export const routes = [
 ]
 
 const router = new Router({
-  routes: routes
+  routes: routes,
+  scrollBehavior: () => ({ y: 0 ,x: 0}),
 })
 router.afterEach((to, from) => {
-
+  document.body.scrollTop = 0
+  document.documentElement.scrollTop = 0
 });
 router.beforeEach((to, from, next) => {
   // let name = '';

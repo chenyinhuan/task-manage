@@ -25,8 +25,14 @@
               <div v-if="item.slot && item.prop=='username'">
               {{scope.row.username}}<br/>{{scope.row.mobile}}</div>
 							<div v-if="item.slot && item.prop=='status'" class="percent">
-								<div class="dot" :class="[scope.row.status == 1?'green':'']">
-								</div><span> {{scope.row.status == 1?'正常':'禁用'}}</span>
+                <el-switch
+                  @change="changeStatus(scope.row)"
+                  v-model="scope.row.flag"
+                  active-color="#21D487"
+                  inactive-color="#CDCDD5">
+                </el-switch>
+								<!-- <div class="dot" :class="[scope.row.status == 1?'green':'']"> </div>-->
+                <span> {{scope.row.status == 1?'正常':'禁用'}}</span>
 							</div>
 							<div v-if="item.slot && item.prop=='related'">
 								<el-button type="text" @click="assocoated(scope.row)">关联</el-button>
@@ -50,7 +56,8 @@
 <script>
 	import {
 		getAccountList,
-    delAccount
+    delAccount,
+    updateAccount
 	} from '@/api/user-manage/account';
   import {getDeptList} from '@/api/user-manage/organization/index'
 	export default {
@@ -159,7 +166,11 @@
         }
 				getAccountList(params).then(res => {
 					if (res.code != 0) return this.$message.warning(res.msg);
-					this.tableData = res.page.list;
+          let list = res.page.list;
+          list.forEach(item => {
+            item.flag = item.status == 1?true:false
+          })
+					this.tableData = JSON.parse(JSON.stringify(list));
 					this.total = res.page.totalCount;
 				})
 			},
@@ -201,6 +212,26 @@
               this.init();
             }
           })
+        })
+      },
+      changeStatus(item) {
+        let params = {
+            userId: item.userId,
+            status: item.flag ? 1: 0,
+            mobile: item.mobile,
+            username: item.username,
+            password: item.password,
+            conPassword: item.conPassword,
+            deptId: item.deptId,
+            roleIdList: item.roleIdList,
+            email: item.email
+        }
+        updateAccount(params).then(res => {
+          if(res.code == 0) {
+            this.$message.success('修改成功！');
+            this.init();
+          }
+          else this.$message.warning(res.msg)
         })
       }
 		}

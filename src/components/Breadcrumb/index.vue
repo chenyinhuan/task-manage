@@ -2,7 +2,7 @@
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path + index">
-        <span v-if="!item.active" class="no-redirect">{{ item.name }}</span>
+        <span v-if="!item.active" class="no-redirect">{{ item.name == '新增' && $route.query.isEdit==1 ?'编辑':item.name}}</span>
         <a v-else @click.prevent="handleLink(item)" style="font-weight: bold;color:#34335B;">{{ item.name }}</a>
       </el-breadcrumb-item>
     </transition-group>
@@ -363,8 +363,8 @@ export default {
             },
             {
               name: '账户配置',
-              path: '',
-              active: false
+              path: '/user-manage/account-config',
+              active: true
             },
             {
               name: '新增',
@@ -384,8 +384,8 @@ export default {
             },
             {
               name: '账户配置',
-              path: '',
-              active: false
+              path: '/user-manage/account-config',
+              active: true
             },
             {
               name: '关联主播',
@@ -421,8 +421,8 @@ export default {
             },
             {
               name: '组织配置',
-              path: '',
-              active: false
+              path: '/user-manage/account-config',
+              active: true
             },
             {
               name: '新增',
@@ -458,8 +458,8 @@ export default {
             },
             {
               name: '角色配置',
-              path: '',
-              active: false
+              path: '/user-manage/account-config',
+              active: true
             },
             {
               name: '新增',
@@ -479,8 +479,8 @@ export default {
             },
             {
               name: '角色配置',
-              path: '',
-              active: false
+              path: '/user-manage/account-config',
+              active: true
             },
             {
               name: '权限配置',
