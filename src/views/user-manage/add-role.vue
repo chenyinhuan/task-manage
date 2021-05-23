@@ -15,7 +15,11 @@ import {saveAddRole,updateRole} from '@/api/user-manage/role/index'
     data() {
       return {
         formData: {
-          roleName: ''
+          roleName: '',
+          deptId: '',
+          menuIdList: [],
+          deptIdList: [],
+          deptName: ''
         },
         type: ''
       }
