@@ -10,3 +10,14 @@ export const getDeptList = (params) => api.get(`/sys/dept/list`, params)
  * @params params
  */
 export const deleteDept = (params) => api.post(`/sys/dept/delete?deptId=${params.deptId}`, params)
+
+/**
+ * 新建组织
+ * @params params
+ */
+export const saveAddDept = (params) => api.post(`/sys/dept/save`, params)
+/**
+ * 修改组织
+ * @params params
+ */
+export const updateAddDept = (params) => api.post(`/sys/dept/update`, params)

@@ -2,23 +2,28 @@
   <div id="addRole">
     <section>
       <p>角色名</p>
-      <el-input v-model="roleName" placeholder="请输入角色名" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="formData.roleName" placeholder="请输入角色名" maxlength="20" show-word-limit></el-input>
     </section>
     <div class="foot">
-      <el-button type="primary" @click="addRole">创建</el-button>
+      <el-button type="primary" @click="addRole">{{type?'创建':'修改'}}</el-button>
     </div>
   </div>
 </template>
 <script>
-import {saveAddRole} from '@/api/user-manage/role/index'
+import {saveAddRole,updateRole} from '@/api/user-manage/role/index'
   export default {
     data() {
       return {
-        roleName: '',
+        formData: {
+          roleName: ''
+        },
+        type: ''
       }
     },
     created() {
-
+      this.type = this.$route.query.type
+      if(this.$route.query.item) this.formData = JSON.parse(this.$route.query.item);
+      if(this.$route.query.deptId) this.formData.deptId = this.$route.query.deptId;
     },
     mounted() {
 
@@ -28,12 +33,26 @@ import {saveAddRole} from '@/api/user-manage/role/index'
     },
     methods: {
       addRole(){
-        if(!this.roleName) return this.$message.warning('角色名不能为空');
-        saveAddRole({roleName: this.roleName}).then(res=>{
-          if(res.data==200){
-
-          }
-        })
+        if(!this.formData.roleName) return this.$message.warning('角色名不能为空');
+        if(this.type){
+          saveAddRole(this.formData).then(res=>{
+            if(res.code==0){
+              this.$message.success('保存成功')
+              this.$router.go(-1)
+            }else{
+              this.$message.warning(res.msg)
+            }
+          })
+        }else{
+          updateRole(this.formData).then(res=>{
+            if(res.code==0){
+              this.$message.success('修改成功')
+              this.$router.go(-1)
+            }else{
+              this.$message.warning(res.msg)
+            }
+          })
+        }
       }
     }
   }

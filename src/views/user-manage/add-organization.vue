@@ -2,27 +2,28 @@
   <div id="addOrganization">
     <section>
       <p>组织名</p>
-      <el-input v-model="form.taskName" placeholder="请输入组织名" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="formData.name" placeholder="请输入组织名" maxlength="20" show-word-limit></el-input>
     </section>
     <div class="foot">
-      <el-button type="primary">创建</el-button>
+      <el-button type="primary" @click="addDept">{{type?'创建':'修改'}}</el-button>
     </div>
   </div>
 </template>
 <script>
+  import {saveAddDept,updateAddDept} from '@/api/user-manage/organization/index'
   export default {
     data() {
       return {
-        taskName: '',
-        form: {
-          taskName: '',
-          remark: '',
-          template: ''
-        }
+        formData: {
+          name: ''
+        },
+        type: ''
       }
     },
     created() {
-
+      this.type = this.$route.query.type
+      if(this.$route.query.item) this.formData = JSON.parse(this.$route.query.item);
+      if(this.$route.query.deptId) this.formData.parentId = this.$route.query.deptId;
     },
     mounted() {
 
@@ -31,7 +32,28 @@
 
     },
     methods: {
-
+      addDept(){
+        if(!this.formData.name) return this.$message.warning('名称不能为空');
+        if(this.type){
+          saveAddDept(this.formData).then(res=>{
+            if(res.code==0){
+              this.$message.success('保存成功')
+              this.$router.go(-1)
+            }else{
+              this.$message.warning(res.msg)
+            }
+          })
+        }else{
+          updateAddDept(this.formData).then(res=>{
+            if(res.code==0){
+              this.$message.success('修改成功')
+              this.$router.go(-1)
+            }else{
+              this.$message.warning(res.msg)
+            }
+          })
+        }
+      }
     }
   }
 </script>
