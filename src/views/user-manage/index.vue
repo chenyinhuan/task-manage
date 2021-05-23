@@ -52,6 +52,7 @@
 		getAccountList,
     delAccount
 	} from '@/api/user-manage/account';
+  import {getDeptList} from '@/api/user-manage/organization/index'
 	export default {
 		data() {
 			return {
@@ -143,6 +144,7 @@
 		},
 		created() {
       this.init();
+      this.getDeptList();
 		},
 		mounted() {
 
@@ -157,6 +159,11 @@
         console.log('search')
         this.currentPage = 1;
         this.init();
+      },
+      getDeptList() {
+        getDeptList().then(res => {
+          this.tableData = res;
+        })
       },
 			init() {
         let params = {

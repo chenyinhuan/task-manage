@@ -55,7 +55,7 @@
         }
         apiLogin(params).then(res => {
           if (res.code == 500) return this.tip = true;
-          else this.tip = true
+          else this.tip = false;
           if (res.code == 0) {
             this.$message.success('登录成功！');
             setTimeout(() => {
