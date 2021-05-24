@@ -9,37 +9,17 @@
       </el-checkbox-group>
       <span class="label">{{checkList[0]==1?'直接创建的字段为原生字段':'原生字段的基础上，经过计算逻辑可以变化生成衍生字段'}}</span>
     </section>
-    <section>
-      <p>字段显示名</p>
-      <el-input v-model="form.taskName" placeholder="请输入字段显示名" maxlength="20" show-word-limit></el-input>
-    </section>
-    <section>
-      <p>字段名</p>
-      <el-input v-model="form.taskName" placeholder="请输入字段名" maxlength="20" show-word-limit>
-        <template style=" background: #D9D9D9;" slot="prepend">{{checkList[0]==1?'basic_':'complex_'}}</template>
-      </el-input>
-    </section>
-    <section v-if="checkList[0] == 1">
-      <p>表单类型</p>
-      <el-select v-model="form.template" placeholder="选择表单类型"></el-select>
-    </section>
-    <section>
-      <p>字段描述</p>
-      <el-input v-model="form.taskName" placeholder="请输入描述" maxlength="20" show-word-limit></el-input>
-    </section>
-    <section v-if="checkList[0] == 2">
-      <h3>加工规则</h3>
-      <p>加工规则</p>
-      <el-select v-model="form.template" placeholder="选择加工方式"></el-select>
-    </section>
-    <div class="foot">
-      <el-button type="primary">保存</el-button>
-      <el-button class="cancel">取消</el-button>
-    </div>
+    <native-field v-if="checkList[0] == 1"></native-field>
+    <derive-field v-if="checkList[0] == 2"></derive-field>
   </div>
 </template>
 <script>
+  import nativeField from "./group/nativeField";
+  import deriveField from "./group/deriveField";
   export default {
+    components:{
+      nativeField,deriveField
+    },
     data() {
       return {
         checkList: [1],
