@@ -11,3 +11,9 @@ export const apiLogin = (params) => api.post(`/sys/login?username=${params.usern
  * @params params
  */
 export const getNav = (params) => api.post(`/sys/menu/nav`, params)
+
+/**
+ * 获取侧边栏
+ * @params params
+ */
+export const getUserInfo = (params) => api.post(`/sys/user/info`, params)

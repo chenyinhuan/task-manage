@@ -14,7 +14,7 @@
 			<el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
 				<div class="avatar-wrapper">
 					<img src="@/images/login/logo.png" class="user-avatar">
-					<span class="name">吴彦祖</span>
+					<span class="name">{{userInfo.username}}</span>
 					<img class="triangle" src="@/images/my-task/triangle.png">
 				</div>
 				<el-dropdown-menu slot="dropdown">
@@ -33,11 +33,14 @@
 	} from 'vuex'
 	import Breadcrumb from '@/components/Breadcrumb'
 	import Hamburger from '@/components/Hamburger'
-	import Search from '@/components/HeaderSearch'
+	import Search from '@/components/HeaderSearch';
+	import {getUserInfo} from '@/api/common/index.js'
 	export default {
 		name: 'navbar',
 		data() {
-			return {}
+			return {
+				userInfo: ''
+			}
 		},
 		components: {
 			Breadcrumb,
@@ -49,6 +52,9 @@
 				'avatar'
 			])
 		},
+		created() {
+			this.getUserInfo();
+		},
 		methods: {
 			...mapActions('module', ['toggleSideBar']),
 			toggleClickSideBar() {
@@ -57,6 +63,11 @@
 			async logout() {
 				await this.$store.dispatch('user/logout')
 				this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+			},
+			getUserInfo() {
+				getUserInfo().then(res => {
+					this.userInfo = res.user;
+				})
 			}
 		}
 	}
