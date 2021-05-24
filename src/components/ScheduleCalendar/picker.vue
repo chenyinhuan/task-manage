@@ -38,8 +38,8 @@ export default {
         visible(val) {
             if(!val) return
             this.$nextTick(() => {
-                this.$refs.yearList.querySelector('li.active').scrollIntoView()
-                this.$refs.monthList.querySelector('li.active').scrollIntoView()
+                this.$refs.yearList.querySelector('li.active').scrollIntoView({ behavior: "auto",block: "center"})
+                this.$refs.monthList.querySelector('li.active').scrollIntoView({ behavior: "auto",block: "center"})
             })
         }
     },

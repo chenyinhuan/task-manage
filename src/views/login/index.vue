@@ -28,6 +28,7 @@
   import {
     apiLogin
   } from '@/api/common/index.js'
+	import Cookies from 'js-cookie'
   export default {
     data() {
       return {
@@ -59,6 +60,7 @@
           if (res.code == 0) {
             this.$message.success('登录成功！');
             setTimeout(() => {
+			  Cookies.set('activeMenu','task-1')
               this.$router.push('/');
             }, 1000)
           }

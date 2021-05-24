@@ -39,7 +39,7 @@ export default {
     },
     data() {
         return {
-            pickerVisible: true
+            pickerVisible: false
         }
     },
     computed: {
