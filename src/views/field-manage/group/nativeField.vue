@@ -36,9 +36,12 @@
       <div class="item">
         <p v-if="form.formType == 2 || form.formType == 3">枚举值</p>
         <div v-if="form.formType == 2 || form.formType == 3" class="options">
-          <el-input class="select" v-model="item.enumValue" placeholder="请输入" maxlength="20" v-for="(item, index) in enums" :key="index">
-            <template style=" background: #D9D9D9;" slot="prepend">选项{{index+1}}</template>
-          </el-input>
+          <div v-for="(item, index) in enums" :key="index">
+            <el-input class="select" v-model="item.enumValue" placeholder="请输入" maxlength="20">
+              <template style=" background: #D9D9D9;" slot="prepend">选项{{index+1}}</template>
+            </el-input>
+            <span @click="remove(item,index)" v-if="index > 1" style="color: #C03639;margin-left: 10px;cursor: pointer;">X删除</span>
+          </div>
           <el-button @click="addEditDomain()">新增选项</el-button>
         </div>
       </div>
@@ -59,42 +62,8 @@ export default {
   name: "nativeField",
   data() {
     return {
-      options: [{
-        value: 1,
-        label: '输入'
-      },
-      {
-        value: 2,
-        label: '单选'
-      },
-      {
-        value: 3,
-        label: '多选'
-      },
-      {
-        value: 4,
-        label: '文件'
-      }],
-      dataTypeList: [{
-        value: 1,
-        label: '字符串string'
-      },
-      {
-        value: 2,
-        label: '整数数值init'
-      },
-      {
-        value: 3,
-        label: '小数数值float'
-      },
-      {
-        value: 4,
-        label: '日期date'
-      },
-      {
-        value: 5,
-        label: '时间time'
-      }],
+      options: this.$formTypeList,
+      dataTypeList: this.$dataTypeList,
       form: {
         showName: '',
         name: '',
@@ -116,8 +85,11 @@ export default {
     addEditDomain() {
       this.enums.push({value: '',id: ''})
     },
+    remove(item,index) {
+      this.enums.splice(index,1)
+    },
     changeDataType() {
-      
+
     },
     changeFormType() {
       this.form.dataType = '';

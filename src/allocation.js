@@ -18,6 +18,27 @@ Vue.use(VueLazyload,{
 
 Vue.use(VueClipboard)
 Vue.prototype.$dealingwithadult = gather.dealingwithadult;
+Vue.prototype.$logicAction = [{value: 1,label: '加法'},
+{value: 2,label: '减法'},
+{value: 3,label: '除'},
+{value: 4,label: '乘'},
+{value: 5,label: '等于'},
+{value: 6,label: '不等于'},
+{value: 7,label: '包含'},
+{value: 8,label: '不包含'},
+{value: 9,label: '为空'},
+{value: 10,label: '不为空'},
+]
+Vue.prototype.$dataTypeList = [{value: 1,label: '字符串string'},
+{value: 2,label: '整数数值init'},
+{value: 3,label: '小数数值float'},
+{value: 4,label: '日期date'},
+{value: 5,label: '时间time'}]
+Vue.prototype.$formTypeList = [
+{value: 1,label: '输入'},
+{value: 2,label: '单选'},
+{value: 3,label: '多选'},
+{value: 4,label: '文件'}]
 Vue.prototype.getPlatform = function (){
 	var ua = window.navigator.userAgent.toLowerCase();
     var u = navigator.userAgent;
