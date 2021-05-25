@@ -25,7 +25,7 @@ export const getNativeEnums = (params) => api.post(`/task/field/info/${params.id
 export const getNativeList = (params) => api.post(`/task/field/condtion/list`, params)
 
 /**
- * 获取原生字段数据
+ * 获取列表
  * @params userId
  */
-export const getPageList = (params) => api.post(`/task/field/page `, params)
+export const getPageList = (params) => api.post(`/task/field/page`, params)

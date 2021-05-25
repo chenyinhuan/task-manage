@@ -48,7 +48,7 @@ api.interceptors.request.use(
 // 请求返回拦截，目前需要结合各项目自身来处理...
 api.interceptors.response.use(
   res => {
-    console.log(res)
+    // console.log(res)
     if (loadingInstance) loadingInstance.close();
     return Promise.resolve(res.data);
   },
