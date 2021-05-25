@@ -17,8 +17,8 @@
           </li>
         </ul>
       </section>
-    <el-dialog title="修改密码" :visible.sync="dialogVisible" width="30%">
-      <el-form :model="form" inline label-width="100px">
+    <el-dialog title="修改密码"  :visible.sync="dialogVisible" width="498px" :close-on-click-modal="false">
+      <el-form :model="form" inline label-width="146px">
         <el-form-item label="原密码:">
           <el-input v-model="form.password" type="password" placeholder="原密码"></el-input>
         </el-form-item>
@@ -85,9 +85,24 @@
     box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
     min-height: 768px;
     >>>.el-dialog__header{
-      border-bottom: 1px solid #ddd;
-      margin-bottom: 20px;
+      text-align: center;
+      font-size: 24px;
+      color: #333333;
+      padding: 40px 0 36px;
+      .el-dialog__headerbtn{
+        display: none;
+      }
     }
+    >>>.el-dialog__body{
+      .el-form-item__label{
+        font-size: 16px;
+      }
+    }
+    >>>.el-dialog__footer{
+      text-align: center;
+      padding-bottom: 60px;
+    }
+
     .foot{
       margin-top: 60px;
       .el-button{

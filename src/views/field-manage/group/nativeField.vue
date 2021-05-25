@@ -58,9 +58,15 @@
 </template>
 
 <script>
-  import {saveNative} from '@/api/filed-manage/index.js'
+  import {saveNative,getNativeEnums} from '@/api/filed-manage/index.js'
 export default {
   name: "nativeField",
+  props:{
+    id:{
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       options: this.$formTypeList,
@@ -82,7 +88,19 @@ export default {
       ]
     }
   },
+  created() {
+    if(this.id){
+      this.init()
+    }
+  },
   methods: {
+    init(){
+      getNativeEnums({id: this.id}).then(res=>{
+        if(res.field.type == 1){
+          this.form = res.field
+        }
+      })
+    },
     addEditDomain() {
       this.enums.push({value: '',id: ''})
     },
@@ -113,14 +131,19 @@ export default {
         "type": 1,                      //1：原生 2：衍生
         "enums": this.enums
       }
-      saveNative(params).then(res => {
-        console.log(res)
-        if(res.code == 0) {
-        	this.$message.success('新增成功！');
-        }else {
-        	this.$message.warning(res.msg);
-        }
-      })
+      if(this.id){  //编辑
+        params.id = this.id
+        //修改方法
+      }else{  //新增
+        saveNative(params).then(res => {
+          console.log(res)
+          if(res.code == 0) {
+            this.$message.success('新增成功！');
+          }else {
+            this.$message.warning(res.msg);
+          }
+        })
+      }
     },
     back() {
     	this.$router.go(-1)

@@ -9,8 +9,8 @@
       </el-checkbox-group>
       <span class="label">{{checkList[0]==1?'直接创建的字段为原生字段':'原生字段的基础上，经过计算逻辑可以变化生成衍生字段'}}</span>
     </section>
-    <native-field v-show="checkList[0] == 1"></native-field>
-    <derive-field v-show="checkList[0] == 2"></derive-field>
+    <native-field v-show="checkList[0] == 1" :id="id"></native-field>
+    <derive-field v-show="checkList[0] == 2" :id="id"></derive-field>
   </div>
 </template>
 <script>
@@ -28,11 +28,13 @@
           taskName: '',
           remark: '',
           template: ''
-        }
+        },
+        id: ''
       }
     },
     created() {
-
+      this.id = this.$route.query.id
+      this.checkList = [Number(this.$route.query.type)]
     },
     mounted() {
 
