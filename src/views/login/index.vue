@@ -61,7 +61,7 @@
             this.$message.success('登录成功！');
             setTimeout(() => {
 			  Cookies.set('activeMenu','task-1')
-              this.$router.push('/');
+              this.$router.push('/task-center');
             }, 1000)
           }
         }).catch(e => {

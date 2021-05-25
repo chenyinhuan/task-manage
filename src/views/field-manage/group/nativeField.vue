@@ -2,7 +2,7 @@
   <div id="nativeField">
     <section>
       <p>字段显示名</p>
-      <el-input v-model="form.showName" placeholder="请输入字段显示名" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.fieldName" placeholder="请输入字段显示名" maxlength="20" show-word-limit></el-input>
     </section>
     <section>
       <p>字段名</p>
@@ -48,7 +48,7 @@
     </section>
     <section>
       <p>字段描述</p>
-      <el-input v-model="form.remark" placeholder="请输入描述" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.description" placeholder="请输入描述" maxlength="20" show-word-limit></el-input>
     </section>
     <div class="foot">
       <el-button type="primary">保存</el-button>
@@ -65,9 +65,9 @@ export default {
       options: this.$formTypeList,
       dataTypeList: this.$dataTypeList,
       form: {
-        showName: '',
+        fieldName: '',
         name: '',
-        remark: '',
+        description: '',
         formType: '',
         dataType: ''
       },
