@@ -40,7 +40,8 @@
 					},
 					{
 						label: '数据类型',
-						prop: 'dataType'
+						prop: 'dataType',
+						slot: true,
 					},
 					{
 						label: '来源字段',

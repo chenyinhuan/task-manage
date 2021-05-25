@@ -40,7 +40,8 @@
 					},
 					{
 						label: '数据类型',
-						prop: 'dataType'
+						prop: 'dataType',
+						slot: true,
 					},
 					{
 						label: '表单类型',
@@ -55,6 +56,7 @@
 					{
 						label: '修改人/修改后时间',
 						prop: 'updateUserName',
+						slot: true,
 					},
 					{
 						label: '操作',
