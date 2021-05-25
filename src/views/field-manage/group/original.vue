@@ -4,6 +4,18 @@
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
+          <div v-if="item.slot && item.prop=='dataType'">
+          	{{$dataTypeList.find(n => n.value == scope.row.dataType)?$dataTypeList.find(n => n.value == scope.row.dataType).label:''}}
+          </div>
+          <div v-if="item.slot && item.prop=='formType'">
+            {{$formTypeList.find(n => n.value == scope.row.formType)?$formTypeList.find(n => n.value == scope.row.formType).label:''}}
+          </div>
+          <div v-if="item.slot && item.prop=='createUserName'">
+            {{scope.row.createUserName}}
+          </div>
+          <div v-if="item.slot && item.prop=='updateUserName'">
+            {{scope.row.updateUserName}}
+          </div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="text">编辑</el-button>
 						<el-button type="text">删除</el-button>
@@ -92,7 +104,7 @@
 						this.tableData = res.page.list;
 						this.total = res.page.totalCount;
 					}
-					
+
 				})
 			},
 			handleSizeChange(val) {
@@ -114,7 +126,7 @@
 
 	#original {
 		.el-table {
-			.el-table__header-wrapper tr th:nth-last-child(2) {
+			.el-table__header-wrapper tr th:nth-last-child(1) {
 				text-align: center !important;
 			}
 
