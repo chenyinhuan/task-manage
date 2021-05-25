@@ -277,6 +277,7 @@
           saveComplex(params).then(res => {
             if (res.code == 0) {
               this.$message.success('新增成功！');
+              this.back()
             } else {
               this.$message.warning(res.msg);
             }
