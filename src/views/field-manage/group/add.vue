@@ -32,15 +32,15 @@
 				tableColumn: [ // 表格列数据
 					{
 						label: '字段显示名',
-						prop: 'name',
+						prop: 'fieldName',
 					},
 					{
 						label: '字段名称',
-						prop: 'address',
+						prop: 'name',
 					},
 					{
 						label: '数据类型',
-						prop: ''
+						prop: 'dataType'
 					},
 					{
 						label: '来源字段',
@@ -49,12 +49,12 @@
 					},
 					{
 						label: '创建人/创建时间',
-						prop: 'date',
+						prop: 'createUserName',
 						slot: true,
 					},
 					{
 						label: '修改人/修改后时间',
-						prop: 'date',
+						prop: 'updateUserName',
 					},
 					{
 						label: '操作',
