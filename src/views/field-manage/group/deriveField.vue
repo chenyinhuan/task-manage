@@ -80,7 +80,7 @@
 			</div>
 		</section>
 		<div class="foot">
-			<el-button type="primary" @click="save">保存</el-button>
+			<el-button type="primary" @click="save()">保存</el-button>
 			<el-button class="cancel" @click="back()">取消</el-button>
 		</div>
 	</div>

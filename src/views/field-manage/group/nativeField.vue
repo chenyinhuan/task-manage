@@ -40,7 +40,7 @@
             <el-input class="select" v-model="item.enumValue" placeholder="请输入" maxlength="20">
               <template style=" background: #D9D9D9;" slot="prepend">选项{{index+1}}</template>
             </el-input>
-            <span @click="remove(item,index)" v-if="index > 1" style="color: #C03639;margin-left: 10px;cursor: pointer;">X删除</span>
+            <span @click="remove(item,index)" v-if="index > 1" style="color: #C03639;margin-left: 10px;cursor: pointer;">X 删除</span>
           </div>
           <el-button @click="addEditDomain()">新增选项</el-button>
         </div>
@@ -51,13 +51,14 @@
       <el-input v-model="form.description" placeholder="请输入描述" maxlength="20" show-word-limit></el-input>
     </section>
     <div class="foot">
-      <el-button type="primary">保存</el-button>
-      <el-button class="cancel">取消</el-button>
+    	<el-button type="primary" @click="save">保存</el-button>
+    	<el-button class="cancel" @click="back()">取消</el-button>
     </div>
   </div>
 </template>
 
 <script>
+  import {saveNative} from '@/api/filed-manage/index.js'
 export default {
   name: "nativeField",
   data() {
@@ -101,6 +102,28 @@ export default {
           enumValue: ''
         }
       ]
+    },
+    save() {
+      let params = {
+        "dataType": this.form.dataType,                    //数据类型 1：字符串型string，2：整数int，3小数数值float，4日期date，5 时间time
+        "description": this.form.description,          //描述
+        "fieldName": this.form.fieldName,            //显示字段名
+        "formType": this.form.formType,                   //表单类型 1：输入，2：单选，3多选，4文件
+        "name": this.form.name,                //字段名
+        "type": 1,                      //1：原生 2：衍生
+        "enums": this.enums
+      }
+      saveNative(params).then(res => {
+        console.log(res)
+        if(res.code == 0) {
+        	this.$message.success('新增成功！');
+        }else {
+        	this.$message.warning(res.msg);
+        }
+      })
+    },
+    back() {
+    	this.$router.go(-1)
     }
   }
 }
