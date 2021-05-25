@@ -7,7 +7,7 @@
       </div>
       <div class="right">
         <el-button type="primary" @click="addField">新增</el-button>
-        <el-input v-model="keyword" placeholder="考核批次" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+        <el-input v-model="keyword" placeholder="字段显示名" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
       </div>
 		</section>
     <div style="margin-top: 16px;">

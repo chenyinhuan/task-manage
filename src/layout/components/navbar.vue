@@ -67,6 +67,7 @@
 			getUserInfo() {
 				getUserInfo().then(res => {
 					this.userInfo = res.user;
+					if(this.userInfo == null) this.$router.push('/login')
 				})
 			}
 		}

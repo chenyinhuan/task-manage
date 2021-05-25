@@ -17,7 +17,7 @@
 		<section>
 			<h3>加工规则</h3>
 			<p>加工规则</p>
-			<el-select v-model="form.ruleType" placeholder="选择加工方式">
+			<el-select v-model="form.ruleType" placeholder="选择加工方式" @change="changeRuleType()">
 				<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 				</el-option>
 			</el-select>
@@ -26,8 +26,7 @@
 				<div class="options">
 					<label>衍生字段=</label>
 					<el-select v-model="form.fieldStartId" placeholder="选择字段">
-						<el-option v-for="item in fieldType" :key="item.value" :label="item.label" :value="item.value">
-						</el-option>
+						<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName" :value="item.id"></el-option>
 					</el-select>
 					<div v-for="(item, index) in enums" :key="index">
 						<el-select v-model="item.logicAction" placeholder="运算方式">
@@ -36,120 +35,66 @@
 							</el-option>
 						</el-select>
 						<el-select v-model="item.fieldStartId" placeholder="选择字段">
-							<el-option v-for="item in fieldType" :key="item.value" :label="item.label"
-								:value="item.value">
-							</el-option>
+							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName" :value="item.id"></el-option>
 						</el-select>
+						<br/>
 					</div>
 					<a class="add-btn" v-if="enums.length==1" @click="addEditDomain()">+新增</a>
-					<a class="delete-btn" v-if="enums.length>1" @click="deleteEditDomain()">X删除</a>
+					<a class="delete-btn" v-if="enums.length>1" @click="deleteEditDomain()">X 删除</a>
 				</div>
 			</div>
-			<div class="item" v-if="form.ruleType ==2">
-				<el-select v-model="form.fieldEnumId" placeholder="选择字段">
-					<el-option v-for="item in fieldType1" :key="item.value" :label="item.label" :value="item.value">
-					</el-option>
+			<div class="item" :class="[nativeList.find(n => n.id == form.fieldStartId) && !(nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3)?'cast':'']" v-if="form.ruleType ==2">
+				<el-select v-model="form.fieldStartId" placeholder="选择字段">
+					<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName" :value="item.id"></el-option>
 				</el-select>
-				<div v-if="form.fieldEnumId==1 || form.fieldEnumId==2">
+				<div v-if="nativeList.find(n => n.id == form.fieldStartId) && (nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3)">
 					<div class="options" v-for="(citem,index) in form.fieldComplexCastRuleVOs">
-						<el-input v-model="form.name" :placeholder="index==0?'法务审核':'邮寄中'">
-							<template style=" background: #D9D9D9;" slot="prepend">{{index==0?'选项1':'选项2'}}</template>
+						<el-input v-model="form.enumValue" disabled>
+							<template style=" background: #D9D9D9;" slot="prepend">选项{{index+1}}</template>
 						</el-input>
 						<span style="margin: 0 15px">则</span>
 						<label style="margin-right: 10px">衍生字段=</label>
-						<el-input v-model="citem.enumValue"></el-input>
-						<el-select v-model="citem.logicAction" placeholder="选择数据类型">
+						<el-input v-model="citem.complexValue"></el-input>
+						<el-select v-model="citem.complexDataType" placeholder="选择数据类型">
 							<el-option v-for="item in dataTypeList" :key="item.value" :label="item.label"
 								:value="item.value">
 							</el-option>
 						</el-select>
 					</div>
 				</div>
-				<div v-if="form.fieldEnumId==3">
+				<div v-else>
 					<div v-for="(item, index) in enums1" :key="index" class="options options1">
-						<el-select v-model="item.complexDataType" placeholder="运算方式">
-							<el-option v-for="item in calcType" :key="item.value" :label="item.label"
+						<el-select v-model="item.logicAction" placeholder="运算方式" style="margin-left: 15px;">
+							<el-option v-for="item in calcType.slice(0,4)" :key="item.value" :label="item.label"
 								:value="item.value">
 							</el-option>
 						</el-select>
-						<el-input v-model="item.enumValue"></el-input>
+						<el-input v-model="item.logicTargetValue"></el-input>
 						<span style="margin: 0 15px">则</span>
 						<label style="margin-right: 10px">衍生字段=</label>
 						<el-input v-model="item.complexValue"></el-input>
 					</div>
-					<a class="add-btn" v-if="enums1.length==1" @click="addEditDomain1()">+新增</a>
-					<a class="delete-btn" v-if="enums1.length>1" @click="deleteEditDomain1()">X删除</a>
+					<a class="add-btn" v-if="enums1.length==1" @click="addEditDomain1()">+ 新增</a>
+					<a class="delete-btn" v-if="enums1.length>1" @click="deleteEditDomain1()">X 删除</a>
 				</div>
 			</div>
 		</section>
 		<div class="foot">
-			<el-button type="primary">保存</el-button>
-			<el-button class="cancel">取消</el-button>
+			<el-button type="primary" @click="save">保存</el-button>
+			<el-button class="cancel" @click="back()">取消</el-button>
 		</div>
 	</div>
 </template>
 
 <script>
+	import {getNativeList, getNativeEnums, saveComplex} from '@/api/filed-manage/index.js'
 	export default {
 		name: "deriveField",
 		data() {
 			return {
-				calcType: [{
-						value: 1,
-						label: '增加'
-					},
-					{
-						value: 2,
-						label: '减去'
-					},
-					{
-						value: 3,
-						label: '除以'
-					},
-					{
-						value: 4,
-						label: '乘以'
-					},
-					{
-						value: 5,
-						label: '等于'
-					},
-					{
-						value: 6,
-						label: '不等于'
-					},
-					{
-						value: 7,
-						label: '包含'
-					},
-					{
-						value: 8,
-						label: '不包含'
-					},
-					{
-						value: 9,
-						label: '空判断'
-					},
-					{
-						value: 10,
-						label: '非空判断'
-					},
-
-				],
-				fieldType: [{
-						value: 1,
-						label: 'V任务费用'
-					},
-					{
-						value: 2,
-						label: '已收佣金'
-					},
-					{
-						value: 3,
-						label: '虚补佣金'
-					},
-				],
-				fieldType1: [{
+				calcType: this.$logicAction,
+				nativeList: [],
+				nativeList1: [{
 						value: 1,
 						label: '合同进度'
 					},
@@ -171,35 +116,16 @@
 						label: '关系映射'
 					},
 				],
-				dataTypeList: [{
-						value: 1,
-						label: '字符串string'
-					},
-					{
-						value: 2,
-						label: '整数数值init'
-					},
-					{
-						value: 3,
-						label: '小数数值float'
-					},
-					{
-						value: 4,
-						label: '日期date'
-					},
-					{
-						value: 5,
-						label: '时间time'
-					}
-				],
+				dataTypeList: this.$dataTypeList,
 				enums: [{
 					logicAction: '',
 					fieldStartId: ''
 				}, ],
 				enums1: [{
+					logicTargetValue: '',  //等于后面的input, 用于比较
+					complexValue: '', //最后一个input, 衍生字段值
 					logicAction: '',
-					fieldStartId: ''
-				}, ],
+				}],
 				form: {
 					showName: '',
 					name: '',
@@ -207,41 +133,47 @@
 					ruleType: '',
 					type: 2, //衍生
 					fieldStartId: '',
-					"fieldComplexCastRuleVOs": [{         //映射类型            
-					  "complexValue": "complex_test_11",
-					  "enumValue": "test11",  //枚举值
-					  "fieldStartId": 2,      //第一个原生字段id
-					  "complexDataType": 1, //数据类型 1：字符串型string，2：整数int，3小数数值float，4日期date，5 时间time
-					  "fieldEnumId": 2      //枚举id
-					}, {
-					  "complexValue": "complex_test_12",
-					  "enumValue": "test12",
-					  "fieldStartId": 2,    //第一个原生字段id
-					  "complexDataType": 1, //数据类型 1：字符串型string，2：整数int，3小数数值float，4日期date，5 时间time
-					  "fieldEnumId": 3
-					}],
-					"fieldComplexCastRuleVOs": [{
-					  "logicAction": 5,               //逻辑算法5-10
-					  "complexValue": "100",          //最后一个input, 衍生字段值
-					  "fieldStartId": 3,              //已收佣金字段id
-					  "logicTargetValue": "success"  //等于后面的input, 用于比较
-					}, {
-					  "logicAction": 5,
-					  "complexValue": "200",
-					  "fieldStartId": 3,
-					  "logicTargetValue": "success2"
-					}],
-					"complexMahtRuleVOs": [{
-					  "logicAction": 1,   //运算方式 1：加法，2：减法，3除，4乘， 5等于，6不等于，7包含， 8不包含， 9空判断，10非空判断
-					  "fieldStartId": 3,   //第一个字段id
-					  "fieldEndId": 4   //第二个字段id
-					}, {
-					  "logicAction": 3,
-					  "fieldStartId": 3
-					}],
+					"fieldComplexCastRuleVOs": [],
+					// "fieldComplexCastRuleVOs": [{
+					//   "logicAction": 5,               //逻辑算法5-10
+					//   "complexValue": "100",          //最后一个input, 衍生字段值
+					//   "fieldStartId": 3,              //已收佣金字段id
+					//   "logicTargetValue": "success"  //等于后面的input, 用于比较
+					// }, {
+					//   "logicAction": 5,
+					//   "complexValue": "200",
+					//   "fieldStartId": 3,
+					//   "logicTargetValue": "success2"
+					// }]
 				},
-				prepend: 'complex_'
+				prepend: 'complex_',
+				checkField: {}
 			}
+		},
+		watch: {
+			'form.fieldStartId':{//深度监听，可监听到对象、数组的变化
+				 handler(val, oldVal){
+					console.log(val, oldVal)
+					if(val && this.form.ruleType == 2 && (this.nativeList.find(n => n.id == val).formType == 2 || this.nativeList.find(n => n.id == val).formType == 3)) {
+						getNativeEnums({id: this.form.fieldStartId}).then(res => {
+							if(res.code == 0) {
+								this.form.fieldComplexCastRuleVOs = [];
+								for(let i=0;i<res.field.fieldEnumEntityList.length;i++) {
+									this.form.fieldComplexCastRuleVOs.push({										
+										complexValue: '',
+										enumValue: res.field.fieldEnumEntityList[i].enumValue,  //枚举值
+										fieldStartId: this.form.fieldStartId,      //第一个原生字段id
+										complexDataType: '', //数据类型 1：字符串型string，2：整数int，3小数数值float，4日期date，5 时间time
+										fieldEnumId:  res.field.fieldEnumEntityList[i].id,  //枚举id
+									})
+								}
+							}
+						})
+					}
+				 },
+				 immediate: true,
+				 deep:true //true 深度监听
+			 }
 		},
 		methods: {
 			addEditDomain() {
@@ -252,6 +184,8 @@
 			},
 			addEditDomain1() {
 				this.enums1.push({
+					logicTargetValue: '',  //等于后面的input, 用于比较
+					complexValue: '', //最后一个input, 衍生字段值
 					logicAction: '',
 					fieldStartId: ''
 				})
@@ -261,6 +195,78 @@
 			},
 			deleteEditDomain1() {
 				this.enums1.splice(0, this.enums1.length - 1)
+			},
+			changeRuleType() {
+				this.form.fieldStartId = '';
+				getNativeList().then(res => {
+					if (res.code == 0) {
+						this.nativeList = res.fields;
+					}
+				})
+			},
+			save() {
+				let params = {};
+				if(this.form.ruleType == 1) {
+					let complexMahtRuleVOs = [];
+					if(this.enums.length == 1) {
+						complexMahtRuleVOs = [{
+					    "logicAction": this.enums[0].logicAction,   //运算方式 1：加法，2：减法，3除，4乘， 5等于，6不等于，7包含， 8不包含， 9空判断，10非空判断
+					    "fieldStartId": this.form.fieldStartId,   //第一个字段id
+					    "fieldEndId": this.enums[0].fieldStartId   //第二个字段id
+					  }]
+					}else if(this.enums.length == 2){
+						complexMahtRuleVOs = [{
+						  "logicAction": this.enums[0].logicAction,
+						  "fieldStartId": this.form.fieldStartId,   //第一个字段id
+						  "fieldEndId": this.enums[0].fieldStartId   //第二个字段id
+						}, {
+					    "logicAction": this.enums[1].logicAction,
+					    "fieldStartId": this.enums[1].fieldStartId
+					  }]
+					}
+					params = {
+					  "complexMahtRuleVOs": complexMahtRuleVOs,
+					  "fieldName": this.form.fieldName,
+					  "dataType": '', // 暂时不传，如果有限制就随便传一个
+					  "ruleType": this.form.ruleType,
+					  "name": `${this.prepend}${this.form.name}`,
+					  "description": this.form.description,
+					  "type": this.form.type
+					}
+				}else {
+					let fieldComplexCastRuleVOs = [];
+					if(this.checkField.formType == 2 || this.checkField.formType == 3) { // 选择类
+						fieldComplexCastRuleVOs = this.form.fieldComplexCastRuleVOs;
+					}else { // 非选择类
+						for(let i=0;i<this.enums1.length;i++) {
+							fieldComplexCastRuleVOs.push({
+								logicAction: this.enums1[i].logicAction,
+								complexValue: this.enums1[i].complexValue,
+								fieldStartId: this.form.fieldStartId,
+								logicTargetValue: this.enums1[i].logicTargetValue,
+							});
+						}
+					}
+					params = {
+					  "fieldComplexCastRuleVOs": fieldComplexCastRuleVOs,
+					  "fieldName": this.form.fieldName,
+					  "dataType": '', // 暂时不传，如果有限制就随便传一个
+					  "ruleType": this.form.ruleType,
+					  "name": `${this.prepend}${this.form.name}`,
+					  "description": this.form.description,
+					  "type": this.form.type
+					}
+				}
+				saveComplex(params).then(res => {
+					if(res.code == 0) {
+						this.$message.success('新增成功！');
+					}else {
+						this.$message.warning(res.msg);
+					}
+				})
+			},
+			back() {
+				this.$router.go(-1)
 			}
 		}
 	}
@@ -305,13 +311,13 @@
 
 		.add-btn {
 			font-size: 14px;
-			margin-left: 10px;
+			margin-left: 15px;
 			color: #0079FE;
 		}
 
 		.delete-btn {
 			font-size: 14px;
-			margin-left: 10px;
+			margin-left: 15px;
 			color: #f44336;
 		}
 
@@ -425,6 +431,8 @@
 				}
 			}
 		}
-
+		.cast {
+			display: flex;
+		}
 	}
 </style>
