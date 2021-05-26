@@ -191,8 +191,6 @@
         getNativeEnums({id: this.id}).then(res=>{
           if(res.field.type == 2){
             this.form = res.field
-            console.log('新：')
-            console.log(this.form)
           }
         })
       },

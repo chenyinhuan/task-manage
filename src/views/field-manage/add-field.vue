@@ -34,7 +34,7 @@
     },
     created() {
       this.id = this.$route.query.id
-      this.checkList = [Number(this.$route.query.type)]
+      this.checkList = this.$route.query.type?[Number(this.$route.query.type)] : [1]
     },
     mounted() {
 
