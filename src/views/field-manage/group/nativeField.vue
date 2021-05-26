@@ -98,6 +98,8 @@ export default {
       getNativeEnums({id: this.id}).then(res=>{
         if(res.field.type == 1){
           this.form = res.field
+          console.log('原：')
+          console.log(this.form)
         }
       })
     },
