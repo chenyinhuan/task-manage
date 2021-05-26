@@ -47,7 +47,7 @@
 			<el-button type="primary">提交任务</el-button>
 			<el-button class="cancel">取消</el-button>
 		</div>
-		<assigment ref="assigment" :visible.sync="visibleDialog"></assigment>
+		<assigment ref="assigment"></assigment>
 	</div>
 </template>
 <script>
@@ -81,7 +81,7 @@
 		},
 		methods: {
 			openDialog() {
-				this.visibleDialog = true;
+				this.$refs.assigment.open();
 			},
 			handleClose() {
 
