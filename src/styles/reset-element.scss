@@ -146,3 +146,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .el-dialog__wrapper {
   background: rgba(0,0,0,0.05);
 }
+
+.el-menu-item-group__title {
+	  padding: 0px !important;
+  }

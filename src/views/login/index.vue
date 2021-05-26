@@ -60,7 +60,7 @@
           if (res.code == 0) {
             this.$message.success('登录成功！');
             setTimeout(() => {
-			  Cookies.set('activeMenu','task-1')
+			  Cookies.set('activeMenu','41-1')
               this.$router.push('/task-center');
             }, 1000)
           }
