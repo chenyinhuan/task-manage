@@ -3,7 +3,7 @@
     <el-dialog :close-on-click-modal="false" custom-class="dialog" :visible="visible" top="15vh"  width="738px" @close="close">
         <div class="dialog-content">
           <div class="cont-item">
-            <h3>选择表</h3>F
+            <h3>选择表</h3>
             <div class="list list-left">
               <ul>
                 <li>名称</li>
