@@ -94,7 +94,7 @@
 		methods: {
       editInfo(item){
         console.log(item)
-        this.$router.push('/field-manage/add-field?type=1&id='+item.id)
+        this.$router.push('/field-manage/add-field?type='+item.type+'&id='+item.id)
       },
 			init() {
 				let params = {
