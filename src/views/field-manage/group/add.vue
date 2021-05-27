@@ -96,7 +96,7 @@
       },
 			init() {
 				let params = {
-					start: this.currentPage,
+					page: this.currentPage,
 					limit: this.limit,
 					type: 2
 				}
