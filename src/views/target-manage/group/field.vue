@@ -22,11 +22,15 @@
         <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName" :value="item.id"></el-option>
       </el-select>
     </section>
+    <div class="foot">
+      <el-button type="primary" @click="save">保存指标</el-button>
+      <el-button class="cancel" @click="back">取消</el-button>
+    </div>
   </div>
 </template>
 
 <script>
-
+  import {saveTarge} from '@/api/target-manage/index.js'
   import {getNativeList} from '@/api/filed-manage/index.js'
     export default {
       name: "field",
@@ -56,6 +60,18 @@
         		this.nativeList = res.fields;
         	}
         })
+      },
+      methods:{
+        back() {
+          this.$router.go(-1)
+        },
+        save() {
+          let params = '';
+          params = this.form;
+          saveTarge(params).then(res => {
+            if(res.code == 0) this.$message.success('保存成功！')
+          })
+        }
       }
     }
 </script>

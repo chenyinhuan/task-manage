@@ -47,6 +47,14 @@ Vue.prototype.$formTypeList = [
 {value: 2,label: '单选'},
 {value: 3,label: '多选'},
 {value: 4,label: '文件'}]
+Vue.prototype.$targetShowType = [
+  {value: 1,label: '百分数'},
+  {value: 2,label: '数值'}]
+Vue.prototype.$targetLogicAction = [{value: 1,label: '加'},
+  {value: 2,label: '减'},
+  {value: 3,label: '乘'},
+  {value: 4,label: '除'},
+]
 Vue.prototype.getPlatform = function (){
 	var ua = window.navigator.userAgent.toLowerCase();
     var u = navigator.userAgent;
