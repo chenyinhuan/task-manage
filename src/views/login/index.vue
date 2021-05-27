@@ -6,7 +6,7 @@
         <img class="logo" src="@/images/login/logo.png">
         <p>任务管理系统</p>
         <div style="position: relative;">
-          <el-input v-model="phonenumber" class="phone">
+          <el-input v-model="phonenumber" class="phone" @keyup.enter.native="enterPhone">
             <template slot="prepend">
               <div class="pre"><span>+86</span>
                 <div class="line"></div>
@@ -14,11 +14,11 @@
             </template>
           </el-input>
           <span v-if="validate && phonenumber == ''" class="error or">请填写登录账号</span>
-          <el-input v-model="password" show-password class="password"></el-input>
+          <el-input ref="psw" v-model="password" show-password class="password" @keyup.enter.native="goLogin"></el-input>
           <span v-if="validate && password == ''" class="error or">请填写登录密码</span>
           <span v-if="tip" class="error red">账号或密码错误</span>
         </div>
-        <div class="forget-psd">忘记密码？</div>
+        <!-- <div class="forget-psd">忘记密码？</div> -->
         <div class="btn" @click="goLogin()">登录</div>
       </div>
     </section>
@@ -48,6 +48,9 @@
 
     },
     methods: {
+		enterPhone() {
+			this.$refs.psw.focus();
+		},
       goLogin() {
         if(this.password == '' || this.phonenumber == '') return this.validate = true;
         let params = {
@@ -202,7 +205,7 @@
         border-radius: 8px;
         color: #FAFAFB;
         background-color: #0079FE;
-        margin: 44px auto 0px auto;
+        margin: 22px auto 0px auto;
         cursor: pointer;
       }
     }
