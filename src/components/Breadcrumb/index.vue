@@ -2,7 +2,7 @@
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path + index">
-        <span v-if="!item.active" class="no-redirect">{{ item.name == '新增' && $route.query.isEdit==1 ?'编辑':item.name}}</span>
+        <span v-if="!item.active" class="no-redirect">{{ item.name.indexOf('新增') != -1  && $route.query.id?item.name.replace('新增','编辑'):item.name}}</span>
         <a v-else @click.prevent="handleLink(item)" style="font-weight: bold;color:#34335B;">{{ item.name }}</a>
       </el-breadcrumb-item>
     </transition-group>
@@ -421,7 +421,7 @@ export default {
             },
             {
               name: '组织配置',
-              path: '/user-manage/account-config',
+              path: '/user-manage/organization-setting',
               active: true
             },
             {
@@ -458,7 +458,7 @@ export default {
             },
             {
               name: '角色配置',
-              path: '/user-manage/account-config',
+              path: '/user-manage/role-setting',
               active: true
             },
             {
@@ -479,7 +479,7 @@ export default {
             },
             {
               name: '角色配置',
-              path: '/user-manage/account-config',
+              path: '/user-manage/role-setting',
               active: true
             },
             {

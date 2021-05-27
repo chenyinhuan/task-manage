@@ -2,15 +2,15 @@
   <div id="addField">
     <h3>字段信息</h3>
     <section>
-      <p>新增字段</p>
+      <p>{{$route.query.id?'编辑':'新增'}}字段</p>
       <el-checkbox-group v-model="checkList" @change="bindCheckBox">
-        <el-checkbox :label="1">原生字段</el-checkbox>
-        <el-checkbox :label="2">衍生字段</el-checkbox>
+        <el-checkbox :label="1" :disabled="$route.query.id && $route.query.type == 2">原生字段</el-checkbox>
+        <el-checkbox :label="2" :disabled="$route.query.id && $route.query.type == 1">衍生字段</el-checkbox>
       </el-checkbox-group>
       <span class="label">{{checkList[0]==1?'直接创建的字段为原生字段':'原生字段的基础上，经过计算逻辑可以变化生成衍生字段'}}</span>
     </section>
-    <native-field v-show="checkList[0] == 1"></native-field>
-    <derive-field v-show="checkList[0] == 2"></derive-field>
+    <native-field v-show="checkList[0] == 1" :id="id"></native-field>
+    <derive-field v-show="checkList[0] == 2" :id="id"></derive-field>
   </div>
 </template>
 <script>
@@ -28,11 +28,13 @@
           taskName: '',
           remark: '',
           template: ''
-        }
+        },
+        id: ''
       }
     },
     created() {
-
+      this.id = this.$route.query.id
+      this.checkList = this.$route.query.type?[Number(this.$route.query.type)] : [1]
     },
     mounted() {
 

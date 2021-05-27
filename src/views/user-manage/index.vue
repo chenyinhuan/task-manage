@@ -3,8 +3,9 @@
 		<div class="main">
 			<div class="tree">
 				<el-input prefix-icon="el-icon-search" placeholder="请输入" v-model="filterText"></el-input>
-				<el-tree class="filter-tree" :data="data" :highlight-current="true" :props="defaultProps" node-key="deptId" default-expand-all
-					:filter-node-method="filterNode" @node-click="handleNodeClick" ref="tree">
+				<el-tree class="filter-tree" :data="data" :highlight-current="true" :props="defaultProps"
+					node-key="deptId" default-expand-all :filter-node-method="filterNode" @node-click="handleNodeClick"
+					ref="tree">
 				</el-tree>
 			</div>
 			<div class="table-list">
@@ -14,7 +15,8 @@
 				<div class="foot search">
 					<el-button type="primary" @click="addAccount()">添加账号</el-button>
 					<div>
-						<el-input class="account" v-model="form.username" placeholder="请输入账号名" @keyup.enter.native="search"></el-input>
+						<el-input class="account" v-model="form.username" placeholder="请输入账号名"
+							@keyup.enter.native="search"></el-input>
 						<el-input v-model="form.mobile" placeholder="请输入登录账号" @keyup.enter.native="search"></el-input>
 					</div>
 				</div>
@@ -22,17 +24,15 @@
 					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 						v-for="(item,index) in tableColumn" :key="index">
 						<template slot-scope="scope">
-              <div v-if="item.slot && item.prop=='username'">
-              {{scope.row.username}}<br/>{{scope.row.mobile}}</div>
+							<div v-if="item.slot && item.prop=='username'">
+								{{scope.row.username}}<br />{{scope.row.mobile}}
+							</div>
 							<div v-if="item.slot && item.prop=='status'" class="percent">
-                <el-switch
-                  @change="changeStatus(scope.row)"
-                  v-model="scope.row.flag"
-                  active-color="#21D487"
-                  inactive-color="#CDCDD5">
-                </el-switch>
+								<el-switch @change="changeStatus(scope.row)" v-model="scope.row.flag"
+									active-color="#21D487" inactive-color="#CDCDD5">
+								</el-switch>
 								<!-- <div class="dot" :class="[scope.row.status == 1?'green':'']"> </div>-->
-                <span> {{scope.row.status == 1?'正常':'禁用'}}</span>
+								<span> {{scope.row.status == 1?'正常':'禁用'}}</span>
 							</div>
 							<div v-if="item.slot && item.prop=='related'">
 								<el-button type="text" @click="assocoated(scope.row)">关联</el-button>
@@ -46,7 +46,7 @@
 					</el-table-column>
 				</el-table>
 				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-					v-if="tableData.length>0" :current-page.sync="currentPage" :page-size="limit"
+					v-if="tableData.length>0" :current-page.sync="searchParams.page" :page-size="searchParams.limit"
 					layout="prev, pager, next, jumper" :total="total">
 				</el-pagination>
 			</div>
@@ -56,10 +56,12 @@
 <script>
 	import {
 		getAccountList,
-    delAccount,
-    updateAccount
+		delAccount,
+		updateAccount
 	} from '@/api/user-manage/account';
-  import {getDeptList} from '@/api/user-manage/organization/index'
+	import {
+		getDeptList
+	} from '@/api/user-manage/organization/index'
 	export default {
 		data() {
 			return {
@@ -69,15 +71,13 @@
 					children: 'children',
 					label: 'name'
 				},
-				currentPage: 1,
 				total: 0,
-        limit: 10,
 				tableData: [],
 				tableColumn: [ // 表格列数据
 					{
 						label: '账号名/账号',
 						prop: 'username',
-            slot: true
+						slot: true
 					},
 					{
 						label: '角色',
@@ -94,7 +94,7 @@
 					{
 						label: '创建时间',
 						prop: 'createTime',
-            width: 170
+						width: 170
 					},
 					{
 						label: '账户状态',
@@ -120,12 +120,16 @@
 					mobile: '',
 					username: '',
 				},
-        deptId: ''
+				deptId: '',
+				searchParams:{
+				  page: 1,
+				  limit: 10
+				},
 			}
 		},
 		created() {
 
-      this.getDeptList();
+			this.getDeptList();
 		},
 		mounted() {
 
@@ -136,40 +140,40 @@
 			}
 		},
 		methods: {
-      search() {
-        console.log('search')
-        this.currentPage = 1;
-        this.init();
-      },
-      getDeptList() {
-        getDeptList().then(res => {
-          this.data = this.$dealingwithadult(res);
-          this.deptId = this.data[0].deptId;
-          this.init();
-          this.setCheckedKeys();
-        })
-      },
-      setCheckedNodes() {
-        this.$refs.tree.setCheckedNodes([this.data[0]]);
-      },
-      setCheckedKeys() {
-        this.$refs.tree.setCheckedKeys([this.deptId]);
-      },
+			search() {
+				console.log('search')
+				this.currentPage = 1;
+				this.init();
+			},
+			getDeptList() {
+				getDeptList().then(res => {
+					this.data = this.$dealingwithadult(res);
+					this.deptId = this.data[0].deptId;
+					this.init();
+					this.setCheckedKeys();
+				})
+			},
+			setCheckedNodes() {
+				this.$refs.tree.setCheckedNodes([this.data[0]]);
+			},
+			setCheckedKeys() {
+				this.$refs.tree.setCheckedKeys([this.deptId]);
+			},
 			init() {
-        let params = {
-          page: this.currentPage,
-          limit: this.limit,
-          username: this.form.username,
-          deptId: this.deptId
-          // order: 'asc',
-          // _search: false
-        }
+				let params = {
+					page: this.searchParams.page,
+					limit: this.searchParams.limit,
+					username: this.form.username,
+					deptId: this.deptId
+					// order: 'asc',
+					// _search: false
+				}
 				getAccountList(params).then(res => {
 					if (res.code != 0) return this.$message.warning(res.msg);
-          let list = res.page.list;
-          list.forEach(item => {
-            item.flag = item.status == 1?true:false
-          })
+					let list = res.page.list;
+					list.forEach(item => {
+						item.flag = item.status == 1 ? true : false
+					})
 					this.tableData = JSON.parse(JSON.stringify(list));
 					this.total = res.page.totalCount;
 				})
@@ -181,59 +185,59 @@
 				if (!value) return true;
 				return data.name.indexOf(value) !== -1;
 			},
-      handleNodeClick(data) {
-        console.log(data);
-        this.deptId = data.deptId;
-      },
+			handleNodeClick(data) {
+				console.log(data);
+				this.deptId = data.deptId;
+			},
 			addAccount(item) {
-        this.$router.push(`/user-manage/add-account?isEdit=${item?1:0}&id=${item && item.userId?item.userId:''}`)
+				this.$router.push(`/user-manage/add-account?isEdit=${item?1:0}&id=${item && item.userId?item.userId:''}`)
 			},
 			handleSizeChange(val) {
-				this.currentPage = 1;
-        this.init();
+			    this.searchParams.limit = val;
+				this.searchParams.page  = 1;
+				this.init();
 				console.log(`每页 ${val} 条`);
 			},
 			handleCurrentChange(val) {
-				this.currentPage = val;
-        this.init();
+				this.searchParams.page = val;
+				this.init();
 				console.log(`当前页: ${val}`);
 			},
-      del(item){
-        this.$confirm('确定删除该用户吗？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let params = [item.userId]
-          delAccount(params).then(res => {
-            if(res.code == 500) return this.$message.warning(res.msg);
-            else {
-              this.$message.success('删除成功！');
-              this.init();
-            }
-          })
-        })
-      },
-      changeStatus(item) {
-        let params = {
-            userId: item.userId,
-            status: item.flag ? 1: 0,
-            mobile: item.mobile,
-            username: item.username,
-            password: item.password,
-            conPassword: item.conPassword,
-            deptId: item.deptId,
-            roleIdList: item.roleIdList,
-            email: item.email
-        }
-        updateAccount(params).then(res => {
-          if(res.code == 0) {
-            this.$message.success('修改成功！');
-            this.init();
-          }
-          else this.$message.warning(res.msg)
-        })
-      }
+			del(item) {
+				this.$confirm('确定删除该用户吗？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					let params = [item.userId]
+					delAccount(params).then(res => {
+						if (res.code == 500) return this.$message.warning(res.msg);
+						else {
+							this.$message.success('删除成功！');
+							this.init();
+						}
+					})
+				})
+			},
+			changeStatus(item) {
+				let params = {
+					userId: item.userId,
+					status: item.flag ? 1 : 0,
+					mobile: item.mobile,
+					username: item.username,
+					password: item.password,
+					conPassword: item.conPassword,
+					deptId: item.deptId,
+					roleIdList: item.roleIdList,
+					email: item.email
+				}
+				updateAccount(params).then(res => {
+					if (res.code == 0) {
+						this.$message.success('修改成功！');
+						this.init();
+					} else this.$message.warning(res.msg)
+				})
+			}
 		}
 	}
 </script>
@@ -384,21 +388,25 @@
 				}
 			}
 		}
-    .percent {
-    	display: flex;
-    	align-items: center;
-    	span {
-    		margin-left: 6px;
-    	}
-    	.dot {
-    		width: 8px;
-    		height: 8px;
-    		border-radius: 50%;
-        background-color: #CDCDD5;
-    		&.green {
-    			background-color: #21D487;
-    		}
-    	}
-    }
+
+		.percent {
+			display: flex;
+			align-items: center;
+
+			span {
+				margin-left: 6px;
+			}
+
+			.dot {
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background-color: #CDCDD5;
+
+				&.green {
+					background-color: #21D487;
+				}
+			}
+		}
 	}
 </style>

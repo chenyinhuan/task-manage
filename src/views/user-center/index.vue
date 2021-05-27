@@ -13,16 +13,36 @@
           </li>
           <li>
             <h3>密码</h3>
-            <p><a>修改</a></p>
+            <p><a @click="editPwd">修改</a></p>
           </li>
         </ul>
       </section>
+    <el-dialog title="修改密码"  :visible.sync="dialogVisible" width="498px" :close-on-click-modal="false">
+      <el-form :model="form" inline label-width="146px">
+        <el-form-item label="原密码:">
+          <el-input v-model="form.password" type="password" placeholder="原密码"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码:">
+          <el-input v-model="form.newPassword" type="password" placeholder="新密码"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirm()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
+  import {resetPassword} from '@/api/user-center/index.js'
   export default {
     data() {
       return {
+        dialogVisible: false,
+        form:{
+          password: '',
+          newPassword: ''
+        }
       }
     },
     created() {
@@ -35,7 +55,21 @@
 
     },
     methods: {
-
+      editPwd(){
+        this.dialogVisible = true
+      },
+      confirm(){
+        if(!this.form.password) return this.$message.warning('请输入原密码');
+        if(!this.form.newPassword) return this.$message.warning('请输入新密码')
+        resetPassword(this.form).then(res=>{
+          if(res.code == 0) {
+            this.$message.success('修改成功！');
+            this.dialogVisible = false
+          }else {
+            this.$message.warning(res.msg);
+          }
+        })
+      }
     }
   }
 </script>
@@ -50,6 +84,25 @@
     border-radius: 12px;
     box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
     min-height: 768px;
+    >>>.el-dialog__header{
+      text-align: center;
+      font-size: 24px;
+      color: #333333;
+      padding: 40px 0 36px;
+      .el-dialog__headerbtn{
+        display: none;
+      }
+    }
+    >>>.el-dialog__body{
+      .el-form-item__label{
+        font-size: 16px;
+      }
+    }
+    >>>.el-dialog__footer{
+      text-align: center;
+      padding-bottom: 60px;
+    }
+
     .foot{
       margin-top: 60px;
       .el-button{

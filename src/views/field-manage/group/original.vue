@@ -17,7 +17,7 @@
             {{scope.row.updateUserName}}
           </div>
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="text">编辑</el-button>
+						<el-button type="text" @click="editInfo(scope.row)">编辑</el-button>
 						<el-button type="text">删除</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
@@ -92,6 +92,10 @@
 
 		},
 		methods: {
+      editInfo(item){
+        console.log(item)
+        this.$router.push('/field-manage/add-field?type='+item.type+'&id='+item.id)
+      },
 			init() {
 				let params = {
 					start: this.currentPage,

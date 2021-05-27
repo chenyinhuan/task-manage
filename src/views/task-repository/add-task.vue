@@ -58,6 +58,7 @@
 		},
 		data() {
 			return {
+        visibleDialog: false,
 				taskName: '',
 				form: {
 					taskName: '',

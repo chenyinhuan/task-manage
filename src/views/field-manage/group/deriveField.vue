@@ -62,7 +62,7 @@
 						</el-select>
 					</div>
 				</div>
-				<div v-else>
+				<div v-if="form.fieldStartId && !(nativeList.find(n => n.id == form.fieldStartId) && (nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3))">
 					<div v-for="(item, index) in enums1" :key="index" class="options options1">
 						<el-select v-model="item.logicAction" placeholder="运算方式" style="margin-left: 15px;">
 							<el-option v-for="item in calcType.slice(0,4)" :key="item.value" :label="item.label"
@@ -90,6 +90,12 @@
 	import {getNativeList, getNativeEnums, saveComplex} from '@/api/filed-manage/index.js'
 	export default {
 		name: "deriveField",
+    props:{
+      id:{
+        type: String,
+        default: ''
+      }
+    },
 		data() {
 			return {
 				calcType: this.$logicAction,
@@ -159,7 +165,7 @@
 							if(res.code == 0) {
 								this.form.fieldComplexCastRuleVOs = [];
 								for(let i=0;i<res.field.fieldEnumEntityList.length;i++) {
-									this.form.fieldComplexCastRuleVOs.push({										
+									this.form.fieldComplexCastRuleVOs.push({
 										complexValue: '',
 										enumValue: res.field.fieldEnumEntityList[i].enumValue,  //枚举值
 										fieldStartId: this.form.fieldStartId,      //第一个原生字段id
@@ -175,7 +181,19 @@
 				 deep:true //true 深度监听
 			 }
 		},
+    created() {
+      if(this.id){
+        this.init()
+      }
+    },
 		methods: {
+      init(){
+        getNativeEnums({id: this.id}).then(res=>{
+          if(res.field.type == 2){
+            this.form = res.field
+          }
+        })
+      },
 			addEditDomain() {
 				this.enums.push({
 					logicAction: '',
@@ -257,13 +275,19 @@
 					  "type": this.form.type
 					}
 				}
-				saveComplex(params).then(res => {
-					if(res.code == 0) {
-						this.$message.success('新增成功！');
-					}else {
-						this.$message.warning(res.msg);
-					}
-				})
+        if(this.id){  //编辑
+          params.id = this.id
+          //修改方法
+        }else {  //新增
+          saveComplex(params).then(res => {
+            if (res.code == 0) {
+              this.$message.success('新增成功！');
+              this.back()
+            } else {
+              this.$message.warning(res.msg);
+            }
+          })
+        }
 			},
 			back() {
 				this.$router.go(-1)

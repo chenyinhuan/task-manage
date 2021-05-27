@@ -19,24 +19,24 @@
         <sidebar-item v-for="route in permissionRoutes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu> -->
       <el-menu :default-active="activeMenu" @select="selectMenu" class="el-menu-vertical-demo" :text-color="variables.menuText" :active-text-color="variables.subMenuActiveText" :collapse="isCollapse" :background-color="variables.menuBg">
-        <template v-for="(item, index) in menuList">
-          <el-submenu :index="item.index" :key="index" v-if="item.children && item.children.length>0">
+        <template v-for="(item, index) in menuList" v-if="item.menuId != 1">
+          <el-submenu :index="item.menuId+''" :key="index" v-if="item.list && item.list.length>0">
             <template slot="title">
-              <img v-if="!isCollapse || activeMenu.indexOf(`${item.index}-`) == -1" :src="item.img"/>
-              <img :src="item.activeImg" v-if="isCollapse && activeMenu.indexOf(`${item.index}-`) != -1"/>
-              <span slot="title">{{item.title}}</span>
+              <img v-if="!isCollapse || activeMenu.indexOf(`${item.menuId}-`) == -1" :src="imgList[item.icon]"/>
+              <img :src="imgList[item.icon+'Active']" v-if="isCollapse && activeMenu.indexOf(`${item.menuId}-`) != -1"/>
+              <span slot="title">{{item.name}}</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item :index="`${item.index}-${cindex+1}`" @click="go(citem.path)" v-for="(citem, cindex) in item.children" :key="cindex">
-                <img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == citem.index && !isCollapse">
-                <span>{{citem.title}}</span>
+              <el-menu-item :index="`${item.menuId}-${cindex+1}`" @click="go(citem.url)" v-for="(citem, cindex) in item.list" :key="cindex">
+                <img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == `${item.menuId}-${cindex+1}` && !isCollapse">
+                <span>{{citem.name}}</span>
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-menu-item :index="item.index" @click="go(item.path)" :key="index" v-else>
-            <img v-if="activeMenu.indexOf(item.index) == -1" :src="item.img"/>
-            <img :src="item.activeImg" v-if="activeMenu.indexOf(item.index) != -1"/>
-            <span slot="title">{{item.title}}</span>
+          <el-menu-item :index="item.menuId+''" @click="go(item.url)" :key="index" v-else>
+            <img v-if="activeMenu.indexOf(item.menuId) == -1" :src="imgList[item.icon]"/>
+            <img :src="imgList[item.icon+'Active']" v-if="activeMenu.indexOf(item.menuId) != -1"/>
+            <span slot="title">{{item.name}}</span>
           </el-menu-item>
         </template>
       </el-menu>
@@ -60,7 +60,21 @@
     data() {
       return {
         activeMenu: Cookies.get('activeMenu')?Cookies.get('activeMenu'):'task-1',
-        menuList: []
+        menuList: [],
+		imgList: {
+			task: require('../../images/sider-bar/task.png'),
+			field: require('../../images/sider-bar/field.png'),
+			targrt: require('../../images/sider-bar/targrt.png'),
+			manage: require('../../images/sider-bar/manage.png'),
+			user: require('../../images/sider-bar/user.png'),
+			center: require('../../images/sider-bar/center.png'),
+			taskActive: require('../../images/sider-bar/task-active.png'),
+			fieldActive: require('../../images/sider-bar/field-active.png'),
+			targrtActive: require('../../images/sider-bar/targrt-active.png'),
+			manageActive: require('../../images/sider-bar/manage-active.png'),
+			userActive: require('../../images/sider-bar/user-active.png'),
+			centerActive: require('../../images/sider-bar/center-active.png')
+		}
       };
     },
     computed: {
@@ -82,7 +96,7 @@
     watch: {
       permissionRoutes: {
         handler: function(route) {
-          this.menuList = JSON.parse(JSON.stringify(route));
+          // this.menuList = JSON.parse(JSON.stringify(route));
         },
         immediate: true
       }
@@ -91,8 +105,9 @@
       ...mapActions('module', ['generateRoutes']),
       getMenu() {
         getNav().then(res => {
-          // this.
-          console.log(res)
+			if(res.code == 0) {
+				this.menuList = res.menuList;
+			}
         })
       },
       go(path) {
@@ -109,8 +124,9 @@
 
 <style lang="scss">
   @import '@/styles/variables.scss';
-
+ 
   #sidebar {
+	 
     .el-menu-vertical-demo:not(.el-menu--collapse) {
       width: 200px;
       min-height: 400px;

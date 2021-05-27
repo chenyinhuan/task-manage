@@ -143,16 +143,16 @@ import {getDeptList} from '@/api/user-manage/organization/index'
       getDeptList() {
         getDeptList().then(res => {
           this.data = this.$dealingwithadult(res);
-          console.log(this.data)
           this.deptId = this.data[0].deptId
           this.deptName = this.data[0].name
         })
       },
       init() {
+		  console.log(this.searchParams)
         getRoleList(this.searchParams).then(res => {
           if (res.code != 0) return this.$message.warning(res.msg);
           this.tableData = res.page.list;
-          this.total = res.totalCount;
+          this.total = res.page.totalCount;
         })
       },
       deleteCurRow(row){
@@ -185,10 +185,15 @@ import {getDeptList} from '@/api/user-manage/organization/index'
         this.$router.push('/user-manage/add-role?type=1&deptId='+this.deptId+'&deptName='+this.deptName)
       },
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+		  this.searchParams.limit = val;
+      	this.searchParams.page  = 1;
+      	this.init();
+      	console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+      	this.searchParams.page = val;
+      	this.init();
+      	console.log(`当前页: ${val}`);
       },
     }
   }
