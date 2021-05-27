@@ -106,7 +106,6 @@
       getMenu() {
         getNav().then(res => {
 			if(res.code == 0) {
-				console.log(res.menuList)
 				this.menuList = res.menuList;
 			}
         })

@@ -3,7 +3,7 @@ import api from '@/api/index';
  * 角色列表
  * @params params
  */
-export const getRoleList = (params) => api.get(`/sys/role/list`, params)
+export const getRoleList = (params) => api.get(`/sys/role/list`, {params})
 /**
  * 新建角色
  * @params params
