@@ -9,22 +9,25 @@
         <el-radio-button label="3">根据数据库表创建</el-radio-button>
       </el-radio-group>
     </section>
-    <field v-show="radio1 == 1"></field>
-    <target v-show="radio1 == 2"></target>
-    <database v-show="radio1 == 3"></database>
+    <field ref="field" v-show="radio1 == 1"></field>
+    <target ref="target" v-show="radio1 == 2"></target>
+    <database ref="database" v-show="radio1 == 3"></database>
     <div class="foot">
-      <el-button type="primary">保存指标</el-button>
-      <el-button class="cancel">取消</el-button>
+      <el-button type="primary" @click="save">保存指标</el-button>
+      <el-button class="cancel" @click="back">取消</el-button>
     </div>
   </div>
 </template>
 <script>
+  import {
+    saveTarge
+  } from '@/api/target-manage/index.js'
   import field from '@/views/target-manage/group/field.vue'
   import target from '@/views/target-manage/group/target.vue'
   import database from '@/views/target-manage/group/database.vue'
   export default {
     name: 'addTarget',
-    components:{
+    components: {
       field,
       target,
       database
@@ -51,6 +54,16 @@
         if (this.checkList.length > 1) {
           this.checkList.splice(0, 1)
         }
+      },
+      back() {
+        this.$router.go(-1)
+      },
+      save() {
+        let params = '';
+        if(this.radio1 == 1) params = this.$refs.field.form;
+        saveTarge(params).then(res => {
+          if(res.code == 0) this.$message.success('保存成功！')
+        })
       }
     }
   }

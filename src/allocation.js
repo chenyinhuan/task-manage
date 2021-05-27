@@ -17,7 +17,15 @@ Vue.use(VueLazyload,{
 })
 
 Vue.use(VueClipboard)
+
 Vue.prototype.$dealingwithadult = gather.dealingwithadult;
+Vue.prototype.$aggregateFun = [
+  {value: 1,label: '求和'},
+  {value: 2,label: '平均值'},
+  {value: 3,label: '最大值'},
+  {value: 4,label: '最小值'},
+  {value: 5,label: '计数'}
+]
 Vue.prototype.$logicAction = [{value: 1,label: '加法'},
 {value: 2,label: '减法'},
 {value: 3,label: '除'},
