@@ -62,7 +62,7 @@
 						</el-select>
 					</div>
 				</div>
-				<div v-else>
+				<div v-if="form.fieldStartId && !(nativeList.find(n => n.id == form.fieldStartId) && (nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3))">
 					<div v-for="(item, index) in enums1" :key="index" class="options options1">
 						<el-select v-model="item.logicAction" placeholder="运算方式" style="margin-left: 15px;">
 							<el-option v-for="item in calcType.slice(0,4)" :key="item.value" :label="item.label"

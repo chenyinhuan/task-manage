@@ -421,7 +421,7 @@ export default {
             },
             {
               name: '组织配置',
-              path: '/user-manage/account-config',
+              path: '/user-manage/organization-setting',
               active: true
             },
             {
@@ -458,7 +458,7 @@ export default {
             },
             {
               name: '角色配置',
-              path: '/user-manage/account-config',
+              path: '/user-manage/role-setting',
               active: true
             },
             {
@@ -479,7 +479,7 @@ export default {
             },
             {
               name: '角色配置',
-              path: '/user-manage/account-config',
+              path: '/user-manage/role-setting',
               active: true
             },
             {
