@@ -98,6 +98,7 @@ export default {
       getNativeEnums({id: this.id}).then(res=>{
         if(res.field.type == 1){
           this.form = res.field
+          this.enums = this.form.fieldEnumEntityList
         }
       })
     },
