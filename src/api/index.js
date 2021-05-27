@@ -53,7 +53,7 @@ api.interceptors.response.use(
     return Promise.resolve(res.data);
   },
   err => {
-   router.push('/login');
+   // router.push('/login');
    if (loadingInstance) loadingInstance.close();
    return Promise.reject(err)
   },
