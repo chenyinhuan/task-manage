@@ -2,63 +2,118 @@
   <div id="target">
     <section>
       <p>指标名称</p>
-      <el-input v-model="form.name" placeholder="请输入指标名称" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.targetName" placeholder="请输入指标名称" maxlength="20" show-word-limit></el-input>
     </section>
     <section>
       <p>指标说明</p>
-      <el-input v-model="form.name" placeholder="请输入指标说明" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.description" placeholder="请输入指标说明" maxlength="20" show-word-limit></el-input>
     </section>
     <section>
       <p>指标计算</p>
       <div style="display: flex;flex-wrap: wrap;">
-        <el-select v-model="form.targetId1" placeholder="选择指标"></el-select>
-        <el-select v-model="form.judgeId" placeholder="运算选择"></el-select>
-        <el-select v-model="form.targetId2" placeholder="选择指标"></el-select>
-        <div v-for="(item,index) in list" :key="index" style="margin-left: 20px;">
-          <el-select v-model="item.judgeId" placeholder="运算选择"></el-select>
-          <el-select v-model="item.targetId" placeholder="选择指标"></el-select>
+        <el-select v-model="form.targetQuoteEndId" placeholder="选择指标">
+          <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.value" :label="citem.label"></el-option>
+        </el-select>
+        <div v-for="(item,index) in form.targesubs" :key="index" style="margin-left: 20px;">
+          <el-select v-model="item.logicAction" placeholder="运算选择">
+            <el-option v-for="(citem,cindex) in $targetLogicAction" :key="cindex" :value="citem.value" :label="citem.label"></el-option>
+          </el-select>
+          <el-select v-model="item.targetQuoteStartId" placeholder="选择指标">
+            <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.value" :label="citem.label"></el-option>
+          </el-select>
         </div>
-        <a @click="addTarget()" class="add-list" v-if="list.length==0">+新增</a>
-        <a v-else class="del" @click="deleteItem()">X删除</a>
+        <a @click="addTarget()" v-if="form.targesubs.length==1" class="add-list">+新增</a>
+        <a class="del" v-if="form.targesubs.length>1"  @click="deleteItem()">X删除</a>
       </div>
       <div>
-        <el-select v-model="form.name" placeholder="选择展示方式"></el-select>
+        <el-select v-model="form.resultType" placeholder="选择展示方式">
+          <el-option v-for="(citem,cindex) in $targetShowType" :key="cindex" :value="citem.value" :label="citem.label"></el-option>
+        </el-select>
       </div>
     </section>
+    <div class="foot">
+      <el-button type="primary" @click="save">保存指标</el-button>
+      <el-button class="cancel" @click="back">取消</el-button>
+    </div>
   </div>
 </template>
 <script>
+  import {saveTarge} from '@/api/target-manage/index.js'
   export default {
     name: 'target',
     data() {
       return {
-        list: [],
+        list: [{
+          value: 1, label: '指標一'},
+          {value: 2, label: '指標二'
+        }],
         form: {
           name: '',
-          targetId1: '',
-          targetId2: '',
-          judgeId: ''
+          targetQuoteEndId: '',
+          targesubs: [
+            {
+              targetQuoteStartId: '',
+              logicAction: ''
+            }
+          ]
         }
       }
     },
     created() {
 
     },
-    mounted() {
-
-    },
-    computed: {
-
-    },
     methods: {
+      back() {
+        this.$router.go(-1)
+      },
       addTarget(){
-        this.list.push({
-          targetId: '',
-          judgeId: ''
+        this.form.targesubs.push({
+          targetQuoteStartId: '',
+          logicAction: ''
         })
       },
       deleteItem() {
-        this.list.splice(0,1)
+        this.form.targesubs.splice(0,1)
+      },
+      save(){
+        let params = {};
+        if(this.form.targesubs.length == 1) {
+          this.form.targesubs = [{
+            "logicAction": this.form.targesubs[0].logicAction,   //运算方式 1：加法，2：减法，3除，4乘， 5等于，6不等于，7包含， 8不包含， 9空判断，10非空判断
+            "targetQuoteStartId": this.form.targesubs[0].targetQuoteStartId,   //第一个字段id
+            "targetQuoteEndId": this.form.targetQuoteEndId   //第二个字段id
+          }]
+        }else if(this.form.targesubs.length == 2){
+          this.form.targesubs = [{
+            "logicAction": this.form.targesubs[0].logicAction,
+            "targetQuoteStartId": this.form.targesubs[0].targetQuoteStartId,   //第一个字段id
+            "targetQuoteEndId": this.form.targetQuoteEndId   //第二个字段id
+          }, {
+            "logicAction": this.form.targesubs[1].logicAction,
+            "targetQuoteStartId": this.form.targesubs[1].targetQuoteStartId
+          }]
+        }
+        params = {
+          "targetName": this.form.targetName,
+          "targesubs": this.form.targesubs, // 暂时不传，如果有限制就随便传一个
+          "resultType": this.form.resultType,
+          "description": this.form.description,
+          "type": 2
+        }
+        console.log(params)
+        if(this.id){  //编辑
+          params.id = this.id
+          //修改方法
+        }else {  //新增
+          saveTarge(params).then(res => {
+            if (res.code == 0) {
+              this.$message.success('新增成功！');
+              this.back()
+            } else {
+              this.$message.warning(res.msg);
+            }
+          })
+        }
       }
     }
   }
@@ -67,6 +122,27 @@
   @import '@/styles/variables.scss';
 
   #target {
+    .foot {
+      margin-top: 60px;
+
+      .el-button {
+        width: 124px;
+        height: 40px;
+        background: #0079FE;
+        border-radius: 6px;
+        font-size: 18px;
+
+        &.cancel {
+          width: 160px;
+          height: 40px;
+          background: #F8FAFB;
+          border-color: #F8FAFB;
+          border-radius: 6px;
+          color: #9596AB;
+        }
+      }
+    }
+
     .item:nth-child(2n+1) {
       margin-left: 20px;
     }

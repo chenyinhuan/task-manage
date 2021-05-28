@@ -10,19 +10,19 @@
       <el-table-column :prop="item.prop" :label="item.label" :width="item.width"
                        v-for="(item,index) in tableColumn" :key="index">
         <template slot-scope="scope">
-          <div v-if="item.slot && item.prop=='weight'" class="percent">
-            <div class="dot" :class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'',scope.$index == 2?'blue':'']"></div><span> {{scope.$index == 0?'进行中':''}}{{scope.$index == 1?'已取消，已结束':''}}{{scope.$index == 2?'待开始':''}}</span>
+          <div v-if="item.slot && item.prop=='type'">
+            <span>{{scope.row.type==1?'字段指标':'指标类指标'}}</span>
           </div>
           <div v-if="item.slot && item.prop=='opt'">
-            <el-button type="text" v-if="scope.$index != 2">编辑</el-button>
-            <el-button type="text" v-if="scope.$index != 2">删除</el-button>
+            <el-button type="text">编辑</el-button>
+            <el-button type="text">删除</el-button>
           </div>
           <div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
-                   :current-page.sync="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
+                   :current-page.sync="searchParams.page" :page-size="searchParams.limit" layout="prev, pager, next, jumper" :total="total">
     </el-pagination>
     <div class="tempty" v-if="tableData.length==0 && isShow">
       <img src="@/images/my-task/illustration.png">
@@ -31,48 +31,34 @@
   </div>
 </template>
 <script>
+  import {getTargeList} from '@/api/target-manage/index';
 	export default {
 		components: {},
 		data() {
 			return {
 				keyword: '',
-        tableData: [{
-          date: '2016-05-02',
-          name: '佣金求和',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '佣金求和',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '佣金求和',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '佣金求和',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
+        tableData: [],
         tableColumn: [ // 表格列数据
           {
             label: '指标名称',
-            prop: 'name',
+            prop: 'targetName',
           },
           {
             label: '指标说明',
-            prop: 'specName',
+            prop: 'description',
           },
           {
             label: '数据类型',
-            prop: 'explain',
+            prop: 'type',
+            slot: true,
           },
           {
             label: '创建人/创建时间',
-            prop: 'toothTypeName',
+            prop: 'createUserName',
           },
           {
             label: '修改人/修改后时间',
-            prop: 'surfaceTreatmentName',
+            prop: 'updateUserName',
           },
           {
             label: '操作',
@@ -82,11 +68,16 @@
           },
         ],
         currentPage: 1,
-        isShow: false
+        isShow: false,
+        searchParams:{
+          page: 1,
+          limit: 10
+        },
+        total: 0
 			}
 		},
 		created() {
-
+      this.init()
 		},
 		mounted() {
 
@@ -95,11 +86,20 @@
 
 		},
 		methods: {
+		  init(){
+        getTargeList(this.searchParams).then(res=>{
+          console.log(res)
+          this.tableData = res.page.list
+          this.total = res.page.totalCount
+        })
+      },
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+		    this.searchParams.limit = val
+        this.init()
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        this.searchParams.page = val
+        this.init()
       },
       addTask(){
         this.$router.push({

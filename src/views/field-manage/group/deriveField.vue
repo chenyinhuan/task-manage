@@ -25,7 +25,7 @@
 			<div class="item" v-if="form.ruleType ==1">
 				<div class="options">
 					<label>衍生字段=</label>
-					<el-select v-model="form.fieldStartId" placeholder="选择字段">
+					<el-select v-model="form.fieldStartId" filterable placeholder="选择字段">
 						<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName" :value="item.id"></el-option>
 					</el-select>
 					<div v-for="(item, index) in enums" :key="index">
@@ -34,7 +34,7 @@
 								:value="item.value">
 							</el-option>
 						</el-select>
-						<el-select v-model="item.fieldStartId" placeholder="选择字段">
+						<el-select v-model="item.fieldStartId" filterable placeholder="选择字段">
 							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName" :value="item.id"></el-option>
 						</el-select>
 						<br/>
@@ -44,12 +44,12 @@
 				</div>
 			</div>
 			<div class="item" :class="[nativeList.find(n => n.id == form.fieldStartId) && !(nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3)?'cast':'']" v-if="form.ruleType ==2">
-				<el-select v-model="form.fieldStartId" placeholder="选择字段">
+				<el-select v-model="form.fieldStartId" filterable placeholder="选择字段">
 					<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName" :value="item.id"></el-option>
 				</el-select>
 				<div v-if="nativeList.find(n => n.id == form.fieldStartId) && (nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3)">
 					<div class="options" v-for="(citem,index) in form.fieldComplexCastRuleVOs">
-						<el-input v-model="form.enumValue" disabled>
+						<el-input v-model="citem.enumValue" disabled>
 							<template style=" background: #D9D9D9;" slot="prepend">选项{{index+1}}</template>
 						</el-input>
 						<span style="margin: 0 15px">则</span>
@@ -216,7 +216,12 @@
 			},
 			changeRuleType() {
 				this.form.fieldStartId = '';
-				getNativeList().then(res => {
+        let params = {
+          "dataTypes": [],    //数据类型，为空时取全部
+          "formTypes": [],       //表单类型，为空时取全部
+          "type": ''              //字段类型1：原生2衍生，为空时取全部
+        }
+				getNativeList(params).then(res => {
 					if (res.code == 0) {
 						this.nativeList = res.fields;
 					}
