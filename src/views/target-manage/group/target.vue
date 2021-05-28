@@ -12,14 +12,14 @@
       <p>指标计算</p>
       <div style="display: flex;flex-wrap: wrap;">
         <el-select v-model="form.targetQuoteEndId" placeholder="选择指标">
-          <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.value" :label="citem.label"></el-option>
+          <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.value" :label="citem.targetName"></el-option>
         </el-select>
         <div v-for="(item,index) in form.targesubs" :key="index" style="margin-left: 20px;">
           <el-select v-model="item.logicAction" placeholder="运算选择">
             <el-option v-for="(citem,cindex) in $targetLogicAction" :key="cindex" :value="citem.value" :label="citem.label"></el-option>
           </el-select>
           <el-select v-model="item.targetQuoteStartId" placeholder="选择指标">
-            <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.value" :label="citem.label"></el-option>
+            <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.value" :label="citem.targetName"></el-option>
           </el-select>
         </div>
         <a @click="addTarget()" v-if="form.targesubs.length==1" class="add-list">+新增</a>
@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-  import {saveTarge} from '@/api/target-manage/index.js'
+  import {saveTarge,getTargeList} from '@/api/target-manage/index.js'
   export default {
     name: 'target',
     data() {
@@ -60,7 +60,9 @@
       }
     },
     created() {
-
+      getTargeList().then(res=>{
+        this.list = res.page.list
+      })
     },
     methods: {
       back() {
