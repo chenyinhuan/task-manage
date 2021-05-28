@@ -48,7 +48,7 @@
           {value: 2, label: '指標二'
         }],
         form: {
-          name: '',
+          targetName: '',
           targetQuoteEndId: '',
           targesubs: [
             {
@@ -76,6 +76,8 @@
         this.form.targesubs.splice(0,1)
       },
       save(){
+		  if(this.form.targetName == '') return this.$message.warning('请输入指标名称');
+		  if(this.form.targetQuoteEndId == '') return this.$message.warning('请选择指标');
         let params = {};
         if(this.form.targesubs.length == 1) {
           this.form.targesubs = [{

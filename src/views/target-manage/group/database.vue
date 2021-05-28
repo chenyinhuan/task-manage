@@ -14,11 +14,11 @@
     </div>
     <section>
       <p>指标名称</p>
-      <el-input v-model="form.name" placeholder="请输入指标名称" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.targetName" placeholder="请输入指标名称" maxlength="20" show-word-limit></el-input>
     </section>
     <section>
       <p>指标说明</p>
-      <el-input v-model="form.name" placeholder="请输入指标说明" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.description" placeholder="请输入指标说明" maxlength="20" show-word-limit></el-input>
     </section>
     <section>
       <p>数据类型</p>
@@ -42,7 +42,8 @@
         ],
         list: [],
         form: {
-          name: '',
+          targetName: '',
+		  description: '',
           dataType: 'number'
         },
         visible: false
