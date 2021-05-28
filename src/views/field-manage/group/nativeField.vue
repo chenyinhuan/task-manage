@@ -127,7 +127,6 @@ export default {
 		if(this.form.name == '') return this.$message.warning('请输入字段名');
 		if(this.form.formType == '') return this.$message.warning('选择表单类型');
 		if(this.form.formType != 4 && this.form.dataType == '') return this.$message.warning('选择数据类型');
-		if()
       let params = {
         "dataType": this.form.dataType,                    //数据类型 1：字符串型string，2：整数int，3小数数值float，4日期date，5 时间time
         "description": this.form.description,          //描述
