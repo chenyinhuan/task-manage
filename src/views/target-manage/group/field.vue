@@ -6,11 +6,11 @@
     </section>
     <section>
       <p>指标说明</p>
-      <el-input v-model="form.description" placeholder="请输入指标说明" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.description" placeholder="请输入指标说明" maxlength="200" show-word-limit></el-input>
     </section>
     <section>
       <p>聚合函数</p>
-      <el-select v-model="form.targeFieldVO.logicAction" placeholder="请选择">
+      <el-select v-model="form.targeFieldVO.logicAction" placeholder="请选择" @change="changeLogic()">
         <el-option v-for="item in aggregateFun" :key="item.value" :label="item.label"
         	:value="item.value">
         </el-option>
@@ -21,6 +21,18 @@
       <el-select v-model="form.targeFieldVO.fieldId" filterable placeholder="请选择">
         <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName" :value="item.id"></el-option>
       </el-select>
+      <el-select style="margin-left: 15px;" v-model="form.targeFieldVO.logicAction" placeholder="字段内容选择" @change="changeLogic()">
+        <el-option v-for="item in fieldContent" :key="item.value" :label="item.label"
+        	:value="item.value">
+        </el-option>
+      </el-select>
+      <el-select style="margin-left: 15px;" v-model="form.targeFieldVO.fieldId" filterable placeholder="请选择">
+        <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName" :value="item.id"></el-option>
+      </el-select>
+      <span style="margin-left: 11px;">
+        <span>=</span>
+        <el-input style="margin-left: 11px;width: 240px;" v-model="form.targeFieldVO.fieldId" placeholder="请输入计数字段内容"></el-input>
+      </span>
     </section>
     <div class="foot">
       <el-button type="primary" @click="save">保存指标</el-button>
@@ -46,20 +58,12 @@
               }
             },
             nativeList: [],
-            aggregateFun: this.$aggregateFun
+            aggregateFun: this.$aggregateFun,
+            fieldContent: this.$fieldContent
           }
       },
       created() {
-        let params = {
-          "dataTypes": [],    //数据类型，为空时取全部
-          "formTypes": [],       //表单类型，为空时取全部
-          "type": ''              //字段类型1：原生2衍生，为空时取全部
-        }
-        getNativeList(params).then(res => {
-        	if (res.code == 0) {
-        		this.nativeList = res.fields;
-        	}
-        })
+
       },
       methods:{
         back() {
@@ -69,7 +73,28 @@
           let params = '';
           params = this.form;
           saveTarge(params).then(res => {
-            if(res.code == 0) this.$message.success('保存成功！')
+            if(res.code == 0) {
+              this.$message.success('保存成功！');
+              setTimeout(() => {
+                this.$router.push('/target-manage')
+              },2000)
+            }
+          })
+        },
+        changeLogic() {
+          let params = {
+            "dataTypes": [],    //数据类型，为空时取全部
+            "formTypes": [],       //表单类型，为空时取全部
+            "type": ''              //字段类型1：原生2衍生，为空时取全部
+          }
+          if(this.form.targeFieldVO.logicAction != 5) {
+            params.dataTypes = [2,3]
+          }
+
+          getNativeList(params).then(res => {
+          	if (res.code == 0) {
+          		this.nativeList = res.fields;
+          	}
           })
         }
       }

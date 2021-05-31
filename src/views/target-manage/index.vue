@@ -107,6 +107,8 @@
         })
       },
 			search() {
+        this.searchParams.page = 1;
+        this.init();
 				console.log(this.keyword)
 			}
 		}
