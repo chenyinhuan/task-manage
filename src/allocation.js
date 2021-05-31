@@ -39,9 +39,15 @@ Vue.prototype.$logicAction = [{value: 1,label: '加法'},
 ]
 Vue.prototype.$fieldContent = [
   {value: 1,label: '所有记录'},
-  {value: 1,label: '为空'},
-  {value: 1,label: '不为空'},
-  {value: 1,label: '按选择项'}
+  {value: 2,label: '为空'},
+  {value: 3,label: '不为空'},
+  {value: 4,label: '自定义内容'}
+]
+Vue.prototype.$fieldSelectContent = [
+  {value: 1,label: '所有记录'},
+  {value: 2,label: '为空'},
+  {value: 3,label: '不为空'},
+  {value: 4,label: '按选择项'}
 ]
 Vue.prototype.$dataTypeList = [{value: 1,label: '字符串string'},
 {value: 2,label: '整数数值init'},

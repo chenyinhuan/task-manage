@@ -18,20 +18,34 @@
     </section>
     <section>
       <p>选择字段</p>
-      <el-select v-model="form.targeFieldVO.fieldId" filterable placeholder="请选择">
+      <el-select v-model="form.targeFieldVO.fieldId" filterable placeholder="请选择" @change="changeField()">
         <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName" :value="item.id"></el-option>
       </el-select>
-      <el-select style="margin-left: 15px;" v-model="form.targeFieldVO.logicAction" placeholder="字段内容选择" @change="changeLogic()">
-        <el-option v-for="item in fieldContent" :key="item.value" :label="item.label"
+      <el-select v-if="form.targeFieldVO.logicAction == 5" style="margin-left: 15px;" v-model="form.targeFieldVO.chooseType" placeholder="字段内容选择">
+        <el-option
+        v-for="item in
+        nativeList.length>0 && form.targeFieldVO.fieldId && (nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 2
+        || nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 3
+        )?fieldSelectContent:fieldContent" :key="item.value" :label="item.label"
         	:value="item.value">
         </el-option>
       </el-select>
-      <el-select style="margin-left: 15px;" v-model="form.targeFieldVO.fieldId" filterable placeholder="请选择">
-        <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName" :value="item.id"></el-option>
+      <!-- 选择类 & 按选择项 -->
+      <el-select
+      :multiple="nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 2?false:true"
+      v-if="form.targeFieldVO.logicAction == 5
+      && form.targeFieldVO.chooseType == 4
+      && nativeList.length>0
+      && nativeList.find(n => n.id == form.targeFieldVO.fieldId)
+      && (nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 2 || nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 3)"
+      style="margin-left: 15px;"
+      v-model="form.targeFieldVO.fieldEnumIds" filterable placeholder="请选择">
+        <el-option v-for="(item,index) in fieldEnumList" :key="index" :label="item.enumValue" :value="item.id"></el-option>
       </el-select>
-      <span style="margin-left: 11px;">
+      <!-- 非选择类  & 自定义-->
+     <span style="margin-left: 11px;" v-if="form.targeFieldVO.logicAction == 5 && form.targeFieldVO.chooseType == 4 && nativeList.length>0 && nativeList.find(n => n.id == form.targeFieldVO.fieldId) && !(nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 2 || nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 3)">
         <span>=</span>
-        <el-input style="margin-left: 11px;width: 240px;" v-model="form.targeFieldVO.fieldId" placeholder="请输入计数字段内容"></el-input>
+        <el-input style="margin-left: 11px;width: 240px;" v-model="form.targeFieldVO.countFileldTargeValue" placeholder="请输入计数字段内容"></el-input>
       </span>
     </section>
     <div class="foot">
@@ -43,7 +57,7 @@
 
 <script>
   import {saveTarge} from '@/api/target-manage/index.js'
-  import {getNativeList} from '@/api/filed-manage/index.js'
+  import {getNativeList, getNativeEnums} from '@/api/filed-manage/index.js'
     export default {
       name: "field",
       data(){
@@ -54,12 +68,15 @@
               "type": 1,                                  //类型1：字段指标， 2指标类指标
               "targeFieldVO": {
                 "logicAction": '',                         //聚合类型： 1：求和  2：平均, 3：最大数, 4：最小数, 5：计数
-                "fieldId": ''                            //字段id
+                "fieldId": '',                            //字段id
+                countFileldTargeValue: ''
               }
             },
             nativeList: [],
             aggregateFun: this.$aggregateFun,
-            fieldContent: this.$fieldContent
+            fieldContent: this.$fieldContent,
+            fieldSelectContent: this.$fieldSelectContent,
+            fieldEnumList: []
           }
       },
       created() {
@@ -71,7 +88,8 @@
         },
         save() {
           let params = '';
-          params = this.form;
+          params = JSON.parse(JSON.stringify(this.form));
+          params.targeFieldVO.fieldEnumIds = params.targeFieldVO.fieldEnumIds.join(',');
           saveTarge(params).then(res => {
             if(res.code == 0) {
               this.$message.success('保存成功！');
@@ -90,12 +108,18 @@
           if(this.form.targeFieldVO.logicAction != 5) {
             params.dataTypes = [2,3]
           }
-
           getNativeList(params).then(res => {
           	if (res.code == 0) {
           		this.nativeList = res.fields;
           	}
           })
+        },
+        changeField() {
+          if(this.nativeList.find(n => n.id == this.form.targeFieldVO.fieldId).formType == 2 || this.nativeList.find(n => n.id == this.form.targeFieldVO.fieldId).formType == 3) {
+            getNativeEnums({id: this.form.targeFieldVO.fieldId}).then(res=>{
+              this.fieldEnumList = res.field.fieldEnumEntityList
+            })
+          }
         }
       }
     }
