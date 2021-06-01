@@ -11,9 +11,12 @@
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
-					<div v-if="item.slot && item.prop=='weight'" class="percent">
-						<div class="dot" :class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'']"></div><span> {{scope.$index == 1?'未上架':'正常'}}</span>
+					<div v-if="item.slot && item.prop=='status'" class="percent">
+						<div class="dot" :class="[scope.row.status == 0?'green':'',scope.row.status == 1?'grey':'']"></div><span> {{scope.row.status == 1?'未上架':'正常'}}</span>
 					</div>
+          <div v-if="item.slot && item.prop=='createUserName'" class="percent">
+            <span>{{scope.row.createUserName}}/{{scope.row.createTime}}</span>
+          </div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="text">复制</el-button>
             <el-button type="text">编辑</el-button>
@@ -33,47 +36,33 @@
 	</div>
 </template>
 <script>
+  import {getTasktplList} from '@/api/task-repository/index'
 	export default {
 		data() {
 			return {
-				tableData: [{
-					date: '2016-05-02',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}, {
-					date: '2016-05-04',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1517 弄'
-				}, {
-					date: '2016-05-01',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1519 弄'
-				}, {
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1516 弄'
-				}],
+				tableData: [],
 				tableColumn: [ // 表格列数据
 					{
 						label: '模版ID',
-						prop: 'strengthName',
+						prop: 'id',
 					},
 					{
 						label: '模版名称',
-						prop: 'specName',
+						prop: 'taskName',
 					},
 					{
 						label: '模版说明',
-						prop: 'explain',
+						prop: 'description',
 					},
 					{
 						label: '模版状态',
-						prop: 'weight',
+						prop: 'status',
 						slot: true,
 					},
 					{
 						label: '创建人/创建时间',
-						prop: 'weight'
+						prop: 'createUserName',
+            slot: true,
 					},
 					{
 						label: '操作',
@@ -83,11 +72,15 @@
 				],
 				currentPage: 0,
 				isShow: false,
-				keyword: ''
+				keyword: '',
+        searchParams:{
+          page: 1,
+          limit: 10
+        },
 			}
 		},
 		created() {
-
+      this.init()
 		},
 		mounted() {
 
@@ -96,6 +89,12 @@
 
 		},
 		methods: {
+		  init(){
+        getTasktplList(this.searchParams).then(res=>{
+          this.tableData = res.page.list
+          this.total = res.page.totalCount
+        })
+      },
 			handleSizeChange(val) {
 				console.log(`每页 ${val} 条`);
 			},
