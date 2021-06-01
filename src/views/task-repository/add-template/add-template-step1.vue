@@ -23,7 +23,6 @@
       <p>表单字段（原生字段）</p>
       <div class="field">
         <draggable
-          v-model="form.taskTplTargereslutEntity"
           chosenClass="chosen"
           forceFallback="true"
           group="people"
@@ -34,13 +33,13 @@
           <transition-group>
             <div
               class="field-item"
-              v-for="item in form.taskTplTargereslutEntity"
-              :key="item.fieldId"
+              v-for="(item,index) in form.taskTplBasicFieldEntities"
+              :key="index"
             >
               <div class="field-sitem">
                 <span>商品ID{{ item.fieldId }}</span>
                 <el-input
-                  v-model="item.fieldValue"
+                  v-model="item.fieldId"
                   placeholder="请输入商品ID"
                 ></el-input>
               </div>
@@ -78,7 +77,7 @@
           @end="onEnd"
         >
           <transition-group>
-            <div class="field-item" v-for="item in form.taskTplComplexFieldEntities" :key="item.fieldId">
+            <div class="field-item" v-for="(item,index) in form.taskTplComplexFieldEntities" :key="index">
               <div class="field-sitem">
                 <span>字段显示名</span>
                 <div class="name">直播间是否装扮{{ item.fieldId }}</div>
@@ -86,7 +85,7 @@
               <div class="field-sitem">
                 <span>是否必填ID</span>
                 <el-radio-group v-model="item.fieldInputType">
-                  <el-radio :label="3">b必填</el-radio>
+                  <el-radio :label="3">必填</el-radio>
                   <el-radio :label="6">非必填</el-radio>
                 </el-radio-group>
               </div>
@@ -105,7 +104,6 @@
       </div>
     </section>
     <div class="foot">
-      <el-button>上一步</el-button>
       <el-button type="primary" @click="next()">下一步</el-button>
       <el-button class="cancel">取消</el-button>
     </div>
@@ -127,6 +125,7 @@
         <el-table
           :data="tableData"
           style="width: 100%; margin-top: 10px"
+          @selection-change="handleSelectionChange"
           v-if="tableData.length > 0 && type == 1"
         >
           <el-table-column type="selection" width="55"> </el-table-column>
@@ -161,19 +160,19 @@
           </el-table-column>
         </el-table>
       </div>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        v-if="tableData.length > 0"
-        :current-page.sync="currentPage"
-        :page-size="100"
-        layout="prev, pager, next, jumper"
-        :total="1000"
-      >
-      </el-pagination>
+<!--      <el-pagination-->
+<!--        @size-change="handleSizeChange"-->
+<!--        @current-change="handleCurrentChange"-->
+<!--        v-if="tableData.length > 0"-->
+<!--        :current-page.sync="currentPage"-->
+<!--        :page-size="100"-->
+<!--        layout="prev, pager, next, jumper"-->
+<!--        :total="1000"-->
+<!--      >-->
+<!--      </el-pagination>-->
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
+        <el-button type="primary" @click="confirmSelected"
           >确 定</el-button
         >
       </span>
@@ -182,6 +181,7 @@
 </template>
 <script>
 import draggable from "vuedraggable";
+import {getNativeList} from '@/api/filed-manage/index'
 export default {
   components: {
     draggable,
@@ -190,14 +190,29 @@ export default {
     return {
       taskName: "",
       form: {
-        taskName: "",
-        remark: "",
-        template: "",
-        radio: "",
-        startDate: "",
-        endDate: "",
-        taskTplTargereslutEntity:[],
-        taskTplComplexFieldEntities: []
+        description: "",   //描述
+        status: 0,               //0是逻辑删除，2是未上架，1正常
+        taskName: "",    //task name
+        taskTplBasicFieldEntities: [ //表单字段（原生字段）
+          {
+            fieldId: 0,                              //字段id
+            fieldInputType: 0,                       //状态，0：非必填 1：必填
+            fieldShowType: 0,                       //状态  0：不显示 1：显示
+            fieldType: 0,                           //字段类型，1：原生， 2衍生
+            fieldValue: "",                   //字段值
+            sort: 0,                      //排序
+          }
+        ],
+        taskTplComplexFieldEntities: [ //衍生字段（结构和原生类似）
+          {
+            fieldId: 0,
+            fieldInputType: 0,
+            fieldShowType: 0,
+            fieldType: 0,
+            fieldValue: "",
+            sort: 0,
+          }
+        ]
       },
       originalField: [{ id: 1 }, { id: 2 }],
       extendField: [{ id: 1 }, { id: 2 }, { id: 3 }],
@@ -205,70 +220,57 @@ export default {
       type: "",
       dialogVisible: false,
       keyword: "",
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
+      tableData: [],
       tableColumn: [
         // 表格列数据
         {
           label: "字段显示名",
-          prop: "strengthName",
+          prop: "fieldName",
         },
         {
           label: "数据类型",
-          prop: "specName",
+          prop: "dataType",
         },
         {
           label: "表单类型",
-          prop: "explain",
+          prop: "formType",
         },
         {
           label: "字段描述",
-          prop: "toothTypeName",
+          prop: "description",
         },
       ],
       tableColumn1: [
         // 表格列数据
         {
           label: "字段显示名",
-          prop: "strengthName",
+          prop: "fieldName",
         },
         {
           label: "数据类型",
-          prop: "specName",
+          prop: "dataType",
         },
         {
           label: "字段描述",
-          prop: "toothTypeName",
+          prop: "description",
         },
       ],
       drag: false,
       currentPage: 1,
+      checkedData: []
     };
   },
   created() {},
   mounted() {},
   computed: {},
   methods: {
+    confirmSelected(){
+
+    },
+    handleSelectionChange(val) {
+      this.checkedData = val
+      console.log(val)
+    },
     //开始拖拽事件
     onStart() {
       this.drag = true;
@@ -285,6 +287,16 @@ export default {
     },
     addField(val) {
       this.type = val;
+      if(val==1){
+        getNativeList({type: 1}).then(res=>{
+          this.tableData = res.fields
+        })
+      }else{
+        getNativeList({type: 2}).then(res=>{
+          this.tableData = res.fields
+        })
+      }
+
       this.dialogVisible = true;
     },
     next() {
