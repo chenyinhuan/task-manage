@@ -13,7 +13,7 @@
     <section>
       <p>模版说明</p>
       <el-input
-        v-model="form.taskName"
+        v-model="form.description"
         placeholder="请输入任务说明"
         maxlength="20"
         show-word-limit
@@ -23,7 +23,7 @@
       <p>表单字段（原生字段）</p>
       <div class="field">
         <draggable
-          v-model="originalField"
+          v-model="form.taskTplTargereslutEntity"
           chosenClass="chosen"
           forceFallback="true"
           group="people"
@@ -34,19 +34,19 @@
           <transition-group>
             <div
               class="field-item"
-              v-for="item in originalField"
-              :key="item.id"
+              v-for="item in form.taskTplTargereslutEntity"
+              :key="item.fieldId"
             >
               <div class="field-sitem">
-                <span>商品ID{{ item.id }}</span>
+                <span>商品ID{{ item.fieldId }}</span>
                 <el-input
-                  v-model="form.taskName"
+                  v-model="item.fieldValue"
                   placeholder="请输入商品ID"
                 ></el-input>
               </div>
               <div class="field-sitem">
                 <span>是否必填ID</span>
-                <el-radio-group v-model="form.radio">
+                <el-radio-group v-model="item.fieldInputType">
                   <el-radio :label="3">b必填</el-radio>
                   <el-radio :label="6">非必填</el-radio>
                 </el-radio-group>
@@ -69,7 +69,7 @@
       <p>监测字段（衍生字段）</p>
       <div class="field">
         <draggable
-          v-model="extendField"
+          v-model="form.taskTplComplexFieldEntities"
           chosenClass="chosen"
           forceFallback="true"
           group="people"
@@ -78,14 +78,14 @@
           @end="onEnd"
         >
           <transition-group>
-            <div class="field-item" v-for="item in extendField" :key="item.id">
+            <div class="field-item" v-for="item in form.taskTplComplexFieldEntities" :key="item.fieldId">
               <div class="field-sitem">
                 <span>字段显示名</span>
-                <div class="name">直播间是否装扮{{ item.id }}</div>
+                <div class="name">直播间是否装扮{{ item.fieldId }}</div>
               </div>
               <div class="field-sitem">
                 <span>是否必填ID</span>
-                <el-radio-group v-model="form.radio">
+                <el-radio-group v-model="item.fieldInputType">
                   <el-radio :label="3">b必填</el-radio>
                   <el-radio :label="6">非必填</el-radio>
                 </el-radio-group>
@@ -196,6 +196,8 @@ export default {
         radio: "",
         startDate: "",
         endDate: "",
+        taskTplTargereslutEntity:[],
+        taskTplComplexFieldEntities: []
       },
       originalField: [{ id: 1 }, { id: 2 }],
       extendField: [{ id: 1 }, { id: 2 }, { id: 3 }],
@@ -287,6 +289,7 @@ export default {
     },
     next() {
       this.$emit("next");
+      console.log(this.form)
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
