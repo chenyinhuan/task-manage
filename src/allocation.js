@@ -67,6 +67,11 @@ Vue.prototype.$targetLogicAction = [{value: 1,label: '加'},
   {value: 3,label: '乘'},
   {value: 4,label: '除'},
 ]
+Vue.prototype.$targetTestTimeTypeList = [{value: 1,label: '任务派发后固定时间'},
+  {value: 2,label: '指定日期'},
+  {value: 3,label: '周期性任务'},
+]
+
 Vue.prototype.getPlatform = function (){
 	var ua = window.navigator.userAgent.toLowerCase();
     var u = navigator.userAgent;

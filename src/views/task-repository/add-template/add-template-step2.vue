@@ -3,10 +3,9 @@
     <p class="title">模版信息</p>
     <section class="hd">
       <div class="left">
-        <div class="item" v-for="(item,index) in taskList" :class="[curIndex == index?'active':'']" @click="changeTab(index)">
+        <div class="item" v-for="(item,index) in list" :class="[curIndex == index?'active':'']" @click="changeTab(index)">
           <span>{{item.name}}{{index+1}}</span>
         </div>
-<!--        <div class="item-add" :class="[index == 1?'active':'']" @click="changeTab(1)"><span>衍生字段</span></div>-->
         <a class="add" type="text" @click="addTask">+新增</a>
       </div>
     </section>
@@ -17,7 +16,7 @@
     <section>
       <p>任务指标计算</p>
       <div class="type-select">
-        <el-checkbox-group v-model="checkList" @change="bindCheckBox">
+        <el-checkbox-group v-model="list[curIndex].taskTplTargetEntity.targetResultShowType" @change="changeResShowType">
           <el-checkbox :label="1">逻辑判断后输出结果</el-checkbox>
           <el-checkbox :label="2">直接输出指标结果</el-checkbox>
         </el-checkbox-group>
@@ -25,14 +24,15 @@
       <div class="content">
         <h3>逻辑判断</h3>
         <div class="container">
-          <div class="right-cont square_brackets" v-for="(item,index) in allTermList" :key="index">
+          <div class="right-cont square_brackets" v-for="(item,index) in list[curIndex].taskTplTargetVOs" :key="index">
             <ul>
               <li>
                 <label class="label">如果</label>
                 <div>
-                  <div v-for="(citem,cindex) in item.list" :key="cindex">
-                    <el-select v-model="citem.targetId" placeholder="选择指标"></el-select>
-                    <el-select v-model="citem.judgeId" placeholder="判断选择"></el-select>
+                  <div v-for="(citem,cindex) in item.taskTplTargeruleEntities" :key="cindex">
+                    <el-select v-model="citem.targetStartId" placeholder="选择指标"></el-select>
+                    <el-select v-model="citem.logicAction" placeholder="判断选择"></el-select>
+                    <el-select v-model="citem.targetEndId" placeholder="选择指标"></el-select>
                   </div>
                   <a @click="addTarget(index)" class="add-list">+新增</a>
                 </div>
@@ -70,6 +70,14 @@
     </section>
     <section>
       <p>任务指标考核结束时间</p>
+      <el-select v-model="template" placeholder="选择指标">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
       <el-date-picker
         v-model="form.date"
         type="date"
@@ -77,6 +85,7 @@
       </el-date-picker>
     </section>
     <div class="foot">
+       <el-button>上一步</el-button>
       <el-button type="primary">保存模版</el-button>
       <el-button class="cancel">取消</el-button>
     </div>
@@ -89,16 +98,31 @@
         elseStatus: false,
         template: '',
         checkList:[1],
-        allTermList:[{
-          list: [
-            {
-              targetId: '',
-              judgeId: ''
-            }
-          ],
-        }],
-        taskList: [
-          {name: '任务指标'}
+        targetTestTimeTypeList: '',
+        list: [
+          {
+            name: '任务指标',
+            taskTplTargetVOs:[{
+              taskTplTargeruleEntities: [
+                {
+                  "logicType": '',
+                  "logicAction": '',                     //状态  1：<, 2:<=, 3:>, 4:>=，5:= 6:!=
+                  "targetEndId": '',                     //字段id
+                  "targetStartId": ''
+                }
+              ],
+              "taskTplTargetEntity": {
+                "targetId": 0,                      //指标id
+                "targetName": "",             //任务名称
+                "targetResultShowType": [1],          //状态  1：判断后输出 2：直接输出
+                "targetTestCycle": 0,   //1:每日考核， 2每周考核，3每月考核
+                "targetTestDate": "2021-06-01T12:18:07.357Z",  //俱体日期
+                "targetTestTimeHour": 0,  //1-24小时
+                "targetTestTimeMinute": 0, //0-59
+                "targetTestTimeType": 0,   //考核时间类型：1：任务派发后固定时间 2：指定日期，3：周期性任务
+              }
+            }]
+          },
         ],
         taskName: '',
         form: {
@@ -120,20 +144,29 @@
     },
     methods: {
       addList(){
-        this.allTermList.push({
-          list: [
+        this.taskTplTargetVOs.push({
+          taskTplTargeruleEntities: [
             {
-              targetId: '',
-              judgeId: ''
+              "logicType": '',
+              "logicAction": '',                     //状态  1：<, 2:<=, 3:>, 4:>=，5:= 6:!=
+              "targetEndId": '',                     //字段id
+              "targetStartId": ''
             }
           ],
         })
       },
       addTarget(index){
-        this.allTermList[index].list.push({
-          targetId: '',
-          judgeId: ''
+        this.list[curIndex].taskTplTargetVOs[index].taskTplTargeruleEntities.push({
+          "logicType": '',                 //状态  1：且运算 2：或运算
+          "targetEndId": '',
+          "targetStartId": '',
+          "logicAction": '',
         })
+      },
+      changeResShowType(value) {
+        if(this.list[curIndex].targetResultShowType.length > 1){
+          this.list[curIndex].targetResultShowType.splice(0,1)
+        }
       },
       bindCheckBox(value){
         if(this.checkList.length > 1){
@@ -144,7 +177,7 @@
         this.curIndex = index
       },
       addTask(){
-        this.taskList.push({
+        this.list.push({
           name: '任务指标'
         })
       },
