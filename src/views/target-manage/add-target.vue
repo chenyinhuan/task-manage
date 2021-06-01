@@ -31,10 +31,7 @@
     },
     data() {
       return {
-        radio1: '2',
-        form: {
-          name: ''
-        }
+        radio1: '1',
       }
     },
     created() {

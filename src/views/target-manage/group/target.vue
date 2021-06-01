@@ -6,7 +6,7 @@
     </section>
     <section>
       <p>指标说明</p>
-      <el-input v-model="form.description" placeholder="请输入指标说明" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.description" placeholder="请输入指标说明" maxlength="200" show-word-limit></el-input>
     </section>
     <section>
       <p>指标计算</p>
