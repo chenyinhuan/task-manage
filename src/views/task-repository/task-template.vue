@@ -26,8 +26,8 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
-			:current-page.sync="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
+                   :current-page.sync="searchParams.page" :page-size="searchParams.limit" layout="prev, pager, next, jumper" :total="total">
 		</el-pagination>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
@@ -70,13 +70,13 @@
 						slot: true,
 					},
 				],
-				currentPage: 0,
 				isShow: false,
 				keyword: '',
         searchParams:{
           page: 1,
           limit: 10
         },
+        total: 0
 			}
 		},
 		created() {
@@ -95,12 +95,14 @@
           this.total = res.page.totalCount
         })
       },
-			handleSizeChange(val) {
-				console.log(`每页 ${val} 条`);
-			},
-			handleCurrentChange(val) {
-				console.log(`当前页: ${val}`);
-			},
+      handleSizeChange(val) {
+        this.searchParams.limit = val
+        this.init()
+      },
+      handleCurrentChange(val) {
+        this.searchParams.page = val
+        this.init()
+      },
 			search() {
 				console.log(this.keyword)
 			},
