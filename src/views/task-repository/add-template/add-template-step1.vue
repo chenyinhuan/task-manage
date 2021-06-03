@@ -78,9 +78,9 @@
 			<div class="dialog-content">
 				<el-input v-model="keyword" placeholder="任务名称" @keyup.enter.native="search"><i slot="prefix"
 						class="el-input__icon el-icon-search"></i></el-input>
-				<el-table :data="tableData" style="width: 100%; margin-top: 10px"
+				<el-table ref="table" :data="tableData" style="width: 100%; margin-top: 10px" @row-click="rowSelect"
 					@selection-change="handleSelectionChange" v-if="tableData.length > 0 && fieldType == 1">
-					<el-table-column type="selection" width="55"> </el-table-column>
+					<el-table-column type="selection" width="55" :selectable="checkSelectable"> </el-table-column>
 					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 						v-for="(item, index) in tableColumn" :key="index">
 						<template slot-scope="scope">
@@ -88,7 +88,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<el-table :data="tableData" style="width: 100%; margin-top: 10px"
+				<el-table ref="table1" :data="tableData" style="width: 100%; margin-top: 10px" @row-click="rowSelect"
 					@selection-change="handleSelectionChange" v-if="tableData.length > 0 && fieldType == 2">
 					<el-table-column type="selection" width="55"> </el-table-column>
 					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
@@ -210,9 +210,24 @@
 		mounted() {},
 		computed: {},
 		methods: {
+      checkSelectable (row, index) {
+        if (this.fieldType == 1) {
+          if(this.taskTplVO.taskTplBasicFieldEntities.length && this.taskTplVO.taskTplBasicFieldEntities.some(el=>{return el.fieldId===row.id})){
+            return false;
+          }else{
+            return true;
+          }
+        }else{
+          if(this.taskTplVO.taskTplComplexFieldEntities.length && this.taskTplVO.taskTplComplexFieldEntities.some(el=>{return el.fieldId===row.id})){
+            return false;
+          }else{
+            return true;
+          }
+        }
+      },
 			confirmSelected() {
 				let arr = [];
-				console.log(this.checkedData)
+				// console.log(this.checkedData)
 				for (let i = 0; i < this.checkedData.length; i++) {
 					let item = this.checkedData[i];
 					arr.push({
@@ -232,13 +247,24 @@
 				else if (this.fieldType == 2) this.taskTplVO.taskTplComplexFieldEntities = [...this.taskTplVO
 					.taskTplComplexFieldEntities, ...arr
 				]
-				console.log(this.fieldType, this.taskTplVO.taskTplComplexFieldEntities)
+				console.log(this.fieldType, this.taskTplVO.taskTplBasicFieldEntities)
 				this.handleClose();
 			},
 			handleSelectionChange(val) {
 				this.checkedData = val;
 				console.log(val)
 			},
+      rowSelect(row){
+        if (this.fieldType == 1) {
+          if(!(this.taskTplVO.taskTplBasicFieldEntities.length && this.taskTplVO.taskTplBasicFieldEntities.some(el=>{return el.fieldId===row.id}))){
+            this.$refs.table.toggleRowSelection(row);
+          }
+        }else{
+          if(!(this.taskTplVO.taskTplComplexFieldEntities.length && this.taskTplVO.taskTplComplexFieldEntities.some(el=>{return el.fieldId===row.id}))){
+            this.$refs.table1.toggleRowSelection(row);
+          }
+        }
+      },
 			handleClose() {
 				this.checkedData = [];
 				this.dialogVisible = false;
