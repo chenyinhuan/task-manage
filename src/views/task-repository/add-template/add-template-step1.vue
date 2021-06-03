@@ -262,8 +262,16 @@
 			},
 			next() {
 				if (this.taskTplVO.taskName == '') return this.$message.warning('请填写模板名称');
-				if (this.taskTplVO.taskTplBasicFieldEntities.length == 0 || this.taskTplVO.taskTplBasicFieldEntities
+				if (this.taskTplVO.taskTplBasicFieldEntities.length == 0 || this.taskTplVO.taskTplComplexFieldEntities
 					.length == 0) return this.$message.warning('请选择原生字段或者衍生字段');
+        for(let i=0;i<this.taskTplVO.taskTplBasicFieldEntities.length;i++) {
+          let item = this.taskTplVO.taskTplBasicFieldEntities[i];
+          item.sort = i+1;
+        }
+        for(let i=0;i<this.taskTplVO.taskTplComplexFieldEntities.length;i++) {
+          let item = this.taskTplVO.taskTplComplexFieldEntities[i];
+          item.sort = i+1;
+        }
 				saveTaskTpl(this.taskTplVO).then(res => {
 					if (res.code == 0) {
 						this.$emit("next", res.taskTplId);
