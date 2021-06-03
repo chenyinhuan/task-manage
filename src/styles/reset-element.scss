@@ -9,6 +9,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .el-breadcrumb__inner.is-link:hover, .el-breadcrumb__inner a:hover {
 	color: #FF7D00;
 }
+.el-select .el-input__icon {
+  line-height: 32px;
+}
 .el-input {
 	.el-input__inner::placeholder {
 		color: #999999;
