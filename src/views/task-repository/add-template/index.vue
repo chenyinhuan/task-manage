@@ -14,8 +14,8 @@
     },
     data() {
       return {
-        step: 1,
-        taskTplId: ''
+        step: 2,
+        taskTplId: 6
       }
     },
     created() {
