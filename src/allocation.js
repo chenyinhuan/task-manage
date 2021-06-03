@@ -71,7 +71,20 @@ Vue.prototype.$targetTestTimeTypeList = [{value: 1,label: '任务派发后固定
   {value: 2,label: '指定日期'},
   {value: 3,label: '周期性任务'},
 ]
+Vue.prototype.$targetTestCycleList = [
+  {value: 1,label: '每日考核'},
+  {value: 2,label: '每周考核'},
+  {value: 3,label: '每月考核'},
 
+]
+Vue.prototype.$logicAction = [
+  {value: 1,label: '<小于'},
+  {value: 2,label: '<=小于等于'},
+  {value: 3,label: '>大于'},
+  {value: 4,label: '>=大于等于'},
+  {value: 5,label: '=等于'},
+  {value: 6,label: '!=不等于'},
+]
 Vue.prototype.getPlatform = function (){
 	var ua = window.navigator.userAgent.toLowerCase();
     var u = navigator.userAgent;
