@@ -7,7 +7,7 @@
 		</section>
 		<section>
 			<p>模版说明</p>
-			<el-input v-model="taskTplVO.description" placeholder="请输入模板说明" maxlength="20" show-word-limit></el-input>
+			<el-input v-model="taskTplVO.description" placeholder="请输入模板说明" maxlength="200" show-word-limit></el-input>
 		</section>
 		<section style="margin-bottom: 32px">
 			<p>表单字段（原生字段）</p>
