@@ -12,7 +12,7 @@
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
 					<div v-if="item.slot && item.prop=='status'" class="percent">
-						<div class="dot" :class="[scope.row.status == 0?'green':'',scope.row.status == 1?'grey':'']"></div><span> {{scope.row.status == 1?'未上架':'正常'}}</span>
+						<div class="dot" :class="[scope.row.status == 1?'green':'',scope.row.status == 2?'':'grey']"></div><span> {{scope.row.status == 2?'未上架':'正常'}}</span>
 					</div>
           <div v-if="item.slot && item.prop=='createUserName'" class="percent">
             <span>{{scope.row.createUserName}}/{{scope.row.createTime}}</span>

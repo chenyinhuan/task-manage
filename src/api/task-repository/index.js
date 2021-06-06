@@ -15,4 +15,4 @@ export const saveTaskTpl = (params) => api.post(`/task/tasktpl/saveTaskTpl`, par
  * 保存任务模板（第2步）
  * @params params
  */
-export const saveTaskTargeTpl = (params) => api.post(`/task/tasktpl/saveTaskTargeTpl`, params);
+export const saveTaskTargeTpl = (params) => api.post(`/task/tasktpl/saveTaskTargeTpl/${params.taskTplId}`, params);

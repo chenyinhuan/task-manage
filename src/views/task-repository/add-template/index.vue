@@ -1,7 +1,7 @@
 <template>
   <div id="addTemplate">
-    <step1 v-if="step == 1" @next="next"></step1>
-    <step2 v-if="step == 2" @pre="pre" :taskTplId="taskTplId"></step2>
+    <step1 v-show="step == 1" @next="next"></step1>
+    <step2 v-show="step == 2" @pre="pre" :taskTplId="taskTplId"></step2>
   </div>
 </template>
 <script>
@@ -14,8 +14,8 @@
     },
     data() {
       return {
-        step: 2,
-        taskTplId: 6
+        step: 1,
+        taskTplId: ''
       }
     },
     created() {

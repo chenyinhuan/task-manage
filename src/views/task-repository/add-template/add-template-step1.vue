@@ -71,7 +71,7 @@
 		</section>
 		<div class="foot">
 			<el-button type="primary" @click="next()">下一步</el-button>
-			<el-button class="cancel">取消</el-button>
+			<el-button class="cancel" @click="cancel">取消</el-button>
 		</div>
 		<el-dialog :title="`选择${fieldType == 1 ? '表单' : '检测'}字段（${fieldType == 1 ? '原生字段' : '衍生字段'}）`"
 			:visible.sync="dialogVisible" width="782px" :before-close="handleClose">
@@ -203,7 +203,8 @@
 				drag: false,
 				currentPage: 1,
 				checkedData: [],
-				fieldType: ''
+				fieldType: '',
+        taskTplId: ''
 			};
 		},
 		created() {},
@@ -287,6 +288,10 @@
 				this.dialogVisible = true;
 			},
 			next() {
+        if(this.taskTplId) {
+          this.$emit("next", this.taskTplId);
+          return;
+        }
 				if (this.taskTplVO.taskName == '') return this.$message.warning('请填写模板名称');
 				if (this.taskTplVO.taskTplBasicFieldEntities.length == 0 || this.taskTplVO.taskTplComplexFieldEntities
 					.length == 0) return this.$message.warning('请选择原生字段或者衍生字段');
@@ -300,6 +305,7 @@
         }
 				saveTaskTpl(this.taskTplVO).then(res => {
 					if (res.code == 0) {
+            this.taskTplId = res.taskTplId;
 						this.$emit("next", res.taskTplId);
 					} else this.$message.warning(res.msg)
 				})
@@ -331,7 +337,10 @@
 				}).then(() => {
 					data.splice(index, 1);
 				})
-			}
+			},
+      cancel() {
+        this.$router.push('/task-repository/task-template');
+      }
 		},
 	};
 </script>

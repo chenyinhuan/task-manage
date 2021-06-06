@@ -8,12 +8,14 @@ import './allocation';
 import Element from 'element-ui';
 import commonComponents from './components';
 import * as filters from './filters' // global filters
+import vcolorpicker from 'vcolorpicker'
+
 import '@/directive';
 import store from './store';
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
-
+Vue.use(vcolorpicker)
 commonComponents(Vue);
 Vue.use(Element, {
   size: 'medium', // set element-ui default size
