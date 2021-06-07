@@ -16,7 +16,7 @@
 					<div class="field-item" v-for="(item,index) in taskTplVO.taskTplBasicFieldEntities" :key="index">
 						<div class="field-sitem">
 							<span>{{item.fieldName}}</span>
-							<el-input v-model="item.fieldValue" :placeholder="'请输入'+item.fieldName"></el-input>
+							<el-input v-model="item.fieldValue" :placeholder="'请输入'+item.fieldName" disabled></el-input>
 						</div>
 						<div class="field-sitem">
 							<span>是否必填</span>
