@@ -153,3 +153,20 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .el-menu-item-group__title {
 	  padding: 0px !important;
   }
+.el-select-dropdown__item.selected{
+  color: #0079FE;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner,.el-checkbox__input.is-indeterminate .el-checkbox__inner{
+  background-color: #0079FE;
+  border-color: #0079FE;
+}
+.schedule-calendar-picker-col li.active{
+  color: #0079FE !important;
+}
+.el-upload-dragger:hover{
+  border-color: #0079FE;
+}
+.el-button--primary:hover, .el-button--primary:focus{
+  background-color: #0079FE;
+  border-color: #0079FE;
+}
