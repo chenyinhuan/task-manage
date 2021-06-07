@@ -141,7 +141,7 @@
               <el-option v-for="(item, index) in weekDay" :key="index" :label="item.label" :value="item.value"></el-option>
             </el-select>
             <!-- 每日的某个时间点 -->
-            <el-time-picker v-if="item.taskTplTargetEntity.targetTestCycle == 1 || item.taskTplTargetEntity.targetTestCycle == 2" type="time" v-model="item.taskTplTargetEntity.targetTestDate"
+            <el-time-picker value-format="HH:mm" format="HH:mm" v-if="item.taskTplTargetEntity.targetTestCycle == 1 || item.taskTplTargetEntity.targetTestCycle == 2" type="time" v-model="item.taskTplTargetEntity.targetTestDate"
               placeholder="请选择时间">
             </el-time-picker>
           </div>
@@ -208,7 +208,7 @@
               "targetEndId": null, //指标id
               "targetStartId": null, //指标id
               "targeDefineValue": null, //自定义对比值
-              taskTplTargetIfId: 0
+              "taskTplTargetIfId": 0
             }],
             "taskTplTargetId": 0,
           }],
