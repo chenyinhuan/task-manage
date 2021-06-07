@@ -10,144 +10,147 @@
         <a class="add" type="text" @click="addTask">+新增</a>
       </div>
     </section>
-    <section v-for="(item, index) in taskTplTargetVOs" :key="index" v-if="curIndex == index">
-      <section>
-        <p><span class="red">* </span>任务指标名称</p>
-        <el-input class="input" v-model="item.taskTplTargetEntity.targetName" placeholder="请输入任务指标名称" maxlength="20"
-          show-word-limit></el-input>
-      </section>
-      <section>
-        <p><span class="red">* </span>任务指标计算</p>
-        <div class="type-select">
-          <el-checkbox-group v-model="item.taskTplTargetEntity.targetResultShowType" @change="changeResShowType">
-            <el-checkbox :label="1">逻辑判断后输出结果</el-checkbox>
-            <el-checkbox :label="2">直接输出指标结果</el-checkbox>
-          </el-checkbox-group>
-        </div>
-        <div class="content" v-if="item.taskTplTargetEntity.targetResultShowType[0] == 1">
-          <h3>逻辑判断</h3>
-          <div class="container">
-            <div class="right-cont square_brackets" v-for="(citem,cindex) in item.taskTplTargeifVOs" :key="cindex">
-              <span style="position: absolute;color: #fd6b6d;right: 0px;font-size: 14px;cursor: pointer;margin-top: 4px;"
-                @click="deleteRule(item.taskTplTargeifVOs, cindex)" v-if="cindex != 0">X 删除</span>
-              <ul>
-                <li>
-                  <label class="label">如果</label>
-                  <div>
-                    <div v-for="(sitem,sindex) in citem.taskTplTargeifExtEntityList" :key="sindex">
-                      <el-select v-model="sitem.logicType" placeholder="请选择" v-if="sindex != 0">
-                        <el-option v-for="(ltitem, ltindex) in logicTypeList" :value="ltitem.value" :label="ltitem.label"
-                          :key="ltindex"></el-option>
-                      </el-select>
-                      <el-select v-model="sitem.targetStartId" placeholder="选择指标">
-                        <el-option v-for="(titem, tindex) in targetList" :value="titem.id" :label="titem.targetName"
-                          :key="tindex"></el-option>
-                      </el-select>
-                      <el-select v-model="sitem.logicAction" placeholder="判断选择">
-                        <el-option v-for="(litem, lindex) in logicAction" :label="litem.label" :value="litem.value" :key="lindex"></el-option>
-                      </el-select>
-                      <el-select v-model="sitem.targetEndId" placeholder="选择指标">
-                        <el-option label="自定义数值" :value="0"></el-option>
-                        <el-option v-for="(titem, tindex) in targetList" :value="titem.id" :label="titem.targetName"
-                          :key="tindex"></el-option>
-                      </el-select>
-                      <el-input-number controls-position="right" style="width: 140px;margin-right: 10px;" v-model="sitem.targeDefineValue" v-if="sitem.targetEndId != null && sitem.targetEndId == 0"></el-input-number>
-                      <a style="color: #fd6b6d;" @click="deleteIf(citem.taskTplTargeifExtEntityList,sindex)" class="add-list" v-if="sindex != 0">X 删除</a>
+    <template v-for="(item, index) in taskTplTargetVOs">
+      <section v-if="curIndex == index"  :key="index">
+        <section>
+          <p><span class="red">* </span>任务指标名称</p>
+          <el-input class="input" v-model="item.taskTplTargetEntity.targetName" placeholder="请输入任务指标名称" maxlength="20"
+            show-word-limit></el-input>
+        </section>
+        <section>
+          <p><span class="red">* </span>任务指标计算</p>
+          <div class="type-select">
+            <el-checkbox-group v-model="item.taskTplTargetEntity.targetResultShowType" @change="changeResShowType">
+              <el-checkbox :label="1">逻辑判断后输出结果</el-checkbox>
+              <el-checkbox :label="2">直接输出指标结果</el-checkbox>
+            </el-checkbox-group>
+          </div>
+          <div class="content" v-if="item.taskTplTargetEntity.targetResultShowType[0] == 1">
+            <h3>逻辑判断</h3>
+            <div class="container">
+              <div class="right-cont square_brackets" v-for="(citem,cindex) in item.taskTplTargeifVOs" :key="cindex">
+                <span style="position: absolute;color: #fd6b6d;right: 0px;font-size: 14px;cursor: pointer;margin-top: 4px;"
+                  @click="deleteRule(item.taskTplTargeifVOs, cindex)" v-if="cindex != 0">X 删除</span>
+                <ul>
+                  <li>
+                    <label class="label">如果</label>
+                    <div>
+                      <div v-for="(sitem,sindex) in citem.taskTplTargeifExtEntityList" :key="sindex">
+                        <el-select v-model="sitem.logicType" placeholder="请选择" v-if="sindex != 0">
+                          <el-option v-for="(ltitem, ltindex) in logicTypeList" :value="ltitem.value" :label="ltitem.label"
+                            :key="ltindex"></el-option>
+                        </el-select>
+                        <el-select v-model="sitem.targetStartId" placeholder="选择指标">
+                          <el-option v-for="(titem, tindex) in targetList" :value="titem.id" :label="titem.targetName"
+                            :key="tindex"></el-option>
+                        </el-select>
+                        <el-select v-model="sitem.logicAction" placeholder="判断选择">
+                          <el-option v-for="(litem, lindex) in logicAction" :label="litem.label" :value="litem.value" :key="lindex"></el-option>
+                        </el-select>
+                        <el-select v-model="sitem.targetEndId" placeholder="选择指标">
+                          <el-option label="自定义数值" :value="0"></el-option>
+                          <el-option v-for="(titem, tindex) in targetList" :value="titem.id" :label="titem.targetName"
+                            :key="tindex"></el-option>
+                        </el-select>
+                        <el-input-number controls-position="right" style="width: 140px;margin-right: 10px;" v-model="sitem.targeDefineValue" v-if="sitem.targetEndId != null && sitem.targetEndId == 0"></el-input-number>
+                        <a style="color: #fd6b6d;" @click="deleteIf(citem.taskTplTargeifExtEntityList,sindex)" class="add-list" v-if="sindex != 0">X 删除</a>
+                      </div>
+                      <a @click="addIf(cindex)" class="add-list" :style="{'margin-top':item.taskTplTargeifVOs.length > 1?'5px':''}">+ 新增</a>
                     </div>
-                    <a @click="addIf(cindex)" class="add-list" :style="{'margin-top':item.taskTplTargeifVOs.length > 1?'5px':''}">+ 新增</a>
-                  </div>
-                </li>
-                <li class="else">
-                  <label class="label">输出</label>
-                  <div style="position: relative;">
-                    <el-select v-model="citem.ifResult" placeholder="选择输出类型">
-                      <el-option v-for="(eitem, eindex) in complateList" :label="eitem.label" :value="eitem.value" :key="eindex"></el-option>
-                    </el-select>
-                    <el-input v-model="citem.defineValue" v-if="citem.ifResult == 3"></el-input>
-                    <div style="border: 1px solid rgb(217, 217, 217);border-radius: 4px;z-index: 2;width: 60px;height: 32px;background: #ffffff;padding: 0px 6px;"
-                      v-if="citem.ifResult == 3">
-                      <colorPicker v-model="citem.color" />
+                  </li>
+                  <li class="else">
+                    <label class="label">输出</label>
+                    <div style="position: relative;">
+                      <el-select v-model="citem.ifResult" placeholder="选择输出类型">
+                        <el-option v-for="(eitem, eindex) in complateList" :label="eitem.label" :value="eitem.value" :key="eindex"></el-option>
+                      </el-select>
+                      <el-input v-model="citem.defineValue" v-if="citem.ifResult == 3"></el-input>
+                      <div style="border: 1px solid rgb(217, 217, 217);border-radius: 4px;z-index: 2;width: 60px;height: 32px;background: #ffffff;padding: 0px 6px;"
+                        v-if="citem.ifResult == 3">
+                        <colorPicker v-model="citem.color" />
+                      </div>
+                      <el-checkbox style="margin: 0px 30px" :label="0" v-model="citem.ifResultShow">不显示数值</el-checkbox>
+                      <el-checkbox-group :style="{'position': citem.ifResult == 3?'absolute':'',
+                      'margin-top': citem.ifResult == 3?'70px':''}"
+                        v-model="citem.ifResultShowType" @change="bindCheckBox(citem.ifResultShowType)">
+                        <el-checkbox :label="1">显示百分数（两位小数)</el-checkbox>
+                        <el-checkbox :label="2">显示数值（两位小数）</el-checkbox>
+                      </el-checkbox-group>
                     </div>
-                    <el-checkbox style="margin: 0px 30px" :label="0" v-model="citem.ifResultShow">不显示数值</el-checkbox>
-                    <el-checkbox-group :style="{'position': citem.ifResult == 3?'absolute':'',
-                    'margin-top': citem.ifResult == 3?'70px':''}"
-                      v-model="citem.ifResultShowType" @change="bindCheckBox(citem.ifResultShowType)">
-                      <el-checkbox :label="1">显示百分数（两位小数)</el-checkbox>
-                      <el-checkbox :label="2">显示数值（两位小数）</el-checkbox>
-                    </el-checkbox-group>
+                  </li>
+                </ul>
+              </div>
+              <div class="add-term">
+                <el-button type="text" @click="addList(index)">+ 如果输出</el-button>
+                <el-button type="text" @click="elseStatus = true">+ 否则输出</el-button>
+              </div>
+              <div class="else" v-if="elseStatus">
+                <label class="label">否则</label>
+                <div style="position: relative;">
+                  <el-select v-model="item.taskTplTargeelseEntity.elseResult" placeholder="选择输出类型">
+                    <el-option v-for="(eitem, eindex) in complateList" :label="eitem.label" :value="eitem.value" :key="eindex"></el-option>
+                  </el-select>
+                  <el-input v-model="item.taskTplTargeelseEntity.defineValue" v-if="item.taskTplTargeelseEntity.elseResult == 3"></el-input>
+                  <div style="border: 1px solid rgb(217, 217, 217);border-radius: 4px;z-index: 2;width: 60px;height: 32px;background: #ffffff;padding: 0px 6px;"  v-if="item.taskTplTargeelseEntity.elseResult == 3">
+                    <colorPicker v-model="item.taskTplTargeelseEntity.color"/>
                   </div>
-                </li>
-              </ul>
-            </div>
-            <div class="add-term">
-              <el-button type="text" @click="addList(index)">+ 如果输出</el-button>
-              <el-button type="text" @click="elseStatus = true">+ 否则输出</el-button>
-            </div>
-            <div class="else" v-if="elseStatus">
-              <label class="label">否则</label>
-              <div style="position: relative;">
-                <el-select v-model="item.taskTplTargeelseEntity.elseResult" placeholder="选择输出类型">
-                  <el-option v-for="(eitem, eindex) in complateList" :label="eitem.label" :value="eitem.value" :key="eindex"></el-option>
-                </el-select>
-                <el-input v-model="item.taskTplTargeelseEntity.defineValue" v-if="item.taskTplTargeelseEntity.elseResult == 3"></el-input>
-                <div style="border: 1px solid rgb(217, 217, 217);border-radius: 4px;z-index: 2;width: 60px;height: 32px;background: #ffffff;padding: 0px 6px;"  v-if="item.taskTplTargeelseEntity.elseResult == 3">
-                  <colorPicker v-model="item.taskTplTargeelseEntity.color"/>
+                  <el-checkbox style="margin: 0px 30px" :label="0" v-model="item.taskTplTargeelseEntity.elseResultShow">不显示数值</el-checkbox>
+                  <el-checkbox-group :style="{'position': item.taskTplTargeelseEntity.elseResult == 3?'absolute':'',
+                  'margin-top': item.taskTplTargeelseEntity.elseResult == 3?'70px':''}" v-model="item.taskTplTargeelseEntity.elseResultShowType" @change="bindCheckBox(item.taskTplTargeelseEntity.elseResultShowType)">
+                    <el-checkbox :label="1">显示百分数（两位小数)</el-checkbox>
+                    <el-checkbox :label="2">显示数值（两位小数）</el-checkbox>
+                  </el-checkbox-group>
                 </div>
-                <el-checkbox style="margin: 0px 30px" :label="0" v-model="item.taskTplTargeelseEntity.elseResultShow">不显示数值</el-checkbox>
-                <el-checkbox-group :style="{'position': item.taskTplTargeelseEntity.elseResult == 3?'absolute':'',
-                'margin-top': item.taskTplTargeelseEntity.elseResult == 3?'70px':''}" v-model="item.taskTplTargeelseEntity.elseResultShowType" @change="bindCheckBox(item.taskTplTargeelseEntity.elseResultShowType)">
-                  <el-checkbox :label="1">显示百分数（两位小数)</el-checkbox>
-                  <el-checkbox :label="2">显示数值（两位小数）</el-checkbox>
-                </el-checkbox-group>
               </div>
             </div>
           </div>
-        </div>
-        <div class="else-result" v-if="item.taskTplTargetEntity.targetResultShowType[0] == 2">
-          <p><span class="red">* </span>直接输出指标</p>
-          <el-select v-model="item.targetId">
-            <el-option v-for="(titem, tindex) in targetList" :value="titem.targetName" :label="titem.targetName" :key="tindex"></el-option>
-          </el-select>
-        </div>
-      </section>
-      <section class="end-time">
-        <p>任务指标考核结束时间</p>
-        <div class="date">
-          <el-select v-model="item.taskTplTargetEntity.targetTestTimeType" placeholder="选择考核结束时间">
-            <el-option v-for="titem in targetTestTimeTypeList" :key="titem.value" :label="titem.label" :value="titem.value">
-            </el-option>
-          </el-select>
-          <div style="margin-left: 20px;" v-if="item.taskTplTargetEntity.targetTestTimeType == 1">
-            <el-input-number controls-position="right" v-model="item.taskTplTargetEntity.targetTestTimeHour"
-              placeholder="任务开始后小时数" type="number" :max="24" :min="1"></el-input-number controls-position="right"><span
-              style="margin: 0px 10px;">时</span>
-            <el-input-number controls-position="right" v-model="item.taskTplTargetEntity.targetTestTimeMinute" type="number"
-              :max="59" :min="0"></el-input-number controls-position="right"><span style="margin: 0px 10px;">分</span><span>结束考核</span>
+          <div class="else-result" v-if="item.taskTplTargetEntity.targetResultShowType[0] == 2">
+            <p><span class="red">* </span>直接输出指标</p>
+            <el-select v-model="item.targetId">
+              <el-option v-for="(titem, tindex) in targetList" :value="titem.targetName" :label="titem.targetName" :key="tindex"></el-option>
+            </el-select>
           </div>
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" v-if="item.taskTplTargetEntity.targetTestTimeType == 2" v-model="item.taskTplTargetEntity.targetTestDate"
-            placeholder="请选择日期和时间">
-          </el-date-picker>
-          <div v-if="item.taskTplTargetEntity.targetTestTimeType == 3">
-            <el-select style="margin-left: 20px;" v-model="item.taskTplTargetEntity.targetTestCycle" placeholder="选择周期">
-              <el-option v-for="(item,index) in targetTestCycleList" :label="item.label" :value="item.value" :key="index"></el-option>
+        </section>
+        <section class="end-time">
+          <p>任务指标考核结束时间</p>
+          <div class="date">
+            <el-select v-model="item.taskTplTargetEntity.targetTestTimeType" placeholder="选择考核结束时间">
+              <el-option v-for="titem in targetTestTimeTypeList" :key="titem.value" :label="titem.label" :value="titem.value">
+              </el-option>
             </el-select>
-            <!-- 每月 -->
-            <el-select style="margin-left: 20px;" v-if="item.taskTplTargetEntity.targetTestCycle == 3" v-model="item.taskTplTargetEntity.monthDay">
-               <el-option v-for="(item, index) in monthDay" :key="index" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-             <el-select v-if="item.taskTplTargetEntity.targetTestCycle == 3 && item.taskTplTargetEntity.monthDay == 30"></el-select>
-            <!-- 每周 -->
-            <el-select style="margin-left: 20px;" v-if="item.taskTplTargetEntity.targetTestCycle == 2" v-model="item.taskTplTargetEntity.weekDay">
-              <el-option v-for="(item, index) in weekDay" :key="index" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-            <!-- 每日的某个时间点 -->
-            <el-time-picker value-format="HH:mm" format="HH:mm" v-if="item.taskTplTargetEntity.targetTestCycle == 1 || item.taskTplTargetEntity.targetTestCycle == 2" type="time" v-model="item.taskTplTargetEntity.targetTestDate"
-              placeholder="请选择时间">
-            </el-time-picker>
+            <div style="margin-left: 20px;" v-if="item.taskTplTargetEntity.targetTestTimeType == 1">
+              <el-input-number controls-position="right" v-model="item.taskTplTargetEntity.targetTestTimeHour"
+                placeholder="任务开始后小时数" type="number" :max="24" :min="1"></el-input-number ><span
+                style="margin: 0px 10px;">时</span>
+              <el-input-number controls-position="right" v-model="item.taskTplTargetEntity.targetTestTimeMinute" type="number"
+                :max="59" :min="0"></el-input-number ><span style="margin: 0px 10px;">分</span><span>结束考核</span>
+            </div>
+            <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" v-if="item.taskTplTargetEntity.targetTestTimeType == 2" v-model="item.taskTplTargetEntity.targetTestDate"
+              placeholder="请选择日期和时间">
+            </el-date-picker>
+            <div v-if="item.taskTplTargetEntity.targetTestTimeType == 3">
+              <el-select style="margin-left: 20px;" v-model="item.taskTplTargetEntity.targetTestCycle" placeholder="选择周期">
+                <el-option v-for="(item,index) in targetTestCycleList" :label="item.label" :value="item.value" :key="index"></el-option>
+              </el-select>
+              <!-- 每月 -->
+              <el-select style="margin-left: 20px;" v-if="item.taskTplTargetEntity.targetTestCycle == 3" v-model="item.taskTplTargetEntity.monthDay">
+                <el-option v-for="(item, index) in monthDay" :key="index" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+              <el-select v-if="item.taskTplTargetEntity.targetTestCycle == 3 && item.taskTplTargetEntity.monthDay == 30"></el-select>
+              <!-- 每周 -->
+              <el-select style="margin-left: 20px;" v-if="item.taskTplTargetEntity.targetTestCycle == 2" v-model="item.taskTplTargetEntity.weekDay">
+                <el-option v-for="(item, index) in weekDay" :key="index" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+              <!-- 每日的某个时间点 -->
+              <el-time-picker value-format="HH:mm" format="HH:mm" v-if="item.taskTplTargetEntity.targetTestCycle == 1 || item.taskTplTargetEntity.targetTestCycle == 2" type="time" v-model="item.taskTplTargetEntity.targetTestDate"
+                placeholder="请选择时间">
+              </el-time-picker>
+            </div>
           </div>
-        </div>
+        </section>
       </section>
-    </section>
+    </template>
+    
     <div class="foot">
       <el-button @click="pre">上一步</el-button>
       <el-button type="primary" @click="save">保存模版</el-button>
