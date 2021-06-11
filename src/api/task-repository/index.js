@@ -16,3 +16,13 @@ export const saveTaskTpl = (params) => api.post(`/task/tasktpl/saveTaskTpl`, par
  * @params params
  */
 export const saveTaskTargeTpl = (params) => api.post(`/task/tasktpl/saveTaskTargeTpl/${params.taskTplId}`, params);
+/**
+ * 任务列表
+ * @params params
+ */
+export const getTaskList = (params) => api.post(`/task/tk/repo/page`, params)
+  /**
+ * 保存任务
+ * @params params
+ */
+export const saveTask = (params) => api.post(`/task/tk/repo/save`, params)

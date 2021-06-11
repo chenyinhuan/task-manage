@@ -7,7 +7,7 @@
 		</section>
 		<section>
 			<p>任务说明</p>
-			<el-input v-model="form.taskName" placeholder="请输入任务说明" maxlength="20" show-word-limit></el-input>
+			<el-input v-model="form.description" placeholder="请输入任务说明" maxlength="20" show-word-limit></el-input>
 		</section>
 		<section>
 			<p>任务模版</p>
@@ -20,11 +20,11 @@
 				<span>任务开始时间</span>
 			</div>
 			<div>
-				<el-date-picker v-model="form.startDate" type="date" format="yyyy/MM/dd" :clearable="false" size:="125"
+				<el-date-picker v-model="form.startTime" type="date" format="yyyy/MM/dd" :clearable="false" size:="125"
 					placeholder="选择日期">
 				</el-date-picker>
 				<span style="margin: 0px 3px;">-</span>
-				<el-date-picker v-model="form.endDate" type="date" :clearable="false" size:="125" format="yyyy/MM/dd"
+				<el-date-picker v-model="form.endTime" type="date" :clearable="false" size:="125" format="yyyy/MM/dd"
 					placeholder="选择日期">
 				</el-date-picker>
 			</div>
@@ -52,6 +52,7 @@
 </template>
 <script>
 	import assigment from '@/views/task-repository/group/assigment.vue'
+  import {saveTask} from '@/api/task-repository/index'
 	export default {
 		components: {
 			assigment
