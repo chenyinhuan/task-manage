@@ -68,6 +68,7 @@
 				getUserInfo().then(res => {
 					this.userInfo = res.user;
 					if(this.userInfo == null) this.$router.push('/login')
+          else localStorage.setItem('userInfo',JSON.stringify(this.userInfo));
 				})
 			}
 		}
@@ -135,7 +136,7 @@
 				height: 30px;
 				margin: 20px 18px 0px 23px;
 			}
-			
+
 			.avatar-container {
 				margin-right: 30px;
 				height: 100%;

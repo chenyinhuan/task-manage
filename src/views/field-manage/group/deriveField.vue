@@ -29,7 +29,7 @@
 						<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
 							:value="item.id"></el-option>
 					</el-select>
-					<div v-for="(item, index) in enums" :key="index">
+					<div v-for="(item, index) in enums" :key="index" v-if="index == 0">
 						<el-select v-model="item.logicAction" placeholder="运算方式">
 							<el-option v-for="item in calcType" :key="item.value" :label="item.label"
 								:value="item.value">
@@ -39,11 +39,23 @@
 							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
 								:value="item.id"></el-option>
 						</el-select>
-						<br />
+            <a class="add-btn" v-if="index == enums.length-1" @click="addEditDomain()">+新增</a>
+            <a class="delete-btn" v-if="index != 0" @click="deleteEditDomain(index)">X 删除</a>
 					</div>
-					<a class="add-btn" v-if="enums.length==1" @click="addEditDomain()">+新增</a>
-					<a class="delete-btn" v-if="enums.length>1" @click="deleteEditDomain()">X 删除</a>
 				</div>
+        <div v-for="(item, index) in enums" :key="index" v-if="index > 0" class="add-item">
+        	<el-select v-model="item.logicAction" placeholder="运算方式">
+        		<el-option v-for="item in calcType" :key="item.value" :label="item.label"
+        			:value="item.value">
+        		</el-option>
+        	</el-select>
+        	<el-select v-model="item.fieldStartId" filterable placeholder="选择字段">
+        		<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+        			:value="item.id"></el-option>
+        	</el-select>
+          <a class="add-btn" v-if="index == enums.length-1" @click="addEditDomain()">+新增</a>
+          <a class="delete-btn" v-if="index != 0" @click="deleteEditDomain(index)">X 删除</a>
+        </div>
 			</div>
 			<div class="item"
 				:class="[nativeList.find(n => n.id == form.fieldStartId) && !(nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3)?'cast':'']"
@@ -80,9 +92,9 @@
 						<span style="margin: 0 15px">则</span>
 						<label style="margin-right: 10px">衍生字段=</label>
 						<el-input v-model="item.complexValue"></el-input>
+            <a class="add-btn" v-if="index == enums1.length-1" @click="addEditDomain1()">+ 新增</a>
+            <a class="delete-btn" v-if="index != 0" @click="deleteEditDomain1(index)">X 删除</a>
 					</div>
-					<a class="add-btn" v-if="enums1.length==1" @click="addEditDomain1()">+ 新增</a>
-					<a class="delete-btn" v-if="enums1.length>1" @click="deleteEditDomain1()">X 删除</a>
 				</div>
 			</div>
 		</section>
@@ -211,12 +223,14 @@
 				})
 			},
 			addEditDomain() {
+        if(this.enums.length >=6) return this.$message.warning('最多只能新增5个！')
 				this.enums.push({
 					logicAction: '',
 					fieldStartId: ''
 				})
 			},
 			addEditDomain1() {
+        if(this.enums1.length >=6) return this.$message.warning('最多只能新增5个！')
 				this.enums1.push({
 					logicTargetValue: '', //等于后面的input, 用于比较
 					complexValue: '', //最后一个input, 衍生字段值
@@ -224,11 +238,11 @@
 					fieldStartId: ''
 				})
 			},
-			deleteEditDomain() {
-				this.enums.splice(0, this.enums.length - 1)
+			deleteEditDomain(index) {
+				this.enums.splice(index, 1)
 			},
-			deleteEditDomain1() {
-				this.enums1.splice(0, this.enums1.length - 1)
+			deleteEditDomain1(index) {
+				this.enums1.splice(index, 1)
 			},
 			changeRuleType() {
 				this.form.fieldStartId = '';
@@ -480,7 +494,12 @@
 				}
 			}
 		}
-
+    .add-item {
+      margin-left: 84px;
+      .el-select,.el-input {
+        margin-bottom: 15px;
+      }
+    }
 		.cast {
 			display: flex;
 		}

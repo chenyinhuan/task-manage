@@ -286,6 +286,7 @@
     },
     methods: {
       addList() {
+        if(this.taskTplTargetVOs[this.curIndex].taskTplTargeifVOs.length >= 6) return this.$message.warning('最多只能新增5个！')
         this.taskTplTargetVOs[this.curIndex].taskTplTargeifVOs.push({ //如果数据对象
             "color": '', //颜色
             "defineValue": '', //结果自定义值
@@ -303,6 +304,7 @@
           })
       },
       addIf(index) {
+        if( this.taskTplTargetVOs[this.curIndex].taskTplTargeifVOs[index].taskTplTargeifExtEntityList.length >= 6) return this.$message.warning('最多只能新增5个！')
         this.taskTplTargetVOs[this.curIndex].taskTplTargeifVOs[index].taskTplTargeifExtEntityList.push({
           "logicAction": null, //状态  1：<, 2:<=, 3:>, 4:>=，5:= 6:!=
           "logicType": null, //状态  1：且运算 2：或运算
@@ -339,6 +341,7 @@
         this.curIndex = index
       },
       addTask() {
+        if(this.taskTplTargetVOs.length >= 6) return this.$message.warning('最多只能新增5个！')
         this.taskTplTargetVOs.push({
           "taskTplTargeelseEntity": {
             "color": '', //颜色

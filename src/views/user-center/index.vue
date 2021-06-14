@@ -5,11 +5,11 @@
         <ul class="info">
           <li>
             <h3>账户名</h3>
-            <p>张三</p>
+            <p>{{userInfo.username}}</p>
           </li>
           <li>
             <h3>手机号</h3>
-            <p>18888888888</p>
+            <p>{{userInfo.mobile}}</p>
           </li>
           <li>
             <h3>密码</h3>
@@ -42,7 +42,8 @@
         form:{
           password: '',
           newPassword: ''
-        }
+        },
+        userInfo: localStorage.getItem('userInfo')?JSON.parse(localStorage.getItem('userInfo')): {}
       }
     },
     created() {
