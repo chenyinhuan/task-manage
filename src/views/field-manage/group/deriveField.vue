@@ -5,7 +5,7 @@
 		  <el-input :class="[showValidate && form.fieldName == ''?'validate-empty':'',
 		  showValidate && form.fieldName != '' && checkFieldName?'validate-error':'']" v-model="form.fieldName" @blur="inputFieldName" placeholder="请输入字段显示名" maxlength="20" show-word-limit></el-input>
 		  <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.fieldName == ''">请输入字段显示名</span>
-		  <span class="validate-info" style="color: #C03639;" v-if="showValidate && form.fieldName != '' && checkFieldName">请输入正确的字段显示名</span>
+		  <span class="validate-info" style="color: #C03639;" v-if="showValidate && form.fieldName != '' && checkFieldName">请输入正确的字段显示名，支持中文、英文、数字</span>
 		</section>
 		<section>
 		  <p>字段名</p>
@@ -15,7 +15,7 @@
 		    <template style=" background: #D9D9D9;" slot="prepend">basic_</template>
 		  </el-input>
 		  <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.name == ''">请输入字段名</span>
-		  <span class="validate-info" style="color: #C03639;" v-if="showValidate && form.name != '' && checkName">请输入正确的字段名</span>
+		  <span class="validate-info" style="color: #C03639;" v-if="showValidate && form.name != '' && checkName">请输入正确的字段名，支持英文、数字、下划线</span>
 		</section>
 		<section>
 			<p>字段描述</p>

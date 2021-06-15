@@ -21,9 +21,16 @@
       <el-form :model="form" inline label-width="146px">
         <el-form-item label="原密码:">
           <el-input auto-complete="new-password" v-model="form.password" type="password" placeholder="原密码"></el-input>
+          <span class="validate-info" style="color: #FF8C00;">请输入原密码</span>
         </el-form-item>
         <el-form-item label="新密码:">
-          <el-input auto-complete="new-password" v-model="form.newPassword" type="password" placeholder="新密码"></el-input>
+          <el-input auto-complete="new-password" v-model="form.newPassword" type="password" placeholder="设置6至20位登录密码"></el-input>
+          <span class="validate-info" style="color: #FF8C00;">请输入新密码</span>
+          <span class="validate-info" style="color: #C03639;">请输入正确新密码</span>
+        </el-form-item>
+        <el-form-item label="确认新密码:">
+          <el-input auto-complete="new-password" v-model="form.newConfirmPassword" type="password" placeholder="请再次输入登录密码"></el-input>
+          <span class="validate-info" style="color: #C03639;">两次密码输入不一致</span>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -41,7 +48,8 @@
         dialogVisible: false,
         form:{
           password: '',
-          newPassword: ''
+          newPassword: '',
+          newConfirmPassword: ''
         },
         userInfo: localStorage.getItem('userInfo')?JSON.parse(localStorage.getItem('userInfo')): {}
       }
@@ -97,6 +105,14 @@
     >>>.el-dialog__body{
       .el-form-item__label{
         font-size: 16px;
+      }
+      .el-form-item__content {
+        position: relative;
+        .validate-info {
+          position: absolute;
+          left: 0px;
+          bottom: -30px;
+        }
       }
     }
     >>>.el-dialog__footer{
