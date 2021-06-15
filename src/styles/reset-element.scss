@@ -12,6 +12,27 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .el-select .el-input__icon {
   line-height: 32px;
 }
+.el-textarea {
+  .el-textarea__inner::placeholder {
+		color: #999999;
+	}
+  /* 谷歌 */
+  .el-textarea__inner::-webkit-input-placeholder {
+  	color: #999999;
+  }
+   /* 火狐 */
+  .el-textarea__inner:-moz-placeholder {
+  	color: #999999;
+  }
+   /*ie*/
+  .el-textarea__inner:-ms-input-placeholder {
+  	color: #999999;
+  }
+  .el-input__icon {
+  	color: #666666;
+  }
+}
+
 .el-input {
 	.el-input__inner::placeholder {
 		color: #999999;
@@ -33,11 +54,28 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 	}
 }
 
+.validate-empty {
+  .el-input__inner {
+    border-color: #FF8C00;
+  }
+}
+.validate-error {
+  .el-input__inner {
+    border-color: #C03639;
+  }
+}
 .el-input__inner {
   border: 1px solid #D9D9D9;
 }
+
 .el-input__inner:focus,.el-input__inner:hover {
 	border-color: #FF8C00 !important;
+}
+.el-textarea__inner:focus,.el-textarea__inner:hover {
+	border-color: #FF8C00 !important;
+}
+.el-textarea__inner {
+  padding: 5px 8px;
 }
 .el-table {
 	.cell {

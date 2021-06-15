@@ -17,8 +17,8 @@
             {{scope.row.updateUserName}}
           </div>
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="text"  @click="editInfo(scope.row)">编辑</el-button>
-						<el-button type="text">删除</el-button>
+						<el-button type="text" @click="editInfo(scope.row)">编辑</el-button>
+						<el-button type="text" @click="deleteInfo(scope.row)">删除</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 				</template>
@@ -93,6 +93,17 @@
 		methods: {
       editInfo(item){
         this.$router.push('/field-manage/add-field?type='+item.type+'&id='+item.id)
+      },
+      deleteInfo(item) {
+        this.$confirm(`删除后将无法恢复此字段的相关记录，
+        如果已经被调用将无法删除，希望删除请删除关联字段、
+        指标和任务模版`, '是否确认删除字段？', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          
+        })
       },
 			init() {
 				let params = {

@@ -1,26 +1,47 @@
 <template>
 	<div id="deriveField">
 		<section>
-			<p>字段显示名</p>
-			<el-input v-model="form.fieldName" placeholder="请输入字段显示名" maxlength="20" show-word-limit></el-input>
+		  <p>字段显示名</p>
+		  <el-input :class="[showValidate && form.fieldName == ''?'validate-empty':'',
+		  showValidate && form.fieldName != '' && checkFieldName?'validate-error':'']" v-model="form.fieldName" @blur="inputFieldName" placeholder="请输入字段显示名" maxlength="20" show-word-limit></el-input>
+		  <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.fieldName == ''">请输入字段显示名</span>
+		  <span class="validate-info" style="color: #C03639;" v-if="showValidate && form.fieldName != '' && checkFieldName">请输入正确的字段显示名</span>
 		</section>
 		<section>
-			<p>字段名</p>
-			<el-input v-model="form.name" placeholder="请输入字段名" maxlength="20" show-word-limit>
-				<template style=" background: #D9D9D9;" slot="prepend">{{prepend}}</template>
-			</el-input>
+		  <p>字段名</p>
+		  <el-input :class="[showValidate && form.name == ''?'validate-empty':'',
+		  showValidate && form.name != '' && checkName?'validate-error':'']"
+		   v-model="form.name" @blur="inputName" placeholder="请输入字段名" maxlength="20" show-word-limit>
+		    <template style=" background: #D9D9D9;" slot="prepend">basic_</template>
+		  </el-input>
+		  <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.name == ''">请输入字段名</span>
+		  <span class="validate-info" style="color: #C03639;" v-if="showValidate && form.name != '' && checkName">请输入正确的字段名</span>
 		</section>
 		<section>
 			<p>字段描述</p>
-			<el-input v-model="form.description" placeholder="请输入描述" maxlength="20" show-word-limit></el-input>
+      <div style="width: 420px;">
+        <el-input
+          :autosize="true"
+          type="textarea"
+          placeholder="请输入描述"
+          v-model="form.description"
+          maxlength="200"
+          show-word-limit
+        >
+        </el-input>
+      </div>
+			<!-- <el-input v-model="form.description" placeholder="请输入描述" maxlength="200" show-word-limit></el-input> -->
 		</section>
 		<section>
 			<h3>加工规则</h3>
 			<p>加工规则</p>
-			<el-select v-model="form.ruleType" placeholder="选择加工方式" @change="changeRuleType()">
+			<el-select
+      :class="[showValidate && form.ruleType == ''?'validate-empty':'']"
+       v-model="form.ruleType" placeholder="选择加工方式" @change="changeRuleType()">
 				<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 				</el-option>
 			</el-select>
+      <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.ruleType == ''">请选择加工方式</span>
 			<span class="warning-info" v-if="form.ruleType == 1">说明：四则运算只针对number型（int、float）数据类型计算</span>
 			<div class="item" v-if="form.ruleType ==1">
 				<div class="options">
@@ -176,7 +197,11 @@
 					// }]
 				},
 				prepend: 'complex_',
-				checkField: {}
+				checkField: {},
+        showValidate: false,
+        checkFieldName: false,
+        checkName: false,
+        checkRule: false
 			}
 		},
 		watch: {
@@ -258,9 +283,8 @@
 				})
 			},
 			save() {
-				if(this.form.fieldName == '') return this.$message.warning('请输入字段显示名');
-				if(this.form.name == '') return this.$message.warning('请输入字段名');
-				if(this.form.ruleType == '') return this.$message.warning('请选择加工方式');
+				if(this.form.fieldName == '' || this.form.name == '' || this.form.ruleType == '') return this.showValidate = true;
+				// if(this.form.ruleType == '') return this.$message.warning('请选择加工方式');
 				let params = {};
 				if (this.form.ruleType == 1) {
 					let complexMahtRuleVOs = [];
@@ -323,14 +347,29 @@
 							this.$message.success('新增成功！');
 							this.back()
 						} else {
-							this.$message.warning(res.msg);
+							this.$message.warning(res.msg?res.msg:'新增失败！');
 						}
 					})
 				}
 			},
 			back() {
 				this.$router.go(-1)
-			}
+			},
+      // 校验字段显示名
+      inputFieldName() {
+        let regex = new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+$"); // 中文、英文、数字
+        //判断输入框中有内容
+        if (!regex.test(this.form.fieldName.trim())) {
+          this.checkFieldName = true;
+        }else this.checkFieldName = false;
+      },
+      inputName() {
+        let regex = new RegExp("^[a-zA-Z0-9_]+$"); // 英文、数字、下划线
+        //判断输入框中有内容
+        if (!regex.test(this.form.name.trim())) {
+          this.checkName = true;
+        }else this.checkName = false;
+      }
 		}
 	}
 </script>
@@ -435,6 +474,16 @@
 		}
 
 		section {
+      position: relative;
+      .validate-info {
+        position: absolute;
+        left: 0px;
+        bottom: 9px;
+        font-size: 12px;
+      }
+      .el-textarea {
+        margin-bottom: 32px;
+      }
 			.label {
 				font-size: 12px;
 				color: #FF8C00;
