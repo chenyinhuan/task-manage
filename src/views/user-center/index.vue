@@ -20,10 +20,10 @@
     <el-dialog title="修改密码"  :visible.sync="dialogVisible" width="498px" :close-on-click-modal="false">
       <el-form :model="form" inline label-width="146px">
         <el-form-item label="原密码:">
-          <el-input v-model="form.password" type="password" placeholder="原密码"></el-input>
+          <el-input auto-complete="new-password" v-model="form.password" type="password" placeholder="原密码"></el-input>
         </el-form-item>
         <el-form-item label="新密码:">
-          <el-input v-model="form.newPassword" type="password" placeholder="新密码"></el-input>
+          <el-input auto-complete="new-password" v-model="form.newPassword" type="password" placeholder="新密码"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

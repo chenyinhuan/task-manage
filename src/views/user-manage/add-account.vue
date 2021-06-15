@@ -11,11 +11,11 @@
     </section>
     <section v-if="isEdit != 1">
       <p>登录密码</p>
-      <el-input v-model="form.password" type="password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.password" type="password" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
     </section>
     <section v-if="isEdit != 1">
       <p>确认登录密码</p>
-      <el-input v-model="form.conPassword" type="password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.conPassword" type="password" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
     </section>
     <section>
       <p>匹配角色</p>
