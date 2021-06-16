@@ -69,7 +69,8 @@
               "targeFieldVO": {
                 "logicAction": '',                         //聚合类型： 1：求和  2：平均, 3：最大数, 4：最小数, 5：计数
                 "fieldId": '',                            //字段id
-                countFileldTargeValue: ''
+                countFileldTargeValue: '',
+			    fieldEnumIds: []
               }
             },
             nativeList: [],

@@ -155,10 +155,12 @@
 				})
 			},
 			handleSizeChange(val) {
-				console.log(`每页 ${val} 条`);
+				this.searchParams.limit = val
+				this.init()
 			},
 			handleCurrentChange(val) {
-				console.log(`当前页: ${val}`);
+				this.searchParams.page = val
+				this.init()
 			},
 			search() {
 				this.init()

@@ -4,18 +4,18 @@
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
-          <div v-if="item.slot && item.prop=='dataType'">
-          	{{$dataTypeList.find(n => n.value == scope.row.dataType)?$dataTypeList.find(n => n.value == scope.row.dataType).label:''}}
-          </div>
-          <div v-if="item.slot && item.prop=='formType'">
-            {{$formTypeList.find(n => n.value == scope.row.formType)?$formTypeList.find(n => n.value == scope.row.formType).label:''}}
-          </div>
-          <div v-if="item.slot && item.prop=='createUserName'">
-            {{scope.row.createUserName}}
-          </div>
-          <div v-if="item.slot && item.prop=='updateUserName'">
-            {{scope.row.updateUserName}}
-          </div>
+					<div v-if="item.slot && item.prop=='dataType'">
+						{{$dataTypeList.find(n => n.value == scope.row.dataType)?$dataTypeList.find(n => n.value == scope.row.dataType).label:''}}
+					</div>
+					<div v-if="item.slot && item.prop=='formType'">
+						{{$formTypeList.find(n => n.value == scope.row.formType)?$formTypeList.find(n => n.value == scope.row.formType).label:''}}
+					</div>
+					<div v-if="item.slot && item.prop=='createUserName'">
+						{{scope.row.createUserName}}
+					</div>
+					<div v-if="item.slot && item.prop=='updateUserName'">
+						{{scope.row.updateUserName}}
+					</div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="text" @click="editInfo(scope.row)">编辑</el-button>
 						<el-button type="text" @click="deleteInfo(scope.row)">删除</el-button>
@@ -91,29 +91,29 @@
 
 		},
 		methods: {
-      editInfo(item){
-        this.$router.push('/field-manage/add-field?type='+item.type+'&id='+item.id)
-      },
-      deleteInfo(item) {
-        this.$confirm(`删除后将无法恢复此字段的相关记录，
+			editInfo(item) {
+				this.$router.push('/field-manage/add-field?type=' + item.type + '&id=' + item.id)
+			},
+			deleteInfo(item) {
+				this.$confirm(`删除后将无法恢复此字段的相关记录，
         如果已经被调用将无法删除，希望删除请删除关联字段、
         指标和任务模版`, '是否确认删除字段？', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          
-        })
-      },
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+
+				})
+			},
 			init() {
 				let params = {
 					page: this.currentPage,
 					limit: this.limit,
 					type: 2
 				}
-				getPageList(params).then( res => {
+				getPageList(params).then(res => {
 					this.isShow = true;
-					if(res.code == 0) {
+					if (res.code == 0) {
 						this.tableData = res.page.list;
 						this.total = res.page.totalCount;
 					}

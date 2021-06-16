@@ -1,47 +1,45 @@
 <template>
 	<div id="deriveField">
 		<section>
-		  <p>字段显示名</p>
-		  <el-input :class="[showValidate && form.fieldName == ''?'validate-empty':'',
-		  showValidate && form.fieldName != '' && checkFieldName?'validate-error':'']" v-model="form.fieldName" @blur="inputFieldName" placeholder="请输入字段显示名" maxlength="20" show-word-limit></el-input>
-		  <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.fieldName == ''">请输入字段显示名</span>
-		  <span class="validate-info" style="color: #C03639;" v-if="showValidate && form.fieldName != '' && checkFieldName">请输入正确的字段显示名，支持中文、英文、数字</span>
+			<p>字段显示名</p>
+			<el-input :class="[showValidate && form.fieldName == ''?'validate-empty':'',
+		  showValidate && form.fieldName != '' && checkFieldName?'validate-error':'']" v-model="form.fieldName"
+				@blur="inputFieldName" placeholder="请输入字段显示名" maxlength="20" show-word-limit></el-input>
+			<span class="validate-info" style="color: #FF8C00;"
+				v-if="showValidate && form.fieldName == ''">请输入字段显示名</span>
+			<span class="validate-info" style="color: #C03639;"
+				v-if="showValidate && form.fieldName != '' && checkFieldName">请输入正确的字段显示名，支持中文、英文、数字</span>
 		</section>
 		<section>
-		  <p>字段名</p>
-		  <el-input :class="[showValidate && form.name == ''?'validate-empty':'',
-		  showValidate && form.name != '' && checkName?'validate-error':'']"
-		   v-model="form.name" @blur="inputName" placeholder="请输入字段名" maxlength="20" show-word-limit>
-		    <template style=" background: #D9D9D9;" slot="prepend">basic_</template>
-		  </el-input>
-		  <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.name == ''">请输入字段名</span>
-		  <span class="validate-info" style="color: #C03639;" v-if="showValidate && form.name != '' && checkName">请输入正确的字段名，支持英文、数字、下划线</span>
+			<p>字段名</p>
+			<el-input :class="[showValidate && form.name == ''?'validate-empty':'',
+		  showValidate && form.name != '' && checkName?'validate-error':'']" v-model="form.name" @blur="inputName"
+				placeholder="请输入字段名" maxlength="20" show-word-limit>
+				<template style=" background: #D9D9D9;" slot="prepend">{{prepend}}</template>
+			</el-input>
+			<span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.name == ''">请输入字段名</span>
+			<span class="validate-info" style="color: #C03639;"
+				v-if="showValidate && form.name != '' && checkName">请输入正确的字段名，支持英文、数字、下划线</span>
 		</section>
 		<section>
 			<p>字段描述</p>
-      <div style="width: 420px;">
-        <el-input
-          :autosize="true"
-          type="textarea"
-          placeholder="请输入描述"
-          v-model="form.description"
-          maxlength="200"
-          show-word-limit
-        >
-        </el-input>
-      </div>
+			<div style="width: 420px;">
+				<el-input :autosize="true" type="textarea" placeholder="请输入描述" v-model="form.description"
+					maxlength="200" show-word-limit>
+				</el-input>
+			</div>
 			<!-- <el-input v-model="form.description" placeholder="请输入描述" maxlength="200" show-word-limit></el-input> -->
 		</section>
 		<section>
 			<h3>加工规则</h3>
 			<p>加工规则</p>
-			<el-select
-      :class="[showValidate && form.ruleType == ''?'validate-empty':'']"
-       v-model="form.ruleType" placeholder="选择加工方式" @change="changeRuleType()">
+			<el-select :class="[showValidate && form.ruleType == ''?'validate-empty':'']" v-model="form.ruleType"
+				placeholder="选择加工方式" @change="changeRuleType()">
 				<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 				</el-option>
 			</el-select>
-      <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.ruleType == ''">请选择加工方式</span>
+			<span class="validate-info" style="color: #FF8C00;"
+				v-if="showValidate && form.ruleType == ''">请选择加工方式</span>
 			<span class="warning-info" v-if="form.ruleType == 1">说明：四则运算只针对number型（int、float）数据类型计算</span>
 			<div class="item" v-if="form.ruleType ==1">
 				<div class="options">
@@ -60,23 +58,22 @@
 							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
 								:value="item.id"></el-option>
 						</el-select>
-            <a class="add-btn" v-if="index == enums.length-1" @click="addEditDomain()">+新增</a>
-            <a class="delete-btn" v-if="index != 0" @click="deleteEditDomain(index)">X 删除</a>
+						<a class="add-btn" v-if="index == enums.length-1" @click="addEditDomain()">+新增</a>
+						<a class="delete-btn" v-if="index != 0" @click="deleteEditDomain(index)">X 删除</a>
 					</div>
 				</div>
-        <div v-for="(item, index) in enums" :key="index" v-if="index > 0" class="add-item">
-        	<el-select v-model="item.logicAction" placeholder="运算方式">
-        		<el-option v-for="item in calcType" :key="item.value" :label="item.label"
-        			:value="item.value">
-        		</el-option>
-        	</el-select>
-        	<el-select v-model="item.fieldStartId" filterable placeholder="选择字段">
-        		<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-        			:value="item.id"></el-option>
-        	</el-select>
-          <a class="add-btn" v-if="index == enums.length-1" @click="addEditDomain()">+新增</a>
-          <a class="delete-btn" v-if="index != 0" @click="deleteEditDomain(index)">X 删除</a>
-        </div>
+				<div v-for="(item, index) in enums" :key="index" v-if="index > 0" class="add-item">
+					<el-select v-model="item.logicAction" placeholder="运算方式">
+						<el-option v-for="item in calcType" :key="item.value" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+					<el-select v-model="item.fieldStartId" filterable placeholder="选择字段">
+						<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+							:value="item.id"></el-option>
+					</el-select>
+					<a class="add-btn" v-if="index == enums.length-1" @click="addEditDomain()">+新增</a>
+					<a class="delete-btn" v-if="index != 0" @click="deleteEditDomain(index)">X 删除</a>
+				</div>
 			</div>
 			<div class="item"
 				:class="[nativeList.find(n => n.id == form.fieldStartId) && !(nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3)?'cast':'']"
@@ -113,8 +110,8 @@
 						<span style="margin: 0 15px">则</span>
 						<label style="margin-right: 10px">衍生字段=</label>
 						<el-input v-model="item.complexValue"></el-input>
-            <a class="add-btn" v-if="index == enums1.length-1" @click="addEditDomain1()">+ 新增</a>
-            <a class="delete-btn" v-if="index != 0" @click="deleteEditDomain1(index)">X 删除</a>
+						<a class="add-btn" v-if="index == enums1.length-1" @click="addEditDomain1()">+ 新增</a>
+						<a class="delete-btn" v-if="index != 0" @click="deleteEditDomain1(index)">X 删除</a>
 					</div>
 				</div>
 			</div>
@@ -198,10 +195,10 @@
 				},
 				prepend: 'complex_',
 				checkField: {},
-        showValidate: false,
-        checkFieldName: false,
-        checkName: false,
-        checkRule: false
+				showValidate: false,
+				checkFieldName: false,
+				checkName: false,
+				checkRule: false
 			}
 		},
 		watch: {
@@ -248,14 +245,14 @@
 				})
 			},
 			addEditDomain() {
-        if(this.enums.length >=6) return this.$message.warning('最多只能新增5个！')
+				if (this.enums.length >= 6) return this.$message.warning('最多只能新增5个！')
 				this.enums.push({
 					logicAction: '',
 					fieldStartId: ''
 				})
 			},
 			addEditDomain1() {
-        if(this.enums1.length >=6) return this.$message.warning('最多只能新增5个！')
+				if (this.enums1.length >= 6) return this.$message.warning('最多只能新增5个！')
 				this.enums1.push({
 					logicTargetValue: '', //等于后面的input, 用于比较
 					complexValue: '', //最后一个input, 衍生字段值
@@ -283,7 +280,8 @@
 				})
 			},
 			save() {
-				if(this.form.fieldName == '' || this.form.name == '' || this.form.ruleType == '') return this.showValidate = true;
+				if (this.form.fieldName == '' || this.form.name == '' || this.form.ruleType == '') return this
+					.showValidate = true;
 				// if(this.form.ruleType == '') return this.$message.warning('请选择加工方式');
 				let params = {};
 				if (this.form.ruleType == 1) {
@@ -291,7 +289,7 @@
 					if (this.enums.length == 1) {
 						complexMahtRuleVOs = [{
 							"logicAction": this.enums[0]
-							.logicAction, //运算方式 1：加法，2：减法，3除，4乘， 5等于，6不等于，7包含， 8不包含， 9空判断，10非空判断
+								.logicAction, //运算方式 1：加法，2：减法，3除，4乘， 5等于，6不等于，7包含， 8不包含， 9空判断，10非空判断
 							"fieldStartId": this.form.fieldStartId, //第一个字段id
 							"fieldEndId": this.enums[0].fieldStartId //第二个字段id
 						}]
@@ -347,7 +345,7 @@
 							this.$message.success('新增成功！');
 							this.back()
 						} else {
-							this.$message.warning(res.msg?res.msg:'新增失败！');
+							this.$message.warning(res.msg ? res.msg : '新增失败！');
 						}
 					})
 				}
@@ -355,21 +353,21 @@
 			back() {
 				this.$router.go(-1)
 			},
-      // 校验字段显示名
-      inputFieldName() {
-        let regex = new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+$"); // 中文、英文、数字
-        //判断输入框中有内容
-        if (!regex.test(this.form.fieldName.trim())) {
-          this.checkFieldName = true;
-        }else this.checkFieldName = false;
-      },
-      inputName() {
-        let regex = new RegExp("^[a-zA-Z0-9_]+$"); // 英文、数字、下划线
-        //判断输入框中有内容
-        if (!regex.test(this.form.name.trim())) {
-          this.checkName = true;
-        }else this.checkName = false;
-      }
+			// 校验字段显示名
+			inputFieldName() {
+				let regex = new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+$"); // 中文、英文、数字
+				//判断输入框中有内容
+				if (!regex.test(this.form.fieldName.trim())) {
+					this.checkFieldName = true;
+				} else this.checkFieldName = false;
+			},
+			inputName() {
+				let regex = new RegExp("^[a-zA-Z0-9_]+$"); // 英文、数字、下划线
+				//判断输入框中有内容
+				if (!regex.test(this.form.name.trim())) {
+					this.checkName = true;
+				} else this.checkName = false;
+			}
 		}
 	}
 </script>
@@ -474,16 +472,19 @@
 		}
 
 		section {
-      position: relative;
-      .validate-info {
-        position: absolute;
-        left: 0px;
-        bottom: 9px;
-        font-size: 12px;
-      }
-      .el-textarea {
-        margin-bottom: 32px;
-      }
+			position: relative;
+
+			.validate-info {
+				position: absolute;
+				left: 0px;
+				bottom: 9px;
+				font-size: 12px;
+			}
+
+			.el-textarea {
+				margin-bottom: 32px;
+			}
+
 			.label {
 				font-size: 12px;
 				color: #FF8C00;
@@ -543,12 +544,16 @@
 				}
 			}
 		}
-    .add-item {
-      margin-left: 84px;
-      .el-select,.el-input {
-        margin-bottom: 15px;
-      }
-    }
+
+		.add-item {
+			margin-left: 84px;
+
+			.el-select,
+			.el-input {
+				margin-bottom: 15px;
+			}
+		}
+
 		.cast {
 			display: flex;
 		}

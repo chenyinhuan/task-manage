@@ -1,83 +1,87 @@
 <template>
-  <div id="targetManage" :style="{'height': tableData.length==0?'661px':''}">
-    <section class="hd">
-      <div>
-        <el-input v-model="keyword" placeholder="指标名称" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
-      </div>
-      <el-button type="primary" @click="addTask">新增</el-button>
-    </section>
-    <el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
-      <el-table-column :prop="item.prop" :label="item.label" :width="item.width"
-                       v-for="(item,index) in tableColumn" :key="index">
-        <template slot-scope="scope">
-          <div v-if="item.slot && item.prop=='type'">
-            <span>{{scope.row.type==1?'字段指标':'指标类指标'}}</span>
-          </div>
-          <div v-if="item.slot && item.prop=='opt'">
-            <el-button type="text">编辑</el-button>
-            <el-button type="text">删除</el-button>
-          </div>
-          <div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
-                   :current-page.sync="searchParams.page" :page-size="searchParams.limit" layout="prev, pager, next, jumper" :total="total">
-    </el-pagination>
-    <div class="tempty" v-if="tableData.length==0 && isShow">
-      <img src="@/images/my-task/illustration.png">
-      <p>还没有任务明细～</p>
-    </div>
-  </div>
+	<div id="targetManage" :style="{'height': tableData.length==0?'661px':''}">
+		<section class="hd">
+			<div>
+				<el-input v-model="keyword" placeholder="指标名称" @keyup.enter.native="search"><i slot="prefix"
+						class="el-input__icon el-icon-search"></i></el-input>
+			</div>
+			<el-button type="primary" @click="addTask">新增</el-button>
+		</section>
+		<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
+			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
+				v-for="(item,index) in tableColumn" :key="index">
+				<template slot-scope="scope">
+					<div v-if="item.slot && item.prop=='type'">
+						<span>{{scope.row.type==1?'字段指标':'指标类指标'}}</span>
+					</div>
+					<div v-if="item.slot && item.prop=='opt'">
+						<el-button type="text">编辑</el-button>
+						<el-button type="text">删除</el-button>
+					</div>
+					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
+				</template>
+			</el-table-column>
+		</el-table>
+		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
+			:current-page.sync="searchParams.page" :page-size="searchParams.limit" layout="prev, pager, next, jumper"
+			:total="total">
+		</el-pagination>
+		<div class="tempty" v-if="tableData.length==0 && isShow">
+			<img src="@/images/my-task/illustration.png">
+			<p>还没有任务明细～</p>
+		</div>
+	</div>
 </template>
 <script>
-  import {getTargeList} from '@/api/target-manage/index';
+	import {
+		getTargeList
+	} from '@/api/target-manage/index';
 	export default {
 		components: {},
 		data() {
 			return {
 				keyword: '',
-        tableData: [],
-        tableColumn: [ // 表格列数据
-          {
-            label: '指标名称',
-            prop: 'targetName',
-          },
-          {
-            label: '指标说明',
-            prop: 'description',
-          },
-          {
-            label: '数据类型',
-            prop: 'type',
-            slot: true,
-          },
-          {
-            label: '创建人/创建时间',
-            prop: 'createUserName',
-          },
-          {
-            label: '修改人/修改后时间',
-            prop: 'updateUserName',
-          },
-          {
-            label: '操作',
-            prop: 'opt',
-            align: 'center',
-            slot: true,
-          },
-        ],
-        currentPage: 1,
-        isShow: false,
-        searchParams:{
-          page: 1,
-          limit: 10
-        },
-        total: 0
+				tableData: [],
+				tableColumn: [ // 表格列数据
+					{
+						label: '指标名称',
+						prop: 'targetName',
+					},
+					{
+						label: '指标说明',
+						prop: 'description',
+					},
+					{
+						label: '数据类型',
+						prop: 'type',
+						slot: true,
+					},
+					{
+						label: '创建人/创建时间',
+						prop: 'createUserName',
+					},
+					{
+						label: '修改人/修改后时间',
+						prop: 'updateUserName',
+					},
+					{
+						label: '操作',
+						prop: 'opt',
+						align: 'center',
+						slot: true,
+					},
+				],
+				currentPage: 1,
+				isShow: false,
+				searchParams: {
+					page: 1,
+					limit: 10
+				},
+				total: 0
 			}
 		},
 		created() {
-      this.init()
+			this.init()
 		},
 		mounted() {
 
@@ -86,29 +90,28 @@
 
 		},
 		methods: {
-		  init(){
-        getTargeList(this.searchParams).then(res=>{
-          console.log(res)
-          this.tableData = res.page.list
-          this.total = res.page.totalCount
-        })
-      },
-      handleSizeChange(val) {
-		    this.searchParams.limit = val
-        this.init()
-      },
-      handleCurrentChange(val) {
-        this.searchParams.page = val
-        this.init()
-      },
-      addTask(){
-        this.$router.push({
-          path: '/target-manage/add-target'
-        })
-      },
+			init() {
+				getTargeList(this.searchParams).then(res => {
+					this.tableData = res.page.list
+					this.total = res.page.totalCount
+				})
+			},
+			handleSizeChange(val) {
+				this.searchParams.limit = val
+				this.init()
+			},
+			handleCurrentChange(val) {
+				this.searchParams.page = val
+				this.init()
+			},
+			addTask() {
+				this.$router.push({
+					path: '/target-manage/add-target'
+				})
+			},
 			search() {
-        this.searchParams.page = 1;
-        this.init();
+				this.searchParams.page = 1;
+				this.init();
 				console.log(this.keyword)
 			}
 		}
@@ -133,20 +136,24 @@
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-      .el-input{
-        width: 160px;
-        height: 40px;
-        line-height: 40px;
-        border-radius: 6px;
-        >>>.el-input__inner{
-          background: #F8FAFB;
-          height: 40px;
-          line-height: 40px;
-        }
-        >>>.el-input__prefix{
-        color: #9596AB;
-      }
-      }
+
+			.el-input {
+				width: 160px;
+				height: 40px;
+				line-height: 40px;
+				border-radius: 6px;
+
+				>>>.el-input__inner {
+					background: #F8FAFB;
+					height: 40px;
+					line-height: 40px;
+				}
+
+				>>>.el-input__prefix {
+					color: #9596AB;
+				}
+			}
+
 			.left {
 				display: inline-flex;
 				position: relative;

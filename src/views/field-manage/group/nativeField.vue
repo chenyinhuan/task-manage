@@ -12,7 +12,7 @@
       <el-input :class="[showValidate && form.name == ''?'validate-empty':'',
       showValidate && form.name != '' && checkName?'validate-error':'']"
        v-model="form.name" @blur="inputName" placeholder="请输入字段名" maxlength="20" show-word-limit>
-        <template style=" background: #D9D9D9;" slot="prepend">basic_</template>
+        <template style=" background: #D9D9D9;" slot="prepend">{{prepend}}</template>
       </el-input>
       <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.name == ''">请输入字段名</span>
       <span class="validate-info" style="color: #C03639;" v-if="showValidate && form.name != '' && checkName">请输入正确的字段名，支持英文、数字、下划线</span>
@@ -96,7 +96,8 @@
         ],
         showValidate: false,
         checkFieldName: false,
-        checkName: false
+        checkName: false,
+		prepend: 'basic_'
       }
     },
     created() {
@@ -144,7 +145,7 @@
           "description": this.form.description, //描述
           "fieldName": this.form.fieldName, //显示字段名
           "formType": this.form.formType, //表单类型 1：输入，2：单选，3多选，4文件
-          "name": this.form.name, //字段名
+          "name": `${this.prepend}${this.form.name}`, //字段名
           "type": 1, //1：原生 2：衍生
           "enums": this.enums
         }
