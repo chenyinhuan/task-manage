@@ -1,7 +1,7 @@
 <template>
 	<div id="taskList" :style="{'height': tableData.length==0?'661px':''}">
 		<section>
-			<p>我的任务</p>
+			<p class="tit">我的任务</p>
 			<ul class="tab-list" v-if="tableData.length>0">
 				<li class="tab-item" v-for="(item,index) in tabList" :key="index">
 					<span class="tit">{{item.title}}</span><span class="num">{{item.number}}</span>
@@ -12,27 +12,46 @@
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
-					<div v-if="item.slot && item.prop=='explain'"><a>查看说明</a></div>
+					<div v-if="item.slot && item.prop=='materialName'" class="percent">
+						<div class="dot"
+							:class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'',scope.$index == 2?'blue':'']">
+						</div><span>
+							{{scope.$index == 0?'进行中':''}}{{scope.$index == 1?'已取消，已结束':''}}{{scope.$index == 2?'待开始':''}}</span>
+					</div>
+					<div v-if="item.slot && item.prop=='description'" @click="viewDes(scope.row)"
+						style="color: #0079FE;"><a>查看说明</a></div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="primary" @click.stop="go(scope.row)">进入任务</el-button>
 					</div>
-          <div v-if="item.slot && item.prop=='result'">
-          	<el-button type="primary" @click.stop="goTarget(scope.row)">查看</el-button>
-          </div>
+					<div v-if="item.slot && item.prop=='result'">
+						<el-button type="primary" @click.stop="goTarget(scope.row)">查看</el-button>
+					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 				</template>
 			</el-table-column>
 		</el-table>
 		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
-			:current-page.sync="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
+			:current-page.sync="currentPage" :page-size="limit" layout="prev, pager, next, jumper" :total="total">
 		</el-pagination>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
 			<p>还没有任务明细～</p>
 		</div>
+		<el-dialog class="add-dialog" title="任务说明" :visible.sync="visibleDialog" width="498px"
+			:before-close="close">
+			<div>
+				<p class="">{{description}}</p>
+				<div slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="visibleDialog = false">确 定</el-button>
+				</div>
+			</div>
+		</el-dialog>
 	</div>
 </template>
 <script>
+	import {
+		getMyTaskList
+	} from '@/api/task-center/my-task/index.js'
 	export default {
 		data() {
 			return {
@@ -54,72 +73,51 @@
 					}
 				],
 
-				tableData: [{
-					date: '2016-05-02',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}, {
-					date: '2016-05-04',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1517 弄'
-				}, {
-					date: '2016-05-01',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1519 弄'
-				}, {
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1516 弄'
-				}],
+				tableData: [{description: ''}],
 				tableColumn: [ // 表格列数据
 					{
-						label: '任务ID/子任务ID',
+						label: '任务ID',
 						prop: 'strengthName',
 						width: '222'
 					},
 					{
 						label: '任务名称',
-						prop: 'specName',
+						prop: 'taskName',
 						width: '153'
 					},
 					{
 						label: '任务说明',
-						prop: 'explain',
+						prop: 'description',
 						width: '136',
 						slot: true,
 					},
 					{
 						label: '任务开始时间',
-						prop: 'toothTypeName',
+						prop: 'startTime',
 						width: '179'
 					},
 					{
 						label: '任务结束时间',
-						prop: 'surfaceTreatmentName',
+						prop: 'endTime',
 						width: '179'
 					},
 					{
-						label: '考核批次数',
+						label: '任务状态',
 						prop: 'materialName',
-						width: '151'
+						width: '151',
+						slot: true
 					},
 					{
-						label: '{任务指标名称0}-完成率',
+						label: '任务指标完成率',
 						prop: 'weight',
 						width: '176'
 					},
 					{
-						label: '{任务指标名称0}-完成率',
-						prop: 'weight',
+						label: '任务指标考核结果',
+						prop: 'result',
+						slot: true,
 						width: '176',
-
 					},
-          {
-          	label: '任务指标考核结果',
-          	prop: 'result',
-            slot: true,
-            width: '176',
-          },
 					{
 						label: '操作',
 						prop: 'opt',
@@ -127,11 +125,24 @@
 					},
 				],
 				currentPage: 0,
-				isShow: false
+				limit: 10,
+				isShow: false,
+				total: 0,
+				description: '',
+				visibleDialog: false
 			}
 		},
 		created() {
-
+			let params = {
+				limit: this.limit,
+				page: this.currentPage
+			}
+			getMyTaskList(params).then(res => {
+				if (res.code == 0) {
+					this.tableData = res.page.list;
+					this.total = res.page.totalCount;
+				}
+			})
 		},
 		mounted() {
 
@@ -146,22 +157,30 @@
 			handleCurrentChange(val) {
 				console.log(`当前页: ${val}`);
 			},
-      go(row) {
-        this.$router.push({
-          path: `/task-center/task-dtl-list`,
-          query: {
-            id: row.id
-          }
-        })
-      },
-      goTarget(row) {
-        this.$router.push({
-          path: `/task-center/task-target-list`,
-          query: {
-            id: row.id
-          }
-        })
-      }
+			go(row) {
+				this.$router.push({
+					path: `/task-center/task-dtl-list`,
+					query: {
+						id: row.id
+					}
+				})
+			},
+			goTarget(row) {
+				this.$router.push({
+					path: `/task-center/task-target-list`,
+					query: {
+						id: row.id
+					}
+				})
+			},
+			viewDes(row) {
+				this.visibleDialog = true;
+				this.description = row.description?row.description:``;
+			},
+			close() {
+				this.description = '';
+				this.visibleDialog = false;
+			}
 		}
 	}
 </script>
@@ -176,7 +195,7 @@
 		border-radius: 12px;
 		box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
 
-		p {
+		.tit {
 			font-weight: bold;
 			color: #292933;
 			font-size: 20px;
@@ -253,22 +272,72 @@
 				// font-size: 12px;
 			}
 		}
-		.tempty {
-			text-align: center;
-			padding-top: 145px;
-			img {
-				width: 84px;
-				height: 109px;
+
+		.percent {
+			display: flex;
+			align-items: center;
+
+			span {
+				margin-left: 6px;
 			}
 
-			p {
-				color: #9596AB;
-				font-size: 20px;
-				line-height: 28px;
-				margin-top: 39px;
-				font-weight: 400;
+			.dot {
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+
+				&.green {
+					background-color: #21D487;
+				}
+
+				&.blue {
+					background-color: #4AB1E1;
+				}
+
+				&.grey {
+					background-color: #CDCDD5;
+				}
 			}
 		}
+	}
 
+	.tempty {
+		text-align: center;
+		padding-top: 145px;
+
+		img {
+			width: 84px;
+			height: 109px;
+		}
+
+		p {
+			color: #9596AB;
+			font-size: 20px;
+			line-height: 28px;
+			margin-top: 39px;
+			font-weight: 400;
+		}
+	}
+	.add-dialog {
+		>>>.el-dialog__body {
+			padding: 0px;
+		}
+		p {
+			font-size: 14px;
+			padding: 16px 24px;
+		}
+		.dialog-footer {
+		  border-top: 1px solid #D9D9D9;
+		  padding: 12px 24px;
+		  margin: 32px 0px 0px;
+		  text-align: right;
+		  >>> .el-button--primary {
+		    width: 124px;
+		    height: 40px;
+		    font-size: 18px;
+		    background: #0079fe;
+		    border-radius: 6px;
+		  }
+		}
 	}
 </style>

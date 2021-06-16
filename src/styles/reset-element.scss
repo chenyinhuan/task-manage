@@ -56,12 +56,22 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 .validate-empty {
   .el-input__inner {
-    border-color: #FF8C00;
+    border-color: #FF8C00 !important;
   }
 }
 .validate-error {
   .el-input__inner {
-    border-color: #C03639;
+    border-color: #C03639 !important;
+  }
+}
+.validate-empty1 {
+  .el-input__inner {
+    border: 1px solid #FF8C00 !important;
+  }
+}
+.validate-error1 {
+  .el-input__inner {
+    border: 1px solid #C03639 !important;
   }
 }
 .el-input__inner {
