@@ -22,11 +22,11 @@
 				<span>任务开始时间</span>
 			</div>
 			<div>
-				<el-date-picker v-model="form.startTime" type="date" format="yyyy/MM/dd" :clearable="false"
+				<el-date-picker v-model="form.startTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" :clearable="false"
 					placeholder="选择日期">
 				</el-date-picker>
 				<span style="margin: 0px 3px;">-</span>
-				<el-date-picker v-model="form.endTime" type="date"  :clearable="false" format="yyyy/MM/dd"
+				<el-date-picker v-model="form.endTime" type="datetime"  :clearable="false" value-format="yyyy-MM-dd HH:mm:ss"
 					placeholder="选择日期">
 				</el-date-picker>
 			</div>
@@ -34,7 +34,7 @@
 		<section>
 			<p>派发名单</p>
 			<div class="assigment">
-				<span v-for="(item,index) in form.users" :key="index" style="margin-right: 5px">{{item.userName}}</span>
+				<span v-for="(item,index) in form.users" :key="index" style="margin-right: 10px">{{item.username}}</span>
 				<span class="add" @click="openDialog">+ 新增</span>
 			</div>
 		</section>
@@ -66,7 +66,7 @@
 				taskName: '',
 				form: {
 					taskName: '',
-          taskTplId: '',
+          taskTplId: 1,
           recordType: '',
 					startTime: '',
 					endTime: '',
@@ -91,7 +91,12 @@
         if(!this.form.taskName) return this.$message.warning('请输入任务名称');
         if(!this.form.recordType) return this.$message.warning('请输入任务类型');
         saveTask(this.form).then(res=>{
-          this.$message.warning(res.msg)
+          if(res.code==0){
+            this.$message.success('保存成功')
+            this.$router.go(-1)
+          }else{
+            this.$message.warning(res.msg)
+          }
         })
       },
       confirm(val){
