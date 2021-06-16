@@ -141,15 +141,15 @@
 
 	#original {
 		.el-table {
-			.el-table__header-wrapper tr th:nth-last-child(1) {
-				text-align: center !important;
-			}
+			// .el-table__header-wrapper tr th:nth-last-child(1) {
+			// 	text-align: center !important;
+			// }
 
-			.el-table__row {
-				td:nth-last-child(1) {
-					text-align: center !important;
-				}
-			}
+			// .el-table__row {
+			// 	td:nth-last-child(1) {
+			// 		text-align: center !important;
+			// 	}
+			// }
 
 			.el-button {
 				// background-color: #0079FE;

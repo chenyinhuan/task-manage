@@ -129,14 +129,14 @@
 </script>
 <style lang="scss">
   #taskDtlList {
-    .el-table__header-wrapper tr th:nth-last-child(2) {
-      text-align: center !important;
-    }
-    .el-table__row {
-      td:nth-last-child(1) {
-        text-align: center !important;
-      }
-    }
+    // .el-table__header-wrapper tr th:nth-last-child(2) {
+    //   text-align: center !important;
+    // }
+    // .el-table__row {
+    //   td:nth-last-child(1) {
+    //     text-align: center !important;
+    //   }
+    // }
   }
 </style>
 <style lang="scss" scoped>

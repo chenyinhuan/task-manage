@@ -12,8 +12,9 @@
 		<section>
 			<p>任务模版</p>
 			<el-select v-model="form.taskTplId" placeholder="选择任务模版">
-        <el-option v-for="(item,index) in taskTplList" :value="item.id" :key="index" :label="item.label"></el-option>
-      </el-select>
+				<el-option v-for="(item,index) in taskTplList" :value="item.id" :key="index" :label="item.taskName">
+				</el-option>
+			</el-select>
 		</section>
 		<section>
 			<p>覆盖时间</p>
@@ -22,19 +23,20 @@
 				<span>任务开始时间</span>
 			</div>
 			<div>
-				<el-date-picker v-model="form.startTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" :clearable="false"
-					placeholder="选择日期">
+				<el-date-picker v-model="form.startTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+					:clearable="false" placeholder="选择日期">
 				</el-date-picker>
 				<span style="margin: 0px 3px;">-</span>
-				<el-date-picker v-model="form.endTime" type="datetime"  :clearable="false" value-format="yyyy-MM-dd HH:mm:ss"
-					placeholder="选择日期">
+				<el-date-picker v-model="form.endTime" type="datetime" :clearable="false"
+					value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
 				</el-date-picker>
 			</div>
 		</section>
 		<section>
 			<p>派发名单</p>
 			<div class="assigment">
-				<span v-for="(item,index) in form.users" :key="index" style="margin-right: 10px">{{item.username}}</span>
+				<span v-for="(item,index) in form.users" :key="index"
+					style="margin-right: 10px">{{item.username}}</span>
 				<span class="add" @click="openDialog">+ 新增</span>
 			</div>
 		</section>
@@ -54,30 +56,35 @@
 </template>
 <script>
 	import assigment from '@/views/task-repository/group/assigment.vue'
-  import {saveTask,getTasktpl} from '@/api/task-repository/index'
-  import {getAccountList} from '@/api/user-manage/account'
+	import {
+		saveTask,
+		getTasktpl
+	} from '@/api/task-repository/index'
+	import {
+		getAccountList
+	} from '@/api/user-manage/account'
 	export default {
 		components: {
 			assigment
 		},
 		data() {
 			return {
-        visibleDialog: false,
+				visibleDialog: false,
 				taskName: '',
 				form: {
 					taskName: '',
-          taskTplId: 1,
-          recordType: '',
+					taskTplId: '',
+					recordType: '',
 					startTime: '',
 					endTime: '',
-          users: []
+					users: []
 				},
-        taskTplList: [],
-        userList: []
+				taskTplList: [],
+				userList: []
 			}
 		},
 		created() {
-      this.init()
+			this.init()
 		},
 		mounted() {
 
@@ -86,37 +93,37 @@
 
 		},
 		methods: {
-      submit(){
-        console.log(this.form)
-        if(!this.form.taskName) return this.$message.warning('请输入任务名称');
-        if(!this.form.recordType) return this.$message.warning('请输入任务类型');
-        saveTask(this.form).then(res=>{
-          if(res.code==0){
-            this.$message.success('保存成功')
-            this.$router.go(-1)
-          }else{
-            this.$message.warning(res.msg)
-          }
-        })
-      },
-      confirm(val){
-        console.log(val)
-        this.form.users = val
-      },
-		  init(){
-        getTasktpl().then(res=>{
-          this.taskTplList = res.taskTplList
-        })
-        let params = {
-          page: 1,
-          limit: 1000,
-          username:  '',
-          deptId: 1
-        }
-        getAccountList(params).then(res => {
-          this.userList = res.page.list;
-        })
-      },
+			submit() {
+				console.log(this.form)
+				if (!this.form.taskName) return this.$message.warning('请输入任务名称');
+				if (!this.form.recordType) return this.$message.warning('请输入任务类型');
+				saveTask(this.form).then(res => {
+					if (res.code == 0) {
+						this.$message.success('保存成功')
+						this.$router.go(-1)
+					} else {
+						this.$message.warning(res.msg)
+					}
+				})
+			},
+			confirm(val) {
+				console.log(val)
+				this.form.users = val
+			},
+			init() {
+				getTasktpl().then(res => {
+					this.taskTplList = res.taskTplList
+				})
+				let params = {
+					page: 1,
+					limit: 1000,
+					username: '',
+					deptId: 1
+				}
+				getAccountList(params).then(res => {
+					this.userList = res.page.list;
+				})
+			},
 			openDialog() {
 				this.$refs.assigment.open();
 			},
@@ -126,6 +133,18 @@
 		}
 	}
 </script>
+<style lang="scss">
+	#addTask {
+		// .el-table__header-wrapper tr th:nth-last-child(2) {
+		//   text-align: center !important;
+		// }
+		// .el-table__row {
+		//   td:nth-last-child(1) {
+		//     text-align: center !important;
+		//   }
+		// }
+	}
+</style>
 <style lang="scss" scoped>
 	@import '@/styles/variables.scss';
 
@@ -237,7 +256,7 @@
 				position: relative;
 
 				&.el-input {
-					width: 125px;
+					width: 175px;
 
 					>>>.el-input__inner {
 						padding-left: 10px;
@@ -252,5 +271,8 @@
 			}
 		}
 
+		>>>.el-input__icon {
+			line-height: 32px;
+		}
 	}
 </style>
