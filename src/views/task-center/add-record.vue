@@ -99,7 +99,7 @@
   </div>
 </template>
 <script>
-	import {saveTaskRecord} from '@/api/task-center/my-task/index.js'
+	import {getRecordListInputs, saveTaskRecord} from '@/api/task-center/my-task/index.js'
   export default {
     data() {
       return {
@@ -127,7 +127,12 @@
       }
     },
     created() {
-
+      let params = {
+        taskTplId: 4
+      }
+      getRecordListInputs(params).then(res => {
+        
+      })
     },
     mounted() {
 
@@ -205,7 +210,7 @@
 		  // }
 		  let params = {}
 		saveTaskRecord(params).then(res => {
-			
+
 		})
       },
       cancel() {

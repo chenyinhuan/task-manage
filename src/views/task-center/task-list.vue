@@ -35,7 +35,7 @@
 		</el-pagination>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
-			<p>还没有任务明细～</p>
+			<p>还没有任务～</p>
 		</div>
 		<el-dialog class="add-dialog" title="任务说明" :visible.sync="visibleDialog" width="498px"
 			:before-close="close">
@@ -57,27 +57,27 @@
 			return {
 				tabList: [{
 						title: '今日任务数：',
-						number: 6
+						number: 0
 					},
 					{
 						title: '今日任务指标完成率：',
-						number: '75%'
+						number: '0%'
 					},
 					{
 						title: '今日任务指标待考核数：',
-						number: 6
+						number: 0
 					},
 					{
 						title: '今日任务指标完成数：',
-						number: 6
+						number: 0
 					}
 				],
 
-				tableData: [{description: ''}],
+				tableData: [],
 				tableColumn: [ // 表格列数据
 					{
 						label: '任务ID',
-						prop: 'strengthName',
+						prop: 'id',
 						width: '222'
 					},
 					{
@@ -139,8 +139,12 @@
 			}
 			getMyTaskList(params).then(res => {
 				if (res.code == 0) {
-					this.tableData = res.page.list;
-					this.total = res.page.totalCount;
+          this.tabList[0].number = res.task.todayTaskCount;
+          this.tabList[1].number = res.task.completeRate;
+          this.tabList[2].number = res.task.todayTargetCount;
+          this.tabList[3].number = res.task.todayCompleteTargetCount;
+					this.tableData = res.task.pageUtils.list;
+					this.total = res.task.pageUtils.totalCount;
 				}
 			})
 		},
