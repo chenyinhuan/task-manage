@@ -50,7 +50,7 @@
 						<!--            </ul>-->
 						<el-tag @close="removeData(item)" v-for="(item,index) in keyarr" :key="index" closable
 							type="info">
-							{{item.label}}
+							{{item.username}}
 						</el-tag>
 					</div>
 				</div>
@@ -58,7 +58,7 @@
 			</div>
 			<span slot="footer" class="dialog-footer">
 				<span class="count">已选择派发人数：{{keyarr.length}}人</span>
-				<el-button @click="visible = false">取 消</el-button>
+				<el-button @click="visibleDialog = false">取 消</el-button>
 				<el-button type="primary" @click="confirm">确 定</el-button>
 			</span>
 		</el-dialog>
@@ -71,6 +71,12 @@
 		// components: {
 		// 	treeTransfer
 		// },
+    props:{
+      data: {
+        type: Array,
+        default: []
+      }
+    },
 		data() {
 			return {
 				type: 1,
@@ -80,44 +86,11 @@
 				filterText: "",
 				defaultProps: {
 					children: "children",
-					label: "label",
+					label: "username",
 				},
 				taskName: '',
 				title: '',
 				mode: "transfer", // transfer addressList
-				data: [{
-					id: 1,
-					label: '一级 1',
-					children: [{
-						label: '二级 1-1',
-						id: 12,
-						children: [{
-							id: 13,
-							label: '三级 1-1-1'
-						}]
-					}]
-				}, {
-					id: 2,
-					label: '一级 2',
-					children: [{
-						label: '二级 2-1',
-						id: 21,
-						children: [{
-							id: 22,
-							label: '三级 2-1-1'
-						}]
-					}, {
-						id: 23,
-						label: '二级 2-2',
-						children: [{
-							id: 24,
-							label: '三级 2-2-1'
-						}]
-					}]
-				}, {
-					label: '一级 3',
-					id: 3,
-				}],
 				toData: [],
 				visibleDialog: false
 			}
@@ -153,6 +126,7 @@
 				if (this.checkList.length != 0) {
 					for (var i = 0; i < this.checkList.length; i++) {
 						if (!this.checkList[i].children) {
+						  this.checkList[i].taskType = this.type
 							this.keyarr.push(this.checkList[i])
 							console.log(this.checkList[i])
 						}
@@ -169,7 +143,7 @@
 				let checklist = this.keyarr;
 				console.log(this.keyarr)
 				for (var i = 0; i < checklist.length; i++) {
-					if (checklist[i].label === data.label) {
+					if (checklist[i].username === data.username) {
 						checklist.splice(i, 1);
 					}
 				}
@@ -184,7 +158,8 @@
 				this.visibleDialog = false;
 			},
 			confirm() {
-				this.$emit('confirm', this.$data)
+				this.$emit('confirm', this.keyarr)
+        this.visibleDialog = false
 			},
 			// 切换模式 现有树形穿梭框模式transfer 和通讯录模式addressList
 			changeMode() {

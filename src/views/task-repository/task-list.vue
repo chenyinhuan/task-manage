@@ -2,9 +2,19 @@
   <div id="taskRepositoryList" :style="{'height': tableData.length==0?'661px':''}">
     <section class="hd">
       <div>
-        <el-input v-model="keyword" placeholder="任务名称" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
-        <el-input v-model="keyword" placeholder="任务状态" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
-        <el-input v-model="keyword" placeholder="任务来源" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+        <el-input v-model="searchParams.taskName" placeholder="任务名称" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+<!--        <el-input v-model="searchParams.taskState" placeholder="任务状态" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>-->
+<!--        <el-input v-model="searchParams.taskType" placeholder="任务来源" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>-->
+        <el-select v-model="searchParams.taskState" placeholder="任务状态" @change="search" clearable>
+          <el-option v-for="item in taskStatus" :key="item.code" :label="item.label"
+                     :value="item.code">
+          </el-option>
+        </el-select>
+        <el-select v-model="searchParams.taskType" placeholder="任务来源" @change="search" clearable>
+          <el-option v-for="item in taskTypeList" :key="item.code" :label="item.label"
+                     :value="item.code">
+          </el-option>
+        </el-select>
       </div>
       <el-button type="primary" @click="addTask">新增任务</el-button>
     </section>
@@ -28,9 +38,9 @@
       </el-table-column>
     </el-table>
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
-      :current-page.sync="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
+      :current-page.sync="searchParams.page" :page-size="searchParams.limit" layout="prev, pager, next, jumper" :total="total">
     </el-pagination>
-    <div class="tempty" v-if="tableData.length==0 && isShow">
+    <div class="tempty" v-if="tableData.length==0">
       <img src="@/images/my-task/illustration.png">
       <p>还没有任务明细～</p>
     </div>
@@ -41,6 +51,16 @@ import {getTaskList} from '@/api/task-repository/index'
   export default {
     data() {
       return {
+        taskTypeList:[
+          {code:1,label: '自建'},
+          {code:2,label: '上级'}
+        ],
+        taskStatus: [
+          {code:1,label: '待开始'},
+          {code:2,label: '进行中'},
+          {code:3,label: '已结束'},
+          {code:4,label: '已取消'}
+        ],
         tableData: [],
         tableColumn: [ // 表格列数据
           {
@@ -90,9 +110,7 @@ import {getTaskList} from '@/api/task-repository/index'
             slot: true,
           },
         ],
-        currentPage: 1,
         isShow: false,
-        keyword: '',
         searchParams:{
           page: 1,
           limit: 10
@@ -123,7 +141,7 @@ import {getTaskList} from '@/api/task-repository/index'
         console.log(`当前页: ${val}`);
       },
       search() {
-        console.log(this.keyword)
+        this.init()
       },
       addTask() {
         this.$router.push({
