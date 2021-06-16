@@ -26,3 +26,8 @@ export const getTaskList = (params) => api.post(`/task/tk/repo/page`, params)
  * @params params
  */
 export const saveTask = (params) => api.post(`/task/tk/repo/save`, params)
+/**
+ * 模板列表
+ * @params params
+ */
+export const getTasktpl = (params) => api.post(`/task/tasktpl/list`, params)
