@@ -8,15 +8,18 @@
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
-          <div v-if="item.slot && item.prop=='materialName'" class="percent">
-          	<div class="dot" :class="[scope.$index == 1?'green':'',scope.$index == 0?'red':'',scope.$index == 2?'blue':'']"></div><span> 完成（100%）</span>
-          </div>
-          <div v-if="item.slot && item.prop=='weight'" class="percent">
-          	<div class="dot" :class="[scope.$index == 0?'green':'',scope.$index == 1?'red':'',scope.$index == 2?'blue':'']"></div><span> 完成（100%）</span>
-          </div>
+					<div v-if="item.slot && item.prop=='materialName'" class="percent">
+						<div class="dot"
+							:class="[scope.$index == 1?'green':'',scope.$index == 0?'red':'',scope.$index == 2?'blue':'']">
+						</div><span> 完成（100%）</span>
+					</div>
+					<div v-if="item.slot && item.prop=='weight'" class="percent">
+						<div class="dot"
+							:class="[scope.$index == 0?'green':'',scope.$index == 1?'red':'',scope.$index == 2?'blue':'']">
+						</div><span> 完成（100%）</span>
+					</div>
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="primary" v-if="scope.$index == 1" @click="go(scope.row)">进入任务</el-button>
-						<el-button type="primary" v-else>查看任务明细</el-button>
+						<el-button type="primary" @click="go(scope.row)">查看关联记录</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 				</template>
@@ -27,7 +30,7 @@
 		</el-pagination>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
-			<p>还没有任务明细～</p>
+			<p>还没有任务指标～</p>
 		</div>
 	</div>
 </template>
@@ -54,12 +57,12 @@
 				}],
 				tableColumn: [ // 表格列数据
 					{
-						label: '任务名称',
+						label: '任务指标名称',
 						prop: 'strengthName',
 						width: '174'
 					},
 					{
-						label: '考核批次数',
+						label: '考核批次',
 						prop: 'specName',
 						width: '140'
 					},
@@ -79,15 +82,9 @@
 						width: '230'
 					},
 					{
-						label: '{任务指标名称1}',
+						label: '任务指标完成情况',
 						prop: 'materialName',
 						width: '205',
-						slot: true,
-					},
-					{
-						label: '{任务指标名称0}',
-						prop: 'weight',
-						width: '215',
 						slot: true,
 					},
 					{
@@ -117,12 +114,12 @@
 				console.log(`当前页: ${val}`);
 			},
 			go(row) {
-			  this.$router.push({
-			    path: `/task-center/task-dtl-list`,
-			    query: {
-			      id: row.id
-			    }
-			  })
+				this.$router.push({
+					path: `/task-center/task-dtl-list`,
+					query: {
+						id: row.id
+					}
+				})
 			}
 		}
 	}
@@ -137,15 +134,18 @@
 		background-color: #FFFFFF;
 		border-radius: 12px;
 		box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
+
 		.hd {
 			display: flex;
 			align-items: center;
+
 			p {
 				font-weight: bold;
 				color: #292933;
 				font-size: 20px;
 				line-height: 28px;
 			}
+
 			span {
 				color: #666777;
 				font-size: 15px;
@@ -161,12 +161,15 @@
 				padding: 5px;
 				// font-size: 12px;
 			}
+
 			.percent {
 				display: flex;
 				align-items: center;
+
 				span {
 					margin-left: 6px;
 				}
+
 				.dot {
 					width: 8px;
 					height: 8px;
@@ -175,18 +178,22 @@
 					&.green {
 						background-color: #21D487;
 					}
+
 					&.blue {
 						background-color: #4AB1E1;
 					}
+
 					&.red {
 						background-color: #FC5555;
 					}
 				}
 			}
 		}
+
 		.tempty {
 			text-align: center;
 			padding-top: 145px;
+
 			img {
 				width: 84px;
 				height: 109px;
