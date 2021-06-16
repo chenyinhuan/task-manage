@@ -9,11 +9,11 @@
       <p>用户姓名</p>
       <el-input v-model="form.username" placeholder="请输入用户姓名" maxlength="20" show-word-limit></el-input>
     </section>
-    <section v-if="isEdit != 1">
+    <section>
       <p>登录密码</p>
       <el-input v-model="form.password" type="password" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
     </section>
-    <section v-if="isEdit != 1">
+    <section>
       <p>确认登录密码</p>
       <el-input v-model="form.conPassword" type="password" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
     </section>
@@ -109,6 +109,7 @@
             console.log('手机号格式正确')
           this.validate = false;
         }
+		if(this.form.password != '' && this.form.password != this.form.conPassword) return this.$message.warning('输入密码不一致！')
         let roleIdList = this.permission.map(item => {
           return item.roleIdList
         })

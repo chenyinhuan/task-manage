@@ -99,6 +99,7 @@
   </div>
 </template>
 <script>
+	import {saveTaskRecord} from '@/api/task-center/my-task/index.js'
   export default {
     data() {
       return {
@@ -136,10 +137,79 @@
     },
     methods: {
       saveGood() {
-
+		  // {
+		  //   "taskId": 0,
+		  //   "taskRecordDetailBasicVOs": [
+		  //     {
+		  //       "createTime": "2021-06-16T03:40:18.275Z",
+		  //       "createUserId": 0,
+		  //       "dataType": 0,
+		  //       "description": "string",
+		  //       "enums": [
+		  //         {
+		  //           "createTime": "2021-06-16T03:40:18.275Z",
+		  //           "enumValue": "string",
+		  //           "fieldId": 0,
+		  //           "id": 0,
+		  //           "status": 0,
+		  //           "updateTime": "2021-06-16T03:40:18.275Z"
+		  //         }
+		  //       ],
+		  //       "fieldId": 0,
+		  //       "fieldInputType": 0,
+		  //       "fieldName": "string",
+		  //       "fieldShowType": 0,
+		  //       "fieldValue": "string",
+		  //       "formType": 0,
+		  //       "id": 0,
+		  //       "status": 0,
+		  //       "taskRecordId": 0,
+		  //       "taskTplFieldId": 0,
+		  //       "type": 0,
+		  //       "updateTime": "2021-06-16T03:40:18.275Z",
+		  //       "updateUserId": 0
+		  //     }
+		  //   ],
+		  //   "taskRecordDetailComplexVOs": [
+		  //     {
+		  //       "createTime": "2021-06-16T03:40:18.275Z",
+		  //       "createUserId": 0,
+		  //       "dataType": 0,
+		  //       "description": "string",
+		  //       "enums": [
+		  //         {
+		  //           "createTime": "2021-06-16T03:40:18.275Z",
+		  //           "enumValue": "string",
+		  //           "fieldId": 0,
+		  //           "id": 0,
+		  //           "status": 0,
+		  //           "updateTime": "2021-06-16T03:40:18.275Z"
+		  //         }
+		  //       ],
+		  //       "fieldId": 0,
+		  //       "fieldInputType": 0,
+		  //       "fieldName": "string",
+		  //       "fieldShowType": 0,
+		  //       "fieldValue": "string",
+		  //       "formType": 0,
+		  //       "id": 0,
+		  //       "status": 0,
+		  //       "taskRecordId": 0,
+		  //       "taskTplFieldId": 0,
+		  //       "type": 0,
+		  //       "updateTime": "2021-06-16T03:40:18.275Z",
+		  //       "updateUserId": 0
+		  //     }
+		  //   ],
+		  //   "taskTplId": 0
+		  // }
+		  let params = {}
+		saveTaskRecord(params).then(res => {
+			
+		})
       },
       cancel() {
-
+		this.$router.go(-1)
       },
       handleAvatarSuccess(res, file) {
         this.form.imageUrl = URL.createObjectURL(file.raw);
