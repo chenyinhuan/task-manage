@@ -5,7 +5,7 @@
 			<el-button type="primary" @click="add()">新增记录</el-button>
 		</section>
 		<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
-			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
+			<el-table-column :prop="item.fieldId" :label="item.fieldName" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
 					<div v-if="item.slot && item.prop=='opt'">
@@ -18,7 +18,7 @@
 			</el-table-column>
 		</el-table>
 		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
-			:current-page.sync="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
+			:current-page.sync="currentPage" :page-size="limit" layout="prev, pager, next, jumper" :total="total">
 		</el-pagination>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
@@ -27,26 +27,11 @@
 	</div>
 </template>
 <script>
+  import {getRecordList} from '@/api/task-center/my-task/index.js'
 	export default {
 		data() {
 			return {
-				tableData: [{
-					date: '2016-05-02',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}, {
-					date: '2016-05-04',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1517 弄'
-				}, {
-					date: '2016-05-01',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1519 弄'
-				}, {
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1516 弄'
-				}],
+				tableData: [],
 				tableColumn: [ // 表格列数据
 					{
 						label: '{原生字段1}',
@@ -88,12 +73,34 @@
 						slot: true,
 					},
 				],
-				currentPage: 0,
-				isShow: false
+				currentPage: 1,
+        limit: 10,
+        total: 0,
+				isShow: false,
+        taskId: '',
+        taskTplId: ''
 			}
 		},
 		created() {
-
+      if(this.$route.query.id) this.taskId = this.$route.query.id;
+      if(this.$route.query.taskTplId) this.taskTplId = this.$route.query.taskTplId;
+      if(this.taskId) {
+        let params = {
+          taskId: this.taskId,
+          limit: this.limit,
+           page: this.currentPage,
+        }
+        getRecordList(params).then(res => {
+          if(res.code == 0) {
+            res.record.taskTplFieldStructureDTOS.push({
+              
+            })
+            this.tableData = res.record.page.list[0]?res.record.page.list[0].taskRecordEntities:[];
+            this.tableColumn = res.record.taskTplFieldStructureDTOS;
+            this.total = res.record.page.totalCount;
+          }
+        })
+      }
 		},
 		mounted() {
 
@@ -112,7 +119,8 @@
         this.$router.push({
           path: '/task-center/add-record',
           query: {
-            
+            id: this.taskId,
+            taskTplId: this.taskTplId
           }
         })
       },

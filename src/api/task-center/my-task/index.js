@@ -28,4 +28,10 @@ export const getTaskTplField = (params) => api.post(`/task/tasktpl/field/list/${
  * 获取任务模板字段列表
  * @params params
  */
-export const getRecordListInputs = (params) => api.post(`/task/tk/record/listInputs/${params.taskTplId}`, params);
+export const getRecordListInputs = (params) => api.post(`/task/tk/record/listInputs/${params.taskId}`, params);
+
+/**
+ * 我的任务页：任务指标情况
+ * @params params
+ */
+export const getTaskTargetList = (params) => api.post(`/task/tk/target/user/page/${params.taskId}`, params);

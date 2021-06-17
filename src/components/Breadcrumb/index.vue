@@ -46,7 +46,7 @@ export default {
               active: true
             },
             {
-              name: '我的任务中心',
+              name: '我的任务',
               path: '',
               active: false
             },

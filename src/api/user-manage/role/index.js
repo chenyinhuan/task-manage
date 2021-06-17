@@ -24,3 +24,9 @@ export const getRoleSelect = (params) => api.get(`/sys/role/select`, params)
  * @params params
  */
 export const updateRole = (params) => api.post(`/sys/role/update`, params)
+
+/**
+ * 通过id获取角色
+ * @params params
+ */
+export const getRoleInfo = (params) => api.post(`/sys/role/info/${params.id}`, params)

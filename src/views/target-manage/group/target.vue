@@ -14,16 +14,27 @@
         <el-select v-model="form.targetQuoteEndId" placeholder="选择指标">
           <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.value" :label="citem.targetName"></el-option>
         </el-select>
-        <div v-for="(item,index) in form.targesubs" :key="index" style="margin-left: 20px;">
+        <div v-for="(item,index) in form.targesubs" :key="index" style="margin-left: 20px;" v-if="index == 0">
           <el-select v-model="item.logicAction" placeholder="运算选择">
             <el-option v-for="(citem,cindex) in $targetLogicAction" :key="cindex" :value="citem.value" :label="citem.label"></el-option>
           </el-select>
           <el-select v-model="item.targetQuoteStartId" placeholder="选择指标">
             <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.value" :label="citem.targetName"></el-option>
           </el-select>
+          <a @click="addTarget()"class="add-list" v-if="form.targesubs.length == 1">+新增</a>
         </div>
-        <a @click="addTarget()" v-if="form.targesubs.length==1" class="add-list">+新增</a>
-        <a class="del" v-if="form.targesubs.length>1"  @click="deleteItem()">X删除</a>
+      </div>
+      <div>
+        <div v-for="(item,index) in form.targesubs" :key="index" v-if="index > 0">
+          <el-select v-model="item.logicAction" placeholder="运算选择">
+            <el-option v-for="(citem,cindex) in $targetLogicAction" :key="cindex" :value="citem.value" :label="citem.label"></el-option>
+          </el-select>
+          <el-select v-model="item.targetQuoteStartId" placeholder="选择指标">
+            <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.value" :label="citem.targetName"></el-option>
+          </el-select>
+          <a @click="addTarget()"class="add-list" v-if="index == form.targesubs.length -1">+新增</a>
+          <a class="del" v-if="form.targesubs.length>1"  @click="deleteItem()">X删除</a>
+        </div>
       </div>
       <div>
         <el-select v-model="form.resultType" placeholder="选择展示方式">
@@ -69,6 +80,7 @@
         this.$router.go(-1)
       },
       addTarget(){
+        if(this.form.targesubs.length >= 6) return this.$message.warning('最多只能新增5个！')
         this.form.targesubs.push({
           targetQuoteStartId: '',
           logicAction: ''

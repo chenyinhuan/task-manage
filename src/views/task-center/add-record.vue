@@ -5,90 +5,9 @@
     </section>
     <section class="container">
       <div class="content">
-        <div class="content-item">
-          <span class="tit">商品ID</span>
-          <el-input placeholder="请输入" v-model="form.brandId"></el-input>
-        </div>
-        <div class="content-item">
-          <span class="tit">直播日期</span>
-          <el-date-picker
-            v-model="form.date"
-            type="date"
-            placeholder="请填写日期">
-          </el-date-picker>
-        </div>
-        <div class="content-item">
-          <span class="tit">店铺</span>
-          <el-input placeholder="请填写店铺" v-model="form.shopName"></el-input>
-        </div>
-        <div class="content-item">
-          <span class="tit">主播</span>
-          <el-select placeholder="请选择主播" v-model="form.name"></el-select>
-        </div>
-        <div class="content-item">
-          <span class="tit">是否付费</span>
-          <el-input placeholder="请填写是否付费" v-model="form.isFeed"></el-input>
-        </div>
-        <div class="content-item">
-          <span class="tit">付款账户</span>
-          <el-input placeholder="请填写" v-model="form.account"></el-input>
-        </div>
-        <div class="content-item">
-          <span class="tit">付款名</span>
-          <el-input placeholder="请填写付款名" v-model="form.accountName"></el-input>
-        </div>
-        <div class="content-item">
-          <span class="tit">开票公司</span>
-          <el-input placeholder="请填写开票公司" v-model="form.companyName"></el-input>
-        </div>
-        <div class="content-item">
-          <span class="tit">链接ID</span>
-          <el-input placeholder="请填写链接ID" v-model="form.linkId"></el-input>
-        </div>
-        <div class="content-item">
-          <span class="tit">合同进度</span>
-          <el-select placeholder="请选择进度" v-model="form.progress"></el-select>
-        </div>
-        <div class="content-item">
-          <span class="tit">合同单号</span>
-          <el-input placeholder="请填写合同单号" v-model="form.orderNo"></el-input>
-        </div>
-        <div class="content-item">
-          <span class="tit">合同编号</span>
-          <el-input placeholder="请填写合同编号" v-model="form.orderCode"></el-input>
-        </div>
-        <div class="content-item">
-          <span class="tit">快递单号</span>
-          <el-input placeholder="请填写快递单号" v-model="form.expressNo"></el-input>
-        </div>
-        <div class="content-item">
-          <span class="tit">任务费用</span>
-          <el-input placeholder="请填写任务费用" v-model="form.taskFeed"></el-input>
-        </div>
-        <div class="content-item">
-          <span class="tit">已收佣金</span>
-          <el-input placeholder="请填写已收佣金" v-model="form.receive"></el-input>
-        </div>
-        <div class="content-item">
-          <span class="tit">需补佣金</span>
-          <el-input placeholder="请填写需补佣金" v-model="form.noReceive"></el-input>
-        </div>
-        <div class="content-item">
-          <span class="tit">已补佣金截图</span>
-          <el-upload
-            class="upload-demo"
-            drag
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload">
-            <img class="img" src="@/images/my-task/upload.png">
-            <span>上传文件</span>
-          </el-upload>
-        </div>
-        <div class="content-item">
-          <span class="tit">佣金备注</span>
-          <el-input placeholder="请填写备注" v-model="form.brandId"></el-input>
+        <div class="content-item" v-for="(item,index) in taskRecordDetailBasicVOs" :key="index">
+          <span class="tit">{{item.fieldName}}</span>
+          <el-input placeholder="请输入" v-model="item.fieldValue"></el-input>
         </div>
       </div>
     </section>
@@ -99,7 +18,10 @@
   </div>
 </template>
 <script>
-	import {getRecordListInputs, saveTaskRecord} from '@/api/task-center/my-task/index.js'
+  import {
+    getRecordListInputs,
+    saveTaskRecord
+  } from '@/api/task-center/my-task/index.js'
   export default {
     data() {
       return {
@@ -121,17 +43,30 @@
           receive: '',
           noReceive: '',
           imageUrl: '',
-          fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
-        }
+          fileList: [{
+            name: 'food.jpeg',
+            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+          }, {
+            name: 'food2.jpeg',
+            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+          }]
+        },
+        taskRecords: '',
+        taskId: '',
+        taskRecordDetailBasicVOs: []
 
       }
     },
     created() {
+      if(this.$route.query.id) this.taskId = this.$route.query.id;
       let params = {
-        taskTplId: 4
+        taskId: this.taskId
       }
       getRecordListInputs(params).then(res => {
-        
+        if (res.code == 0) {
+          this.taskRecords = JSON.parse(JSON.stringify(res.taskRecords))
+          this.taskRecordDetailBasicVOs = JSON.parse(JSON.stringify(res.taskRecords.taskRecordDetailBasicVOs))
+        }
       })
     },
     mounted() {
@@ -142,79 +77,19 @@
     },
     methods: {
       saveGood() {
-		  // {
-		  //   "taskId": 0,
-		  //   "taskRecordDetailBasicVOs": [
-		  //     {
-		  //       "createTime": "2021-06-16T03:40:18.275Z",
-		  //       "createUserId": 0,
-		  //       "dataType": 0,
-		  //       "description": "string",
-		  //       "enums": [
-		  //         {
-		  //           "createTime": "2021-06-16T03:40:18.275Z",
-		  //           "enumValue": "string",
-		  //           "fieldId": 0,
-		  //           "id": 0,
-		  //           "status": 0,
-		  //           "updateTime": "2021-06-16T03:40:18.275Z"
-		  //         }
-		  //       ],
-		  //       "fieldId": 0,
-		  //       "fieldInputType": 0,
-		  //       "fieldName": "string",
-		  //       "fieldShowType": 0,
-		  //       "fieldValue": "string",
-		  //       "formType": 0,
-		  //       "id": 0,
-		  //       "status": 0,
-		  //       "taskRecordId": 0,
-		  //       "taskTplFieldId": 0,
-		  //       "type": 0,
-		  //       "updateTime": "2021-06-16T03:40:18.275Z",
-		  //       "updateUserId": 0
-		  //     }
-		  //   ],
-		  //   "taskRecordDetailComplexVOs": [
-		  //     {
-		  //       "createTime": "2021-06-16T03:40:18.275Z",
-		  //       "createUserId": 0,
-		  //       "dataType": 0,
-		  //       "description": "string",
-		  //       "enums": [
-		  //         {
-		  //           "createTime": "2021-06-16T03:40:18.275Z",
-		  //           "enumValue": "string",
-		  //           "fieldId": 0,
-		  //           "id": 0,
-		  //           "status": 0,
-		  //           "updateTime": "2021-06-16T03:40:18.275Z"
-		  //         }
-		  //       ],
-		  //       "fieldId": 0,
-		  //       "fieldInputType": 0,
-		  //       "fieldName": "string",
-		  //       "fieldShowType": 0,
-		  //       "fieldValue": "string",
-		  //       "formType": 0,
-		  //       "id": 0,
-		  //       "status": 0,
-		  //       "taskRecordId": 0,
-		  //       "taskTplFieldId": 0,
-		  //       "type": 0,
-		  //       "updateTime": "2021-06-16T03:40:18.275Z",
-		  //       "updateUserId": 0
-		  //     }
-		  //   ],
-		  //   "taskTplId": 0
-		  // }
-		  let params = {}
-		saveTaskRecord(params).then(res => {
-
-		})
+        let params = {
+          taskRecordDetailBasicVOs: this.taskRecordDetailBasicVOs,
+          taskRecordDetailComplexVOs: this.taskRecords.taskRecordDetailComplexVOs,
+          taskTplId: this.taskRecords.taskTplId,
+          taskId: this.taskId,
+        }
+        saveTaskRecord(params).then(res => {
+          if(res.code == 0) this.$message.success('保存成功！');
+          else this.$message.warning(res.msg);
+        })
       },
       cancel() {
-		this.$router.go(-1)
+        this.$router.go(-1)
       },
       handleAvatarSuccess(res, file) {
         this.form.imageUrl = URL.createObjectURL(file.raw);
@@ -278,6 +153,7 @@
             color: #666777;
             margin-bottom: 4px;
           }
+
           .el-input {
             >>>.el-input__inner {
               border: 0px;
@@ -286,32 +162,39 @@
               color: #CDCDD5;
             }
           }
+
           .el-select {
             width: 105px;
+
             >>>.el-input__inner {
               border: 0px;
               padding: 0px;
               font-size: 14px;
             }
           }
+
           .img {
             width: 10px;
             height: 10px;
           }
+
           .el-date-editor {
             position: relative;
+
             >>>.el-input__prefix {
               left: 0px;
               right: 50px;
               color: #CDCDD5;
             }
           }
+
           >>>.el-upload-dragger {
             width: 115px;
             height: 30px;
             line-height: 27px;
             border-radius: 4px;
             font-size: 12px;
+
             span {
               margin-left: 4px;
             }
@@ -320,13 +203,16 @@
 
       }
     }
+
     .footer-btn {
       .el-button {
         width: 160px;
         font-size: 18px;
+
         &.el-button--primary {
           background-color: #0079FE;
         }
+
         &.el-button--default {
           background-color: #F8FAFB;
           color: #9596AB;

@@ -30,6 +30,9 @@
 	import {
 		apiLogin
 	} from '@/api/common/index.js'
+  import {
+    getNav
+  } from '@/api/common/index.js'
 	import Cookies from 'js-cookie'
 	export default {
 		data() {
@@ -64,10 +67,21 @@
 					else this.tip = false;
 					if (res.code == 0) {
 						this.$message.success('登录成功！');
-						setTimeout(() => {
-							Cookies.set('activeMenu', '41-1')
-							this.$router.push('/task-center');
-						}, 1000)
+            getNav().then(res => {
+              if(res.code == 0) {
+                if(res.menuList.length > 0 && res.menuList[0].menuId == 1 && res.menuList.length > 2) {
+                  if(res.menuList[1].list.length>0) {
+                    Cookies.set('activeMenu', res.menuList[1].menuId + '-1')
+                    this.$router.push(res.menuList[1].url);
+                  }
+                  else {
+                    Cookies.set('activeMenu', res.menuList[1].menuId + '')
+                    this.$router.push(res.menuList[1].url);
+                  }
+
+                }
+              }
+            })
 					}
 				}).catch(e => {
 					this.tip = true;
