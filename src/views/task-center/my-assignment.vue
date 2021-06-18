@@ -23,9 +23,9 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-				v-if="tableData.length>0" :current-page.sync="currentPage" :page-size="100"
-				layout="prev, pager, next, jumper" :total="1000">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
+                     :current-page.sync="searchParams.page" :page-size="searchParams.limit" layout="prev, pager, next, jumper"
+                     :total="total">
 			</el-pagination>
 			<div class="tempty" v-if="tableData.length==0 && isShow">
 				<img src="@/images/my-task/illustration.png">
@@ -39,6 +39,7 @@
 	import task from '@/images/my-task/task.png';
 	import taskcomplete from '@/images/my-task/task-complete.png';
 	import sending from '@/images/my-task/sending.png';
+  import {getTaskList} from '@/api/task-repository/index'
 	export default {
 		data() {
 			return {
@@ -67,31 +68,15 @@
 						bgColor: '#FE642B'
 					},
 				],
-				tableData: [{
-					date: '2016-05-02',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}, {
-					date: '2016-05-04',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1517 弄'
-				}, {
-					date: '2016-05-01',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1519 弄'
-				}, {
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1516 弄'
-				}],
+				tableData: [],
 				tableColumn: [ // 表格列数据
 					{
 						label: '任务ID',
-						prop: 'strengthName',
+						prop: 'id',
 					},
 					{
 						label: '任务名称',
-						prop: 'specName',
+						prop: 'taskName',
 					},
 					{
 						label: '派发类型',
@@ -104,20 +89,18 @@
 					},
 					{
 						label: '任务开始时间',
-						prop: 'surfaceTreatmentName',
+						prop: 'startTime',
 						width: '230'
 					},
 					{
 						label: '任务结束时间',
-						prop: 'materialName',
+						prop: 'endTime',
 						width: '205',
-						slot: true,
 					},
 					{
 						label: '派发人数',
-						prop: 'weight',
+						prop: 'userCount',
 						width: '215',
-						slot: true,
 					},
 					{
 						label: '操作',
@@ -127,11 +110,15 @@
 				],
 				currentPage: 0,
 				isShow: false,
-				keyword: ''
+				keyword: '',
+        searchParams: {
+          page: 1,
+          limit: 10
+        },
 			}
 		},
 		created() {
-
+      this.init()
 		},
 		mounted() {
 
@@ -140,12 +127,20 @@
 
 		},
 		methods: {
-			handleSizeChange(val) {
-				console.log(`每页 ${val} 条`);
-			},
-			handleCurrentChange(val) {
-				console.log(`当前页: ${val}`);
-			},
+      init() {
+        getTaskList(this.searchParams).then(res => {
+          this.tableData = res.page.list
+          this.total = res.page.totalCount
+        })
+      },
+      handleSizeChange(val) {
+        this.searchParams.limit = val
+        this.init()
+      },
+      handleCurrentChange(val) {
+        this.searchParams.page = val
+        this.init()
+      },
 			search() {
 				console.log(this.keyword)
 			},
@@ -153,7 +148,7 @@
         this.$router.push({
           path: '/task-center/my-assignment-list',
           query: {
-            
+
           }
         })
       }
