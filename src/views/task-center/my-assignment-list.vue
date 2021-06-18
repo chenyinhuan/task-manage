@@ -31,34 +31,19 @@
 	</div>
 </template>
 <script>
+  import {getTaskDetail} from '@/api/task-repository/index'
 	export default {
 		data() {
 			return {
-				tableData: [{
-					date: '2016-05-02',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}, {
-					date: '2016-05-04',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1517 弄'
-				}, {
-					date: '2016-05-01',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1519 弄'
-				}, {
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1516 弄'
-				}],
+				tableData: [],
 				tableColumn: [ // 表格列数据
 					{
 						label: '任务ID',
-						prop: 'strengthName',
+						prop: 'id',
 					},
 					{
 						label: '任务名称',
-						prop: 'specName',
+						prop: 'taskName',
 					},
 					{
 						label: '账户名/账户号',
@@ -102,11 +87,13 @@
 				],
 				currentPage: 0,
 				isShow: false,
-				keyword: ''
+				keyword: '',
+        taskId: ''
 			}
 		},
 		created() {
-
+		  this.taskId = this.$route.query.id
+      this.init()
 		},
 		mounted() {
 
@@ -115,6 +102,12 @@
 
 		},
 		methods: {
+		  init(){
+        getTaskDetail({taskId: this.taskId}).then(res=>{
+          this.tableData = res.page.list
+          this.total = res.totalCount
+        })
+      },
 			handleSizeChange(val) {
 				console.log(`每页 ${val} 条`);
 			},

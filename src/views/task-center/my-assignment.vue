@@ -148,7 +148,7 @@
         this.$router.push({
           path: '/task-center/my-assignment-list',
           query: {
-
+            id: row.id
           }
         })
       }

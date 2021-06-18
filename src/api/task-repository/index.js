@@ -31,3 +31,8 @@ export const saveTask = (params) => api.post(`/task/tk/repo/save`, params)
  * @params params
  */
 export const getTasktpl = (params) => api.post(`/task/tasktpl/list`, params)
+/**
+ * 任务详情
+ * @params params
+ */
+export const getTaskDetail = (params) => api.post(`/task/tk/sender/task/detail/${params.taskId}`, params)
