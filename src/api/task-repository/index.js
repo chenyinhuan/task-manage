@@ -4,7 +4,7 @@ import api from '@/api/index';
  * 模板列表
  * @params params
  */
-export const getTasktplList = (params) => api.post(`/task/tasktpl/page`, params)
+export const getTasktplList = (params) => api.post(`/task/tasktpl/page?page=${params.page}&limit=${params.limit}`, params)
 
 /**
  * 保存任务模板（第一步）
@@ -20,7 +20,7 @@ export const saveTaskTargeTpl = (params) => api.post(`/task/tasktpl/saveTaskTarg
  * 任务列表
  * @params params
  */
-export const getTaskList = (params) => api.post(`/task/tk/repo/page`, params)
+export const getTaskList = (params) => api.post(`/task/tk/repo/page?page=${params.page}&limit=${params.limit}`, params)
   /**
  * 保存任务
  * @params params
