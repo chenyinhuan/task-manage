@@ -2,7 +2,10 @@
   <div id="addRole">
     <section>
       <p>角色名</p>
-      <el-input v-model="formData.roleName" placeholder="请输入角色名" maxlength="20" show-word-limit></el-input>
+      <el-input :class="[validate && formData.roleName == ''?'validate-empty':'',
+		  validate && formData.roleName != '' && checkName?'validate-error':'']" @blur="inputName" v-model="formData.roleName" placeholder="请输入角色名" maxlength="20" show-word-limit></el-input>
+      <span class="error" v-show="validate && !formData.roleName">请输入组织名</span>
+      <span class="error" v-show="validate && formData.roleName!='' && checkName">支持中文、英文，20字符以内</span>
     </section>
     <div class="foot">
       <el-button type="primary" @click="addRole">{{type?'创建':'修改'}}</el-button>
@@ -21,7 +24,9 @@ import {saveAddRole,updateRole} from '@/api/user-manage/role/index'
           deptIdList: [],
           deptName: ''
         },
-        type: ''
+        type: '',
+        validate: false,
+        checkName: false
       }
     },
     created() {
@@ -37,8 +42,15 @@ import {saveAddRole,updateRole} from '@/api/user-manage/role/index'
 
     },
     methods: {
+      inputName() {
+        let regex = new RegExp("^[A-Za-z\u4e00-\u9fa5]+$"); // 中文、英文
+        //判断输入框中有内容
+        if (!regex.test(this.formData.roleName.trim())) {
+          this.checkName = true;
+        } else this.checkName = false;
+      },
       addRole(){
-        if(!this.formData.roleName) return this.$message.warning('角色名不能为空');
+        if(!this.formData.roleName) return this.validate = true;
         if(this.type){
           saveAddRole(this.formData).then(res=>{
             if(res.code==0){
@@ -80,6 +92,14 @@ import {saveAddRole,updateRole} from '@/api/user-manage/role/index'
       }
     }
     section{
+      position: relative;
+      .error {
+        position: absolute;
+        color: $red;
+        font-size: 12px;
+        bottom: 7px;
+        left: 0px;
+      }
       p{
         font-size: 20px;
         font-weight: 600;

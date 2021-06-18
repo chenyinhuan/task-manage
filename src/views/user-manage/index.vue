@@ -171,7 +171,8 @@
 					page: this.searchParams.page,
 					limit: this.searchParams.limit,
 					username: this.form.username,
-					deptId: this.deptId
+					deptId: this.deptId,
+          mobile: this.form.mobile
 					// order: 'asc',
 					// _search: false
 				}
@@ -207,7 +208,7 @@
 				console.log(`当前页: ${val}`);
 			},
 			del(item) {
-				this.$confirm('确定删除该用户吗？', '提示', {
+				this.$confirm('删除后该账户无法登录且无法恢复该账户相关配置项，是否确认？', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'

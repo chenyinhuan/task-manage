@@ -2,24 +2,30 @@
   <div id="addAccount">
     <section>
       <p>账户号</p>
-      <el-input v-model="form.mobile" placeholder="请输入使用人手机号" maxlength="11" show-word-limit></el-input>
-      <span class="error" v-show="validate">请输入合法手机号</span>
+      <el-input :class="[mobileValidate && !form.mobile?'validate-empty':'',
+		  showValidate && form.mobile != ''?'validate-error':'']" @blur="inputMobile" v-model="form.mobile" placeholder="请输入使用人手机号" maxlength="11" show-word-limit></el-input>
+      <span class="error" v-if="mobileValidate && !form.mobile">请输入账户名</span>
+      <span class="error" v-if="showValidate && form.mobile != ''">手机号格式不正确</span>
     </section>
     <section>
       <p>用户姓名</p>
-      <el-input v-model="form.username" placeholder="请输入用户姓名" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.username" placeholder="请输入使用人姓名" @blur="inputName" maxlength="20" show-word-limit></el-input>
+      <span class="error" v-show="nameValidate && !form.username">请输入使用人姓名</span>
     </section>
     <section>
       <p>登录密码</p>
-      <el-input v-model="form.password" type="password" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.password" type="password" @blur="inputPsw" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
+      <span class="error" v-show="pswValidate && !form.password">请输入登录密码</span>
     </section>
     <section>
       <p>确认登录密码</p>
-      <el-input v-model="form.conPassword" type="password" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
+      <el-input v-model="form.conPassword" type="password" @blur="inputConPsw" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
+      <span class="error" v-show="conPswValidate && !form.conPassword">请输入登录密码</span>
+      <span class="error" v-show="pswError">输入密码不一致！</span>
     </section>
     <section>
       <p>匹配角色</p>
-      <div v-for="(item, index) in permission" :key="index">
+      <div v-for="(item, index) in permission" :key="index" style="display: flex;align-items: center">
         <el-select v-model="item.deptId" placeholder="选择部门">
           <el-option v-for="(ditem,dindex) in deptlist" :key="dindex" :label="ditem.name"
         :value="ditem.deptId"></el-option>
@@ -28,6 +34,7 @@
           <el-option v-for="(ritem,rindex) in roleList" :key="rindex" :label="ritem.roleName"
         :value="ritem.roleId"></el-option>
         </el-select>
+<!--        <span style="position:inherit;" class="error" v-show="item.deptId == '' || item.roleIdList == ''">请选择部门/角色</span>-->
       </div>
       <el-button class="add-role" type="primary" @click="addRole()">+新增</el-button>
     </section>
@@ -62,7 +69,13 @@
         deptlist: [],
         roleList: [],
         isEdit: 0,
-        validate: false
+        validate: false,
+        showValidate: false,
+        pswError: false,
+        mobileValidate:false,
+        nameValidate: false,
+        pswValidate: false,
+        conPswValidate: false
       }
     },
     created() {
@@ -100,16 +113,46 @@
           this.roleList = res.page.list;
         })
       },
+      inputMobile() {
+        if(!this.form.mobile){
+          this.mobileValidate = true;
+        }
+      },
+      inputName() {
+        if(!this.form.username){
+          this.nameValidate = true;
+        }
+      },
+      inputPsw(){
+        if(!this.form.password){
+          this.pswValidate = true;
+        }
+      },
+      inputConPsw(){
+        if(!this.form.conPassword){
+          this.conPswValidate = true;
+        }
+      },
       create() {
         var reg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
-        if (!reg.test(this.form.mobile)) {
-            console.log('手机号格式不正确')
-          return this.validate = true;
-        } else {
-            console.log('手机号格式正确')
-          this.validate = false;
+        //判断输入框中有内容
+        if(!this.form.mobile){
+          this.mobileValidate = true;
+          this.showValidate = false;
+        }else if (this.form.mobile && !reg.test(this.form.mobile.trim())) {
+          this.showValidate = true;
+          this.mobileValidate = false;
         }
-		if(this.form.password != '' && this.form.password != this.form.conPassword) return this.$message.warning('输入密码不一致！')
+        if(!this.form.mobile || !this.form.username || !this.form.password || !this.form.conPassword){
+           this.validate = true;
+           this.pswError = false;
+          return
+        }
+        if(this.form.password != '' && this.form.password != this.form.conPassword) {
+           this.pswError = true;
+           this.validate = false;
+           return
+        }
         let roleIdList = this.permission.map(item => {
           return item.roleIdList
         })
