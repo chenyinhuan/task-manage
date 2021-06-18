@@ -106,6 +106,7 @@
         getTaskDetail({taskId: this.taskId}).then(res=>{
           this.tableData = res.page.list
           this.total = res.totalCount
+		  this.isShow = true;
         })
       },
 			handleSizeChange(val) {

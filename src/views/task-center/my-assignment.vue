@@ -10,7 +10,8 @@
 		<section class="content">
 			<section class="hd">
 				<p>我的派发任务</p>
-				<el-input v-model="keyword" placeholder="考核批次" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+				<el-input v-model="keyword" placeholder="考核批次" @keyup.enter.native="search"><i slot="prefix"
+						class="el-input__icon el-icon-search"></i></el-input>
 			</section>
 			<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
 				<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
@@ -23,13 +24,13 @@
 					</template>
 				</el-table-column>
 			</el-table>
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
-                     :current-page.sync="searchParams.page" :page-size="searchParams.limit" layout="prev, pager, next, jumper"
-                     :total="total">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+				v-if="tableData.length>0" :current-page.sync="searchParams.page" :page-size="searchParams.limit"
+				layout="prev, pager, next, jumper" :total="total">
 			</el-pagination>
 			<div class="tempty" v-if="tableData.length==0 && isShow">
 				<img src="@/images/my-task/illustration.png">
-				<p>还没有任务明细～</p>
+				<p>还没有任务～</p>
 			</div>
 		</section>
 	</div>
@@ -39,7 +40,9 @@
 	import task from '@/images/my-task/task.png';
 	import taskcomplete from '@/images/my-task/task-complete.png';
 	import sending from '@/images/my-task/sending.png';
-  import {getTaskList} from '@/api/task-repository/index'
+	import {
+		getTaskList
+	} from '@/api/task-repository/index'
 	export default {
 		data() {
 			return {
@@ -84,7 +87,7 @@
 					},
 					{
 						label: '考核/应考核批次数',
-            width: 210,
+						width: 210,
 						prop: 'toothTypeName',
 					},
 					{
@@ -111,14 +114,14 @@
 				currentPage: 0,
 				isShow: false,
 				keyword: '',
-        searchParams: {
-          page: 1,
-          limit: 10
-        },
+				searchParams: {
+					page: 1,
+					limit: 10
+				},
 			}
 		},
 		created() {
-      this.init()
+			this.init()
 		},
 		mounted() {
 
@@ -127,31 +130,32 @@
 
 		},
 		methods: {
-      init() {
-        getTaskList(this.searchParams).then(res => {
-          this.tableData = res.page.list
-          this.total = res.page.totalCount
-        })
-      },
-      handleSizeChange(val) {
-        this.searchParams.limit = val
-        this.init()
-      },
-      handleCurrentChange(val) {
-        this.searchParams.page = val
-        this.init()
-      },
+			init() {
+				getTaskList(this.searchParams).then(res => {
+					this.tableData = res.page.list
+					this.total = res.page.totalCount
+					this.isShow = true;
+				})
+			},
+			handleSizeChange(val) {
+				this.searchParams.limit = val
+				this.init()
+			},
+			handleCurrentChange(val) {
+				this.searchParams.page = val
+				this.init()
+			},
 			search() {
 				console.log(this.keyword)
 			},
-      go(row) {
-        this.$router.push({
-          path: '/task-center/my-assignment-list',
-          query: {
-            id: row.id
-          }
-        })
-      }
+			go(row) {
+				this.$router.push({
+					path: '/task-center/my-assignment-list',
+					query: {
+						id: row.id
+					}
+				})
+			}
 		}
 	}
 </script>
@@ -214,15 +218,18 @@
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
+
 				p {
 					font-weight: bold;
 					color: #292933;
 					font-size: 20px;
 					line-height: 28px;
 				}
+
 				.el-input {
 					width: 160px;
 					background-color: #F8FAFB;
+
 					>>>.el-input__inner {
 						height: 40px;
 						line-height: 40px;
@@ -233,9 +240,11 @@
 						font-size: 14px;
 						padding-left: 43px;
 					}
+
 					>>>.el-input__prefix {
 						left: 11px;
 					}
+
 					>>>.el-input__icon {
 						font-size: 20px;
 						line-height: 40px;
