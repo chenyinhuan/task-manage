@@ -4,8 +4,8 @@
       <p>组织名</p>
       <el-input :class="[validate && formData.name == ''?'validate-empty':'',
 		  validate && formData.name != '' && checkName?'validate-error':'']" v-model="formData.name" @blur="inputName" placeholder="请输入组织名" maxlength="20" show-word-limit></el-input>
-      <span class="error" v-show="validate && !formData.name">请输入组织名</span>
-      <span class="error" v-show="validate && formData.name!='' && checkName">支持中文、英文，20字符以内</span>
+      <span class="error" style="color: #FF8C00;"  v-show="validate && !formData.name">请输入组织名</span>
+      <span class="error" style="color: #C03639;" v-show="validate && formData.name!='' && checkName">支持中文、英文，20字符以内</span>
     </section>
     <div class="foot">
       <el-button type="primary" @click="addDept">{{type?'创建':'修改'}}</el-button>

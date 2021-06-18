@@ -4,24 +4,24 @@
       <p>账户号</p>
       <el-input :class="[mobileValidate && !form.mobile?'validate-empty':'',
 		  showValidate && form.mobile != ''?'validate-error':'']" @blur="inputMobile" v-model="form.mobile" placeholder="请输入使用人手机号" maxlength="11" show-word-limit></el-input>
-      <span class="error" v-if="mobileValidate && !form.mobile">请输入账户名</span>
-      <span class="error" v-if="showValidate && form.mobile != ''">手机号格式不正确</span>
+      <span class="error" style="color: #FF8C00;" v-if="mobileValidate && !form.mobile">请输入账户名</span>
+      <span class="error" style="color: #C03639;" v-if="showValidate && form.mobile != ''">手机号格式不正确</span>
     </section>
     <section>
       <p>用户姓名</p>
-      <el-input v-model="form.username" placeholder="请输入使用人姓名" @blur="inputName" maxlength="20" show-word-limit></el-input>
-      <span class="error" v-show="nameValidate && !form.username">请输入使用人姓名</span>
+      <el-input :class="[nameValidate && !form.username?'validate-empty':'']" v-model="form.username" placeholder="请输入使用人姓名" @blur="inputName" maxlength="20" show-word-limit></el-input>
+      <span class="error" style="color: #FF8C00;" v-show="nameValidate && !form.username">请输入使用人姓名</span>
     </section>
     <section>
       <p>登录密码</p>
-      <el-input v-model="form.password" type="password" @blur="inputPsw" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
-      <span class="error" v-show="pswValidate && !form.password">请输入登录密码</span>
+      <el-input :class="[pswValidate && !form.password?'validate-empty':'']" v-model="form.password" type="password" @blur="inputPsw" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
+      <span class="error" style="color: #FF8C00;" v-show="pswValidate && !form.password">请输入登录密码</span>
     </section>
     <section>
       <p>确认登录密码</p>
-      <el-input v-model="form.conPassword" type="password" @blur="inputConPsw" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
-      <span class="error" v-show="conPswValidate && !form.conPassword">请输入登录密码</span>
-      <span class="error" v-show="pswError">输入密码不一致！</span>
+      <el-input :class="[conPswValidate && !form.conPassword?'validate-empty':'']" v-model="form.conPassword" type="password" @blur="inputConPsw" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
+      <span class="error" style="color: #FF8C00;" v-show="conPswValidate && !form.conPassword">请输入登录密码</span>
+      <span class="error" style="color: #C03639;" v-show="pswError">输入密码不一致！</span>
     </section>
     <section>
       <p>匹配角色</p>

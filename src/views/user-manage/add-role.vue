@@ -4,8 +4,8 @@
       <p>角色名</p>
       <el-input :class="[validate && formData.roleName == ''?'validate-empty':'',
 		  validate && formData.roleName != '' && checkName?'validate-error':'']" @blur="inputName" v-model="formData.roleName" placeholder="请输入角色名" maxlength="20" show-word-limit></el-input>
-      <span class="error" v-show="validate && !formData.roleName">请输入组织名</span>
-      <span class="error" v-show="validate && formData.roleName!='' && checkName">支持中文、英文，20字符以内</span>
+      <span class="error" style="color: #FF8C00;" v-show="validate && !formData.roleName">请输入组织名</span>
+      <span class="error" style="color: #C03639;" v-show="validate && formData.roleName!='' && checkName">支持中文、英文，20字符以内</span>
     </section>
     <div class="foot">
       <el-button type="primary" @click="addRole">{{type?'创建':'修改'}}</el-button>
