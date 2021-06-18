@@ -8,7 +8,7 @@
       </div>
       <div class="table-list">
         <section class="search">
-          <p>业务三部</p>
+          <p>{{deptName}}</p>
         </section>
         <div class="foot">
           <el-button type="primary" @click="addOrganization">添加组织</el-button>
@@ -73,7 +73,8 @@
           },
         ],
         taskName: '',
-        deptId:''
+        deptId:'',
+        deptName: ''
       }
     },
     created() {
@@ -89,14 +90,17 @@
     },
     methods: {
       // 点击节点名称触发的事件
-      handleNodeClick: function (data) {
+      handleNodeClick (data) {
         this.deptId = data.deptId
-        // console.log(data);
+        this.deptName = data.name
+        this.init();
       },
       init() {
         getDeptList().then(res => {
           this.tableData = res;
           this.data = this.$dealingwithadult(res);
+          this.deptId = this.data[0].deptId
+          this.deptName = this.data[0].name
         })
       },
       editRow(item){

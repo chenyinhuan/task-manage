@@ -9,7 +9,7 @@
       </div>
       <div class="table-list">
         <section class="search">
-          <p>业务三部</p>
+          <p>{{deptName}}</p>
         </section>
         <div class="foot">
           <el-button type="primary" @click="addRole">添加角色</el-button>
@@ -96,7 +96,8 @@ import {getDeptList} from '@/api/user-manage/organization/index'
           },
           {
             label: '创建时间',
-            prop: 'createTime'
+            prop: 'createTime',
+            width: '200'
           },
           {
             label: '关联账户数',
@@ -118,7 +119,8 @@ import {getDeptList} from '@/api/user-manage/organization/index'
           page: 1,
           limit: 10
         },
-        deptId: ''
+        deptId: '',
+        deptName: ''
       }
     },
     created() {
@@ -135,10 +137,11 @@ import {getDeptList} from '@/api/user-manage/organization/index'
     },
     methods: {
       // 点击节点名称触发的事件
-      handleNodeClick: function (data) {
+      handleNodeClick (data) {
         this.deptId = data.deptId
         this.deptName = data.name
-        console.log(data);
+        this.searchParams.page = 1;
+        this.init();
       },
       getDeptList() {
         getDeptList().then(res => {
@@ -148,7 +151,6 @@ import {getDeptList} from '@/api/user-manage/organization/index'
         })
       },
       init() {
-		  console.log(this.searchParams)
         getRoleList(this.searchParams).then(res => {
           if (res.code != 0) return this.$message.warning(res.msg);
           this.tableData = res.page.list;
@@ -172,10 +174,10 @@ import {getDeptList} from '@/api/user-manage/organization/index'
         this.$router.push('/user-manage/add-role?item='+JSON.stringify(item))
       },
       permissionConfig(item){
-        this.$router.push('/user-manage/role-permission-setting')
+        this.$router.push(`/user-manage/role-permission-setting?id=${item.roleId}`)
       },
       assocoated(item){
-        this.$router.push('/user-manage/associated-anchor')
+        this.$router.push(`/user-manage/associated-anchor?id=${item.roleId}`)
       },
       filterNode(value, data) {
         if (!value) return true;

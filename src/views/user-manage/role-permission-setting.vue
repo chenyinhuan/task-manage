@@ -2,79 +2,82 @@
   <div id="rolePermissionSetting">
     <section>
       <p>系统页面权限</p>
+      <!-- @check="getMenuData" -->
       <div class="tree">
         <el-tree
-          :data="data"
+          :data="menuList"
           show-checkbox
           default-expand-all
-          node-key="id"
+          node-key="menuId"
           ref="tree"
           highlight-current
-          :props="defaultProps">
+          :default-checked-keys="role.menuIdList"
+          :props="defaultProps1">
         </el-tree>
       </div>
     </section>
     <section>
+      <!-- @check="getData" -->
       <p>数据权限</p>
-      <el-select v-model="form.template" placeholder="选择权限"></el-select>
+      <el-tree
+        :data="deptList"
+        show-checkbox
+        default-expand-all
+        node-key="deptId"
+        ref="tree1"
+        highlight-current
+        :default-checked-keys="role.deptIdList"
+        :props="defaultProps">
+      </el-tree>
     </section>
     <div class="foot">
-      <el-button type="primary">保存</el-button>
+      <el-button type="primary" @click="save()">保存</el-button>
     </div>
   </div>
 </template>
 <script>
+  import {getDeptList} from '@/api/user-manage/organization/index.js';
+  import {getRoleInfo, updateRole} from '@/api/user-manage/role/index.js';
+  import {getMenuList,getNav} from '@/api/common/index.js'
   export default {
     data() {
       return {
-        data: [{
-          id: 1,
-          label: '一级 1',
-          children: [{
-            id: 4,
-            label: '二级 1-1',
-            children: [{
-              id: 9,
-              label: '三级 1-1-1'
-            }, {
-              id: 10,
-              label: '三级 1-1-2'
-            }]
-          }]
-        }, {
-          id: 2,
-          label: '一级 2',
-          children: [{
-            id: 5,
-            label: '二级 2-1'
-          }, {
-            id: 6,
-            label: '二级 2-2'
-          }]
-        }, {
-          id: 3,
-          label: '一级 3',
-          children: [{
-            id: 7,
-            label: '二级 3-1'
-          }, {
-            id: 8,
-            label: '二级 3-2'
-          }]
-        }],
         defaultProps: {
           children: 'children',
-          label: 'label'
+          label: 'name'
+        },
+        defaultProps1: {
+          children: 'list',
+          label: 'name'
         },
         form: {
           taskName: '',
           remark: '',
           template: ''
-        }
+        },
+        id: '',
+        menuList: [],
+        deptList: [],
+        role:'',
+        checkdDepList: [],
+        keyDepArr: [],
+        checkdMenuList: [],
+        keyMenuArr: []
       }
     },
     created() {
+      if(this.$route.query.id) this.id = this.$route.query.id;
+       getDeptList().then(res => {
+          this.deptList = this.$dealingwithadult(res);
+       })
 
+       getRoleInfo({id: this.id}).then(res => {
+        if(res.code == 0) this.role = res.role;
+       })
+
+       getNav().then(res => {
+          if(res.code == 0) this.menuList = res.menuList;
+       })
     },
     mounted() {
 
@@ -83,7 +86,59 @@
 
     },
     methods: {
-
+      getData() {
+      	this.keyDepArr = []
+      	this.checkdDepList = this.$refs.tree1.getCheckedNodes();
+      	if (this.checkdDepList.length != 0) {
+      		for (var i = 0; i < this.checkdDepList.length; i++) {
+      			if (!this.checkdDepList[i].children) {
+      				this.keyDepArr.push(this.checkdDepList[i])
+      			}
+      		}
+      	} else {
+      		this.keyDepArr = []
+      	}
+      },
+      getMenuData() {
+      	this.keyMenuArr = []
+      	this.checkdMenuList = this.$refs.tree.getCheckedNodes();
+      	if (this.checkdMenuList.length != 0) {
+      		for (var i = 0; i < this.checkdMenuList.length; i++) {
+      			if (!this.checkdMenuList[i].children) {
+      				this.keyMenuArr.push(this.checkdMenuList[i])
+      			}
+      		}
+      	} else {
+      		this.keyMenuArr = []
+      	}
+      },
+      save() {
+        this.getData();
+        this.getMenuData();
+        let deptIdList = this.keyDepArr.map(item => {
+          return item.deptId;
+        })
+        let menuIdList = this.keyMenuArr.map(item => {
+          return item.menuId;
+        })
+        let params = {
+          deptIdList: deptIdList,
+          menuIdList: menuIdList,
+          roleId: this.role.roleId,
+          roleName: this.role.roleName,
+          remark: this.role.remark,
+          deptId: this.role.deptId,
+          deptName: this.role.deptName,
+          createTime: this.role.createTime
+        }
+        updateRole(params).then(res => {
+          if(res.code == 0) {
+            this.$message.success('更新成功！');
+            this.$router.push('/user-manage/role-setting')
+          }
+          else this.$message.warning(res.msg)
+        })
+      }
     }
   }
 </script>

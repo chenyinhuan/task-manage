@@ -18,24 +18,26 @@
         :collapse-transition="false" mode="vertical">
         <sidebar-item v-for="route in permissionRoutes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu> -->
-      <el-menu :default-active="activeMenu" @select="selectMenu" class="el-menu-vertical-demo" :text-color="variables.menuText" :active-text-color="variables.subMenuActiveText" :collapse="isCollapse" :background-color="variables.menuBg">
+      <el-menu :default-active="activeMenu" @select="selectMenu" class="el-menu-vertical-demo" :text-color="variables.menuText"
+        :active-text-color="variables.subMenuActiveText" :collapse="isCollapse" :background-color="variables.menuBg">
         <template v-for="(item, index) in menuList" v-if="item.menuId != 1">
           <el-submenu :index="item.menuId+''" :key="index" v-if="item.list && item.list.length>0">
             <template slot="title">
-              <img v-if="!isCollapse || activeMenu.indexOf(`${item.menuId}-`) == -1" :src="imgList[item.icon]"/>
-              <img :src="imgList[item.icon+'Active']" v-if="isCollapse && activeMenu.indexOf(`${item.menuId}-`) != -1"/>
+              <img v-if="!isCollapse || activeMenu.indexOf(`${item.menuId}-`) == -1" :src="imgList[item.icon]" />
+              <img :src="imgList[item.icon+'Active']" v-if="isCollapse && activeMenu.indexOf(`${item.menuId}-`) != -1" />
               <span slot="title">{{item.name}}</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item :index="`${item.menuId}-${cindex+1}`" @click="go(citem.url)" v-for="(citem, cindex) in item.list" :key="cindex">
+              <el-menu-item :index="`${item.menuId}-${cindex+1}`" @click="go(citem.url)" v-for="(citem, cindex) in item.list"
+                :key="cindex">
                 <img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == `${item.menuId}-${cindex+1}` && !isCollapse">
                 <span>{{citem.name}}</span>
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-menu-item :index="item.menuId+''" @click="go(item.url)" :key="index" v-else>
-            <img v-if="activeMenu.indexOf(item.menuId) == -1" :src="imgList[item.icon]"/>
-            <img :src="imgList[item.icon+'Active']" v-if="activeMenu.indexOf(item.menuId) != -1"/>
+            <img v-if="activeMenu.indexOf(item.menuId) == -1" :src="imgList[item.icon]" />
+            <img :src="imgList[item.icon+'Active']" v-if="activeMenu.indexOf(item.menuId) != -1" />
             <span slot="title">{{item.name}}</span>
           </el-menu-item>
         </template>
@@ -51,7 +53,9 @@
   import variables from '@/styles/variables.scss';
   import SidebarItem from './group/SidebarItem';
   import Cookies from 'js-cookie'
-  import {getNav} from '@/api/common/index.js'
+  import {
+    getNav
+  } from '@/api/common/index.js'
   export default {
     name: 'sidebar',
     components: {
@@ -59,22 +63,22 @@
     },
     data() {
       return {
-        activeMenu: Cookies.get('activeMenu')?Cookies.get('activeMenu'):'task-1',
+        activeMenu: Cookies.get('activeMenu') ? Cookies.get('activeMenu') : 'task-1',
         menuList: [],
-		imgList: {
-			task: require('../../images/sider-bar/task.png'),
-			field: require('../../images/sider-bar/field.png'),
-			targrt: require('../../images/sider-bar/targrt.png'),
-			manage: require('../../images/sider-bar/manage.png'),
-			user: require('../../images/sider-bar/user.png'),
-			center: require('../../images/sider-bar/center.png'),
-			taskActive: require('../../images/sider-bar/task-active.png'),
-			fieldActive: require('../../images/sider-bar/field-active.png'),
-			targrtActive: require('../../images/sider-bar/targrt-active.png'),
-			manageActive: require('../../images/sider-bar/manage-active.png'),
-			userActive: require('../../images/sider-bar/user-active.png'),
-			centerActive: require('../../images/sider-bar/center-active.png')
-		}
+        imgList: {
+          task: require('../../images/sider-bar/task.png'),
+          field: require('../../images/sider-bar/field.png'),
+          targrt: require('../../images/sider-bar/targrt.png'),
+          manage: require('../../images/sider-bar/manage.png'),
+          user: require('../../images/sider-bar/user.png'),
+          center: require('../../images/sider-bar/center.png'),
+          taskActive: require('../../images/sider-bar/task-active.png'),
+          fieldActive: require('../../images/sider-bar/field-active.png'),
+          targrtActive: require('../../images/sider-bar/targrt-active.png'),
+          manageActive: require('../../images/sider-bar/manage-active.png'),
+          userActive: require('../../images/sider-bar/user-active.png'),
+          centerActive: require('../../images/sider-bar/center-active.png')
+        }
       };
     },
     computed: {
@@ -105,17 +109,17 @@
       ...mapActions('module', ['generateRoutes']),
       getMenu() {
         getNav().then(res => {
-			if(res.code == 0) {
-				this.menuList = res.menuList;
-			}
+          if (res.code == 0) {
+            this.menuList = res.menuList;
+          }
         })
       },
       go(path) {
-        Cookies.set('activePath',path)
+        Cookies.set('activePath', path)
         this.$router.push(path)
       },
       selectMenu(index, indexPath) {
-        Cookies.set('activeMenu',index);
+        Cookies.set('activeMenu', index);
         this.activeMenu = index;
       }
     }
@@ -124,16 +128,18 @@
 
 <style lang="scss">
   @import '@/styles/variables.scss';
- 
+
   #sidebar {
-	 
+
     .el-menu-vertical-demo:not(.el-menu--collapse) {
       width: 200px;
       min-height: 400px;
     }
+
     .el-submenu__title {
       font-size: 15px;
     }
+
     .sys-logo {
       display: flex;
       align-items: center;
@@ -192,12 +198,14 @@
       }
     }
   }
+
   .el-menu {
     img {
       width: 16px;
       height: 16px;
       margin-right: 20px;
     }
+
     .active-img {
       width: 10px;
       height: 10px;
@@ -206,20 +214,25 @@
       left: 25px;
     }
   }
+
   .el-menu-item {
     display: flex;
     align-items: center;
-    &.is-active, .is-active {
+
+    &.is-active,
+    .is-active {
       background-color: #FFF9F4 !important;
     }
+
     &.is-active.is-opened {
       .active-img {
         display: none;
       }
     }
-    &:hover, &:focus {
+
+    &:hover,
+    &:focus {
       background-color: #FFF9F4 !important;
     }
   }
-
 </style>

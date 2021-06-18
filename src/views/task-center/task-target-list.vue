@@ -1,7 +1,7 @@
 <template>
 	<div id="taskTargetList" :style="{'height': tableData.length==0?'661px':''}">
 		<section class="hd">
-			<p>{任务名称}</p>
+			<p>{{taskName}}</p>
 			<span>累计考核批次：6</span>
 		</section>
 		<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
@@ -30,50 +30,35 @@
 	</div>
 </template>
 <script>
+  import {getTaskTargetList} from '@/api/task-center/my-task/index.js'
 	export default {
 		data() {
 			return {
-				tableData: [{
-					date: '2016-05-02',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}, {
-					date: '2016-05-04',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1517 弄'
-				}, {
-					date: '2016-05-01',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1519 弄'
-				}, {
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1516 弄'
-				}],
+				tableData: [],
 				tableColumn: [ // 表格列数据
 					{
 						label: '任务指标名称',
-						prop: 'strengthName',
+						prop: 'taskTplTargeName',
 						width: '174'
 					},
 					{
 						label: '考核批次',
-						prop: 'specName',
+						prop: 'taskTplTargeBatch',
 						width: '140'
 					},
 					{
 						label: '关联记录数',
-						prop: 'explain',
+						prop: 'recordCount',
 						width: '140',
 					},
 					{
 						label: '考核开始时间',
-						prop: 'toothTypeName',
+						prop: 'startTime',
 						width: '234'
 					},
 					{
 						label: '考核结束时间',
-						prop: 'surfaceTreatmentName',
+						prop: 'endTime',
 						width: '230'
 					},
 					{
@@ -88,12 +73,19 @@
 						slot: true,
 					},
 				],
-				currentPage: 0,
-				isShow: false
+				currentPage: 1,
+        limit: 10,
+        total: 0,
+				isShow: false,
+        taskId: '',
+        taskTplId: '',
+        taskName: ''
 			}
 		},
 		created() {
-
+      if(this.$route.query.id) this.taskId = this.$route.query.id;
+      if(this.$route.query.taskTplId) this.taskTplId = this.$route.query.taskTplId;
+      this.init();
 		},
 		mounted() {
 
@@ -103,19 +95,37 @@
 		},
 		methods: {
 			handleSizeChange(val) {
-				console.log(`每页 ${val} 条`);
+				this.limit = val;
+        this.currentPage = 1;
+        this.init();
 			},
 			handleCurrentChange(val) {
-				console.log(`当前页: ${val}`);
+				this.currentPage = val;
+        this.init();
 			},
 			go(row) {
 				this.$router.push({
 					path: `/task-center/task-dtl-list`,
 					query: {
-						id: row.id
+						id: row.id,
+            taskTplId: this.taskTplId
 					}
 				})
-			}
+			},
+      init() {
+        let params = {
+          taskId: this.taskId,
+          limit: this.limit,
+          page: this.currentPage
+        }
+        getTaskTargetList(params).then(res => {
+          if(res.code == 0) {
+            this.tableData = res.taskTarget.page.list;
+            this.total = res.taskTarget.page.targetCount;
+            this.taskName = res.taskTarget.taskName
+          }
+        })
+      }
 		}
 	}
 </script>

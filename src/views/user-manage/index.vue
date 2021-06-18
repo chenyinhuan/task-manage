@@ -10,7 +10,7 @@
 			</div>
 			<div class="table-list">
 				<section>
-					<p>业务三部</p>
+					<p>{{deptName}}</p>
 				</section>
 				<div class="foot search">
 					<el-button type="primary" @click="addAccount()">添加账号</el-button>
@@ -121,6 +121,7 @@
 					username: '',
 				},
 				deptId: '',
+        deptName: '',
 				searchParams:{
 				  page: 1,
 				  limit: 10
@@ -140,15 +141,21 @@
 			}
 		},
 		methods: {
+      // 点击节点名称触发的事件
+      handleNodeClick (data) {
+        this.deptId = data.deptId
+        this.deptName = data.name
+        this.search();
+      },
 			search() {
-				console.log('search')
 				this.currentPage = 1;
 				this.init();
 			},
 			getDeptList() {
 				getDeptList().then(res => {
 					this.data = this.$dealingwithadult(res);
-					this.deptId = this.data[0].deptId;
+					this.deptId = this.data[0].deptId
+					this.deptName = this.data[0].name
 					this.init();
 					this.setCheckedKeys();
 				})
@@ -184,10 +191,6 @@
 			filterNode(value, data) {
 				if (!value) return true;
 				return data.name.indexOf(value) !== -1;
-			},
-			handleNodeClick(data) {
-				console.log(data);
-				this.deptId = data.deptId;
 			},
 			addAccount(item) {
 				this.$router.push(`/user-manage/add-account?isEdit=${item?1:0}&id=${item && item.userId?item.userId:''}`)

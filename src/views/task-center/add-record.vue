@@ -14,12 +14,12 @@
 					<el-date-picker v-if="item.formType == 1 && item.dataType == 4" v-model="form.date" type="date"
 						placeholder="请填写日期">
 					</el-date-picker>
-					<el-time-picker v-if="item.formType == 1 && item.dataType == 5" v-model="item.fieldValue" type="date"
-						placeholder="请填写日期">
+					<el-time-picker v-if="item.formType == 1 && item.dataType == 5" v-model="item.fieldValue"
+						type="date" placeholder="请填写日期">
 					</el-time-picker>
 					<el-select placeholder="请输入" v-model="item.fieldValue"
 						v-if="item.formType == 2 || item.formType == 3" :multiple="item.formType == 2?false:true">
-						<el-option v-for="citem in item.enums" :key="item.id" :label="item.name" :value="item.id">
+						<el-option v-for="citem in item.enums" :key="citem.id" :label="citem.name" :value="citem.id">
 						</el-option>
 					</el-select>
 					<el-upload v-if=" item.formType == 4" class="upload-demo" drag
@@ -71,99 +71,40 @@
 						url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
 					}]
 				},
-				taskRecordDetailBasicVOs: [],
-				taskRecords: {},
+				taskRecords: '',
+				taskId: '',
+				taskRecordDetailBasicVOs: []
+
 			}
 		},
 		created() {
+			if (this.$route.query.id) this.taskId = this.$route.query.id;
 			let params = {
-				taskTplId: 4
+				taskId: this.taskId
 			}
 			getRecordListInputs(params).then(res => {
 				if (res.code == 0) {
-					this.taskRecords = JSON.parse(JSON.stringify(res.taskRecords));
+					this.taskRecords = JSON.parse(JSON.stringify(res.taskRecords))
 					this.taskRecordDetailBasicVOs = JSON.parse(JSON.stringify(res.taskRecords
-						.taskRecordDetailBasicVOs));
+						.taskRecordDetailBasicVOs))
 				}
 			})
 		},
 		mounted() {
 
 		},
-		computed: {
 
-		},
 		methods: {
 			saveGood() {
-				// {
-				//   "taskId": 0,
-				//   "taskRecordDetailBasicVOs": [
-				//     {
-				//       "createTime": "2021-06-16T03:40:18.275Z",
-				//       "createUserId": 0,
-				//       "dataType": 0,
-				//       "description": "string",
-				//       "enums": [
-				//         {
-				//           "createTime": "2021-06-16T03:40:18.275Z",
-				//           "enumValue": "string",
-				//           "fieldId": 0,
-				//           "id": 0,
-				//           "status": 0,
-				//           "updateTime": "2021-06-16T03:40:18.275Z"
-				//         }
-				//       ],
-				//       "fieldId": 0,
-				//       "fieldInputType": 0,
-				//       "fieldName": "string",
-				//       "fieldShowType": 0,
-				//       "fieldValue": "string",
-				//       "formType": 0,
-				//       "id": 0,
-				//       "status": 0,
-				//       "taskRecordId": 0,
-				//       "taskTplFieldId": 0,
-				//       "type": 0,
-				//       "updateTime": "2021-06-16T03:40:18.275Z",
-				//       "updateUserId": 0
-				//     }
-				//   ],
-				//   "taskRecordDetailComplexVOs": [
-				//     {
-				//       "createTime": "2021-06-16T03:40:18.275Z",
-				//       "createUserId": 0,
-				//       "dataType": 0,
-				//       "description": "string",
-				//       "enums": [
-				//         {
-				//           "createTime": "2021-06-16T03:40:18.275Z",
-				//           "enumValue": "string",
-				//           "fieldId": 0,
-				//           "id": 0,
-				//           "status": 0,
-				//           "updateTime": "2021-06-16T03:40:18.275Z"
-				//         }
-				//       ],
-				//       "fieldId": 0,
-				//       "fieldInputType": 0,
-				//       "fieldName": "string",
-				//       "fieldShowType": 0,
-				//       "fieldValue": "string",
-				//       "formType": 0,
-				//       "id": 0,
-				//       "status": 0,
-				//       "taskRecordId": 0,
-				//       "taskTplFieldId": 0,
-				//       "type": 0,
-				//       "updateTime": "2021-06-16T03:40:18.275Z",
-				//       "updateUserId": 0
-				//     }
-				//   ],
-				//   "taskTplId": 0
-				// }
-				let params = {}
+				let params = {
+					taskRecordDetailBasicVOs: this.taskRecordDetailBasicVOs,
+					taskRecordDetailComplexVOs: this.taskRecords.taskRecordDetailComplexVOs,
+					taskTplId: this.taskRecords.taskTplId,
+					taskId: this.taskId,
+				}
 				saveTaskRecord(params).then(res => {
-
+					if (res.code == 0) this.$message.success('保存成功！');
+					else this.$message.warning(res.msg);
 				})
 			},
 			cancel() {
@@ -232,7 +173,7 @@
 						margin-bottom: 4px;
 					}
 
-					.el-input {
+					.el-input,.el-input-number {
 						>>>.el-input__inner {
 							border: 0px;
 							font-size: 14px;
@@ -241,15 +182,7 @@
 							text-align: left;
 						}
 					}
-					.el-input-number {
-						>>>.el-input__inner {
-							border: 0px;
-							font-size: 14px;
-							padding: 0px;
-							color: #323232;
-							text-align: left;
-						}
-					}
+
 					.el-select {
 						width: 105px;
 
@@ -257,7 +190,6 @@
 							border: 0px;
 							padding: 0px;
 							font-size: 14px;
-							text-align: left;
 						}
 					}
 
@@ -288,7 +220,6 @@
 						}
 					}
 				}
-
 			}
 		}
 
