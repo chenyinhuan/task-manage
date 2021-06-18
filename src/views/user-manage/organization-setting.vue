@@ -96,7 +96,7 @@
         this.init();
       },
       init() {
-        getDeptList().then(res => {
+        getDeptList({deptId: this.deptId}).then(res => {
           this.tableData = res;
           this.data = this.$dealingwithadult(res);
           this.deptId = this.data[0].deptId
@@ -107,7 +107,7 @@
         this.$router.push('/user-manage/add-organization?item='+JSON.stringify(item))
       },
       del(item){
-        this.$confirm('确定删除该部门吗？', '提示', {
+        this.$confirm('删除后将无法恢复该组织相关配置项，是否确认？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
