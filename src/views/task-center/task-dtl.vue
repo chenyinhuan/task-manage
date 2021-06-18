@@ -3,29 +3,28 @@
 		<section class="hd">
 			<p>查看任务</p>
 		</section>
-		<section class="container">
+		<section class="container" v-if="list.taskRecordEntities">
 			<div class="field">
-				<div class="field-item" v-for="(item,index) in fieldList" :key="index"><span class="tit">{{item.name}}</span><span class="des">{{item.des}}</span></div>
+				<template v-for="(item,index) in tableColumn">
+					<div class="field-item" :key="index" v-if="item.fieldType == 2">
+						<span class="tit">{{item.fieldName}}</span>
+						<div class="des">
+							{{list.taskRecordEntities?list.taskRecordEntities.find(n => n.fieldId == item.fieldId).fieldValue:''}}
+						</div>
+					</div>
+				</template>
 			</div>
 			<div class="content">
-				<div class="content-item"><span class="tit">商品ID</span><span class="des">sp8976546789</span></div>
-				<div class="content-item"><span class="tit">直播日期</span><span class="des">2020/10/19</span></div>
-				<div class="content-item"><span class="tit">店铺</span><span class="des">杭州哈哈哈旗舰店</span></div>
-				<div class="content-item"><span class="tit">主播</span><span class="des">小白</span></div>
-				<div class="content-item"><span class="tit">是否付费</span><span class="des">是</span></div>
-				<div class="content-item"><span class="tit">付款账户</span><span class="des">27137371371741334</span></div>
-				<div class="content-item"><span class="tit">付款名</span><span class="des">张三</span></div>
-				<div class="content-item"><span class="tit">开票公司</span><span class="des">杭州哈哈哈科技有限公司</span></div>
-				<div class="content-item"><span class="tit">链接ID</span><a class="des" style="color: #9596AB;">http://taobao.com…</a></div>
-				<div class="content-item"><span class="tit">合同进度</span><span class="des">商家填写</span></div>
-				<div class="content-item"><span class="tit">合同单号</span><span class="des">HJK3787748844</span></div>
-				<div class="content-item"><span class="tit">合同编号</span><span class="des">318840114</span></div>
-				<div class="content-item"><span class="tit">快递单号</span><span class="des">SF3737330303</span></div>
-				<div class="content-item"><span class="tit">任务费用</span><span class="des">56.85</span></div>
-				<div class="content-item"><span class="tit">已收佣金</span><span class="des">67.98</span></div>
-				<div class="content-item"><span class="tit">需补佣金</span><span class="des">12.13</span></div>
-				<div class="content-item"><span class="tit">已补佣金截图</span><span class="des"><el-button type="text">查看</el-button></span></div>
-				<div class="content-item"><span class="tit">佣金备注</span><span class="des" style="color: #9596AB;">无备注</span></div>
+				<template v-for="(item,index) in tableColumn">
+					<div class="content-item" :key="index" v-if="item.fieldType == 1">
+						<span class="tit">{{item.fieldName}}</span>
+						<div class="des"
+							v-if="list.taskRecordEntities.find(n => n.fieldId == item.fieldId).formType != 4">
+							{{list.taskRecordEntities?list.taskRecordEntities.find(n => n.fieldId == item.fieldId).fieldValue:''}}
+						</div>
+						<el-button type="text" v-else @click="scan(list.taskRecordEntities.find(n => n.fieldId == item.fieldId))">查看</el-button></span>
+					</div>
+				</template>
 			</div>
 		</section>
 	</div>
@@ -34,11 +33,23 @@
 	export default {
 		data() {
 			return {
-				fieldList: [{name: '衍生字段名称',des: '已付款'},{name: '衍生字段名称1',des: '已付佣金'}],
-
+				fieldList: [{
+					name: '衍生字段名称',
+					des: '已付款'
+				}, {
+					name: '衍生字段名称1',
+					des: '已付佣金'
+				}],
+				list: [],
+				tableColumn: []
 			}
 		},
 		created() {
+			let taskDtl = JSON.parse(localStorage.getItem('taskDtl'));
+			this.list = taskDtl.list;
+			this.tableColumn = taskDtl.tableColumn;
+			console.log(this.tableColumn)
+			console.log(this.list)
 
 		},
 		mounted() {
@@ -48,7 +59,9 @@
 
 		},
 		methods: {
-
+			scan(item) {
+				
+			}
 		}
 	}
 </script>
@@ -62,10 +75,12 @@
 		background-color: #FFFFFF;
 		border-radius: 12px;
 		box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
+
 		.hd {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
+
 			p {
 				font-weight: bold;
 				color: #292933;
@@ -73,47 +88,63 @@
 				line-height: 28px;
 			}
 		}
+
 		.container {
 			.field {
 				display: flex;
 				align-items: center;
 				margin-top: 40px;
+
 				.field-item {
 					display: inline-flex;
 					flex-direction: column;
-          width: 164px;
+					width: 164px;
 					margin-bottom: 30px;
+
 					.tit {
 						font-size: 12px;
 						color: #CDCDD5;
 					}
+
 					.des {
+						width: 260px;
 						font-size: 14px;
 						color: #34335B;
 						margin-top: 8px;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						overflow: hidden;
 					}
 				}
 			}
+
 			.content {
 				display: flex;
 				flex-wrap: wrap;
 				align-items: center;
 				margin-top: 40px;
 				padding-right: 200px;
+
 				.content-item {
 					display: inline-flex;
 					flex-direction: column;
 					margin-bottom: 30px;
 					width: 270px;
 					text-align: left;
+
 					.tit {
 						font-size: 12px;
 						color: #CDCDD5;
 					}
+
 					.des {
+						width: 260px;
 						font-size: 14px;
 						color: #34335B;
 						margin-top: 4px;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						overflow: hidden;
 					}
 				}
 

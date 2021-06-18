@@ -10,13 +10,13 @@
 				<template slot-scope="scope">
 					<!-- {{item.slot}}
 					{{scope.row.fieldValue}} -->
-					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="text" @click="go('scan', scope.row)">查看</el-button>
-						<el-button type="text" @click="go('edit', scope.row)">编辑</el-button>
+					<div v-if="item.slot && item.fieldId=='opt'">
+						<el-button type="text" @click="go('scan', scope.row, scope.$index)">查看</el-button>
+						<el-button type="text" @click="go('edit', scope.row, scope)">编辑</el-button>
 						<el-button type="text">删除</el-button>
 					</div>
-					<div v-if="item.slot && item.prop=='createTime'">{{ scope.row.createTime }}</div>
-					<div v-if="!item.slot">{{ scope.row.fieldValue }}</div>
+					<div v-if="item.slot && item.fieldId=='createTime'">{{ scope.row.createTime }}</div>
+					<div v-if="!item.slot">{{ scope.row[item.fieldId] }}</div>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -43,7 +43,9 @@
 				total: 0,
 				isShow: false,
 				taskId: '',
-				taskTplId: ''
+				taskTplId: '',
+				list: [],
+				taskTplFieldStructureDTOS: []
 			}
 		},
 		created() {
@@ -57,8 +59,10 @@
 				}
 				getRecordList(params).then(res => {
 					if (res.code == 0) {
-						res.record.taskTplFieldStructureDTOS = [...res.record.taskTplFieldStructureDTOS, ...[{fieldName: '创建时间',slot: true,prop: 'createTime'}
-						,{fieldName: '操作',prop: 'opt',width: 140,slot: true}]]
+						this.list = JSON.parse(JSON.stringify(res.record.page.list));
+						this.taskTplFieldStructureDTOS = JSON.parse(JSON.stringify(res.record.taskTplFieldStructureDTOS));
+						res.record.taskTplFieldStructureDTOS = [...res.record.taskTplFieldStructureDTOS, ...[{fieldName: '创建时间',slot: true,fieldId: 'createTime'}
+						,{fieldName: '操作',fieldId: 'opt',width: 140,slot: true}]]
 						// this.tableData = res.record.page.list[0] ? res.record.page.list[0].taskRecordEntities : [];
 						this.tableColumn = res.record.taskTplFieldStructureDTOS;
 						this.total = res.record.page.totalCount;
@@ -69,14 +73,13 @@
 							for (let j in this.tableColumn) {
 								if (item.taskRecordEntities.find(n => n.fieldId == this.tableColumn[j]
 										.fieldId)) {
-									if (this.tableColumn[j].fieldId == -1) json.specId = item
-										.taskRecordEntities.find(n => n.fieldId == this.tableColumn[j]
-											.fieldId).fieldId;
-									json[`${this.tableColumn[j].prop}`] = item.taskRecordEntities.find(n =>
+									
+									json[`${this.tableColumn[j].fieldId}`] = item.taskRecordEntities.find(n =>
 											n.fieldId == this.tableColumn[j].fieldId)
-										.fieldName;
+										.fieldValue;
 								}
 							}
+							json.createTime = item.createTime;
 							tableData.push(json)
 						}
 						this.tableData = tableData;
@@ -106,11 +109,14 @@
 					}
 				})
 			},
-			go(type, row) {
+			go(type, row, index) {
+				if(type == 'scan') {
+					localStorage.setItem('taskDtl', JSON.stringify({list: this.list[index],tableColumn: this.tableColumn}))
+				}
 				this.$router.push({
 					path: type == 'scan' ? '/task-center/task-dtl' : '/task-center/add-record',
 					query: {
-						id: row.id
+						id: this.list[index].id
 					}
 				})
 			}
