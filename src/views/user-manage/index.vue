@@ -13,7 +13,7 @@
 					<p>{{deptName}}</p>
 				</section>
 				<div class="foot search">
-					<el-button type="primary" @click="addAccount()" v-if="actionList.children&& actionList.children.find(n => n.name == '添加账号')">添加账号</el-button>
+					<el-button type="primary" @click="addAccount()" v-if="actionList.children && actionList.children.find(n => n.name == '添加账号')">添加账号</el-button>
 					<div>
 						<el-input class="account" v-model="form.username" placeholder="请输入账号名"
 							@keyup.enter.native="search"></el-input>
@@ -151,6 +151,7 @@
         handler(val, oldVal) {
           if(val) {
             this.actionList = val.find(n => n.url == this.$route.path)
+            console.log(this.actionList)
           }
         },
         immediate: true,

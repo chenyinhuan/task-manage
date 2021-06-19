@@ -117,8 +117,10 @@
           if(res.code != 500) {
             this.tableData = res;
             this.data = this.$dealingwithadult(res);
-            this.deptId = this.data[0].deptId
-            this.deptName = this.data[0].name
+            if(!this.deptId) {
+              this.deptId = this.data[0].deptId
+              this.deptName = this.data[0].name
+            }
           }
         })
       },

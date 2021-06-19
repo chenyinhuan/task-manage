@@ -36,3 +36,9 @@ export const getTasktpl = (params) => api.post(`/task/tasktpl/list`, params)
  * @params params
  */
 export const getTaskDetail = (params) => api.post(`/task/tk/sender/task/detail/${params.taskId}`, params)
+
+/**
+ * 任务详情
+ * @params params
+ */
+export const turnonoff = (params) => api.post(`/task/tasktpl/turnonoff/${params.taskTplId}/${params.status}`, params)

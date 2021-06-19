@@ -29,3 +29,9 @@ export const getMenuList = (params) => api.post(`/sys/menu/list`, params)
  * @params params
  */
 export const getMenuById = (params) => api.post(`/sys/menu/info/${params.menuId}`, params)
+
+/**
+ * 获取某个页面菜单数据
+ * @params params
+ */
+export const upload = (params) => api.post(`/sys/oss/upload`, params,{ headers: { 'Content-Type': 'multipart/form-data' } })

@@ -71,7 +71,11 @@
       }
     },
     created() {
-      getTargeList().then(res=>{
+      let params = {
+        page: 1,
+        limit: 10000
+      }
+      getTargeList(params).then(res=>{
         this.list = res.page.list
       })
     },
