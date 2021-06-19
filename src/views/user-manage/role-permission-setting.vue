@@ -89,12 +89,10 @@
     methods: {
       getData() {
       	this.keyDepArr = []
-      	this.checkdDepList = this.$refs.tree1.getCheckedNodes();
+      	this.checkdDepList = this.$refs.tree1.getCheckedNodes(false,true);
       	if (this.checkdDepList.length != 0) {
       		for (var i = 0; i < this.checkdDepList.length; i++) {
-      			if (!this.checkdDepList[i].children) {
-      				this.keyDepArr.push(this.checkdDepList[i])
-      			}
+      			this.keyDepArr.push(this.checkdDepList[i])
       		}
       	} else {
       		this.keyDepArr = []
@@ -102,12 +100,10 @@
       },
       getMenuData() {
       	this.keyMenuArr = []
-      	this.checkdMenuList = this.$refs.tree.getCheckedNodes();
+      	this.checkdMenuList = this.$refs.tree.getCheckedNodes(false,true);
       	if (this.checkdMenuList.length != 0) {
       		for (var i = 0; i < this.checkdMenuList.length; i++) {
-      			if (!this.checkdMenuList[i].children) {
-      				this.keyMenuArr.push(this.checkdMenuList[i])
-      			}
+      			this.keyMenuArr.push(this.checkdMenuList[i])
       		}
       	} else {
       		this.keyMenuArr = []
