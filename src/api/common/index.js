@@ -23,3 +23,9 @@ export const getUserInfo = (params) => api.post(`/sys/user/info`, params)
  * @params params
  */
 export const getMenuList = (params) => api.post(`/sys/menu/list`, params)
+
+/**
+ * 获取某个页面菜单数据
+ * @params params
+ */
+export const getMenuById = (params) => api.post(`/sys/menu/info/${params.menuId}`, params)

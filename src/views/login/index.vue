@@ -63,7 +63,11 @@
 					username: this.phonenumber
 				}
 				apiLogin(params).then(res => {
-					if (res.code == 500) return this.tip = true;
+					if (res.code == 500)  {
+            this.$message.warning(res.msg);
+            if(res.msg != '账号已被锁定,请联系管理员') this.tip = true;
+            return
+          }
 					else this.tip = false;
 					if (res.code == 0) {
 						this.$message.success('登录成功！');

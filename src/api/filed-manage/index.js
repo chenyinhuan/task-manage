@@ -28,4 +28,4 @@ export const getNativeList = (params) => api.post(`/task/field/condtion/list`, p
  * 获取列表
  * @params userId
  */
-export const getPageList = (params) => api.post(`/task/field/page`, params)
+export const getPageList = (params) => api.post(`/task/field/page?page=${params.page}&limit=${params.limit}&type=${params.type}`, params)

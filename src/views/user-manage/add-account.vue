@@ -136,14 +136,19 @@
       create() {
         var reg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
         //判断输入框中有内容
+        console.log(this.form.mobile && !reg.test(this.form.mobile.trim()))
         if(!this.form.mobile){
           this.mobileValidate = true;
           this.showValidate = false;
-        }else if (this.form.mobile && !reg.test(this.form.mobile.trim())) {
+        }
+        if (this.form.mobile && !reg.test(this.form.mobile.trim())) {
           this.showValidate = true;
           this.mobileValidate = false;
+        }else {
+          this.showValidate = false;
         }
-        if(!this.form.mobile || !this.form.username || !this.form.password || !this.form.conPassword){
+        console.log(this.form.password == '' || this.form.conPassword == '')
+        if(this.form.password == '' || this.form.conPassword == ''){
            this.validate = true;
            this.pswError = false;
           return
@@ -172,7 +177,7 @@
             if(res.code == 0) {
               this.$message.success('修改成功！');
               setTimeout(() => {
-                this.$route.go(-1);
+                this.$router.go(-1);
               },2000)
             }
             else this.$message.warning(res.msg)

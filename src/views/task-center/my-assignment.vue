@@ -20,6 +20,12 @@
 						<div v-if="item.slot && item.prop=='opt'">
 							<el-button type="primary" @click.stop="go(scope.row)">查看明细</el-button>
 						</div>
+            <div v-if="item.slot && item.prop=='taskType'">
+              {{scope.row.taskType == 1?'直接派发':'由下级派发'}}
+            </div>
+            <div v-if="item.slot && item.prop == 'taskTarget'">
+              <span style="color: #0079FE;">管理</span>
+            </div>
 						<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 					</template>
 				</el-table-column>
@@ -80,31 +86,34 @@
 					{
 						label: '任务名称',
 						prop: 'taskName',
+            width: '230',
 					},
 					{
 						label: '派发类型',
-						prop: 'explain',
-					},
-					{
-						label: '考核/应考核批次数',
-						width: 210,
-						prop: 'toothTypeName',
+						prop: 'taskType',
+            slot: true
 					},
 					{
 						label: '任务开始时间',
 						prop: 'startTime',
-						width: '230'
+						width: '210'
 					},
 					{
 						label: '任务结束时间',
 						prop: 'endTime',
-						width: '205',
+						width: '210',
 					},
 					{
 						label: '派发人数',
 						prop: 'userCount',
-						width: '215',
+						width: '150',
 					},
+          {
+          	label: '任务指标',
+          	prop: 'taskTarget',
+          	width: '150',
+            slot: true,
+          },
 					{
 						label: '操作',
 						prop: 'opt',

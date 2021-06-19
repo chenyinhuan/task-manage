@@ -165,8 +165,7 @@
 				this.$router.push({
 					path: `/task-center/task-dtl-list`,
 					query: {
-						id: row.id,
-            taskTplId: row.taskTplId
+						id: row.id
 					}
 				})
 			},
@@ -174,8 +173,7 @@
 				this.$router.push({
 					path: `/task-center/task-target-list`,
 					query: {
-						id: row.id,
-            taskTplId: row.taskTplId
+						id: row.id
 					}
 				})
 			},

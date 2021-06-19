@@ -2,7 +2,7 @@
 	<div id="taskTargetList" :style="{'height': tableData.length==0?'661px':''}">
 		<section class="hd">
 			<p>{{taskName}}</p>
-			<span>累计考核批次：6</span>
+			<span>累计考核批次：{{total}}</span>
 		</section>
 		<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
@@ -21,7 +21,7 @@
 			</el-table-column>
 		</el-table>
 		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
-			:current-page.sync="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
+			:current-page.sync="currentPage" :page-size="limit" layout="prev, pager, next, jumper" :total="total">
 		</el-pagination>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
@@ -84,7 +84,6 @@
 		},
 		created() {
       if(this.$route.query.id) this.taskId = this.$route.query.id;
-      if(this.$route.query.taskTplId) this.taskTplId = this.$route.query.taskTplId;
       this.init();
 		},
 		mounted() {
@@ -107,8 +106,7 @@
 				this.$router.push({
 					path: `/task-center/task-dtl-list`,
 					query: {
-						id: row.id,
-            taskTplId: this.taskTplId
+						id: row.id
 					}
 				})
 			},
@@ -121,7 +119,7 @@
         getTaskTargetList(params).then(res => {
           if(res.code == 0) {
             this.tableData = res.taskTarget.page.list;
-            this.total = res.taskTarget.page.targetCount;
+            this.total = res.taskTarget.page.totalCount;
             this.taskName = res.taskTarget.taskName
           }
         })

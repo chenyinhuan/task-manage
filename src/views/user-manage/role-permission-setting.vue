@@ -38,7 +38,7 @@
 <script>
   import {getDeptList} from '@/api/user-manage/organization/index.js';
   import {getRoleInfo, updateRole} from '@/api/user-manage/role/index.js';
-  import {getMenuList,getNav} from '@/api/common/index.js'
+  import {getMenuList} from '@/api/common/index.js'
   export default {
     data() {
       return {
@@ -47,7 +47,7 @@
           label: 'name'
         },
         defaultProps1: {
-          children: 'list',
+          children: 'children',
           label: 'name'
         },
         form: {
@@ -75,8 +75,9 @@
         if(res.code == 0) this.role = res.role;
        })
 
-       getNav().then(res => {
-          if(res.code == 0) this.menuList = res.menuList;
+       getMenuList().then(res => {
+		   this.menuList = this.$dealingwithMenu(res);
+          // if(res.code == 0) this.menuList = res.menuList;
        })
     },
     mounted() {

@@ -35,7 +35,7 @@
 		</el-pagination>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
-			<p>还没有任务明细～</p>
+			<p>还没有任务模板～</p>
 		</div>
 	</div>
 </template>

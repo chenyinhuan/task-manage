@@ -43,14 +43,12 @@
 				total: 0,
 				isShow: false,
 				taskId: '',
-				taskTplId: '',
 				list: [],
 				taskTplFieldStructureDTOS: []
 			}
 		},
 		created() {
 			if (this.$route.query.id) this.taskId = this.$route.query.id;
-			if (this.$route.query.taskTplId) this.taskTplId = this.$route.query.taskTplId;
 			if (this.taskId) {
 				let params = {
 					taskId: this.taskId,
@@ -73,7 +71,7 @@
 							for (let j in this.tableColumn) {
 								if (item.taskRecordEntities.find(n => n.fieldId == this.tableColumn[j]
 										.fieldId)) {
-									
+
 									json[`${this.tableColumn[j].fieldId}`] = item.taskRecordEntities.find(n =>
 											n.fieldId == this.tableColumn[j].fieldId)
 										.fieldValue;
@@ -104,8 +102,7 @@
 				this.$router.push({
 					path: '/task-center/add-record',
 					query: {
-						id: this.taskId,
-						taskTplId: this.taskTplId
+						id: this.taskId
 					}
 				})
 			},

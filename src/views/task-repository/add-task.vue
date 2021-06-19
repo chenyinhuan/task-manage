@@ -112,7 +112,7 @@
 			},
 			init() {
 				getTasktpl().then(res => {
-					this.taskTplList = res.taskTplList
+          if (res.code == 0) this.taskTplList = res.taskTplList
 				})
 				let params = {
 					page: 1,
@@ -121,7 +121,8 @@
 					deptId: 1
 				}
 				getAccountList(params).then(res => {
-					this.userList = res.page.list;
+          if (res.code == 0) this.userList = res.page.list;
+          else return this.$message.warning(res.msg)
 				})
 			},
 			openDialog() {

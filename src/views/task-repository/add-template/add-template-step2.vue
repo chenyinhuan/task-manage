@@ -324,10 +324,10 @@
           let params = {
             types: [1,2,3]
           }
-          getTargeList(params).then(res => {
+          getTargeListExtend(params).then(res => {
             if (res.code != 0) return;
-            // this.targetList = res.targetEntities;
-            this.targetList = res.page.list;
+            this.targetList = res.targetEntities;
+            // this.targetList = res.page.list;
           })
         }
       },

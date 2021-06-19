@@ -3,6 +3,9 @@ import Router from 'vue-router';
 import Layout from '@/layout';
 import Cookies from 'js-cookie';
 import store from '@/store';
+import {
+	getMenuById
+} from '@/api/common/index.js'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) { // 路由错误信息拦截
@@ -332,22 +335,11 @@ router.afterEach((to, from) => {
   document.documentElement.scrollTop = 0
 });
 router.beforeEach((to, from, next) => {
-  // let name = '';
-  // if(Cookies.get('activeMenu') && Cookies.get('activeMenu').split('-').length>0) name = Cookies.get('activeMenu').split('-')[0];
+
   let module = store.state.module.permissionRoutes.find(n => n.path.indexOf(to.matched[0].path));
-  // if(module) {
-	 //  if(module.children) module.children
-	 //  else Cookies.set('activeMenu', module.index)
-  // }else {
-	 //  this.$router.push('/login');
-	 //  return;
-  // }
-  // console.log(store.state.module.permissionRoutes.find(n => n.index == Cookies.get('activeMenu').split('-')[0]))
-  // if(Cookies.set('activePath') && Cookies.set('activePath') != to.fullPath)
-  // {
-  //   this.$router.push(Cookies.set('activePath'))
-  // }
-  // else next();
+  // getMenuById({menuId: Cookies.get('')}).then(res => {
+
+  // })
   next();
 })
 
