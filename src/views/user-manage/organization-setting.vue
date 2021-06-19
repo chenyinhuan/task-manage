@@ -97,10 +97,12 @@
       },
       init() {
         getDeptList({deptId: this.deptId}).then(res => {
-          this.tableData = res;
-          this.data = this.$dealingwithadult(res);
-          this.deptId = this.data[0].deptId
-          this.deptName = this.data[0].name
+          if(res.code != 500) {
+            this.tableData = res;
+            this.data = this.$dealingwithadult(res);
+            this.deptId = this.data[0].deptId
+            this.deptName = this.data[0].name
+          }
         })
       },
       editRow(item){

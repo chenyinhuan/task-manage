@@ -74,7 +74,7 @@
             getNav().then(res => {
               if(res.code == 0) {
                 if(res.menuList.length > 0 && res.menuList[0].menuId == 1 && res.menuList.length > 2) {
-                  if(res.menuList[1].list.length>0) {
+                  if(res.menuList[0].list && res.menuList[1].list.length>0) {
                     Cookies.set('activeMenu', res.menuList[1].menuId + '-1')
                     this.$router.push(res.menuList[1].url);
                   }
@@ -82,7 +82,15 @@
                     Cookies.set('activeMenu', res.menuList[1].menuId + '')
                     this.$router.push(res.menuList[1].url);
                   }
-
+                }else if(res.menuList.length > 0 && res.menuList[0].menuId != 1) {
+                  if(res.menuList[0].list && res.menuList[0].list.length>0) {
+                    Cookies.set('activeMenu', res.menuList[0].menuId + '-1')
+                    this.$router.push(res.menuList[0].url);
+                  }
+                  else {
+                    Cookies.set('activeMenu', res.menuList[0].menuId + '')
+                    this.$router.push(res.menuList[0].url);
+                  }
                 }
               }
             })

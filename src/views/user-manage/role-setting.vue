@@ -145,9 +145,13 @@ import {getDeptList} from '@/api/user-manage/organization/index'
       },
       getDeptList() {
         getDeptList().then(res => {
-          this.data = this.$dealingwithadult(res);
-          this.deptId = this.data[0].deptId
-          this.deptName = this.data[0].name
+          if(res.code != 500) {
+            this.data = this.$dealingwithadult(res);
+            this.deptId = this.data[0].deptId
+            this.deptName = this.data[0].name
+          }else {
+            this.data = [];
+          }
         })
       },
       init() {
