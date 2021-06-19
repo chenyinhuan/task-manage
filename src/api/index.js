@@ -35,7 +35,6 @@ api.interceptors.request.use(
     } else {
       // config.headers = { 'Authorization': 'Bearer ' + store.state.home.token } // 所有请求添加token验证
     }
-	console.log(config)
     if(config.params){ // 请求接口携带token
       config.params['_r'] = new Date().getTime()
     } else {

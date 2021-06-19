@@ -111,7 +111,7 @@
 					},
 					{
 						label: '任务状态',
-						prop: 'weight',
+						prop: 'weight', // 任务状态 1：待开始, 2:进行中,3已结束,4已取消'
 						slot: true,
 					},
 					{

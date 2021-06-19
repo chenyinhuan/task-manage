@@ -6,5 +6,8 @@ export default {
   },
 	generateRoutes({ commit }, roles) {
 	  commit('SET_ROUTES', routes)
-	}
+	},
+  setAction({ commit }, actions) {
+	  commit('SET_ACTION', actions)
+	},
 };

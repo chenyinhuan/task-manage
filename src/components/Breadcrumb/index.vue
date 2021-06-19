@@ -518,10 +518,8 @@ export default {
   methods: {
     getBreadcrumb() {
       // only show routes with meta.title
-      console.log(this.$route)
       let matched = this.routes.find(item => item.path == this.$route.path);
       this.levelList = matched.matched;
-      console.log(this.levelList)
     },
     handleLink(item) {
       const { redirect, path } = item

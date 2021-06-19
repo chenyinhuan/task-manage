@@ -13,5 +13,9 @@ export default {
   },
   [types.SET_ROUTES](state, payload) {
     state.permissionRoutes = payload;
-  }
+  },
+  [types.SET_ACTION](state, payload) {
+    state.action = payload;
+  },
+  
 };

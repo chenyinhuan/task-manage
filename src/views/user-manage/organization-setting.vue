@@ -33,7 +33,11 @@
   </div>
 </template>
 <script>
-  import {getDeptList,deleteDept} from '@/api/user-manage/organization/index'
+  import {getDeptList,deleteDept} from '@/api/user-manage/organization/index';
+  import {
+  	mapGetters,
+  	mapActions,
+  } from 'vuex'
   export default {
     data() {
       return {
@@ -74,11 +78,15 @@
         ],
         taskName: '',
         deptId:'',
-        deptName: ''
+        deptName: '',
+        actionList: {}
       }
     },
     created() {
       this.init()
+    },
+    computed:{
+      ...mapGetters({action: 'module/action'}),
     },
     mounted() {
 
@@ -86,6 +94,15 @@
     watch: {
       filterText(val) {
         this.$refs.tree.filter(val);
+      },
+      action: {
+        handler(val, oldVal) {
+          if(val) {
+            this.actionList = val.find(n => n.url == this.$route.path)
+          }
+        },
+        immediate: true,
+        deep: true //true 深度监听
       }
     },
     methods: {

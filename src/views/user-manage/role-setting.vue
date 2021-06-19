@@ -38,39 +38,16 @@
 </template>
 <script>
 import {getRoleList,deleteRole,getRoleSelect} from '@/api/user-manage/role/index'
-import {getDeptList} from '@/api/user-manage/organization/index'
+import {getDeptList} from '@/api/user-manage/organization/index';
+  import {
+  	mapGetters,
+  	mapActions,
+  } from 'vuex'
   export default {
     data() {
       return {
         filterText: '',
-        data: [{
-          id: 1,
-          label: '一级 2',
-          children: [{
-            id: 3,
-            label: '二级 2-1',
-            children: [{
-              id: 4,
-              label: '三级 3-1-1'
-            }, {
-              id: 5,
-              label: '三级 3-1-2',
-              disabled: true
-            }]
-          }, {
-            id: 2,
-            label: '二级 2-2',
-            disabled: true,
-            children: [{
-              id: 6,
-              label: '三级 3-2-1'
-            }, {
-              id: 7,
-              label: '三级 3-2-2',
-              disabled: true
-            }]
-          }]
-        }],
+        data: [],
         defaultProps: {
           children: 'children',
           label: 'name'
@@ -120,12 +97,16 @@ import {getDeptList} from '@/api/user-manage/organization/index'
           limit: 10
         },
         deptId: '',
-        deptName: ''
+        deptName: '',
+        actionList: {}
       }
     },
     created() {
       this.init()
       this.getDeptList();
+    },
+    computed:{
+      ...mapGetters({action: 'module/action'}),
     },
     mounted() {
 
@@ -133,6 +114,15 @@ import {getDeptList} from '@/api/user-manage/organization/index'
     watch: {
       filterText(val) {
         this.$refs.tree.filter(val);
+      },
+      action: {
+        handler(val, oldVal) {
+          if(val) {
+            this.actionList = val.find(n => n.url == this.$route.path)
+          }
+        },
+        immediate: true,
+        deep: true //true 深度监听
       }
     },
     methods: {

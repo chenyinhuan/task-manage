@@ -20,6 +20,7 @@ Vue.use(VueClipboard)
 
 Vue.prototype.$dealingwithadult = gather.dealingwithadult;
 Vue.prototype.$dealingwithMenu = gather.dealingwithMenu;
+Vue.prototype.$deepFind = gather.$deepFind
 Vue.prototype.$aggregateFun = [
   {value: 1,label: '求和'},
   {value: 2,label: '平均值'},

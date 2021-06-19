@@ -3,9 +3,8 @@ import Router from 'vue-router';
 import Layout from '@/layout';
 import Cookies from 'js-cookie';
 import store from '@/store';
-import {
-	getMenuById
-} from '@/api/common/index.js'
+import {getMenuList} from '@/api/common/index.js';
+import gather from '@/utils/utils';
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) { // 路由错误信息拦截
@@ -335,11 +334,15 @@ router.afterEach((to, from) => {
   document.documentElement.scrollTop = 0
 });
 router.beforeEach((to, from, next) => {
-
   let module = store.state.module.permissionRoutes.find(n => n.path.indexOf(to.matched[0].path));
-  // getMenuById({menuId: Cookies.get('')}).then(res => {
+  if(to.path != '/login') {
+    getMenuList().then(res => {
+    		   let menuList = gather.dealingwithMenu(res);
+           console.log(gather.deepFind(menuList,(item) => item.url == to.path,'children'))
+          store.dispatch('module/setAction', gather.deepFind(menuList,(item) => item.url == to.path,'children'))
+    })
+  }
 
-  // })
   next();
 })
 
