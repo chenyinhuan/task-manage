@@ -14,16 +14,17 @@
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
 					<div v-if="item.slot && item.prop=='status'" class="percent">
-						<div class="dot" :class="[scope.row.status == 1?'green':'',scope.row.status == 2?'':'grey']">
+						<div class="dot" :class="[scope.row.status == 1?'green':'grey']">
 						</div><span> {{scope.row.status == 2?'未上架':'正常'}}</span>
 					</div>
 					<div v-if="item.slot && item.prop=='createUserName'" class="percent">
 						<span>{{scope.row.createUserName}}/{{scope.row.createTime}}</span>
 					</div>
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="text">复制</el-button>
-						<el-button type="text">编辑</el-button>
-						<el-button type="text">下架</el-button>
+						<el-button type="text" @click="copy(scope.row)">复制</el-button>
+						<el-button type="text" @click="editItem(scope.row)">编辑</el-button>
+						<el-button type="text" v-if="scope.row.status == 1" @click="option(scope.row)">下架</el-button>
+            <el-button type="text" v-if="scope.row.status == 2" @click="option(scope.row)">上架</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 				</template>
@@ -114,7 +115,25 @@
 			},
 			go() {
 				this.$router.push('/task-repository/add-template')
-			}
+			},
+      copy(item) {
+
+      },
+      editItem(item) {
+        console.log(item)
+        this.$router.push(`/task-repository/add-template?id=${item.id}`)
+      },
+      option(item) {
+        this.$confirm(`删除后将无法恢复此字段的相关记录，
+        如果已经被调用将无法删除，希望删除请删除关联字段、
+        指标和任务模版`, '是否确认删除字段？', {
+        			confirmButtonText: '确定',
+        			cancelButtonText: '取消',
+        			type: 'warning'
+        		}).then(() => {
+
+        		})
+      }
 		}
 	}
 </script>
