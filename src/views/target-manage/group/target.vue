@@ -2,7 +2,12 @@
   <div id="target">
     <section>
       <p>指标名称</p>
-      <el-input v-model="form.targetName" placeholder="请输入指标名称" maxlength="20" show-word-limit></el-input>
+      <el-input :class="[showValidate && form.targetName == ''?'validate-empty':'',
+      showValidate && form.targetName != '' && checkTargetName?'validate-error':'']"
+       v-model="form.targetName" placeholder="请输入指标名称" @blur="inputTatgetName" maxlength="20" show-word-limit></el-input>
+      <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.targetName == ''">请输入指标名称</span>
+      <span class="validate-info" style="color: #C03639;"
+        v-if="showValidate && form.targetName != '' && checkTargetName">请输入正确的字段显示名，支持中文、英文、数字</span>
     </section>
     <section>
       <p>指标说明</p>
@@ -11,16 +16,19 @@
     <section>
       <p>指标计算</p>
       <div style="display: flex;flex-wrap: wrap;">
-        <el-select v-model="form.targetQuoteEndId" placeholder="选择指标">
-          <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.value" :label="citem.targetName"></el-option>
+        <el-select v-model="form.targetQuoteEndId" placeholder="请选择指标">
+          <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.id" :label="citem.targetName"></el-option>
         </el-select>
+        <span class="validate-info1"  style="color: #FF8C00;" v-if="showValidate && form.targetQuoteEndId == ''">请选择指标</span>
         <div v-for="(item,index) in form.targesubs" :key="index" style="margin-left: 20px;" v-if="index == 0">
           <el-select v-model="item.logicAction" placeholder="运算选择">
             <el-option v-for="(citem,cindex) in $targetLogicAction" :key="cindex" :value="citem.value" :label="citem.label"></el-option>
           </el-select>
-          <el-select v-model="item.targetQuoteStartId" placeholder="选择指标">
-            <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.value" :label="citem.targetName"></el-option>
+          <span class="validate-info1"  style="color: #FF8C00;left: 260px;" v-if="showValidate && form.targesubs[0].logicAction == ''">请选择运算方式</span>
+          <el-select v-model="item.targetQuoteStartId" placeholder="请选择指标">
+            <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.id" :label="citem.targetName"></el-option>
           </el-select>
+          <span class="validate-info1" style="color: #FF8C00;left: 524px;" v-if="showValidate && form.targesubs[0].targetQuoteStartId == ''">请选择指标</span>
           <a @click="addTarget()"class="add-list" v-if="form.targesubs.length == 1">+新增</a>
         </div>
       </div>
@@ -67,7 +75,9 @@
               logicAction: ''
             }
           ]
-        }
+        },
+        showValidate: false,
+        checkTargetName: false,
       }
     },
     created() {
@@ -94,8 +104,9 @@
         this.form.targesubs.splice(0,1)
       },
       save(){
-		  if(this.form.targetName == '') return this.$message.warning('请输入指标名称');
-		  if(this.form.targetQuoteEndId == '') return this.$message.warning('请选择指标');
+        if (this.form.targetName == '' || this.form.targetQuoteEndId == '') return this.showValidate = true;
+        this.inputTatgetName();
+        if(this.checkTargetName) return;
         let params = {};
         if(this.form.targesubs.length == 1) {
           this.form.targesubs = [{
@@ -120,7 +131,6 @@
           "description": this.form.description,
           "type": 2
         }
-        console.log(params)
         if(this.id){  //编辑
           params.id = this.id
           //修改方法
@@ -134,7 +144,15 @@
             }
           })
         }
-      }
+      },
+      // 校验字段显示名
+      inputTatgetName() {
+        let regex = new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+$"); // 中文、英文、数字
+        //判断输入框中有内容
+        if (!regex.test(this.form.targetName.trim())) {
+          this.checkTargetName = true;
+        }else this.checkTargetName = false;
+      },
     }
   }
 </script>
@@ -167,7 +185,20 @@
       margin-left: 20px;
     }
     section {
+      position: relative;
       font-size: 14px;
+      .validate-info1 {
+        position: absolute;
+        left: 0px;
+        top: 82px;
+        font-size: 12px;
+      }
+      .validate-info {
+        position: absolute;
+        left: 0px;
+        bottom: 9px;
+        font-size: 12px;
+      }
       .label {
         font-size: 12px;
         color: #FF8C00;
