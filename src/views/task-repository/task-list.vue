@@ -111,13 +111,14 @@
 					},
 					{
 						label: '任务状态',
-						prop: 'weight', // 任务状态 1：待开始, 2:进行中,3已结束,4已取消'
+						prop: 'taskStatus', // 任务状态 1：待开始, 2:进行中,3已结束,4已取消'
 						slot: true,
 					},
 					{
 						label: '任务来源',
-						prop: 'weight',
-						width: 113
+						prop: 'taskType',
+						width: 113,
+            slot: true,
 					},
 					{
 						label: '创建人/创建时间',
