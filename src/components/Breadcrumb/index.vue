@@ -189,7 +189,7 @@ export default {
         },
         {
           // 派发任务明细
-          path: '/task-center/my-assignment',
+          path: '/task-center/my-assignment-list',
           matched: [
             {
               name: '任务中心',
