@@ -37,7 +37,7 @@
 					<span class="validate-info" style="color: #C03639;" v-if="showValidate && form.newPassword != '' && form.newPassword != form.newConfirmPassword">两次密码输入不一致</span>
 				</el-form-item>
 			</el-form>
-			<span slot="footer" class="dialog-footer">
+			<span slot="footer">
 				<el-button @click="close()">取 消</el-button>
 				<el-button type="primary" @click="confirm()">确 定</el-button>
 			</span>
