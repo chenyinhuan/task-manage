@@ -149,6 +149,7 @@
 			},
       action: {
         handler(val, oldVal) {
+          console.log(val)
           if(val) {
             this.actionList = val.find(n => n.url == this.$route.path)
             console.log(this.actionList)

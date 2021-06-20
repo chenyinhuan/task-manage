@@ -3,7 +3,9 @@ import Router from 'vue-router';
 import Layout from '@/layout';
 import Cookies from 'js-cookie';
 import store from '@/store';
-import {getMenuList} from '@/api/common/index.js';
+import {
+  getMenuList
+} from '@/api/common/index.js';
 import gather from '@/utils/utils';
 Vue.use(Router)
 const routerPush = Router.prototype.push
@@ -124,23 +126,23 @@ export const routes = [
       icon: 'lock',
     },
     children: [{
-      path: '',
-      component: () => import( /* webpackChunkName: "login" */ '@/views/field-manage/index'),
-      hidden: false,
-      meta: {
-        title: '字段库管理',
-        noCache: true
+        path: '',
+        component: () => import( /* webpackChunkName: "login" */ '@/views/field-manage/index'),
+        hidden: false,
+        meta: {
+          title: '字段库管理',
+          noCache: true
+        }
+      },
+      {
+        path: 'add-field',
+        component: () => import( /* webpackChunkName: "login" */ '@/views/field-manage/add-field'),
+        hidden: false,
+        meta: {
+          title: '新增字段',
+          noCache: true
+        }
       }
-    },
-    {
-      path: 'add-field',
-      component: () => import( /* webpackChunkName: "login" */ '@/views/field-manage/add-field'),
-      hidden: false,
-      meta: {
-        title: '新增字段',
-        noCache: true
-      }
-    }
     ]
   },
   {
@@ -153,23 +155,23 @@ export const routes = [
       icon: 'lock',
     },
     children: [{
-      path: '',
-      component: () => import( /* webpackChunkName: "login" */ '@/views/target-manage/index'),
-      hidden: false,
-      meta: {
-        title: '指标库管理',
-        noCache: true
+        path: '',
+        component: () => import( /* webpackChunkName: "login" */ '@/views/target-manage/index'),
+        hidden: false,
+        meta: {
+          title: '指标库管理',
+          noCache: true
+        }
+      },
+      {
+        path: 'add-target',
+        component: () => import( /* webpackChunkName: "login" */ '@/views/target-manage/add-target'),
+        hidden: false,
+        meta: {
+          title: '新增指标',
+          noCache: true
+        }
       }
-    },
-    {
-      path: 'add-target',
-      component: () => import( /* webpackChunkName: "login" */ '@/views/target-manage/add-target'),
-      hidden: false,
-      meta: {
-        title: '新增指标',
-        noCache: true
-      }
-    }
     ]
   },
   {
@@ -228,8 +230,7 @@ export const routes = [
       title: '用户管理',
       icon: 'lock',
     },
-    children: [
-      {
+    children: [{
         path: 'account-config',
         component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/index'),
         hidden: false,
@@ -251,8 +252,8 @@ export const routes = [
         path: 'associated-anchor',
         component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/associated-anchor'),
         hidden: true,
-          title: '关联主播',
-          meta: {
+        title: '关联主播',
+        meta: {
           noCache: true
         }
       },
@@ -294,7 +295,8 @@ export const routes = [
       },
       {
         path: 'role-permission-setting',
-        component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/role-permission-setting'),
+        component: () => import( /* webpackChunkName: "UserManage" */
+          '@/views/user-manage/role-permission-setting'),
         hidden: false,
         meta: {
           title: '角色权限配置',
@@ -327,7 +329,10 @@ export const routes = [
 
 const router = new Router({
   routes: routes,
-  scrollBehavior: () => ({ y: 0 ,x: 0}),
+  scrollBehavior: () => ({
+    y: 0,
+    x: 0
+  }),
 })
 router.afterEach((to, from) => {
   document.body.scrollTop = 0
@@ -335,15 +340,26 @@ router.afterEach((to, from) => {
 });
 router.beforeEach((to, from, next) => {
   let module = store.state.module.permissionRoutes.find(n => n.path.indexOf(to.matched[0].path));
-  if(to.path != '/login') {
+  if (to.path != '/login') {
     getMenuList().then(res => {
-    		   let menuList = gather.dealingwithMenu(res);
-           console.log(gather.deepFind(menuList,(item) => item.url == to.path,'children'))
-          store.dispatch('module/setAction', gather.deepFind(menuList,(item) => item.url == to.path,'children'))
+      let menuList = gather.dealingwithMenu(res);
+      store.dispatch('module/setAction', gather.deepFind(menuList, (item) => item.url == to.path, 'children'))
+      let menue = store.state.module.action.find(n => n.url == to.path);
+      if (menue && !menue.children) {
+        store.dispatch('module/setActiveMenu', menue.menuId + '')
+      } else if(menue && menue.children){
+        let sub = menue.children.find(n => n.url == to.path);
+        store.dispatch('module/setActiveMenu', sub.parentId + '-' + sub.menuId)
+      }
+      next();
+    }).catch(e => {
+      next();
     })
+  } else {
+    next();
   }
 
-  next();
+
 })
 
 router.onError((error) => {

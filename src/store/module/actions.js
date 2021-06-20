@@ -10,4 +10,7 @@ export default {
   setAction({ commit }, actions) {
 	  commit('SET_ACTION', actions)
 	},
+  setActiveMenu({ commit }, menu) {
+	  commit('SET_ACTIVEMENU', menu);
+	}
 };

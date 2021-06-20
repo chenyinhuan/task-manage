@@ -2,14 +2,14 @@
   <div id="sidebar">
     <div class="sidebar-logo-container" :class="{'collapse':isCollapse}">
       <transition name="sidebarLogoFade">
-        <router-link v-if="isCollapse" key="collapse" class="sidebar-logo-link" to="/">
+        <span v-if="isCollapse" class="sidebar-logo-link" @click="goLogin">
           <img v-if="true" class="sidebar-logo" src="@/images/login/logo.png" />
           <h1 v-else class="sidebar-title">任务管理系统</h1>
-        </router-link>
-        <router-link v-else key="expand" class="sidebar-logo-link" to="/">
+        </span>
+        <span v-else class="sidebar-logo-link" @click="goLogin">
           <img class="sidebar-logo" src="@/images/login/logo.png" />
           <h1 class="sidebar-title">任务管理系统</h1>
-        </router-link>
+        </span>
       </transition>
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper" :class="{'collapse':isCollapse}">
@@ -28,9 +28,9 @@
               <span slot="title">{{item.name}}</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item :index="`${item.menuId}-${cindex+1}`" @click="go(citem.url)" v-for="(citem, cindex) in item.list"
+              <el-menu-item :index="`${item.menuId}-${citem.menuId}`" @click="go(citem.url)" v-for="(citem, cindex) in item.list"
                 :key="cindex">
-                <img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == `${item.menuId}-${cindex+1}` && !isCollapse">
+                <img class="active-img" src="@/images/my-task/group.png" v-if="activeMenu == `${item.menuId}-${citem.menuId}` && !isCollapse">
                 <span>{{citem.name}}</span>
               </el-menu-item>
             </el-menu-item-group>
@@ -56,6 +56,7 @@
   import {
     getNav
   } from '@/api/common/index.js'
+  import {getUserInfo} from '@/api/common/index.js'
   export default {
     name: 'sidebar',
     components: {
@@ -63,7 +64,6 @@
     },
     data() {
       return {
-        activeMenu: Cookies.get('activeMenu') ? Cookies.get('activeMenu') : 'task-1',
         menuList: [],
         imgList: {
           task: require('../../images/sider-bar/task.png'),
@@ -78,7 +78,8 @@
           manageActive: require('../../images/sider-bar/manage-active.png'),
           userActive: require('../../images/sider-bar/user-active.png'),
           centerActive: require('../../images/sider-bar/center-active.png')
-        }
+        },
+        userInfo: ''
       };
     },
     computed: {
@@ -89,6 +90,9 @@
       isCollapse() {
         return !this.sidebar.opened
       },
+      activeMenu() {
+        return this.sidebar.activeMenu;
+      },
       variables() {
         return variables
       },
@@ -96,6 +100,7 @@
     created() {
       // this.generateRoutes();
       this.getMenu();
+      console.log('getmenu')
     },
     watch: {
       permissionRoutes: {
@@ -103,10 +108,10 @@
           // this.menuList = JSON.parse(JSON.stringify(route));
         },
         immediate: true
-      }
+      },
     },
     methods: {
-      ...mapActions('module', ['generateRoutes']),
+      ...mapActions('module', ['generateRoutes','setActiveMenu']),
       getMenu() {
         getNav().then(res => {
           if (res.code == 0) {
@@ -119,8 +124,19 @@
         this.$router.push(path)
       },
       selectMenu(index, indexPath) {
-        Cookies.set('activeMenu', index);
-        this.activeMenu = index;
+        console.log(index)
+        this.setActiveMenu(index);
+      },
+      getUserInfo() {
+      	getUserInfo().then(res => {
+      		this.userInfo = res.user;
+      		if(this.userInfo == null) this.$router.push('/login')
+          else localStorage.setItem('userInfo',JSON.stringify(this.userInfo));
+      	})
+      },
+      async goLogin() {
+        let responseObj = await getUserInfo();
+        if (responseObj.user == null) this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       }
     }
   }
@@ -171,7 +187,7 @@
       & .sidebar-logo-link {
         height: 100%;
         width: 100%;
-
+        cursor: pointer;
         & .sidebar-logo {
           width: 24px;
           height: 24px;

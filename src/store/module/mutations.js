@@ -17,5 +17,8 @@ export default {
   [types.SET_ACTION](state, payload) {
     state.action = payload;
   },
-  
+  [types.SET_ACTIVEMENU](state, payload) {
+    Cookies.set('activeMenu', payload);
+    state.sidebar.activeMenu = payload;
+  },
 };
