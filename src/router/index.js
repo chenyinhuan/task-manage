@@ -346,7 +346,9 @@ router.beforeEach((to, from, next) => {
       store.dispatch('module/setAction', gather.deepFind(menuList, (item) => item.url == to.path, 'children'))
       let menue = store.state.module.action.find(n => n.url == to.path);
       if (menue && !menue.children) {
-        store.dispatch('module/setActiveMenu', menue.menuId + '')
+        console.log(menue)
+        if(menue.parentId != 0) store.dispatch('module/setActiveMenu', menue.parentId + '-' + menue.menuId)
+        else store.dispatch('module/setActiveMenu', menue.menuId + '')
       } else if(menue && menue.children){
         let sub = menue.children.find(n => n.url == to.path);
         store.dispatch('module/setActiveMenu', sub.parentId + '-' + sub.menuId)
