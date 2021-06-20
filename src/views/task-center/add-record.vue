@@ -85,7 +85,8 @@
         taskRecordDetailBasicVOs: [],
         uploadUrl: `${window.$globalConfig.API_BASE_Tabel}/sys/oss/upload`,
         uploadItem: '',
-        dialogVisible: false
+        dialogVisible: false,
+        url: ''
 
       }
     },

@@ -12,7 +12,7 @@
 					{{scope.row.fieldValue}} -->
 					<div v-if="item.slot && item.fieldId=='opt'">
 						<el-button type="text" @click="go('scan', scope.row, scope.$index)">查看</el-button>
-						<el-button type="text" @click="go('edit', scope.row, scope)">编辑</el-button>
+						<el-button type="text" @click="go('edit', scope.row, scope.$index)">编辑</el-button>
 						<el-button type="text">删除</el-button>
 					</div>
 					<div v-if="item.slot && item.fieldId=='createTime'">{{ scope.row.createTime }}</div>
