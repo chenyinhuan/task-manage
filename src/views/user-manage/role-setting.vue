@@ -137,8 +137,8 @@ import {getDeptList} from '@/api/user-manage/organization/index';
         getDeptList().then(res => {
           if(res.code != 500) {
             this.data = this.$dealingwithadult(res);
-            this.deptId = this.data[0].deptId
-            this.deptName = this.data[0].name
+            // this.deptId = this.data[0].deptId
+            // this.deptName = this.data[0].name
           }else {
             this.data = [];
           }
@@ -174,8 +174,8 @@ import {getDeptList} from '@/api/user-manage/organization/index';
         this.$router.push(`/user-manage/associated-anchor?id=${item.roleId}`)
       },
       filterNode(value, data) {
-        if (!value) return true;
-        return data.label.indexOf(value) !== -1;
+      	if (!value) return true;
+      	return data.name.indexOf(value) !== -1;
       },
       addRole(){
         this.$router.push('/user-manage/add-role?type=1&deptId='+this.deptId+'&deptName='+this.deptName)

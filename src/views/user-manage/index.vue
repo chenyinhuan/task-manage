@@ -13,7 +13,7 @@
 					<p>{{deptName}}</p>
 				</section>
 				<div class="foot search">
-					<el-button type="primary" @click="addAccount()" v-if="actionList.children && actionList.children.find(n => n.name == '添加账号')">添加账号</el-button>
+					<el-button type="primary" @click="addAccount()" v-if="actionList && actionList.children && actionList.children.find(n => n.name == '添加账号')">添加账号</el-button>
 					<div>
 						<el-input class="account" v-model="form.username" placeholder="请输入账号名"
 							@keyup.enter.native="search"></el-input>
@@ -35,11 +35,11 @@
 								<span> {{scope.row.status == 1?'正常':'禁用'}}</span>
 							</div>
 							<div v-if="item.slot && item.prop=='related'">
-								<el-button type="text" @click="assocoated(scope.row)" v-if="actionList.children&& actionList.children.find(n => n.name == '关联')">关联</el-button>
+								<el-button type="text" @click="assocoated(scope.row)" v-if="actionList && actionList.children && actionList.children.find(n => n.name == '关联')">关联</el-button>
 							</div>
 							<div v-if="item.slot && item.prop=='opt'">
-								<el-button type="text" @click="addAccount(scope.row)" v-if="actionList.children&& actionList.children.find(n => n.name == '编辑')">编辑</el-button>
-								<el-button type="text" @click="del(scope.row)" v-if="actionList.children&& actionList.children.find(n => n.name == '删除')">删除</el-button>
+								<el-button type="text" @click="addAccount(scope.row)" v-if="actionList && actionList.children && actionList.children.find(n => n.name == '编辑')">编辑</el-button>
+								<el-button type="text" @click="del(scope.row)" v-if="actionList && actionList.children && actionList.children.find(n => n.name == '删除')">删除</el-button>
 							</div>
 							<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 						</template>
@@ -173,8 +173,8 @@
 				getDeptList().then(res => {
           if(res.code != 500) {
             this.data = this.$dealingwithadult(res);
-            this.deptId = this.data[0].deptId
-            this.deptName = this.data[0].name
+            // this.deptId = this.data[0].deptId
+            // this.deptName = this.data[0].name
             this.setCheckedKeys();
           }
 					this.init();

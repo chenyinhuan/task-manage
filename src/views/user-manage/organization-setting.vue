@@ -117,10 +117,10 @@
           if(res.code != 500) {
             this.tableData = res;
             this.data = this.$dealingwithadult(res);
-            if(!this.deptId) {
-              this.deptId = this.data[0].deptId
-              this.deptName = this.data[0].name
-            }
+            // if(!this.deptId) {
+            //   this.deptId = this.data[0].deptId
+            //   this.deptName = this.data[0].name
+            // }
           }
         })
       },
@@ -144,8 +144,8 @@
         this.$router.push('/user-manage/associated-anchor')
       },
       filterNode(value, data) {
-        if (!value) return true;
-        return data.label.indexOf(value) !== -1;
+      	if (!value) return true;
+      	return data.name.indexOf(value) !== -1;
       },
       addOrganization(){
         this.$router.push('/user-manage/add-organization?type=1&deptId='+this.deptId)

@@ -4,34 +4,34 @@ import api from '@/api/index';
  * 我的任务页面-任务列表
  * @params params
  */
-export const getMyTaskList = (params) => api.post(`/task/tk/user/page`, params);
+export const getMyTaskList = (params) => api.post(`/task-admin/task/tk/user/page`, params);
 
 /**
  * 我的任务-新增任务记录
  * @params params
  */
-export const saveTaskRecord = (params) => api.post(`/task/tk/record/saveTaskRecord`, params);
+export const saveTaskRecord = (params) => api.post(`/task-admin/task/tk/record/saveTaskRecord`, params);
 
 /**
  * 我的任务-任务记录
  * @params params
  */
-export const getRecordList = (params) => api.post(`/task/tk/record/records/${params.taskId}`, params);
+export const getRecordList = (params) => api.post(`/task-admin/task/tk/record/records/${params.taskId}`, params);
 
 /**
  * 根据模板id获取字段列表，用于任务记录添加
  * @params params
  */
-export const getTaskTplField = (params) => api.post(`/task/tasktpl/field/list/${params.taskTplId}`, params);
+export const getTaskTplField = (params) => api.post(`/task-admin/task/task-admin/tasktpl/field/list/${params.taskTplId}`, params);
 
 /**
  * 获取任务模板字段列表
  * @params params
  */
-export const getRecordListInputs = (params) => api.post(`/task/tk/record/listInputs/${params.taskId}`, params);
+export const getRecordListInputs = (params) => api.post(`/task-admin/task/tk/record/listInputs/${params.taskId}`, params);
 
 /**
  * 我的任务页：任务指标情况
  * @params params
  */
-export const getTaskTargetList = (params) => api.post(`/task/tk/target/user/page/${params.taskId}`, params);
+export const getTaskTargetList = (params) => api.post(`/task-admin/task/tk/target/user/page/${params.taskId}`, params);
