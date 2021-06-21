@@ -42,7 +42,7 @@
 			:current-page.sync="searchParams.page" :page-size="searchParams.limit" layout="prev, pager, next, jumper"
 			:total="total">
 		</el-pagination>
-		<div class="tempty" v-if="tableData.length==0">
+		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
 			<p>还没有任务～</p>
 		</div>
@@ -153,7 +153,10 @@
 				getTaskList(this.searchParams).then(res => {
 					this.tableData = res.page.list
 					this.total = res.page.totalCount
-				})
+          this.isShow = true;
+				}).catch(e => {
+          this.isShow = true;
+        })
 			},
 			handleSizeChange(val) {
 				this.searchParams.limit = val

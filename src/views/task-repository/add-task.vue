@@ -67,7 +67,7 @@
 		</section>
 		<div class="foot">
 			<el-button type="primary" @click="submit">提交任务</el-button>
-			<el-button class="cancel">取消</el-button>
+			<el-button class="cancel" @click="cancel">取消</el-button>
 		</div>
 		<assigment ref="assigment" :data.sync="userList" @confirm="confirm"></assigment>
 	</div>
@@ -114,6 +114,9 @@
 
 		},
 		methods: {
+      cancel() {
+        this.$router.push('/task-repository/task-list')
+      },
 			submit() {
 				if (this.form.taskName == '' || this.form.recordType == '' ||
         this.form.taskTplId == '' || this.form.startTime == '' ||
