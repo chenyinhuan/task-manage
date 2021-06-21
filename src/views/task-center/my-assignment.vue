@@ -95,7 +95,7 @@
 	export default {
 		data() {
 			return {
-        warningDialog: true,
+        warningDialog: false,
         newEndTime: '',
         timeDialog: false,
         dialogVisible: false,
@@ -125,9 +125,7 @@
 					},
 				],
         total: 0,
-				tableData: [
-          {id:1}
-        ],
+				tableData: [],
         tableData1: [],
         tableColumn1: [ // 表格列数据
           {
