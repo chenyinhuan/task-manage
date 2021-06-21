@@ -87,6 +87,12 @@ Vue.prototype.$logicAction = [
   {value: 5,label: '=等于'},
   {value: 6,label: '!=不等于'},
 ]
+Vue.prototype.$taskTargetState = [
+  {value: 1,label: '待开始'},
+  {value: 2,label: '进行中'},
+  {value: 3,label: '已结束'},
+  {value: 4,label: '已取消'},
+]
 Vue.prototype.getPlatform = function (){
 	var ua = window.navigator.userAgent.toLowerCase();
     var u = navigator.userAgent;
