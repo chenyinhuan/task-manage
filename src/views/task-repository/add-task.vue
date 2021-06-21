@@ -131,8 +131,8 @@
 				})
 			},
 			confirm(val) {
-				console.log(val)
 				this.form.users = val
+        this.submit()
 			},
 			init() {
 				getTasktpl().then(res => {

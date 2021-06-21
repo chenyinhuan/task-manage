@@ -32,7 +32,7 @@
 						<el-button type="text" v-if="scope.$index != 2">编辑</el-button>
 						<el-button type="text" v-if="scope.$index != 2">取消</el-button>
 						<el-button type="text" v-if="scope.$index == 2" @click="viewDes(scope.row)">查看说明</el-button>
-						<el-button type="text" v-if="scope.$index == 2">派发任务</el-button>
+						<el-button type="text" v-if="scope.$index == 2" @click="openDialog(scope.row)">派发任务</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 				</template>
@@ -55,13 +55,17 @@
     		</div>
     	</div>
      </el-dialog>
-	</div>
+    <assigment ref="assigment" :data.sync="userList" @confirm="confirm"></assigment>
+  </div>
 </template>
 <script>
-	import {
-		getTaskList
-	} from '@/api/task-repository/index'
+  import assigment from '@/views/task-repository/group/assigment.vue'
+  import {getTaskList,saveTask} from '@/api/task-repository/index'
+  import {getAccountList} from '@/api/user-manage/account'
 	export default {
+    components: {
+      assigment
+    },
 		data() {
 			return {
 				taskTypeList: [{
@@ -147,7 +151,10 @@
 				},
 				total: 0,
         description: '',
-        visibleDialog: false
+        visibleDialog: false,
+        userList: [],
+        users: [],
+        formData:{}
 			}
 		},
 		created() {
@@ -160,6 +167,31 @@
 
 		},
 		methods: {
+      confirm(val) {
+        this.formData.users = val
+        saveTask(this.formData).then(res=>{
+          if (res.code == 0) {
+            this.$message.success('保存成功')
+            this.init()
+          } else {
+            this.$message.warning(res.msg)
+          }
+        })
+      },
+      openDialog(item) {
+        this.formData = item
+        let params = {
+          page: 1,
+          limit: 1000,
+          username: '',
+          deptId: 1
+        }
+        getAccountList(params).then(res => {
+          if (res.code == 0) this.userList = res.page.list;
+          else return this.$message.warning(res.msg)
+        })
+        this.$refs.assigment.open();
+      },
 			init() {
 				getTaskList(this.searchParams).then(res => {
 					this.tableData = res.page.list
