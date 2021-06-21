@@ -117,33 +117,35 @@
             <el-option v-for="titem in targetTestTimeTypeList" :key="titem.value" :label="titem.label" :value="titem.value">
             </el-option>
           </el-select>
-          <div style="margin-left: 20px;" v-if="item.taskTplTargetEntity.targetTestTimeType == 1">
+          <!-- <div style="margin-left: 20px;" v-if="item.taskTplTargetEntity.targetTestTimeType == 1">
             <el-input-number controls-position="right" v-model="item.taskTplTargetEntity.targetTestTimeHour"
-              placeholder="任务开始后小时数" type="number" :max="24" :min="1"></el-input-number controls-position="right"><span
+              placeholder="任务开始后小时数" type="number" :max="24" :min="1"></el-input-number><span
               style="margin: 0px 10px;">时</span>
             <el-input-number controls-position="right" v-model="item.taskTplTargetEntity.targetTestTimeMinute" type="number"
-              :max="59" :min="0"></el-input-number controls-position="right"><span style="margin: 0px 10px;">分</span><span>结束考核</span>
-          </div>
-          <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" v-if="item.taskTplTargetEntity.targetTestTimeType == 2" v-model="item.taskTplTargetEntity.targetTestDate"
-            placeholder="请选择日期和时间">
+              :max="59" :min="0"></el-input-number><span style="margin: 0px 10px;">分</span><span>结束考核</span>
+          </div> -->
+          <el-date-picker type="date" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" v-if="item.taskTplTargetEntity.targetTestTimeType == 2" v-model="item.taskTplTargetEntity.targetTestDate"
+            placeholder="请选择日期">
           </el-date-picker>
           <div v-if="item.taskTplTargetEntity.targetTestTimeType == 3">
             <el-select style="margin-left: 20px;" v-model="item.taskTplTargetEntity.targetTestCycle" placeholder="选择周期">
               <el-option v-for="(item,index) in targetTestCycleList" :label="item.label" :value="item.value" :key="index"></el-option>
             </el-select>
             <!-- 每月 -->
-            <el-select style="margin-left: 20px;" v-if="item.taskTplTargetEntity.targetTestCycle == 3" v-model="item.taskTplTargetEntity.monthDay">
+            <!-- <el-select style="margin-left: 20px;" v-if="item.taskTplTargetEntity.targetTestCycle == 3" v-model="item.taskTplTargetEntity.monthDay">
                <el-option v-for="(item, index) in monthDay" :key="index" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-             <el-select v-if="item.taskTplTargetEntity.targetTestCycle == 3 && item.taskTplTargetEntity.monthDay == 30"></el-select>
+            </el-select> -->
+            <el-input-number style="margin-left: 20px;" controls-position="right" :controls="false" v-model="item.taskTplTargetEntity.targetTestTimeHour"
+              placeholder="" type="number" :max="31" :min="1" v-if="item.taskTplTargetEntity.targetTestCycle == 3"></el-input-number>
+             <!-- <el-select v-if="item.taskTplTargetEntity.targetTestCycle == 3 && item.taskTplTargetEntity.monthDay == 30"></el-select> -->
             <!-- 每周 -->
             <el-select style="margin-left: 20px;" v-if="item.taskTplTargetEntity.targetTestCycle == 2" v-model="item.taskTplTargetEntity.weekDay">
               <el-option v-for="(item, index) in weekDay" :key="index" :label="item.label" :value="item.value"></el-option>
             </el-select>
             <!-- 每日的某个时间点 -->
-            <el-time-picker v-if="item.taskTplTargetEntity.targetTestCycle == 1 || item.taskTplTargetEntity.targetTestCycle == 2" type="time" v-model="item.taskTplTargetEntity.targetTestDate"
+            <!-- <el-time-picker v-if="item.taskTplTargetEntity.targetTestCycle == 1 || item.taskTplTargetEntity.targetTestCycle == 2" type="time" v-model="item.taskTplTargetEntity.targetTestDate"
               placeholder="请选择时间">
-            </el-time-picker>
+            </el-time-picker> -->
           </div>
         </div>
       </section>
@@ -780,7 +782,14 @@
           margin-left: 20px;
         }
       }
-
+      .el-input-number {
+        width: 160px;
+        >>>.el-input__inner {
+          font-size: 14px;
+          height: 32px;
+          line-height: 32px;
+        }
+      }
       .el-input {
         width: 140px;
 
