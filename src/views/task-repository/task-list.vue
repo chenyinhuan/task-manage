@@ -31,7 +31,7 @@
 						<el-button type="text" v-if="scope.$index != 2">查看</el-button>
 						<el-button type="text" v-if="scope.$index != 2">编辑</el-button>
 						<el-button type="text" v-if="scope.$index != 2">取消</el-button>
-						<el-button type="text" v-if="scope.$index == 2">查看说明</el-button>
+						<el-button type="text" v-if="scope.$index == 2" @click="viewDes(scope.row)">查看说明</el-button>
 						<el-button type="text" v-if="scope.$index == 2">派发任务</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
@@ -46,6 +46,15 @@
 			<img src="@/images/my-task/illustration.png">
 			<p>还没有任务～</p>
 		</div>
+    <el-dialog class="add-dialog" title="任务说明" :visible.sync="visibleDialog" width="498px"
+    	:before-close="close">
+    	<div>
+    		<p class="">{{description}}</p>
+    		<div slot="footer" class="dialog-footer">
+    			<el-button type="primary" @click="visibleDialog = false">确 定</el-button>
+    		</div>
+    	</div>
+     </el-dialog>
 	</div>
 </template>
 <script>
@@ -136,7 +145,9 @@
 					page: 1,
 					limit: 10
 				},
-				total: 0
+				total: 0,
+        description: '',
+        visibleDialog: false
 			}
 		},
 		created() {
@@ -173,7 +184,15 @@
 				this.$router.push({
 					path: '/task-repository/add-task'
 				})
-			}
+			},
+      viewDes(row) {
+      	this.visibleDialog = true;
+      	this.description = row.description?row.description:``;
+      },
+      close() {
+      	this.description = '';
+      	this.visibleDialog = false;
+      }
 		}
 	}
 </script>
@@ -293,4 +312,26 @@
 		}
 
 	}
+  .add-dialog {
+  	>>>.el-dialog__body {
+  		padding: 0px;
+  	}
+  	p {
+  		font-size: 14px;
+  		padding: 16px 24px;
+  	}
+  	.dialog-footer {
+  	  border-top: 1px solid #D9D9D9;
+  	  padding: 12px 24px;
+  	  margin: 32px 0px 0px;
+  	  text-align: right;
+  	  >>> .el-button--primary {
+  	    width: 124px;
+  	    height: 40px;
+  	    font-size: 18px;
+  	    background: #0079fe;
+  	    border-radius: 6px;
+  	  }
+  	}
+  }
 </style>
