@@ -108,9 +108,7 @@
         saveTarge(params).then(res => {
           if (res.code == 0) {
             this.$message.success('保存成功！');
-            setTimeout(() => {
-              this.$router.push('/target-manage')
-            }, 2000)
+            this.$router.push('/target-manage')
           }
         })
       },

@@ -15,7 +15,7 @@
 						</template>
 					</el-input>
 					<span v-if="validate && phonenumber == ''" class="error or">请填写登录账号</span>
-					<el-input ref="psw" v-model="password" show-password class="password" @keyup.enter.native="goLogin">
+					<el-input ref="psw" v-model="password" maxlength="20" show-password class="password" @keyup.enter.native="goLogin">
 					</el-input>
 					<span v-if="validate && password == ''" class="error or">请填写登录密码</span>
 					<span v-if="tip" class="error red">账号或密码错误</span>

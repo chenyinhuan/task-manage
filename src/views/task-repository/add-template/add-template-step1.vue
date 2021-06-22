@@ -45,7 +45,7 @@
 				<div class="add-field" @click="addField(1)">+ 新增表单字段</div>
 			</div>
 			<span class="validate-info1" style="color: #FF8C00;"
-				v-if="showValidate && taskTplVO.taskName == ''">请输入模板名称</span>
+				v-if="showValidate && taskTplVO.taskTplBasicFieldEntities.length == 0">请选择表单字段</span>
 		</section>
 		<section>
 			<p>监测字段（衍生字段）</p>
@@ -77,7 +77,7 @@
 				<div class="add-field" @click="addField(2)">+ 新增检测字段</div>
 			</div>
 			<span class="validate-info1" style="color: #FF8C00;"
-				v-if="showValidate && taskTplVO.taskName == ''">请输入模板名称</span>
+				v-if="showValidate && taskTplVO.taskTplComplexFieldEntities.length == 0">请选择监测字段</span>
 		</section>
 		<div class="foot">
 			<el-button type="primary" @click="next()">下一步</el-button>
@@ -318,9 +318,6 @@
 				}
 				if (this.taskTplVO.taskName == '' || this.taskTplVO.taskTplBasicFieldEntities.length == 0 || this.taskTplVO.taskTplComplexFieldEntities
 					.length == 0) return this.showValidate = true;
-				if (this.taskTplVO.taskName == '') return this.$message.warning('请填写模板名称');
-				if (this.taskTplVO.taskTplBasicFieldEntities.length == 0 || this.taskTplVO.taskTplComplexFieldEntities
-					.length == 0) return this.$message.warning('请选择原生字段或者衍生字段');
 				for (let i = 0; i < this.taskTplVO.taskTplBasicFieldEntities.length; i++) {
 					let item = this.taskTplVO.taskTplBasicFieldEntities[i];
 					item.sort = i + 1;
@@ -371,7 +368,7 @@
 			inputTaskName() {
 				let regex = new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+$"); // 中文、英文、数字
 				//判断输入框中有内容
-				if (!regex.test(taskTplVO.taskName)) {
+				if (!regex.test(this.taskTplVO.taskName)) {
 					this.checkTaskName = true;
 				} else this.checkTaskName = false;
 			},
@@ -429,7 +426,7 @@
 			.validate-info1 {
 			  position: absolute;
 			  left: 0px;
-			  bottom: -40rpx;
+			  bottom: -20px;
 			  font-size: 12px;
 			}
 			.validate-info {
