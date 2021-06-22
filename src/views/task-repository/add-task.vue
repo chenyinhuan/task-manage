@@ -4,15 +4,13 @@
 		<section>
 			<p>任务名称</p>
 			<el-input :class="[showValidate && form.taskName == ''?'validate-empty':'',
-		  showValidate && form.taskName != '' && checkTaskName?'validate-error':'']"
-      v-model="form.taskName" placeholder="请输入任务名称"
-      @blur="inputTaskName"
-      maxlength="20" show-word-limit></el-input>
-      <span class="validate-info" style="color: #FF8C00;"
-      	v-if="showValidate && form.taskName == ''">请输入任务名称</span>
-      <span class="validate-info" style="color: #C03639;"
-      	v-if="showValidate && form.taskName != '' && checkTaskName">请输入正确的任务名称，支持中文、英文、数字</span>
-    </section>
+		  showValidate && form.taskName != '' && checkTaskName?'validate-error':'']" v-model="form.taskName"
+				placeholder="请输入任务名称" @blur="inputTaskName" maxlength="20" show-word-limit></el-input>
+			<span class="validate-info" style="color: #FF8C00;"
+				v-if="showValidate && form.taskName == ''">请输入任务名称</span>
+			<span class="validate-info" style="color: #C03639;"
+				v-if="showValidate && form.taskName != '' && checkTaskName">请输入正确的任务名称，支持中文、英文、数字</span>
+		</section>
 		<section>
 			<p>任务说明</p>
 			<el-input v-model="form.description" placeholder="请输入任务说明" maxlength="200" show-word-limit></el-input>
@@ -23,8 +21,8 @@
 				<el-option v-for="(item,index) in taskTplList" :value="item.id" :key="index" :label="item.taskName">
 				</el-option>
 			</el-select>
-      <span class="validate-info" style="color: #FF8C00;"
-      	v-if="showValidate && form.taskTplId == ''">请选择任务模版</span>
+			<span class="validate-info" style="color: #FF8C00;"
+				v-if="showValidate && form.taskTplId == ''">请选择任务模版</span>
 		</section>
 		<section>
 			<p>覆盖时间</p>
@@ -41,10 +39,10 @@
 					value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
 				</el-date-picker>
 			</div>
-      <span class="validate-info" style="color: #FF8C00;"
-      	v-if="showValidate && form.startTime == ''">请选择任务开始时间</span>
-        <span class="validate-info" style="color: #FF8C00;left: 200px;"
-        	v-if="showValidate && form.endTime == ''">请选择任务结束时间</span>
+			<span class="validate-info" style="color: #FF8C00;"
+				v-if="showValidate && form.startTime == ''">请选择任务开始时间</span>
+			<span class="validate-info" style="color: #FF8C00;left: 200px;"
+				v-if="showValidate && form.endTime == ''">请选择任务结束时间</span>
 		</section>
 		<section>
 			<p>派发名单</p>
@@ -53,8 +51,8 @@
 					style="margin-right: 10px">{{item.username}}</span>
 				<span class="add" @click="openDialog">+ 新增</span>
 			</div>
-      <span class="validate-info" style="color: #FF8C00;bottom: -22px;"
-      	v-if="showValidate && form.users.length == 0">请选择派发名单</span>
+			<span class="validate-info" style="color: #FF8C00;bottom: -22px;"
+				v-if="showValidate && form.users.length == 0">请选择派发名单</span>
 		</section>
 		<section>
 			<p>任务类型</p>
@@ -62,8 +60,8 @@
 				<el-radio :label="1">单记录任务</el-radio>
 				<el-radio :label="2">多记录任务</el-radio>
 			</el-radio-group>
-      <span class="validate-info" style="color: #FF8C00;bottom: -22px;"
-      	v-if="showValidate && form.recordType == ''">请选择任务类型</span>
+			<span class="validate-info" style="color: #FF8C00;bottom: -22px;"
+				v-if="showValidate && form.recordType == ''">请选择任务类型</span>
 		</section>
 		<div class="foot">
 			<el-button type="primary" @click="submit">提交任务</el-button>
@@ -96,12 +94,12 @@
 					startTime: '',
 					endTime: '',
 					users: [],
-          description: ''
+					description: ''
 				},
 				taskTplList: [],
 				userList: [],
-        showValidate: false,
-        checkTaskName: false,
+				showValidate: false,
+				checkTaskName: false,
 			}
 		},
 		created() {
@@ -114,13 +112,13 @@
 
 		},
 		methods: {
-      cancel() {
-        this.$router.push('/task-repository/task-list')
-      },
+			cancel() {
+				this.$router.push('/task-repository/task-list')
+			},
 			submit() {
 				if (this.form.taskName == '' || this.form.recordType == '' ||
-        this.form.taskTplId == '' || this.form.startTime == '' ||
-        this.form.endTime == '' || this.form.users.length == 0) return this.showValidate = true;
+					this.form.taskTplId == '' || this.form.startTime == '' ||
+					this.form.endTime == '' || this.form.users.length == 0) return this.showValidate = true;
 				saveTask(this.form).then(res => {
 					if (res.code == 0) {
 						this.$message.success('保存成功')
@@ -132,11 +130,11 @@
 			},
 			confirm(val) {
 				this.form.users = val
-        this.submit()
+				this.submit()
 			},
 			init() {
 				getTasktpl().then(res => {
-          if (res.code == 0) this.taskTplList = res.taskTplList
+					if (res.code == 0) this.taskTplList = res.taskTplList
 				})
 				let params = {
 					page: 1,
@@ -145,8 +143,8 @@
 					deptId: 1
 				}
 				getAccountList(params).then(res => {
-          if (res.code == 0) this.userList = res.page.list;
-          else return this.$message.warning(res.msg)
+					if (res.code == 0) this.userList = res.page.list;
+					else return this.$message.warning(res.msg)
 				})
 			},
 			openDialog() {
@@ -155,14 +153,14 @@
 			handleClose() {
 
 			},
-      // 校验字段显示名
-      inputTaskName() {
-      	let regex = new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+$"); // 中文、英文、数字
-      	//判断输入框中有内容
-      	if (!regex.test(this.form.taskName.trim())) {
-      		this.checkTaskName = true;
-      	} else this.checkTaskName = false;
-      },
+			// 校验字段显示名
+			inputTaskName() {
+				let regex = new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+$"); // 中文、英文、数字
+				//判断输入框中有内容
+				if (!regex.test(this.form.taskName.trim())) {
+					this.checkTaskName = true;
+				} else this.checkTaskName = false;
+			},
 		}
 	}
 </script>
@@ -216,14 +214,15 @@
 		}
 
 		section {
-      position: relative;
+			position: relative;
 
-      .validate-info {
-      	position: absolute;
-      	left: 0px;
-      	bottom: 9px;
-      	font-size: 12px;
-      }
+			.validate-info {
+				position: absolute;
+				left: 0px;
+				bottom: 9px;
+				font-size: 12px;
+			}
+
 			p {
 				font-size: 20px;
 				font-weight: 600;

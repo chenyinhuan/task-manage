@@ -3,7 +3,13 @@
 		<p class="title">模版信息</p>
 		<section>
 			<p>模版名称</p>
-			<el-input v-model="taskTplVO.taskName" placeholder="请输入模板名称" maxlength="20" show-word-limit></el-input>
+			<el-input :class="[showValidate && taskTplVO.taskName == ''?'validate-empty':'',
+		  showValidate && taskTplVO.taskName != '' && checkTaskName?'validate-error':'']" @blur="inputTaskName" v-model="taskTplVO.taskName"
+				placeholder="请输入模板名称" maxlength="20" show-word-limit></el-input>
+				<span class="validate-info" style="color: #FF8C00;"
+					v-if="showValidate && taskTplVO.taskName == ''">请输入模板名称</span>
+				<span class="validate-info" style="color: #C03639;"
+					v-if="showValidate && taskTplVO.taskName != '' && checkTaskName">请输入正确的模板名称，支持中文、英文、数字</span>
 		</section>
 		<section>
 			<p>模版说明</p>
@@ -38,6 +44,8 @@
 				</draggable>
 				<div class="add-field" @click="addField(1)">+ 新增表单字段</div>
 			</div>
+			<span class="validate-info1" style="color: #FF8C00;"
+				v-if="showValidate && taskTplVO.taskName == ''">请输入模板名称</span>
 		</section>
 		<section>
 			<p>监测字段（衍生字段）</p>
@@ -68,6 +76,8 @@
 				</draggable>
 				<div class="add-field" @click="addField(2)">+ 新增检测字段</div>
 			</div>
+			<span class="validate-info1" style="color: #FF8C00;"
+				v-if="showValidate && taskTplVO.taskName == ''">请输入模板名称</span>
 		</section>
 		<div class="foot">
 			<el-button type="primary" @click="next()">下一步</el-button>
@@ -204,28 +214,36 @@
 				currentPage: 1,
 				checkedData: [],
 				fieldType: '',
-        taskTplId: ''
+				taskTplId: '',
+				showValidate: false,
+				checkTaskName: false
 			};
 		},
 		created() {},
 		mounted() {},
 		computed: {},
 		methods: {
-      checkSelectable (row, index) {
-        if (this.fieldType == 1) {
-          if(this.taskTplVO.taskTplBasicFieldEntities.length && this.taskTplVO.taskTplBasicFieldEntities.some(el=>{return el.fieldId===row.id})){
-            return false;
-          }else{
-            return true;
-          }
-        }else{
-          if(this.taskTplVO.taskTplComplexFieldEntities.length && this.taskTplVO.taskTplComplexFieldEntities.some(el=>{return el.fieldId===row.id})){
-            return false;
-          }else{
-            return true;
-          }
-        }
-      },
+			checkSelectable(row, index) {
+				if (this.fieldType == 1) {
+					if (this.taskTplVO.taskTplBasicFieldEntities.length && this.taskTplVO.taskTplBasicFieldEntities.some(
+							el => {
+								return el.fieldId === row.id
+							})) {
+						return false;
+					} else {
+						return true;
+					}
+				} else {
+					if (this.taskTplVO.taskTplComplexFieldEntities.length && this.taskTplVO.taskTplComplexFieldEntities
+						.some(el => {
+							return el.fieldId === row.id
+						})) {
+						return false;
+					} else {
+						return true;
+					}
+				}
+			},
 			confirmSelected() {
 				let arr = [];
 				// console.log(this.checkedData)
@@ -255,17 +273,23 @@
 				this.checkedData = val;
 				console.log(val)
 			},
-      rowSelect(row){
-        if (this.fieldType == 1) {
-          if(!(this.taskTplVO.taskTplBasicFieldEntities.length && this.taskTplVO.taskTplBasicFieldEntities.some(el=>{return el.fieldId===row.id}))){
-            this.$refs.table.toggleRowSelection(row);
-          }
-        }else{
-          if(!(this.taskTplVO.taskTplComplexFieldEntities.length && this.taskTplVO.taskTplComplexFieldEntities.some(el=>{return el.fieldId===row.id}))){
-            this.$refs.table1.toggleRowSelection(row);
-          }
-        }
-      },
+			rowSelect(row) {
+				if (this.fieldType == 1) {
+					if (!(this.taskTplVO.taskTplBasicFieldEntities.length && this.taskTplVO.taskTplBasicFieldEntities.some(
+							el => {
+								return el.fieldId === row.id
+							}))) {
+						this.$refs.table.toggleRowSelection(row);
+					}
+				} else {
+					if (!(this.taskTplVO.taskTplComplexFieldEntities.length && this.taskTplVO.taskTplComplexFieldEntities
+							.some(el => {
+								return el.fieldId === row.id
+							}))) {
+						this.$refs.table1.toggleRowSelection(row);
+					}
+				}
+			},
 			handleClose() {
 				this.checkedData = [];
 				this.dialogVisible = false;
@@ -288,24 +312,26 @@
 				this.dialogVisible = true;
 			},
 			next() {
-        if(this.taskTplId) {
-          this.$emit("next", this.taskTplId);
-          return;
-        }
+				if (this.taskTplId) {
+					this.$emit("next", this.taskTplId);
+					return;
+				}
+				if (this.taskTplVO.taskName == '' || this.taskTplVO.taskTplBasicFieldEntities.length == 0 || this.taskTplVO.taskTplComplexFieldEntities
+					.length == 0) return this.showValidate = true;
 				if (this.taskTplVO.taskName == '') return this.$message.warning('请填写模板名称');
 				if (this.taskTplVO.taskTplBasicFieldEntities.length == 0 || this.taskTplVO.taskTplComplexFieldEntities
 					.length == 0) return this.$message.warning('请选择原生字段或者衍生字段');
-        for(let i=0;i<this.taskTplVO.taskTplBasicFieldEntities.length;i++) {
-          let item = this.taskTplVO.taskTplBasicFieldEntities[i];
-          item.sort = i+1;
-        }
-        for(let i=0;i<this.taskTplVO.taskTplComplexFieldEntities.length;i++) {
-          let item = this.taskTplVO.taskTplComplexFieldEntities[i];
-          item.sort = i+1;
-        }
+				for (let i = 0; i < this.taskTplVO.taskTplBasicFieldEntities.length; i++) {
+					let item = this.taskTplVO.taskTplBasicFieldEntities[i];
+					item.sort = i + 1;
+				}
+				for (let i = 0; i < this.taskTplVO.taskTplComplexFieldEntities.length; i++) {
+					let item = this.taskTplVO.taskTplComplexFieldEntities[i];
+					item.sort = i + 1;
+				}
 				saveTaskTpl(this.taskTplVO).then(res => {
 					if (res.code == 0) {
-            this.taskTplId = res.taskTplId;
+						this.taskTplId = res.taskTplId;
 						this.$emit("next", res.taskTplId);
 					} else this.$message.warning(res.msg)
 				})
@@ -338,9 +364,17 @@
 					data.splice(index, 1);
 				})
 			},
-      cancel() {
-        this.$router.push('/task-repository/task-template');
-      }
+			cancel() {
+				this.$router.push('/task-repository/task-template');
+			},
+			// 校验字段显示名
+			inputTaskName() {
+				let regex = new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+$"); // 中文、英文、数字
+				//判断输入框中有内容
+				if (!regex.test(taskTplVO.taskName)) {
+					this.checkTaskName = true;
+				} else this.checkTaskName = false;
+			},
 		},
 	};
 </script>
@@ -391,6 +425,19 @@
 		}
 
 		section {
+			position: relative;
+			.validate-info1 {
+			  position: absolute;
+			  left: 0px;
+			  bottom: -40rpx;
+			  font-size: 12px;
+			}
+			.validate-info {
+				position: absolute;
+				left: 0px;
+				bottom: 9px;
+				font-size: 12px;
+			}
 			p {
 				font-size: 20px;
 				font-weight: 600;
