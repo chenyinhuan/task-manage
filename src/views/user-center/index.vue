@@ -19,20 +19,20 @@
 		</section>
 		<el-dialog title="修改密码" :visible.sync="dialogVisible" width="498px" :close-on-click-modal="false" @close="close">
 			<el-form :model="form" inline label-width="146px">
-				<el-form-item label="原密码:" :class="[showValidate && form.password == ''?'validate-empty':'']">
-					<el-input auto-complete="new-password" v-model="form.password" type="password" placeholder="原密码">
+				<el-form-item label="原密码:"  :class="[showValidate && form.password == ''?'validate-empty':'']">
+					<el-input auto-complete="new-password" maxlength="20" v-model="form.password" type="password" placeholder="原密码">
 					</el-input>
 					<span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.password == ''">请输入原密码{{form.password}}</span>
 				</el-form-item>
 				<el-form-item label="新密码:" :class="[showValidate && form.newPassword == ''?'validate-empty':'',
 				showValidate && form.newPassword != '' && checkNewPassword?'validate-error':'']">
-					<el-input auto-complete="new-password" v-model="form.newPassword" type="password"
+					<el-input  maxlength="20" auto-complete="new-password" v-model="form.newPassword" type="password"
 						placeholder="设置6至20位登录密码"></el-input>
 					<span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.newPassword == ''">请输入新密码</span>
 					<span class="validate-info" style="color: #C03639;" v-if="showValidate && form.newPassword != '' && checkNewPassword">请输入正确新密码,支持6-20位字符</span>
 				</el-form-item>
 				<el-form-item label="确认新密码:" :class="[showValidate && form.newPassword != form.newConfirmPassword?'validate-error':'']">
-					<el-input auto-complete="new-password" v-model="form.newConfirmPassword" type="password"
+					<el-input maxlength="20" auto-complete="new-password" v-model="form.newConfirmPassword" type="password"
 						placeholder="请再次输入登录密码"></el-input>
 					<span class="validate-info" style="color: #C03639;" v-if="showValidate && form.newPassword != '' && form.newPassword != form.newConfirmPassword">两次密码输入不一致</span>
 				</el-form-item>
