@@ -34,7 +34,7 @@
           <el-option v-for="(ritem,rindex) in roleList" :key="rindex" :label="ritem.roleName"
         :value="ritem.roleId"></el-option>
         </el-select>
-<!--        <span style="position:inherit;" class="error" v-show="item.deptId == '' || item.roleIdList == ''">请选择部门/角色</span>-->
+        <span style="position:inherit;" class="error" v-show="deptValidate && item.roleIdList == ''">请选择部门/角色</span>
       </div>
       <el-button class="add-role" type="primary" @click="addRole()">+新增</el-button>
     </section>
@@ -75,7 +75,8 @@
         mobileValidate:false,
         nameValidate: false,
         pswValidate: false,
-        conPswValidate: false
+        conPswValidate: false,
+        deptValidate: false
       }
     },
     created() {
@@ -136,20 +137,29 @@
       create() {
         var reg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
         //判断输入框中有内容
-        console.log(this.form.mobile && !reg.test(this.form.mobile.trim()))
         if(!this.form.mobile){
           this.mobileValidate = true;
           this.showValidate = false;
+          return
         }
         if (this.form.mobile && !reg.test(this.form.mobile.trim())) {
           this.showValidate = true;
           this.mobileValidate = false;
+          return
         }else {
           this.showValidate = false;
         }
-        console.log(this.form.password == '' || this.form.conPassword == '')
-        if(this.form.password == '' || this.form.conPassword == ''){
-           this.validate = true;
+        if(!this.form.username){
+          this.nameValidate = true
+          return
+        }
+        if(this.form.password == ''){
+          this.pswValidate = true
+          this.pswError = false;
+          return
+        }
+        if(this.form.conPassword == ''){
+           this.conPswValidate = true;
            this.pswError = false;
           return
         }
@@ -161,7 +171,12 @@
         let roleIdList = this.permission.map(item => {
           return item.roleIdList
         })
-
+        if(!this.permission[0].deptId || !roleIdList[0]) {
+          this.deptValidate = true
+          return;
+        }else{
+          this.deptValidate = false
+        }
         if(this.isEdit != 0) {
           let params = {
             mobile: this.form.mobile,

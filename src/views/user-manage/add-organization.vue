@@ -3,9 +3,14 @@
     <section>
       <p>组织名</p>
       <el-input :class="[validate && formData.name == ''?'validate-empty':'',
-		  validate && formData.name != '' && checkName?'validate-error':'']" v-model="formData.name" @blur="inputName" placeholder="请输入组织名" maxlength="20" show-word-limit></el-input>
+		  formData.name != '' && checkName?'validate-error':'']" v-model="formData.name" @input="inputName" placeholder="请输入组织名" maxlength="20" show-word-limit></el-input>
       <span class="error" style="color: #FF8C00;"  v-show="validate && !formData.name">请输入组织名</span>
-      <span class="error" style="color: #C03639;" v-show="validate && formData.name!='' && checkName">支持中文、英文，20字符以内</span>
+      <span class="error" style="color: #C03639;" v-show="formData.name!='' && checkName">支持中文、英文，20字符以内</span>
+    </section>
+    <section>
+      <p>组织排序</p>
+      <el-input :class="[validate1 && formData.orderNum == ''?'validate-empty':'']" v-model="formData.orderNum"  placeholder="组织排序" type="number"></el-input>
+      <span  style="font-size: 14px;margin-left: 10px;">说明：只允许填入整数，数值越小位置越靠前</span>
     </section>
     <div class="foot">
       <el-button type="primary" @click="addDept">{{type?'创建':'修改'}}</el-button>
@@ -22,7 +27,8 @@
         },
         type: '',
         validate: false,
-        checkName: false
+        checkName: false,
+        validate1: false
       }
     },
     created() {
@@ -46,6 +52,9 @@
       },
       addDept(){
         if(!this.formData.name) return this.validate = true;
+        if(this.validate || this.checkName) {
+         return  false
+        }
         if(this.type){
           saveAddDept(this.formData).then(res=>{
             if(res.code==0){
