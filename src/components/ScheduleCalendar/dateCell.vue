@@ -3,14 +3,13 @@
     @dragover.prevent="" @dragenter.prevent="dragenter" @drop="onDrop" @click="cellClick">
     <div class="schedule-calendar-date-hd">
       <div class="schedule-calendar-date-label">{{type != 'prev' && type != 'next' ?date.getDate():''}}</div>
-      <!-- <button type="button"
-                    class="schedule-calendar-counter"
-                    v-if="details.length > volume"
-                    @click.stop.prevent="expandAll">共 {{details.length}} 项</button> -->
     </div>
-    <div class="schedule-calendar-details" :class="{ expanded }" :style="detailsPost" ref="details">
-      <div v-if="isToday" class="today-des">进行中任务数:5</div>
-      <el-popover
+    <div class="schedule-calendar-details"
+	:style="detailsPost" ref="details">
+      <el-popover v-if="data.find(n => n.today == formatDate) && (data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout >0 || 
+		 data.find(n => n.today == formatDate).dailyTaskTargetCompleteCout >0 || 
+		 data.find(n => n.today == formatDate).dailyTaskTargetUncompleteCout >0)"
+	:class="{ expanded }"
       :visible-arrow="false"
         popper-class="detail-info"
         placement="bottom-start"
@@ -19,43 +18,36 @@
         <ul class="task-info">
         	<li>
         		<div class="dot" style="background-color: #00B043;"></div>
-        		<p>任务指标今日待考核5</p>
+        		<p>任务指标今日待考核：{{data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout}}</p>
         	</li>
         	<li>
         		<div class="dot" style="background-color: #FF9300;"></div>
-        		<p>任务指标考核完成4</p>
+        		<p>任务指标考核完成：{{data.find(n => n.today == formatDate).dailyTaskTargetCompleteCout}}</p>
         	</li>
         	<li>
         		<div class="dot" style="background-color: #FE642B;"></div>
-        		<p>任务指标考核未完成2</p>
+        		<p>任务指标考核未完成：{{data.find(n => n.today == formatDate).dailyTaskTargetUncompleteCout}}</p>
         	</li>
         </ul>
         <div v-if="!isToday && type != 'prev' && type != 'next'" class="progress" slot="reference">
-          <el-progress type="circle" color="#FF8C00" :stroke-width="4" :width="40" :percentage="70"></el-progress>
-          <span class="des">进行中任务数:5</span>
+          <el-progress type="circle" color="#FF8C00" :stroke-width="4" :width="40" :percentage="Number(data.find(n => n.today == formatDate).percentDailyTaskTargetComelete.replace('%',''))?Number(data.find(n => n.today == formatDate).percentDailyTaskTargetComelete.replace('%','')):0"></el-progress>
+          <span class="des">进行中任务数：{{data.find(n => n.today == formatDate)?data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout:''}}</span>
         </div>
+		<div slot="reference" v-if="isToday && type != 'prev' && type != 'next'" class="today-des">进行中任务数：{{data.find(n => n.today == formatDate)?data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout:''}}</div>
       </el-popover>
-      <!-- <div v-show="expanded" class="schedule-calendar-details-hd">{{ dateString }}</div>
-      <div class="schedule-calendar-details-bd">
-        <event-item v-if="details.length" v-for="item in displayDetails" :item="item" :date="date" :type="type"
-          :itemRender="itemRender" @item-dragstart="dragItem" :key="item.id"></event-item>
-      </div> -->
     </div>
   </div>
 </template>
 <script>
+  import moment from 'moment';
   import {
     EventBus,
     isSameDay,
     format,
     Store
   } from './utils'
-  import eventItem from './eventItem'
 
   export default {
-    components: {
-      eventItem
-    },
     props: {
       date: Date,
       type: String,
@@ -67,9 +59,22 @@
     data() {
       return {
         volume: 0,
-        expanded: false
+        expanded: false,
+		formatDate: ''
       }
     },
+	watch: {
+	  data: {
+	    handler(val, oldVal) {
+	      // console.log(val)
+	    },
+	    immediate: true,
+	    deep: true //true 深度监听
+	  }
+	},
+	created() {
+		this.format();
+	},
     computed: {
       isToday() {
         return isSameDay(new Date(), this.date)
@@ -102,6 +107,9 @@
       }
     },
     methods: {
+      format() {
+		  this.formatDate = moment(this.date).format('YYYY-MM-DD')
+	  },
       calcVolume() {
         this.volume = Math.floor(this.$refs.details.clientHeight / 27)
       },

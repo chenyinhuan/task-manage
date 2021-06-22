@@ -323,7 +323,7 @@ export const routes = [
   // 匹配所有重定向首页
   {
     path: '*',
-    redirect: '/login'
+    redirect: '/task-center'
   }
 ]
 

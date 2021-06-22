@@ -15,49 +15,18 @@
 				<li class="tab-item" v-for="(item, index) in tabList" :key="index">
 					<span class="tit">{{ item.title }}</span><span class="num">{{ item.number }}</span>
 				</li>
-				<!-- <div class="date">
-					<div class="img"><img src="@/images/my-task/up.png"></div>
-					<div class="des">{{selectDate}}</div>
-					<div class="img"><img src="@/images/my-task/down.png"></div>
-				</div> -->
 			</ul>
 			<div class="calendar-list"
 				:style="{ height: calandarNextNum > 0 && calandarNextNum < 7  ? '800px' : '676px' }">
-				<schedule-calendar :events="events" :dateItemRender="itemRender" @event-dragend="changeDate"
+				<schedule-calendar :events="events" :dateItemRender="itemRender"
 					@date-click="dateClick" @update-value="updateValue" :calandarNextNum="calandarNextNum">
 				</schedule-calendar>
-				<!-- <ul class="week">
-					<li v-for="(item,index) in week" :key="index">{{item.name}}</li>
-				</ul>
-				<ul class="week-date">
-					<li v-for="(item,index) in calendarList" :key="index">
-						<div :class="[index==16?'today':'day']">{{index+1}}</div>
-						<div v-if="index==3" class="progress">
-							<el-progress type="circle" color="#FF8C00" :stroke-width="4" :width="40" :percentage="70"></el-progress>
-							<span class="des">进行中任务数:5</span>
-						</div>
-						<div v-if="index==16"class="today-des">进行中任务数:5</div>
-						<ul v-if="index == 3" class="task-info">
-							<li>
-								<div class="dot" style="background-color: #00B043;"></div>
-								<p>任务指标今日待考核5</p>
-							</li>
-							<li>
-								<div class="dot" style="background-color: #FF9300;"></div>
-								<p>任务指标考核完成4</p>
-							</li>
-							<li>
-								<div class="dot" style="background-color: #FE642B;"></div>
-								<p>任务指标考核未完成2</p>
-							</li>
-						</ul>
-					</li>
-				</ul> -->
 			</div>
 		</section>
 	</div>
 </template>
 <script>
+	import moment from 'moment';
 	import sending from "@/images/my-task/sending.png";
 	import completed from "@/images/my-task/completed.png";
 	import taskcomplete from "@/images/my-task/task-complete.png";
@@ -66,143 +35,30 @@
 	import {
 		monthlyCalendar
 	} from "@/components/ScheduleCalendar/utils";
+	import {getTaskCenter} from '@/api/task-center/my-task/index.js'
 	export default {
 		data() {
 			return {
-				countList: [{
-						imageUrl: sending,
-						title: "累计考核任务指标数",
-						number: 78,
-						bgColor: "#FF9300",
-					},
-					{
-						imageUrl: completed,
-						title: "累计完成任务指标数",
-						number: 59,
-						bgColor: "#00B043",
-					},
-					{
-						imageUrl: taskcomplete,
-						title: "任务指标完成率",
-						number: "50%",
-						bgColor: "#0089FE",
-					},
-					{
-						imageUrl: task,
-						title: "考核中的任务指标数",
-						number: 45,
-						bgColor: "#FE642B",
-					},
-					{
-						imageUrl: waite,
-						title: "进行中任务数",
-						number: 6,
-						bgColor: "#7718A6",
-					},
+				countList: [
+					{imageUrl: sending,title: "累计考核任务指标数",number: 78,bgColor: "#FF9300"},
+					{imageUrl: completed,title: "累计完成任务指标数",number: 59,bgColor: "#00B043"},
+					{imageUrl: taskcomplete,title: "任务指标完成率",number: "50%",bgColor: "#0089FE"},
+					{imageUrl: task,title: "考核中的任务指标数",number: 45,bgColor: "#FE642B"},
+					{imageUrl: waite,title: "进行中任务数",number: 6,bgColor: "#7718A6"}
 				],
-				tabList: [{
-						title: "本月应考核任务指标数：",
-						number: 6,
-					},
-					{
-						title: "本月任务指标完成率：",
-						number: "75%",
-					},
-					{
-						title: "当前进行中任务数：",
-						number: 6,
-					},
+				tabList: [
+					{title: "本月应考核任务指标数：",number: 0},
+					{title: "本月任务指标完成率：",number: "0%"},
+					{title: "当前进行中任务数：",number: 0}
 				],
-				calendarList: Array(30),
 				selectDate: "2020-04",
-				week: [{
-						name: "周一"
-					},
-					{
-						name: "周二"
-					},
-					{
-						name: "周三"
-					},
-					{
-						name: "周四"
-					},
-					{
-						name: "周五"
-					},
-					{
-						name: "周六"
-					},
-					{
-						name: "周日"
-					},
-				],
-				events: [{
-						id: 111,
-						date: "2017-04-03",
-						text: "老铁，扎心了",
-						status: 1,
-					},
-					{
-						id: 222,
-						date: "2017-04-03",
-						text: "来啊，互相伤害",
-						status: 2,
-					},
-					{
-						id: 333,
-						date: "2017-04-03",
-						text: "这个人好会装逼",
-						status: 3,
-					},
-					{
-						id: 444,
-						date: "2017-04-03",
-						text: "那你很棒哟",
-						status: 4,
-					},
-					{
-						id: 555,
-						date: "2017-04-03",
-						text: "我表示很无奈",
-						status: 5,
-					},
-					{
-						id: 666,
-						date: "2017-04-09",
-						text: "老铁，扎心了",
-						status: 6,
-					},
-					{
-						id: 777,
-						date: "2017-04-09",
-						text: "来啊，互相伤害",
-						status: 7,
-					},
-					{
-						id: 888,
-						date: "2017-04-09",
-						text: "这个人好会装逼",
-						status: 8,
-					},
-					{
-						id: 999,
-						date: "2017-04-09",
-						text: "那你很棒哟",
-						status: 9,
-					},
-					{
-						id: 1010,
-						date: "2017-04-09",
-						text: "我表示很无奈",
-						status: 10,
-					},
-				],
+				events: [],
 				itemRender(item) {
 					const h = this.$createElement;
 					return h("span", "CustomRender：" + item.text);
 				},
 				calandarNextNum: 0,
+				taskCenterDailyDTOList: []
 			};
 		},
 		created() {
@@ -214,29 +70,42 @@
 				return item;
 			});
 			this.calandarNextNum = monthlyCalendar(new Date().getFullYear(), new Date().getMonth(), 1).nextNum;
+			let date = moment().format('YYYY-MM-DD');
+			this.getMothData(date);
 		},
 		mounted() {},
 		computed: {},
 		methods: {
+			getMothData(date) {
+				let params = {
+					startTime: moment(moment(date).startOf('month').valueOf()).format('YYYY-MM-DD HH:mm:ss'),
+					endTime: moment(moment(date).endOf('month').valueOf()).format('YYYY-MM-DD HH:mm:ss')
+				}
+				getTaskCenter(params).then(res => {
+					if(res.code == 0) {
+						this.events = res.taskCenter.taskCenterDailyDTOList;
+						this.tabList[0].number = res.taskCenter.taskTargetsCount;
+						this.tabList[1].number = res.taskCenter.percentTaskTargetComelete;
+						this.tabList[2].number = res.taskCenter.taskTargetWorkingCount;
+					}
+				})
+			},
 			updateValue(year, month) {
 				this.calandarNextNum = monthlyCalendar(year, month, 1).nextNum;
-				console.log(this.calandarNextNum)
-			},
-			changeDate(e, item, date) {
-				const updateIndex = this.events.findIndex((ele) => ele.id === item.id);
-				this.$set(this.events, updateIndex, {
-					...this.events[updateIndex],
-					date,
-				});
+				this.getMothData(`${year}-${month+1}-1 00:00:00`)
 			},
 			dateClick(e, val) {
-				console.log(val);
-				this.$router.push({
-					path: `/task-center/task-list`,
-					query: {
-						date: val,
-					},
-				});
+				console.log(e, val);
+				if(this.events.find(n => n.today == val) && (this.events.find(n => n.today == val).dailyTaskTargetWorkingCout >0 || 
+				 this.events.find(n => n.today == val).dailyTaskTargetCompleteCout >0 || 
+				 this.events.find(n => n.today == val).dailyTaskTargetUncompleteCout >0)) {
+					this.$router.push({
+						path: `/task-center/task-list`,
+						query: {
+							date: val,
+						},
+					});
+				}
 			},
 		},
 	};

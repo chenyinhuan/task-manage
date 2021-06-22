@@ -10,6 +10,7 @@ import commonComponents from './components';
 import * as filters from './filters' // global filters
 import vcolorpicker from 'vcolorpicker'
 
+
 import '@/directive';
 import store from './store';
 Object.keys(filters).forEach(key => {

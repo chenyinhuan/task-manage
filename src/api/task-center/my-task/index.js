@@ -35,3 +35,10 @@ export const getRecordListInputs = (params) => api.post(`/task-admin/task/tk/rec
  * @params params
  */
 export const getTaskTargetList = (params) => api.post(`/task-admin/task/tk/target/user/page/${params.taskId}`, params);
+
+/**
+ * 任务中心-日历
+ * @params params
+ */
+export const getTaskCenter = (params) => api.post(`/task-admin/task/tk/user/taskcenter`, params);
+
