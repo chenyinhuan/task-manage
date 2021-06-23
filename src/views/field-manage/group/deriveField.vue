@@ -234,7 +234,7 @@
 			init() {
         getComplexcDetail({id: this.id}).then(res=>{
           this.form = res.field
-          this.enums = this.form.enums
+          if(this.form.enums && this.form.enums.length) this.enums = this.form.enums
           if(this.form.ruleType){
             let params = {
               "dataTypes": [], //数据类型，为空时取全部
