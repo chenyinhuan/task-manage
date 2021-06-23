@@ -7,7 +7,7 @@
 				<p>任务管理系统</p>
 				<div style="position: relative;"
 					:class="[tip?'validate-error1':'',validate && password == ''?'validate-empty1':'']">
-					<el-input v-model="phonenumber" class="phone" @keyup.enter.native="enterPhone">
+					<el-input v-model="phonenumber" placeholder="请输入登录账号" class="phone" @keyup.enter.native="enterPhone">
 						<template slot="prepend">
 							<div class="pre"><span>+86</span>
 								<div class="line"></div>
@@ -15,7 +15,7 @@
 						</template>
 					</el-input>
 					<span v-if="validate && phonenumber == ''" class="error or">请填写登录账号</span>
-					<el-input ref="psw" v-model="password" maxlength="20" show-password class="password" @keyup.enter.native="goLogin">
+					<el-input ref="psw" v-model="password" placeholder="请输入6至20位登录密码" maxlength="20" show-password class="password" @keyup.enter.native="goLogin">
 					</el-input>
 					<span v-if="validate && password == ''" class="error or">请填写登录密码</span>
 					<span v-if="tip" class="error red">账号或密码错误</span>

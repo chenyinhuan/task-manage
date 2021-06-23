@@ -13,19 +13,22 @@
       <span class="error" style="color: #FF8C00;" v-show="nameValidate && !form.username">请输入使用人姓名</span>
     </section>
     <section>
-      <p>登录密码</p>
-      <el-input :class="[pswValidate && !form.password?'validate-empty':'']" v-model="form.password" type="password" @blur="inputPsw" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
+      <p>登录密码{{pswValidate}}</p>
+      <el-input :class="[pswValidate && !form.password?'validate-empty':'',
+	  pswValidate && form.password != '' && form.password.length<6?'validate-error':''
+	  ]" v-model="form.password" type="password" @blur="inputPsw" auto-complete="new-password" placeholder="请输入6至20位登录密码" maxlength="20" show-word-limit></el-input>
       <span class="error" style="color: #FF8C00;" v-show="pswValidate && !form.password">请输入登录密码</span>
+	  <span class="error" style="color: #C03639;" v-show="pswValidate && form.password != '' && form.password.length<6">请输入6至20位登录密码</span>
     </section>
     <section>
       <p>确认登录密码</p>
-      <el-input :class="[conPswValidate && !form.conPassword?'validate-empty':'']" v-model="form.conPassword" type="password" @blur="inputConPsw" auto-complete="new-password" placeholder="请输入登录密码" maxlength="20" show-word-limit></el-input>
+      <el-input :class="[conPswValidate && !form.conPassword?'validate-empty':'']" v-model="form.conPassword" type="password" @blur="inputConPsw" auto-complete="new-password" placeholder="请输入6至20位登录密码" maxlength="20" show-word-limit></el-input>
       <span class="error" style="color: #FF8C00;" v-show="conPswValidate && !form.conPassword">请输入登录密码</span>
       <span class="error" style="color: #C03639;" v-show="pswError">输入密码不一致！</span>
     </section>
     <section>
       <p>匹配角色</p>
-      <div v-for="(item, index) in permission" :key="index" style="display: flex;align-items: center">
+      <div v-for="(item, index) in permission" :key="index" style="display: flex;align-items: center;position: relative;">
         <el-select v-model="item.deptId" placeholder="选择部门">
           <el-option v-for="(ditem,dindex) in deptlist" :key="dindex" :label="ditem.name"
         :value="ditem.deptId"></el-option>
@@ -34,7 +37,7 @@
           <el-option v-for="(ritem,rindex) in roleList" :key="rindex" :label="ritem.roleName"
         :value="ritem.roleId"></el-option>
         </el-select>
-        <span style="position:inherit;" class="error" v-show="deptValidate && item.roleIdList == ''">请选择部门/角色</span>
+        <span class="error1" v-show="deptValidate && item.roleIdList == ''">请选择部门/角色</span>
       </div>
       <el-button class="add-role" type="primary" @click="addRole()">+新增</el-button>
     </section>
@@ -158,6 +161,10 @@
           this.pswError = false;
           return
         }
+		if(this.form.password.length < 6){
+		  this.pswValidate = true
+		  return
+		}
         if(this.form.conPassword == ''){
            this.conPswValidate = true;
            this.pswError = false;
@@ -191,9 +198,7 @@
           updateAccount(params).then(res => {
             if(res.code == 0) {
               this.$message.success('修改成功！');
-              setTimeout(() => {
-                this.$router.go(-1);
-              },2000)
+              this.$router.push('/user-manage/account-config')
             }
             else this.$message.warning(res.msg)
           })
@@ -211,9 +216,7 @@
           addAccount(params).then(res => {
             if(res.code == 0) {
               this.$message.success('创建成功！');
-              setTimeout(() => {
-                this.$router.go(-1)
-              },2000)
+              this.$router.push('/user-manage/account-config')
             }else this.$message.warning(res.msg)
           })
         }
@@ -246,6 +249,13 @@
     }
     section{
       position: relative;
+      
+      .validate-info {
+      	position: absolute;
+      	left: 0px;
+      	bottom: 9px;
+      	font-size: 12px;
+      }
       .add{
         font-size: 14px;
         font-weight: 500;
@@ -298,5 +308,12 @@
       bottom: 7px;
       left: 0px;
     }
+	.error1 {
+		position: absolute;
+		color: $red;
+		font-size: 12px;
+		bottom: 20px;
+		left: 400px;
+	}
   }
 </style>

@@ -65,7 +65,7 @@
 
 <script>
   import {
-    saveNative,
+    saveBasic,
     getNativeEnums
   } from '@/api/filed-manage/index.js'
   export default {
@@ -153,7 +153,7 @@
           params.id = this.id
           //修改方法
         } else { //新增
-          saveNative(params).then(res => {
+          saveBasic(params).then(res => {
             console.log(res)
             if (res.code == 0) {
               this.$message.success('新增成功！');

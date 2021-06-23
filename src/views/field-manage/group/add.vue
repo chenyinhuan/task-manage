@@ -37,6 +37,7 @@
 	import {
 		getPageList
 	} from '@/api/filed-manage/index.js'
+	import {deleteField} from '@/api/filed-manage/index.js'
 	export default {
 		data() {
 			return {
@@ -95,14 +96,27 @@
 				this.$router.push('/field-manage/add-field?type=' + item.type + '&id=' + item.id)
 			},
 			deleteInfo(item) {
-				this.$confirm(`删除后将无法恢复此字段的相关记录，
-        如果已经被调用将无法删除，希望删除请删除关联字段、
-        指标和任务模版`, '是否确认删除字段？', {
+				let _this = this;
+				_this.$confirm(`删除后将无法恢复此字段的相关记录，
+				如果已经被调用将无法删除，希望删除请删除关联字段、
+				指标和任务模版`, '是否确认删除字段？', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-
+					_this.deleteItem(item);
+				})
+			},
+			deleteItem(item) {
+				console.log(item)
+				let params = {
+					id: item.id
+				}
+				deleteField(params).then(res => {
+					if (res.code == 0) {
+						this.$message.success('删除成功！');
+						this.init();
+					} else this.$message.warning(res.msg)
 				})
 			},
 			init() {

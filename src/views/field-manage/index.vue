@@ -12,15 +12,16 @@
     </section>
     <div style="margin-top: 16px;">
       <!-- 原生字段 -->
-      <origin-field v-show="type==1"></origin-field>
+      <origin-field v-show="type==1" @deleteItem="deleteItem"></origin-field>
       <!-- 衍生字段 -->
-      <add-field v-show="type==2"></add-field>
+      <add-field v-show="type==2" @deleteItem="deleteItem"></add-field>
     </div>
   </div>
 </template>
 <script>
   import originField from '@/views/field-manage/group/original.vue';
   import addField from '@/views/field-manage/group/add.vue';
+  import {deleteField} from '@/api/filed-manage/index.js'
   export default {
     components: {
       originField,
@@ -50,6 +51,17 @@
       },
       search() {
         console.log(this.keyword)
+      },
+      deleteItem(item) {
+		  console.log(item)
+		let params = {
+			id: item.id
+		}	
+		 deleteField(params).then(res => {
+			 if(res.code == 0) {
+				 this.$message.warning('删除成功！')
+			 }
+		 })
       }
     }
   }
