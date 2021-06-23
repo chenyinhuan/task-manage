@@ -209,7 +209,7 @@
 					.el-input__inner {
 						border-radius: 8px;
 						padding: 25px;
-						font-size: 23px;
+						font-size: 16px;
 					}
 				}
 			}

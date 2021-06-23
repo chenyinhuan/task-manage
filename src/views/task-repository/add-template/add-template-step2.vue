@@ -449,12 +449,15 @@
         let msg = '';
         let taskTplTargetVOs = JSON.parse(JSON.stringify(this.taskTplTargetVOs))
         taskTplTargetVOs.forEach(item => {
+					
         	if (item.taskTplTargetEntity.targetName == '') {
         		flag = false;
         	}
+			flag = !this.checkTaskName(item.taskTplTargetEntity.targetName);
         	if (!item.taskTplTargeelseEntity.elseResult && flag) {
         		flag = false;
         	}
+			
         	if (flag) {
         		item.taskTplTargeelseEntity.elseResultShow = item.taskTplTargeelseEntity.elseResultShow[0];
         		item.taskTplTargeelseEntity.elseResultShowType = item.taskTplTargeelseEntity

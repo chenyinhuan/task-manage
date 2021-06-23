@@ -317,7 +317,7 @@
 					return;
 				}
 				if (this.taskTplVO.taskName == '' || this.taskTplVO.taskTplBasicFieldEntities.length == 0 || this.taskTplVO.taskTplComplexFieldEntities
-					.length == 0) return this.showValidate = true;
+					.length == 0 || this.checkTaskName) return this.showValidate = true;
 				for (let i = 0; i < this.taskTplVO.taskTplBasicFieldEntities.length; i++) {
 					let item = this.taskTplVO.taskTplBasicFieldEntities[i];
 					item.sort = i + 1;

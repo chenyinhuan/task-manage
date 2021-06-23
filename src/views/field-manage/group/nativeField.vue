@@ -139,7 +139,8 @@
         ]
       },
       save() {
-        if (this.form.fieldName == '' || this.form.name == '') return this.showValidate = true;
+        if (this.form.fieldName == '' || this.form.name == '' || this.form.formType == '') return this.showValidate = true;
+		if(this.checkFieldName || this.checkName) return;
         let params = {
           "dataType": this.form.dataType, //数据类型 1：字符串型string，2：整数int，3小数数值float，4日期date，5 时间time
           "description": this.form.description, //描述
@@ -171,14 +172,14 @@
       inputFieldName() {
         let regex = new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+$"); // 中文、英文、数字
         //判断输入框中有内容
-        if (!regex.test(this.form.fieldName.trim())) {
+        if (!regex.test(this.form.fieldName)) {
           this.checkFieldName = true;
         }else this.checkFieldName = false;
       },
       inputName() {
         let regex = new RegExp("^[a-zA-Z0-9_]+$"); // 英文、数字、下划线
         //判断输入框中有内容
-        if (!regex.test(this.form.name.trim())) {
+        if (!regex.test(this.form.name)) {
           this.checkName = true;
         }else this.checkName = false;
       }

@@ -280,9 +280,8 @@
 				})
 			},
 			save() {
-				if (this.form.fieldName == '' || this.form.name == '' || this.form.ruleType == '') return this
-					.showValidate = true;
-				// if(this.form.ruleType == '') return this.$message.warning('请选择加工方式');
+				if (this.form.fieldName == '' || this.form.name == '' || this.form.ruleType == '') return this.showValidate = true;
+				if(this.checkFieldName || this.checkName) return;
 				let params = {};
 				if (this.form.ruleType == 1) {
 					let complexMahtRuleVOs = [];
