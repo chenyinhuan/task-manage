@@ -454,7 +454,8 @@
         		flag = false;
         	}
 			flag = !this.checkTaskName(item.taskTplTargetEntity.targetName);
-        	if (!item.taskTplTargeelseEntity.elseResult && flag) {
+			
+        	if (item.taskTplTargetEntity.targetResultShowType[0] == 1 && !item.taskTplTargeelseEntity.elseResult && flag) {
         		flag = false;
         	}
 			
