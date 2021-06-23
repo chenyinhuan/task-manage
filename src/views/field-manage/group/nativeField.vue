@@ -64,10 +64,7 @@
 </template>
 
 <script>
-  import {
-    saveBasic,
-    getNativeEnums
-  } from '@/api/filed-manage/index.js'
+  import {saveBasic, getNativeEnums,getBasicDetail,updateBasic} from '@/api/filed-manage/index.js'
   export default {
     name: "nativeField",
     props: {
@@ -107,13 +104,9 @@
     },
     methods: {
       init() {
-        getNativeEnums({
-          id: this.id
-        }).then(res => {
-          if (res.field.type == 1) {
-            this.form = res.field
-            this.enums = this.form.fieldEnumEntityList
-          }
+        getBasicDetail({id:this.id}).then(res=>{
+          this.form = res.field
+          this.enums = this.form.enums
         })
       },
       addEditDomain() {
@@ -152,12 +145,20 @@
         if (this.id) { //编辑
           params.id = this.id
           //修改方法
+          updateBasic(params).then(res => {
+            if (res.code == 0) {
+              this.$message.success('编辑成功！');
+              this.$router.push('/field-manage')
+            } else {
+              this.$message.warning(res.msg);
+            }
+          })
         } else { //新增
           saveBasic(params).then(res => {
             console.log(res)
             if (res.code == 0) {
               this.$message.success('新增成功！');
-              this.back()
+              this.$router.push('/field-manage')
             } else {
               this.$message.warning(res.msg);
             }

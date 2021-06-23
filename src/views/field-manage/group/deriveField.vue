@@ -124,11 +124,7 @@
 </template>
 
 <script>
-	import {
-		getNativeList,
-		getNativeEnums,
-		saveComplex
-	} from '@/api/filed-manage/index.js'
+	import {getNativeList, getNativeEnums, saveComplex,getComplexcDetail,updateComplex} from '@/api/filed-manage/index.js'
 	export default {
 		name: "deriveField",
 		props: {
@@ -236,13 +232,22 @@
 		},
 		methods: {
 			init() {
-				getNativeEnums({
-					id: this.id
-				}).then(res => {
-					if (res.field.type == 2) {
-						this.form = res.field
-					}
-				})
+        getComplexcDetail({id: this.id}).then(res=>{
+          this.form = res.field
+          this.enums = this.form.enums
+          if(this.form.ruleType){
+            let params = {
+              "dataTypes": [], //数据类型，为空时取全部
+              "formTypes": [], //表单类型，为空时取全部
+              "type": '' //字段类型1：原生2衍生，为空时取全部
+            }
+            getNativeList(params).then(res => {
+              if (res.code == 0) {
+                this.nativeList = res.fields;
+              }
+            })
+          }
+        })
 			},
 			addEditDomain() {
 				if (this.enums.length >= 6) return this.$message.warning('最多只能新增5个！')
@@ -336,12 +341,20 @@
 				}
 				if (this.id) { //编辑
 					params.id = this.id
-					//修改方法
+          //修改方法
+          updateComplex(params).then(res => {
+            if (res.code == 0) {
+              this.$message.success('编辑成功！');
+              this.$router.push('/field-manage')
+            } else {
+              this.$message.warning(res.msg);
+            }
+          })
 				} else { //新增
 					saveComplex(params).then(res => {
 						if (res.code == 0) {
 							this.$message.success('新增成功！');
-							this.back()
+              this.$router.push('/field-manage')
 						} else {
 							this.$message.warning(res.msg ? res.msg : '新增失败！');
 						}
