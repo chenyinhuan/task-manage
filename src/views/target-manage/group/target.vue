@@ -104,9 +104,7 @@
         this.form.targesubs.splice(0,1)
       },
       save(){
-        if (this.form.targetName == '' || this.form.targetQuoteEndId == '') return this.showValidate = true;
-        this.inputTatgetName();
-        if(this.checkTargetName) return;
+        if (this.form.targetName == '' || this.form.targetQuoteEndId == '' || this.checkTargetName) return this.showValidate = true;
         let params = {};
         if(this.form.targesubs.length == 1) {
           this.form.targesubs = [{

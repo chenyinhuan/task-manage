@@ -134,6 +134,7 @@
           <span class="validate-info1" style="color: #FF8C00;" v-if="showValidate
           && item.taskTplTargetEntity.targetResultShowType == 2 && item.taskTplTargetEntity.targetId == ''">请选择输出指标</span>
         </div>
+        <span class="validate-info" style="color: #C03639;bottom: -24px;" v-if="!item.taskTplTargeelseEntity.elseResult && checkElseResult">请填写否则输出结果</span>
       </section>
       <section class="end-time">
         <p>任务指标考核结束时间</p>
@@ -308,7 +309,8 @@
           label: '每月',
           value: 3
         }],
-        showValidate: false
+        showValidate: false,
+        checkElseResult: false
       }
     },
     created() {
@@ -449,16 +451,15 @@
         let msg = '';
         let taskTplTargetVOs = JSON.parse(JSON.stringify(this.taskTplTargetVOs))
         taskTplTargetVOs.forEach(item => {
-					
+
         	if (item.taskTplTargetEntity.targetName == '') {
         		flag = false;
         	}
-			flag = !this.checkTaskName(item.taskTplTargetEntity.targetName);
-			
+        flag = !this.checkTaskName(item.taskTplTargetEntity.targetName);
         	if (item.taskTplTargetEntity.targetResultShowType[0] == 1 && !item.taskTplTargeelseEntity.elseResult && flag) {
         		flag = false;
+            this.checkElseResult = true;
         	}
-			
         	if (flag) {
         		item.taskTplTargeelseEntity.elseResultShow = item.taskTplTargeelseEntity.elseResultShow[0];
         		item.taskTplTargeelseEntity.elseResultShowType = item.taskTplTargeelseEntity
@@ -471,6 +472,7 @@
         		})
         	}
         })
+        console.log(flag)
         if (flag == false) {
         	this.showValidate = true;
         	return

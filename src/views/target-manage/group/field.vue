@@ -100,9 +100,7 @@
         this.$router.go(-1)
       },
       save() {
-        if (this.form.targetName == '' || this.form.targeFieldVO.logicAction == '' || this.form.targeFieldVO.fieldId == '') return this.showValidate = true;
-        this.inputTatgetName();
-        if(this.checkTargetName) return;
+        if (this.form.targetName == '' || this.form.targeFieldVO.logicAction == '' || this.form.targeFieldVO.fieldId == '' || this.checkTargetName) return this.showValidate = true;
         let params = JSON.parse(JSON.stringify(this.form));
         params.targeFieldVO.fieldEnumIds = params.targeFieldVO.fieldEnumIds.join(',');
         saveTarge(params).then(res => {

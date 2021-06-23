@@ -13,7 +13,7 @@
       <span class="error" style="color: #FF8C00;" v-show="nameValidate && !form.username">请输入使用人姓名</span>
     </section>
     <section>
-      <p>登录密码{{pswValidate}}</p>
+      <p>登录密码</p>
       <el-input :class="[pswValidate && !form.password?'validate-empty':'',
 	  pswValidate && form.password != '' && form.password.length<6?'validate-error':''
 	  ]" v-model="form.password" type="password" @blur="inputPsw" auto-complete="new-password" placeholder="请输入6至20位登录密码" maxlength="20" show-word-limit></el-input>
@@ -249,7 +249,7 @@
     }
     section{
       position: relative;
-      
+
       .validate-info {
       	position: absolute;
       	left: 0px;
