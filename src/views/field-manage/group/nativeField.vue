@@ -139,8 +139,7 @@
         ]
       },
       save() {
-        if (this.form.fieldName == '' || this.form.name == '' || this.form.formType == '') return this.showValidate = true;
-		if(this.checkFieldName || this.checkName) return;
+        if (this.form.fieldName == '' || this.form.name == '' || this.form.formType == '' || this.checkFieldName || this.checkName) return this.showValidate = true;
         let params = {
           "dataType": this.form.dataType, //数据类型 1：字符串型string，2：整数int，3小数数值float，4日期date，5 时间time
           "description": this.form.description, //描述

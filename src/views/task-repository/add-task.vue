@@ -29,25 +29,19 @@
         <span>任务结束时间</span>
       </div>
       <div>
-        <el-date-picker v-model="form.startTime"
-        type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
-        :picker-options="startTimeRule"
-        :clearable="false"
-          placeholder="选择日期">
+        <el-date-picker v-model="form.startTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+          :picker-options="startTimeRule" :clearable="false" placeholder="选择日期">
         </el-date-picker>
         <span style="margin: 0px 3px;">-</span>
-        <el-date-picker v-model="form.endTime"
-        type="datetime"
-        :clearable="false"
-        :picker-options="endTimeRule"
-        value-format="yyyy-MM-dd HH:mm:ss"
-          placeholder="选择日期">
+        <el-date-picker v-model="form.endTime" type="datetime" :clearable="false" :picker-options="endTimeRule"
+          value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
         </el-date-picker>
       </div>
       <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.startTime == ''">请选择任务开始时间</span>
       <span class="validate-info" style="color: #FF8C00;left: 200px;"
         v-if="showValidate && form.endTime == ''">请选择任务结束时间</span>
-        <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.endTime != '' && form.startTime != '' && validateTime">任务结束时间不能大于任务开始时间</span>
+      <span class="validate-info" style="color: #FF8C00;"
+        v-if="showValidate && form.endTime != '' && form.startTime != '' && validateTime">任务结束时间不能大于任务开始时间</span>
     </section>
     <section>
       <p>派发名单</p>
@@ -121,7 +115,7 @@
                 time.getTime() > new Date(this.form.endTime).getTime()
               );
             } else {
-              return time.getTime()+86400000 < Date.now();
+              return time.getTime() + 86400000 < Date.now();
             }
           }
         },
@@ -132,7 +126,7 @@
                 time.getTime() < new Date(this.form.startTime).getTime()
               );
             } else {
-              return time.getTime()+86400000 < Date.now();
+              return time.getTime() + 86400000 < Date.now();
             }
           },
         },
@@ -147,7 +141,7 @@
     },
     computed: {
       validateTime() {
-        return (new Date(this.form.endTime).getTime()) - (new Date(this.form.startTime).getTime()) > 0 ? false:true
+        return (new Date(this.form.endTime).getTime()) - (new Date(this.form.startTime).getTime()) > 0 ? false : true
       },
     },
     methods: {
@@ -155,9 +149,10 @@
         this.$router.push('/task-repository/task-list')
       },
       submit() {
-        if (this.form.taskName == '' || this.form.recordType == '' ||
+        if ( this.checkTaskName|| this.form.taskName == '' || this.form.recordType == '' ||
           this.form.taskTplId == '' || this.form.startTime == '' ||
-          this.form.endTime == '' || this.form.users.length == 0 || ((new Date(this.form.endTime).getTime()) - (new Date(this.form.startTime).getTime()) > 0 ? false:true)) return this.showValidate = true;
+          this.form.endTime == '' || this.form.users.length == 0 || ((new Date(this.form.endTime).getTime()) - (
+            new Date(this.form.startTime).getTime()) > 0 ? false : true)) return this.showValidate = true;
         saveTask(this.form).then(res => {
           if (res.code == 0) {
             this.$message.success('保存成功')

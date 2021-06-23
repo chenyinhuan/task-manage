@@ -280,8 +280,7 @@
 				})
 			},
 			save() {
-				if (this.form.fieldName == '' || this.form.name == '' || this.form.ruleType == '') return this.showValidate = true;
-				if(this.checkFieldName || this.checkName) return;
+				if (this.form.fieldName == '' || this.form.name == '' || this.form.ruleType == '' || this.checkFieldName || this.checkName) return this.showValidate = true;
 				let params = {};
 				if (this.form.ruleType == 1) {
 					let complexMahtRuleVOs = [];

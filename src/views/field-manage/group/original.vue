@@ -101,9 +101,7 @@
 			},
 			deleteInfo(item) {
 				let _this = this;
-				_this.$confirm(`删除后将无法恢复此字段的相关记录，
-				如果已经被调用将无法删除，希望删除请删除关联字段、
-				指标和任务模版`, '是否确认删除字段？', {
+				_this.$confirm(`删除后将无法恢复此字段的相关记录如果已经被调用将无法删除，希望删除请删除关联字段、指标和任务模版`, '是否确认删除字段？', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
