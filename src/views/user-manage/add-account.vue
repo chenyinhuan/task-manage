@@ -13,7 +13,7 @@
       <span class="error" style="color: #FF8C00;" v-show="nameValidate && !form.username">请输入使用人姓名</span>
     </section>
     <section>
-      <p>登录密码{{pswValidate}}</p>
+      <p>登录密码</p>
       <el-input :class="[pswValidate && !form.password?'validate-empty':'',
 	  pswValidate && form.password != '' && form.password.length<6?'validate-error':''
 	  ]" v-model="form.password" type="password" @blur="inputPsw" auto-complete="new-password" placeholder="请输入6至20位登录密码" maxlength="20" show-word-limit></el-input>
@@ -90,14 +90,19 @@
         getUserInfo({userId: this.$route.query.id}).then(res => {
           if(res.code == 0) {
             this.form = {
-              mobile: res.user.mobile,
+              mobile: res.user.mobile || '',
               username: res.user.username,
-              password: res.user.password,
-              conPassword: res.user.password,
-              deptId: res.user.deptId,
-              roleIdList: res.user.roleIdList,
-              email: res.user.email
+              password: res.user.password || '',
+              conPassword: res.user.password || '',
+              deptId: res.user.deptId || '',
+              roleIdList: res.user.roleIdList || [],
+              email: res.user.email || ''
             }
+			this.permission = [];
+			for(let i=0;i<res.user.roleIdList.length;i++) {
+				let item = res.user.roleIdList[i];
+				this.permission.push({deptId: res.user.deptId,roleIdList: item })
+			}
           }
         })
       }
@@ -161,6 +166,7 @@
           this.pswError = false;
           return
         }
+		console.log(this.form)
 		if(this.form.password.length < 6){
 		  this.pswValidate = true
 		  return
@@ -175,6 +181,7 @@
            this.validate = false;
            return
         }
+		console.log(this.permission)
         let roleIdList = this.permission.map(item => {
           return item.roleIdList
         })
@@ -191,7 +198,7 @@
             password: this.form.password,
             conPassword: this.form.conPassword,
             deptId: this.form.deptId,
-            roleIdList: this.form.roleIdList,
+            roleIdList: roleIdList,
             email: this.form.email,
             userId: this.userId
           }
