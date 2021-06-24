@@ -50,7 +50,7 @@
       <span style="margin-left: 11px;"
         v-if="form.targeFieldVO.logicAction == 5 && form.targeFieldVO.chooseType == 4 && nativeList.length>0 && nativeList.find(n => n.id == form.targeFieldVO.fieldId) && !(nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 2 || nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 3)">
         <span>=</span>
-        <el-input style="margin-left: 11px;width: 240px;" v-model="form.targeFieldVO.countFileldTargeValue"
+        <el-input style="margin-left: 11px;width: 240px;" v-model="form.targeFieldVO.countFieldTargeValue"
           placeholder="请输入计数字段内容"></el-input>
       </span>
     </section>
@@ -92,7 +92,7 @@
           "targeFieldVO": {
             "logicAction": 1, //聚合类型： 1：求和  2：平均, 3：最大数, 4：最小数, 5：计数
             "fieldId": '', //字段id
-            countFileldTargeValue: '',
+            countFieldTargeValue: '',
             fieldEnumIds: []
           }
         },
@@ -125,7 +125,7 @@
             this.form.description = res.target.description;
             this.form.targeFieldVO.logicAction = res.target.targeFieldVO.logicAction;
             this.form.targeFieldVO.fieldId = res.target.targeFieldVO.fieldId;
-            this.form.targeFieldVO.countFileldTargeValue = res.target.targeFieldVO.countFileldTargeValue;
+            this.form.targeFieldVO.countFieldTargeValue = res.target.targeFieldVO.countFieldTargeValue;
             this.form.targeFieldVO.fieldEnumIds = res.target.targeFieldVO.fieldEnumIds;
           }
         })
@@ -134,13 +134,23 @@
         if (this.form.targetName == '' || this.form.targeFieldVO.logicAction == '' || this.form.targeFieldVO.fieldId ==
           '' || this.checkTargetName) return this.showValidate = true;
         let params = JSON.parse(JSON.stringify(this.form));
-        params.targeFieldVO.fieldEnumIds = params.targeFieldVO.fieldEnumIds.join(',');
-        saveTarge(params).then(res => {
-          if (res.code == 0) {
-            this.$message.success('保存成功！');
-            this.$router.push('/target-manage')
-          }
-        })
+        params.targeFieldVO.fieldEnumIds = params.targeFieldVO.fieldEnumIds && params.targeFieldVO.fieldEnumIds.length>0? params.targeFieldVO.fieldEnumIds.join(','):'';
+        if(this.targetId) {
+          params.id = this.targetId;
+          updateTarget(params).then(res => {
+            if (res.code == 0) {
+              this.$message.success('更新成功！');
+              this.$router.push('/target-manage')
+            }
+          })
+        }else {
+          saveTarge(params).then(res => {
+            if (res.code == 0) {
+              this.$message.success('保存成功！');
+              this.$router.push('/target-manage')
+            }
+          })
+        }
       },
       changeLogic() {
         let params = {

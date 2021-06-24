@@ -16,49 +16,53 @@
     <section>
       <p>指标计算</p>
       <div style="display: flex;flex-wrap: wrap;">
-        {{form.targesubs[0].targetQuoteStartId == ''}}
         <el-select v-model="form.targesubs[0].targetQuoteStartId" placeholder="请选择指标">
           <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.id" :label="citem.targetName">
           </el-option>
         </el-select>
-        <span class="validate-info1" style="color: #FF8C00;left: 524px;"
+        <span class="validate-info1"
             v-if="showValidate && form.targesubs[0].targetQuoteStartId == ''">请选择指标</span>
         <div v-for="(item,index) in form.targesubs" :key="index" style="margin-left: 20px;" v-if="index == 0">
           <el-select v-model="item.logicAction" placeholder="运算选择">
             <el-option v-for="(citem,cindex) in $targetLogicAction" :key="cindex" :value="citem.value"
               :label="citem.label"></el-option>
           </el-select>
-          <span class="validate-info1" style="color: #FF8C00;left: 260px;"
+          <span class="validate-info1" style="left: 260px;"
             v-if="showValidate && form.targesubs[0].logicAction == ''">请选择运算方式</span>
           <el-select v-model="form.targetQuoteEndId" placeholder="请选择指标">
             <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.id" :label="citem.targetName">
             </el-option>
           </el-select>
-          {{form.targetQuoteEndId == ''}}
-          <span class="validate-info1" style="color: #FF8C00;"
+          <span class="validate-info1" style="left: 524px;"
             v-if="showValidate && form.targetQuoteEndId == ''">请选择指标</span>
           <a @click="addTarget()" class="add-list" v-if="form.targesubs.length == 1">+新增</a>
         </div>
       </div>
       <div>
-        <div v-for="(item,index) in form.targesubs" :key="index" v-if="index > 0">
+        <div v-for="(item,index) in form.targesubs" :key="index" v-if="index > 0" style="position: relative;">
           <el-select v-model="item.logicAction" placeholder="运算选择">
             <el-option v-for="(citem,cindex) in $targetLogicAction" :key="cindex" :value="citem.value"
               :label="citem.label"></el-option>
           </el-select>
+          <span class="validate-info1" style="top: 33px;"
+            v-if="showValidate && item.logicAction == ''">请选择运算方式</span>
           <el-select v-model="item.targetQuoteStartId" placeholder="选择指标">
             <el-option v-for="(citem,cindex) in list" :key="cindex" :value="citem.id" :label="citem.targetName">
             </el-option>
           </el-select>
+          <span class="validate-info1" style="top: 33px;left: 260px;"
+            v-if="showValidate && item.targetQuoteStartId == ''">请选择运算方式</span>
           <a @click="addTarget()" class="add-list" v-if="index == form.targesubs.length -1">+新增</a>
           <a class="del" v-if="form.targesubs.length>1" @click="deleteItem()">X删除</a>
         </div>
       </div>
-      <div>
+      <div style="position: relative;">
         <el-select v-model="form.resultType" placeholder="选择展示方式">
           <el-option v-for="(citem,cindex) in $targetShowType" :key="cindex" :value="citem.value" :label="citem.label">
           </el-option>
         </el-select>
+        <span class="validate-info1" style="top: 33px;"
+            v-if="showValidate && form.resultType == ''">请选择展示方式</span>
       </div>
     </section>
     <div class="foot">
@@ -155,9 +159,11 @@
         this.form.targesubs.splice(0, 1)
       },
       save() {
-        if (this.form.targetName == '' || this.checkTargetName) return this.showValidate = true;
+        if (this.form.targetName == '' || this.checkTargetName || this.form.targetQuoteEndId == '' || this.form.resultType == '') return this.showValidate = true;
         let params = {};
+        let flag = true;
         let targesubs = this.form.targesubs.map((item, index) => {
+          if(item.logicAction == '' || item.targetQuoteStartId == '') flag = false;
           if(index==0) {
             return {
               "logicAction": this.form.targesubs[0].logicAction,
@@ -171,6 +177,7 @@
             }
           }
         })
+        if(!flag) return this.showValidate = true;
         params = {
           "targetName": this.form.targetName,
           "targesubs": targesubs, // 暂时不传，如果有限制就随便传一个
@@ -248,6 +255,7 @@
         left: 0px;
         top: 82px;
         font-size: 12px;
+        color: #FF8C00;
       }
 
       .validate-info {
