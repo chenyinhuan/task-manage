@@ -3,15 +3,15 @@
     <h3>指标信息</h3>
     <section>
       <p>指标创建方式</p>
-      <el-radio-group v-model="radio1">
-        <el-radio-button label="1">根据字段创建</el-radio-button>
-        <el-radio-button label="2">根据指标创建</el-radio-button>
-        <el-radio-button label="3">根据数据库表创建</el-radio-button>
+      <el-radio-group v-model="type">
+        <el-radio-button label="1" :disabled="id && type != 1">根据字段创建</el-radio-button>
+        <el-radio-button label="2" :disabled="id && type != 2">根据指标创建</el-radio-button>
+        <el-radio-button label="3" :disabled="id && type != 3">根据数据库表创建</el-radio-button>
       </el-radio-group>
     </section>
-    <field ref="field" v-show="radio1 == 1"></field>
-    <target ref="target" v-show="radio1 == 2"></target>
-    <database ref="database" v-show="radio1 == 3"></database>
+    <field ref="field" v-show="type == 1" :id="id"></field>
+    <target ref="target" v-show="type == 2" :id="id"></target>
+    <database ref="database" v-show="type == 3" :id="id"></database>
 <!--    <div class="foot">-->
 <!--      <el-button type="primary" @click="save">保存指标</el-button>-->
 <!--      <el-button class="cancel" @click="back">取消</el-button>-->
@@ -31,11 +31,13 @@
     },
     data() {
       return {
-        radio1: '1',
+        type: '1',
+		id: '',
       }
     },
     created() {
-
+		if(this.$route.query.id) this.id = this.$route.query.id;
+		if(this.$route.query.type) this.type = this.$route.query.type;
     },
     mounted() {
 

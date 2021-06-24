@@ -37,6 +37,7 @@
           <el-option v-for="(ritem,rindex) in roleList" :key="rindex" :label="ritem.roleName"
         :value="ritem.roleId"></el-option>
         </el-select>
+		<span class="delete-btn" @click="deleteItem(index)" v-if="permission.length>1 && !(deptValidate && item.roleIdList == '')">X 删除</span>
         <span class="error1" v-show="deptValidate && item.roleIdList == ''">请选择部门/角色</span>
       </div>
       <el-button class="add-role" type="primary" @click="addRole()">+新增</el-button>
@@ -90,14 +91,19 @@
         getUserInfo({userId: this.$route.query.id}).then(res => {
           if(res.code == 0) {
             this.form = {
-              mobile: res.user.mobile,
+              mobile: res.user.mobile || '',
               username: res.user.username,
-              password: res.user.password,
-              conPassword: res.user.password,
-              deptId: res.user.deptId,
-              roleIdList: res.user.roleIdList,
-              email: res.user.email
+              password: res.user.password || '',
+              conPassword: res.user.password || '',
+              deptId: res.user.deptId || '',
+              roleIdList: res.user.roleIdList || [],
+              email: res.user.email || ''
             }
+			this.permission = [];
+			for(let i=0;i<res.user.roleIdList.length;i++) {
+				let item = res.user.roleIdList[i];
+				this.permission.push({deptId: res.user.deptId,roleIdList: item })
+			}
           }
         })
       }
@@ -191,7 +197,7 @@
             password: this.form.password,
             conPassword: this.form.conPassword,
             deptId: this.form.deptId,
-            roleIdList: this.form.roleIdList,
+            roleIdList: roleIdList,
             email: this.form.email,
             userId: this.userId
           }
@@ -223,7 +229,10 @@
       },
       addRole() {
         this.permission.push({deptId: '',roleIdList: ''})
-      }
+      },
+	  deleteItem(index) {
+		  this.permission.splice(index, 1)
+	  }
     }
   }
 </script>
@@ -313,6 +322,15 @@
 		color: $red;
 		font-size: 12px;
 		bottom: 20px;
+		left: 400px;
+	}
+	.delete-btn {
+		bottom: 20px;
+		position: absolute;
+		font-size: 14px;
+		margin-left: 15px;
+		color: #f44336;
+		cursor: pointer;
 		left: 400px;
 	}
   }

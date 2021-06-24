@@ -154,6 +154,7 @@
 					margin-bottom: 22px;
 					width: 400px;
 					height: 58px;
+					line-height: 58px;
 					font-size: 16px;
 
 					.el-input__clear {

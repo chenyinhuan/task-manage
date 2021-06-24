@@ -15,8 +15,8 @@
 						<span>{{scope.row.type==1?'字段指标':'指标类指标'}}</span>
 					</div>
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="text">编辑</el-button>
-						<el-button type="text">删除</el-button>
+						<el-button type="text" @click="edit(scope.row)">编辑</el-button>
+						<el-button type="text" @click="deleteItem(scope.row)">删除</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 				</template>
@@ -34,7 +34,8 @@
 </template>
 <script>
 	import {
-		getTargeList
+		getTargeList,
+		deleteTarget
 	} from '@/api/target-manage/index';
 	export default {
 		components: {},
@@ -97,6 +98,7 @@
 				})
 			},
 			handleSizeChange(val) {
+				this.currentPage = 1;
 				this.searchParams.limit = val
 				this.init()
 			},
@@ -113,6 +115,26 @@
 				this.searchParams.page = 1;
 				this.init();
 				console.log(this.keyword)
+			},
+			deleteItem(item) {
+				let _this = this;
+				_this.$confirm(`删除后将无法恢复此指标的相关记录，如果已经被调用将无法删除，希望删除请删除关联指标和任务模版`, '是否确认删除指标？', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					deleteTarget({id: item.id}).then(res => {
+						if(res.code == 0) {
+							_this.$message.success('删除成功');
+							_this.currentPage = 1;
+							_this.init();
+						}
+						else _this.$message.warning(res.msg);
+					})
+				})
+			},
+			edit(item) {
+				this.$router.push(`/target-manage/add-target?id=${item.id}&type=${item.type}`)
 			}
 		}
 	}

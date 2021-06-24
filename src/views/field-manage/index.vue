@@ -21,7 +21,7 @@
 <script>
   import originField from '@/views/field-manage/group/original.vue';
   import addField from '@/views/field-manage/group/add.vue';
-  import {deleteField} from '@/api/filed-manage/index.js'
+  
   export default {
     components: {
       originField,
@@ -52,17 +52,7 @@
       search() {
         console.log(this.keyword)
       },
-      deleteItem(item) {
-		  console.log(item)
-		let params = {
-			id: item.id
-		}	
-		 deleteField(params).then(res => {
-			 if(res.code == 0) {
-				 this.$message.warning('删除成功！')
-			 }
-		 })
-      }
+      
     }
   }
 </script>

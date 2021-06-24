@@ -62,7 +62,9 @@
 
 <script>
   import {
-    saveTarge
+    saveTarge,
+	getTargeDetail,
+	updateTarget
   } from '@/api/target-manage/index.js'
   import {
     getNativeList,
@@ -70,6 +72,12 @@
   } from '@/api/filed-manage/index.js'
   export default {
     name: "field",
+		props:{
+			id: {
+				type: [Number, String],
+				default: ''
+			}
+		},
     data() {
       return {
         form: {
@@ -93,12 +101,20 @@
       }
     },
     created() {
+		if(this.id) {
+			this.getDetail();
+		}
       this.changeLogic();
     },
     methods: {
       back() {
-        this.$router.go(-1)
+        this.$router.push('/target-manage')
       },
+	  getDetail() {
+		getTargeDetail({id: this.id}).then(res => {
+			
+		})  
+	  },
       save() {
         if (this.form.targetName == '' || this.form.targeFieldVO.logicAction == '' || this.form.targeFieldVO.fieldId == '' || this.checkTargetName) return this.showValidate = true;
         let params = JSON.parse(JSON.stringify(this.form));
