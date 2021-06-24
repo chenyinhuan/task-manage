@@ -234,7 +234,7 @@
 			init() {
         getComplexcDetail({id: this.id}).then(res=>{
           this.form = res.field
-          if(this.form.complexMahtRuleVOs && this.form.complexMahtRuleVOs.length) this.enums = this.form.complexMahtRuleVOs
+          // if(this.form.complexMahtRuleVOs && this.form.complexMahtRuleVOs.length) this.enums = this.form.complexMahtRuleVOs
           if(this.form.ruleType){
             let params = {
               "dataTypes": [], //数据类型，为空时取全部
