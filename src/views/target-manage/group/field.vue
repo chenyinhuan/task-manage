@@ -127,6 +127,7 @@
             this.form.targeFieldVO.fieldId = res.target.targeFieldVO.fieldId;
             this.form.targeFieldVO.countFieldTargeValue = res.target.targeFieldVO.countFieldTargeValue;
             this.form.targeFieldVO.fieldEnumIds = res.target.targeFieldVO.fieldEnumIds;
+            this.form.targeFieldVO.chooseType = res.target.targeFieldVO.chooseType;
           }
         })
       },
