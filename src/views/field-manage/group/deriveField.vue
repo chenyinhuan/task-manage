@@ -283,13 +283,13 @@
         getComplexcDetail({id: this.id}).then(res=>{
           this.form = res.field
           this.form.name = this.form.name.replace("complex_","")
-          if(this.form.complexMahtRuleVOs){
+          if(this.form.complexMahtRuleVOs && this.form.complexMahtRuleVOs.length){
             this.enums = this.form.complexMahtRuleVOs
           }else{
             this.enums = [{
               logicAction: '',
               fieldStartId: ''
-            },]
+            }]
           }
           if(this.form.ruleType == 1){
             let params = {
