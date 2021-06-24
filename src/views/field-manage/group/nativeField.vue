@@ -108,6 +108,7 @@
       init() {
         getBasicDetail({id:this.id}).then(res=>{
           this.form = res.field
+          this.form.name = this.form.name.replace("basic_","")
           this.enums = this.form.enums
         })
       },
