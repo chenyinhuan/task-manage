@@ -3,8 +3,8 @@
     <section>
       <p>指标名称</p>
       <el-input :class="[showValidate && form.targetName == ''?'validate-empty':'',
-      showValidate && form.targetName != '' && checkTargetName?'validate-error':'']"
-      v-model="form.targetName" placeholder="请输入指标名称" @blur="inputTatgetName" maxlength="20" show-word-limit></el-input>
+      showValidate && form.targetName != '' && checkTargetName?'validate-error':'']" v-model="form.targetName"
+        placeholder="请输入指标名称" @blur="inputTatgetName" maxlength="20" show-word-limit></el-input>
       <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.targetName == ''">请输入指标名称</span>
       <span class="validate-info" style="color: #C03639;"
         v-if="showValidate && form.targetName != '' && checkTargetName">请输入正确的字段显示名，支持中文、英文、数字</span>
@@ -25,7 +25,8 @@
       <el-select v-model="form.targeFieldVO.fieldId" filterable placeholder="请选择字段名称" @change="changeField()">
         <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName" :value="item.id"></el-option>
       </el-select>
-      <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.targeFieldVO.fieldId == ''">请选择字段名称</span>
+      <span class="validate-info" style="color: #FF8C00;"
+        v-if="showValidate && form.targeFieldVO.fieldId == ''">请选择字段名称</span>
       <el-select v-if="form.targeFieldVO.logicAction == 5" style="margin-left: 15px;"
         v-model="form.targeFieldVO.chooseType" placeholder="字段内容选择">
         <el-option v-for="item in
@@ -63,8 +64,8 @@
 <script>
   import {
     saveTarge,
-	getTargeDetail,
-	updateTarget
+    getTargeDetail,
+    updateTarget
   } from '@/api/target-manage/index.js'
   import {
     getNativeList,
@@ -72,12 +73,16 @@
   } from '@/api/filed-manage/index.js'
   export default {
     name: "field",
-		props:{
-			id: {
-				type: [Number, String],
-				default: ''
-			}
-		},
+    props: {
+      targetId: {
+        type: [Number, String],
+        default: ''
+      },
+      type: {
+        type: [Number, String],
+        default: ''
+      }
+    },
     data() {
       return {
         form: {
@@ -101,22 +106,33 @@
       }
     },
     created() {
-		if(this.id) {
-			this.getDetail();
-		}
+      console.log(this.targetId)
+      if (this.targetId && this.type == 1) {
+        this.getDetail();
+      }
       this.changeLogic();
     },
     methods: {
       back() {
         this.$router.push('/target-manage')
       },
-	  getDetail() {
-		getTargeDetail({id: this.id}).then(res => {
-			
-		})  
-	  },
+      getDetail() {
+        getTargeDetail({
+          id: this.targetId
+        }).then(res => {
+          if(res.code == 0) {
+            this.form.targetName = res.target.targetName;
+            this.form.description = res.target.description;
+            this.form.targeFieldVO.logicAction = res.target.targeFieldVO.logicAction;
+            this.form.targeFieldVO.fieldId = res.target.targeFieldVO.fieldId;
+            this.form.targeFieldVO.countFileldTargeValue = res.target.targeFieldVO.countFileldTargeValue;
+            this.form.targeFieldVO.fieldEnumIds = res.target.targeFieldVO.fieldEnumIds;
+          }
+        })
+      },
       save() {
-        if (this.form.targetName == '' || this.form.targeFieldVO.logicAction == '' || this.form.targeFieldVO.fieldId == '' || this.checkTargetName) return this.showValidate = true;
+        if (this.form.targetName == '' || this.form.targeFieldVO.logicAction == '' || this.form.targeFieldVO.fieldId ==
+          '' || this.checkTargetName) return this.showValidate = true;
         let params = JSON.parse(JSON.stringify(this.form));
         params.targeFieldVO.fieldEnumIds = params.targeFieldVO.fieldEnumIds.join(',');
         saveTarge(params).then(res => {
@@ -157,7 +173,7 @@
         //判断输入框中有内容
         if (!regex.test(this.form.targetName.trim())) {
           this.checkTargetName = true;
-        }else this.checkTargetName = false;
+        } else this.checkTargetName = false;
       },
     }
   }
@@ -167,12 +183,14 @@
   #field {
     section {
       position: relative;
+
       .validate-info {
         position: absolute;
         left: 0px;
         bottom: 9px;
         font-size: 12px;
       }
+
       p {
         font-size: 20px;
         font-weight: 600;

@@ -12,9 +12,9 @@
     </section>
     <div style="margin-top: 16px;">
       <!-- 原生字段 -->
-      <origin-field v-show="type==1" @deleteItem="deleteItem"></origin-field>
+      <origin-field v-show="type==1"></origin-field>
       <!-- 衍生字段 -->
-      <add-field v-show="type==2" @deleteItem="deleteItem"></add-field>
+      <add-field v-show="type==2"></add-field>
     </div>
   </div>
 </template>

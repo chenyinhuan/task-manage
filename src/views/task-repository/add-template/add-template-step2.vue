@@ -14,14 +14,14 @@
       <section>
         <p><span class="red">* </span>任务指标名称</p>
         <el-input class="input"
-        :class="[showValidate && item.taskTplTargetEntity.targetName == ''?'validate-empty':'',
+          :class="[showValidate && item.taskTplTargetEntity.targetName == ''?'validate-empty':'',
         showValidate && item.taskTplTargetEntity.targetName != '' && checkTaskName(item.taskTplTargetEntity.targetName)?'validate-error':'']"
-        v-model="item.taskTplTargetEntity.targetName" placeholder="请输入任务指标名称" maxlength="20"
-          show-word-limit></el-input>
-          <span class="validate-info" style="color: #FF8C00;"
-          	v-if="showValidate && item.taskTplTargetEntity.targetName == ''">请输入任务指标名称</span>
-          <span class="validate-info" style="color: #C03639;"
-          	v-if="showValidate && item.taskTplTargetEntity.targetName != '' && checkTaskName(item.taskTplTargetEntity.targetName)">请输入正确的任务指标名称，支持中文、英文、数字</span>
+          v-model="item.taskTplTargetEntity.targetName" placeholder="请输入任务指标名称" maxlength="20" show-word-limit>
+        </el-input>
+        <span class="validate-info" style="color: #FF8C00;"
+          v-if="showValidate && item.taskTplTargetEntity.targetName == ''">请输入任务指标名称</span>
+        <span class="validate-info" style="color: #C03639;"
+          v-if="showValidate && item.taskTplTargetEntity.targetName != '' && checkTaskName(item.taskTplTargetEntity.targetName)">请输入正确的任务指标名称，支持中文、英文、数字</span>
       </section>
       <section>
         <p><span class="red">* </span>任务指标计算</p>
@@ -128,13 +128,15 @@
         <div class="else-result" v-if="item.taskTplTargetEntity.targetResultShowType[0] == 2">
           <p><span class="red">* </span>直接输出指标</p>
           <el-select v-model="item.taskTplTargetEntity.targetId">
-            <el-option v-for="(titem, tindex) in targetList" :value="titem.id" :label="titem.targetName"
-              :key="tindex"></el-option>
+            <el-option v-for="(titem, tindex) in targetList" :value="titem.id" :label="titem.targetName" :key="tindex">
+            </el-option>
           </el-select>
-          <span class="validate-info1" style="color: #FF8C00;" v-if="showValidate
+          <span class="validate-info1" style="color: #FF8C00;"
+            v-if="showValidate
           && item.taskTplTargetEntity.targetResultShowType == 2 && item.taskTplTargetEntity.targetId == ''">请选择输出指标</span>
         </div>
-        <span class="validate-info" style="color: #C03639;bottom: -24px;" v-if="!item.taskTplTargeelseEntity.elseResult && checkElseResult">请填写否则输出结果</span>
+        <span class="validate-info" style="color: #C03639;bottom: -24px;"
+          v-if="!item.taskTplTargeelseEntity.elseResult && checkElseResult">请填写否则输出结果</span>
       </section>
       <section class="end-time">
         <p>任务指标考核结束时间</p>
@@ -168,7 +170,7 @@
           </div>
         </div>
         <span class="validate-info1" style="color: #FF8C00;"
-        	v-if="showValidate && item.taskTplTargetEntity.testTimeType == ''">请选择选择考核结束时间</span>
+          v-if="showValidate && item.taskTplTargetEntity.testTimeType == ''">请选择选择考核结束时间</span>
       </section>
     </section>
     <div class="foot">
@@ -452,30 +454,32 @@
         let taskTplTargetVOs = JSON.parse(JSON.stringify(this.taskTplTargetVOs))
         taskTplTargetVOs.forEach(item => {
 
-        	if (item.taskTplTargetEntity.targetName == '') {
-        		flag = false;
-        	}
-        flag = !this.checkTaskName(item.taskTplTargetEntity.targetName);
-        	if (item.taskTplTargetEntity.targetResultShowType[0] == 1 && !item.taskTplTargeelseEntity.elseResult && flag) {
-        		flag = false;
+          if (item.taskTplTargetEntity.targetName == '') {
+            flag = false;
+          }
+          flag = !this.checkTaskName(item.taskTplTargetEntity.targetName);
+          if (item.taskTplTargetEntity.targetResultShowType[0] == 1 && !item.taskTplTargeelseEntity.elseResult &&
+            flag) {
+            flag = false;
             this.checkElseResult = true;
-        	}
-        	if (flag) {
-        		item.taskTplTargeelseEntity.elseResultShow = item.taskTplTargeelseEntity.elseResultShow[0];
-        		item.taskTplTargeelseEntity.elseResultShowType = item.taskTplTargeelseEntity
-        			.elseResultShowType[0];
-        		item.taskTplTargetEntity.targetResultShowType = item.taskTplTargetEntity
-        			.targetResultShowType[0];
-        		item.taskTplTargeifVOs.forEach(citem => {
-        			citem.ifResultShow = citem.ifResultShow[0]
-        			citem.ifResultShowType = citem.ifResultShowType[0];
-        		})
-        	}
+          }
+          if(item.taskTplTargetEntity.targetResultShowType == 2 && item.taskTplTargetEntity.targetId == '') flag = false;
+          if (flag) {
+            item.taskTplTargeelseEntity.elseResultShow = item.taskTplTargeelseEntity.elseResultShow[0];
+            item.taskTplTargeelseEntity.elseResultShowType = item.taskTplTargeelseEntity
+              .elseResultShowType[0];
+            item.taskTplTargetEntity.targetResultShowType = item.taskTplTargetEntity
+              .targetResultShowType[0];
+            item.taskTplTargeifVOs.forEach(citem => {
+              citem.ifResultShow = citem.ifResultShow[0]
+              citem.ifResultShowType = citem.ifResultShowType[0];
+            })
+          }
         })
         console.log(flag)
         if (flag == false) {
-        	this.showValidate = true;
-        	return
+          this.showValidate = true;
+          return
         }
         // if(!this.taskTplId) return this.$message.warning('模板id不能为空！')
         let params = {
@@ -495,12 +499,12 @@
       },
       // 校验字段显示名
       checkTaskName(val) {
-      	if (val == '') return;
-      	let regex = new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+$"); // 中文、英文、数字
-      	//判断输入框中有内容
-      	if (!regex.test(val)) {
-      		return true;
-      	} else return false;
+        if (val == '') return;
+        let regex = new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+$"); // 中文、英文、数字
+        //判断输入框中有内容
+        if (!regex.test(val)) {
+          return true;
+        } else return false;
       }
     }
   }
@@ -619,18 +623,21 @@
 
     section {
       position: relative;
+
       .validate-info {
-      	position: absolute;
-      	left: 0px;
-      	bottom: 9px;
-      	font-size: 12px;
+        position: absolute;
+        left: 0px;
+        bottom: 9px;
+        font-size: 12px;
       }
+
       .validate-info1 {
-      	position: absolute;
-      	left: 0px;
-      	bottom: -20px;
-      	font-size: 12px;
+        position: absolute;
+        left: 0px;
+        bottom: -20px;
+        font-size: 12px;
       }
+
       .type-select {
         margin-bottom: 20px;
       }
@@ -883,6 +890,9 @@
     >>>.m-colorPicker .colorBtn {
       width: 24px;
       height: 24px;
+    }
+    .el-input__icon {
+      line-height: 32px;
     }
   }
 </style>

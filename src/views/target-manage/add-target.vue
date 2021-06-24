@@ -4,14 +4,14 @@
     <section>
       <p>指标创建方式</p>
       <el-radio-group v-model="type">
-        <el-radio-button label="1" :disabled="id && type != 1">根据字段创建</el-radio-button>
-        <el-radio-button label="2" :disabled="id && type != 2">根据指标创建</el-radio-button>
-        <el-radio-button label="3" :disabled="id && type != 3">根据数据库表创建</el-radio-button>
+        <el-radio-button label="1" :disabled="targetId != '' && type != 1">根据字段创建</el-radio-button>
+        <el-radio-button label="2" :disabled="targetId != '' && type != 2">根据指标创建</el-radio-button>
+        <el-radio-button label="3" :disabled="targetId != '' && type != 3">根据数据库表创建</el-radio-button>
       </el-radio-group>
     </section>
-    <field ref="field" v-show="type == 1" :id="id"></field>
-    <target ref="target" v-show="type == 2" :id="id"></target>
-    <database ref="database" v-show="type == 3" :id="id"></database>
+    <field ref="field" v-show="type == 1" :targetId="targetId" :type="type"></field>
+    <target ref="target" v-show="type == 2" :targetId="targetId" :type="type"></target>
+    <database ref="database" v-show="type == 3" :targetId="targetId" :type="type"></database>
 <!--    <div class="foot">-->
 <!--      <el-button type="primary" @click="save">保存指标</el-button>-->
 <!--      <el-button class="cancel" @click="back">取消</el-button>-->
@@ -32,11 +32,11 @@
     data() {
       return {
         type: '1',
-		id: '',
+		targetId: '',
       }
     },
     created() {
-		if(this.$route.query.id) this.id = this.$route.query.id;
+		if(this.$route.query.id) this.targetId = this.$route.query.id;
 		if(this.$route.query.type) this.type = this.$route.query.type;
     },
     mounted() {

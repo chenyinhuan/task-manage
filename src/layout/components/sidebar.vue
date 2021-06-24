@@ -100,7 +100,6 @@
     created() {
       // this.generateRoutes();
       this.getMenu();
-      console.log('getmenu')
     },
     watch: {
       permissionRoutes: {
