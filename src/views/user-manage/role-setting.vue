@@ -128,7 +128,7 @@ import {getDeptList} from '@/api/user-manage/organization/index';
     methods: {
       // 点击节点名称触发的事件
       handleNodeClick (data) {
-        this.searchParams.deptId = data.deptId
+        this.deptId = data.deptId
         this.deptName = data.name
         this.searchParams.page = 1;
         this.init();

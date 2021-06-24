@@ -37,6 +37,7 @@
           <el-option v-for="(ritem,rindex) in roleList" :key="rindex" :label="ritem.roleName"
         :value="ritem.roleId"></el-option>
         </el-select>
+		<span class="delete-btn" @click="deleteItem(index)" v-if="permission.length>1 && !(deptValidate && item.roleIdList == '')">X 删除</span>
         <span class="error1" v-show="deptValidate && item.roleIdList == ''">请选择部门/角色</span>
       </div>
       <el-button class="add-role" type="primary" @click="addRole()">+新增</el-button>
@@ -166,7 +167,6 @@
           this.pswError = false;
           return
         }
-		console.log(this.form)
 		if(this.form.password.length < 6){
 		  this.pswValidate = true
 		  return
@@ -181,7 +181,6 @@
            this.validate = false;
            return
         }
-		console.log(this.permission)
         let roleIdList = this.permission.map(item => {
           return item.roleIdList
         })
@@ -230,7 +229,10 @@
       },
       addRole() {
         this.permission.push({deptId: '',roleIdList: ''})
-      }
+      },
+	  deleteItem(index) {
+		  this.permission.splice(index, 1)
+	  }
     }
   }
 </script>
@@ -320,6 +322,15 @@
 		color: $red;
 		font-size: 12px;
 		bottom: 20px;
+		left: 400px;
+	}
+	.delete-btn {
+		bottom: 20px;
+		position: absolute;
+		font-size: 14px;
+		margin-left: 15px;
+		color: #f44336;
+		cursor: pointer;
 		left: 400px;
 	}
   }
