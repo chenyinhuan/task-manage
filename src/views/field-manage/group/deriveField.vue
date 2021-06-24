@@ -235,11 +235,22 @@
         getComplexcDetail({id: this.id}).then(res=>{
           this.form = res.field
           // if(this.form.complexMahtRuleVOs && this.form.complexMahtRuleVOs.length) this.enums = this.form.complexMahtRuleVOs
-          if(this.form.ruleType){
+          if(this.form.ruleType == 1){
+            let params = {
+              "dataTypes": [3], //数据类型，为空时取全部
+              "formTypes": [1], //表单类型，为空时取全部
+              "type": '1' //字段类型1：原生2衍生，为空时取全部
+            }
+            getNativeList(params).then(res => {
+              if (res.code == 0) {
+                this.nativeList = res.fields;
+              }
+            })
+          }else {
             let params = {
               "dataTypes": [], //数据类型，为空时取全部
-              "formTypes": [], //表单类型，为空时取全部
-              "type": '' //字段类型1：原生2衍生，为空时取全部
+              "formTypes": [1,2,3], //表单类型，为空时取全部
+              "type": '1' //字段类型1：原生2衍生，为空时取全部
             }
             getNativeList(params).then(res => {
               if (res.code == 0) {
@@ -273,16 +284,29 @@
 			},
 			changeRuleType() {
 				this.form.fieldStartId = '';
-				let params = {
-					"dataTypes": [], //数据类型，为空时取全部
-					"formTypes": [], //表单类型，为空时取全部
-					"type": '' //字段类型1：原生2衍生，为空时取全部
-				}
-				getNativeList(params).then(res => {
-					if (res.code == 0) {
-						this.nativeList = res.fields;
-					}
-				})
+        if(this.form.ruleType == 1){
+          let params = {
+            "dataTypes": [3], //数据类型，为空时取全部
+            "formTypes": [1], //表单类型，为空时取全部
+            "type": '1' //字段类型1：原生2衍生，为空时取全部
+          }
+          getNativeList(params).then(res => {
+            if (res.code == 0) {
+              this.nativeList = res.fields;
+            }
+          })
+        }else {
+          let params = {
+            "dataTypes": [], //数据类型，为空时取全部
+            "formTypes": [1,2,3], //表单类型，为空时取全部
+            "type": '1' //字段类型1：原生2衍生，为空时取全部
+          }
+          getNativeList(params).then(res => {
+            if (res.code == 0) {
+              this.nativeList = res.fields;
+            }
+          })
+        }
 			},
 			save() {
 				if (this.form.fieldName == '' || this.form.name == '' || this.form.ruleType == '' || this.checkFieldName || this.checkName) return this.showValidate = true;
