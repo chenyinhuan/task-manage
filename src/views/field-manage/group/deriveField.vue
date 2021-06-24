@@ -225,6 +225,7 @@
 					type: 2, //衍生
 					fieldStartId: '',
 					"fieldComplexCastRuleVOs": [],
+          complexMahtRuleVOs: []
 					// "fieldComplexCastRuleVOs": [{
 					//   "logicAction": 5,               //逻辑算法5-10
 					//   "complexValue": "100",          //最后一个input, 衍生字段值
@@ -282,14 +283,20 @@
 			init() {
         getComplexcDetail({id: this.id}).then(res=>{
           this.form = res.field
-          this.form.name = this.form.name.replace("complex_","")
+          this.form.name = this.form.name.replace("complex_","");
+
           if(this.form.complexMahtRuleVOs && this.form.complexMahtRuleVOs.length){
+            this.form.fieldStartId = this.form.complexMahtRuleVOs[0].fieldStartId;
             this.enums = this.form.complexMahtRuleVOs
           }else{
             this.enums = [{
               logicAction: '',
               fieldStartId: ''
             }]
+          }
+          if(this.form.fieldComplexCastRuleVOs && this.form.fieldComplexCastRuleVOs.length) {
+            console.log(this.form.fieldComplexCastRuleVOs)
+            this.form.fieldStartId = this.form.fieldComplexCastRuleVOs[0].fieldStartId;
           }
           if(this.form.ruleType == 1){
             let params = {
@@ -504,6 +511,8 @@
 			font-size: 14px;
 			margin-left: 15px;
 			color: #0079FE;
+      line-height: 32px;
+      cursor: pointer;
 		}
 
 		.delete-btn {
