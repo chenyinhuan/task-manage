@@ -39,6 +39,12 @@
 	} from '@/api/filed-manage/index.js'
 	import {deleteField} from '@/api/filed-manage/index.js'
 	export default {
+		props: {
+		  keyword: {
+		    type: String,
+		    default: ''
+		  }
+		},
 		data() {
 			return {
 				tableData: [],
@@ -121,7 +127,8 @@
 				let params = {
 					page: this.currentPage,
 					limit: this.limit,
-					type: 2
+					type: 2,
+					fieldName: this.keyword
 				}
 				getPageList(params).then(res => {
 					this.isShow = true;
@@ -143,6 +150,10 @@
 				this.init();
 				console.log(`当前页: ${val}`);
 			},
+			search() {
+				this.currentPage = 1;
+				this.init();
+			}
 		}
 	}
 </script>

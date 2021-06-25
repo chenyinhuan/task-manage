@@ -7,14 +7,15 @@
       </div>
       <div class="right">
         <el-button type="primary" @click="addField">新增</el-button>
-        <el-input v-model="keyword" placeholder="字段显示名" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
-      </div>
+        <el-input v-model="keyword" v-show="type==1" placeholder="字段显示名" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+		<el-input v-model="keyword1" v-show="type==2" placeholder="字段显示名" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+	  </div>
     </section>
     <div style="margin-top: 16px;">
       <!-- 原生字段 -->
-      <origin-field v-show="type==1"></origin-field>
+      <origin-field ref="origin" v-show="type==1" :keyword="keyword"></origin-field>
       <!-- 衍生字段 -->
-      <add-field v-show="type==2"></add-field>
+      <add-field ref="add" v-show="type==2" :keyword="keyword1"></add-field>
     </div>
   </div>
 </template>
@@ -30,7 +31,8 @@
     data() {
       return {
         type: 1,
-        keyword: ''
+        keyword: '',
+		keyword1: ''
       }
     },
     created() {
@@ -50,7 +52,8 @@
         this.type = type;
       },
       search() {
-        console.log(this.keyword)
+		if(this.type == 1) this.$refs.origin.search();
+        else this.$refs.add.search();
       },
       
     }

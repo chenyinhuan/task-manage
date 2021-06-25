@@ -41,6 +41,12 @@
 		deleteField
 	} from '@/api/filed-manage/index.js'
 	export default {
+		props: {
+		  keyword: {
+		    type: String,
+		    default: ''
+		  }
+		},
 		data() {
 			return {
 				tableData: [],
@@ -126,7 +132,8 @@
 				let params = {
 					page: this.currentPage,
 					limit: this.limit,
-					type: 1
+					type: 1,
+					fieldName: this.keyword
 				}
 				getPageList(params).then(res => {
 					this.isShow = true;
@@ -146,6 +153,10 @@
 				this.currentPage = val;
 				this.init();
 			},
+			search() {
+				this.currentPage = 1;
+				this.init();
+			}
 		}
 	}
 </script>
