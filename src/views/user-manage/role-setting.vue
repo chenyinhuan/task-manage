@@ -159,7 +159,8 @@ import {getDeptList} from '@/api/user-manage/organization/index';
         }).then(() => {
           deleteRole([row.roleId]).then(res => {
             if(res.code == 500) return this.$message.warning(res.msg);
-            this.$message.success('删除成功！')
+            this.$message.success('删除成功！');
+			this.searchParams.page  = 1;
             this.init()
           })
         })

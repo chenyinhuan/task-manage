@@ -239,6 +239,7 @@
 						if (res.code == 500) return this.$message.warning(res.msg);
 						else {
 							this.$message.success('删除成功！');
+							this.searchParams.page  = 1;
 							this.init();
 						}
 					})
