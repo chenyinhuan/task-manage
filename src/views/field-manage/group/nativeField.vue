@@ -38,10 +38,11 @@
       <div class="item">
         <p v-if="form.formType == 2 || form.formType == 3">枚举值</p>
         <div v-if="form.formType == 2 || form.formType == 3" class="options">
-          <div v-for="(item, index) in enums" :key="index">
+          <div v-for="(item, index) in enums" :key="index" style="position:relative;">
             <el-input class="select" v-model="item.enumValue" placeholder="请输入" maxlength="20">
               <template style=" background: #D9D9D9;" slot="prepend">选项{{index+1}}</template>
             </el-input>
+            <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && !item.enumValue">请输入枚举值</span>
             <span @click="remove(item,index)" v-if="index > 1" style="color: #C03639;margin-left: 10px;cursor: pointer;">X
               删除</span>
           </div>
@@ -136,6 +137,9 @@
       },
       save() {
         if (this.form.fieldName == '' || this.form.name == '' || this.form.formType == '' || this.checkFieldName || this.checkName) return this.showValidate = true;
+        for(let i in this.enums){
+          if(!this.enums[i].enumValue) return this.showValidate = true;
+        }
         let params = {
           "dataType": this.form.dataType, //数据类型 1：字符串型string，2：整数int，3小数数值float，4日期date，5 时间time
           "description": this.form.description, //描述
