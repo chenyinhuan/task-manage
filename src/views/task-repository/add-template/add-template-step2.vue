@@ -81,7 +81,7 @@
 												v-if="showValidate && sitem.logicType == ''">请选判断方式</span>
 											<span class="validate-info" style="color: #FF8C00;"
 												v-if="showValidate && sitem.logicType == ''">请选择指标</span>
-										    <span class="validate-info" style="color: #FF8C00;" 
+										    <span class="validate-info" style="color: #FF8C00;"
 											v-if="showValidate && sitem.targetEndId != null && sitem.targetEndId == 0">请输入自定义数值</span> -->
 										</div>
 										<a @click="addIf(cindex)" class="add-list"
@@ -116,7 +116,7 @@
 							<el-button type="text" @click="addList(index)">+ 如果输出</el-button>
 							<el-button type="text" @click="elseStatus = true">+ 否则输出</el-button>
 						</div>
-						<div class="else" v-if="elseStatus">
+						<div class="else1" v-if="elseStatus">
 							<label class="label">否则</label>
 							<div style="position: relative;">
 								<el-select v-model="item.taskTplTargeelseEntity.elseResult" placeholder="选择输出类型">
@@ -194,7 +194,7 @@
 				</div>
 				<span class="validate-info1"
 					v-if="showValidate && item.taskTplTargetEntity.testTimeType == ''">请选择选择考核结束时间</span>
-				<span class="validate-info1"
+				<span class="validate-info1" style="left: 180px;"
 					v-if="showValidate && item.taskTplTargetEntity.testTimeType == 1 && item.taskTplTargetEntity.testDays == ''">请输入固定考核天数</span>
 				<span class="validate-info1" style="left: 180px;"
 					v-if="showValidate && item.taskTplTargetEntity.testTimeType == 2 && item.taskTplTargetEntity.testDate == ''">请选择日期</span>
@@ -208,8 +208,8 @@
 		</section>
 		<div class="foot">
 			<el-button @click="pre">上一步</el-button>
-			<el-button type="primary" @click="save">保存模版</el-button>
-			<el-button class="cancel" @click="cancel">取消</el-button>
+			<el-button type="primary" @click="save()">保存模版</el-button>
+			<el-button class="cancel" @click="cancel()">取消</el-button>
 		</div>
 	</div>
 </template>
@@ -219,7 +219,8 @@
 		getTargeList
 	} from '@/api/target-manage/index.js'
 	import {
-		saveTaskTargeTpl
+		saveTaskTargeTpl,
+    getTaskTargeTplDetail
 	} from '@/api/task-repository/index.js'
 	export default {
 		props: {
@@ -498,6 +499,7 @@
 						flag = false;
 						this.checkElseResult = true;
 					}
+
 					if (item.taskTplTargetEntity.targetResultShowType == 2 && item.taskTplTargetEntity.targetId ==
 						'') flag = false;
 					if (flag) {
@@ -511,24 +513,35 @@
 							citem.ifResultShowType = citem.ifResultShowType[0];
 						})
 					}
-				})
-				console.log(flag)
+          // 考核结束时间类型
+          if(item.taskTplTargetEntity.testTimeType == '') flag = false;
+          if(item.taskTplTargetEntity.testTimeType == 1 && item.taskTplTargetEntity.testDays <= 0) flag = false;
+          if(item.taskTplTargetEntity.testTimeType == 2 && item.taskTplTargetEntity.testDate == '') flag = false;
+          if(item.taskTplTargetEntity.testTimeType == 3 && item.taskTplTargetEntity.testCycle == '') flag = false;
+          if(item.taskTplTargetEntity.testTimeType == 3 && item.taskTplTargetEntity.testCycle == 2 && item.taskTplTargetEntity.weekDay == '') flag = false;
+           if(item.taskTplTargetEntity.testTimeType == 3 && item.taskTplTargetEntity.testCycle == 3 && item.taskTplTargetEntity.testDays == '') flag = false;
+        })
+
 				if (flag == false) {
 					this.showValidate = true;
 					return
 				}
-				// if(!this.taskTplId) return this.$message.warning('模板id不能为空！')
-				let params = {
-					taskTplTargetVOs: taskTplTargetVOs,
-					taskTplId: this.taskTplId ? this.taskTplId : 10
-				}
-				saveTaskTargeTpl(params).then(res => {
-					if (res.code != 0) return this.$message.warning(res.msg)
-					else {
-						this.$message.success('新增成功');
-						this.$router.push('/task-repository/task-template');
-					}
-				})
+				if(this.$route.query.id) {
+
+        }else {
+          let params = {
+          	taskTplTargetVOs: taskTplTargetVOs,
+          	taskTplId: this.taskTplId ? this.taskTplId : ''
+          }
+          saveTaskTargeTpl(params).then(res => {
+          	if (res.code != 0) return this.$message.warning(res.msg)
+          	else {
+          		this.$message.success('新增成功');
+          		this.$router.push('/task-repository/task-template');
+          	}
+          })
+        }
+
 			},
 			cancel() {
 				this.$router.push('/task-repository/task-template');
@@ -541,7 +554,29 @@
 				if (!regex.test(val)) {
 					return true;
 				} else return false;
-			}
+			},
+      editTask() {
+        let params = {
+          id: this.taskTplId
+        }
+        getTaskTargeTplDetail(params).then(res => {
+          if(res.code == 0 && res.taskTplTarges.taskTplTargetVOs) {
+            this.taskTplTargetVOs = JSON.parse(JSON.stringify(res.taskTplTarges.taskTplTargetVOs))
+            for(let i=0;i<this.taskTplTargetVOs.length;i++) {
+              let item = this.taskTplTargetVOs[i];
+              console.log(item)
+              item.taskTplTargeelseEntity.elseResultShow = [item.taskTplTargeelseEntity.elseResultShow];
+              item.taskTplTargeelseEntity.elseResultShowType = [item.taskTplTargeelseEntity.elseResultShowType];
+              item.taskTplTargetEntity.targetResultShowType = [item.taskTplTargetEntity
+              	.targetResultShowType];
+              item.taskTplTargeifVOs.forEach(citem => {
+              	citem.ifResultShow = [citem.ifResultShow];
+              	citem.ifResultShowType = [citem.ifResultShowType];
+              })
+            }
+          }
+        })
+      }
 		}
 	}
 </script>
@@ -738,7 +773,62 @@
 				.container {
 					position: relative;
 				}
+        .else1 {
+          display: flex;
+          font-size: 14px;
+          margin-top: 20px;
+          padding-top: 32px;
 
+          &::before {
+          	position: absolute;
+          	background-color: #FFFFFF;
+          	height: 1px;
+          	content: '';
+          	width: calc(100% + 60px);
+          	left: -30px;
+          	bottom: 66px;
+          }
+
+          &:first-child {
+          	margin-bottom: 68px;
+
+          	.el-select {
+          		margin: 10px 20px 5px 0;
+          	}
+
+          	.label {
+          		margin-top: 15px;
+          	}
+          }
+
+          .el-input {
+          	width: 140px;
+          	margin-right: 30px;
+          }
+
+          .add-list {
+          	font-size: 14px;
+          	color: #2A7ED1;
+          }
+
+          .label {
+          	margin-right: 20px;
+          	color: #9596AB;
+          	margin-top: 6px;
+          	white-space: nowrap;
+          }
+
+          .el-select {
+          	margin-right: 20px;
+          	width: 160px;
+          }
+
+          div {
+          	display: flex;
+          	flex-wrap: wrap;
+          	align-items: center;
+          }
+        }
 				.else {
 					display: flex;
 					font-size: 14px;
@@ -752,7 +842,7 @@
 						content: '';
 						width: calc(100% + 60px);
 						left: -30px;
-						bottom: 66px;
+						bottom: 88px;
 					}
 
 					&:first-child {

@@ -196,7 +196,7 @@
             username: this.form.username,
             password: this.form.password,
             conPassword: this.form.conPassword,
-            deptId: this.form.deptId,
+            deptId: this.permission[0].deptId,
             roleIdList: roleIdList,
             email: this.form.email,
             userId: this.userId

@@ -95,9 +95,14 @@
 				this.getMothData(`${year}-${month+1}-1 00:00:00`)
 			},
 			dateClick(e, val) {
-				console.log(e, val);
-				if(this.events.find(n => n.today == val) && (this.events.find(n => n.today == val).dailyTaskTargetWorkingCout >0 || 
-				 this.events.find(n => n.today == val).dailyTaskTargetCompleteCout >0 || 
+        this.$router.push({
+        	path: `/task-center/task-list`,
+        	query: {
+        		date: val,
+        	},
+        });
+				if(this.events.find(n => n.today == val) && (this.events.find(n => n.today == val).dailyTaskTargetWorkingCout >0 ||
+				 this.events.find(n => n.today == val).dailyTaskTargetCompleteCout >0 ||
 				 this.events.find(n => n.today == val).dailyTaskTargetUncompleteCout >0)) {
 					this.$router.push({
 						path: `/task-center/task-list`,

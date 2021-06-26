@@ -1,7 +1,7 @@
 <template>
   <div id="addTemplate">
-    <step1 v-show="step == 1" @next="next"></step1>
-    <step2 v-show="step == 2" @pre="pre" :taskTplId="taskTplId"></step2>
+    <step1 v-show="step == 1" @next="next" @edit="edit"></step1>
+    <step2 ref="step2" v-show="step == 2" @pre="pre" :taskTplId="taskTplId"></step2>
   </div>
 </template>
 <script>
@@ -19,7 +19,6 @@
       }
     },
     created() {
-
     },
     mounted() {
 
@@ -32,6 +31,13 @@
         if(!taskTplId) return false;
         this.step = 2;
         this.taskTplId = taskTplId;
+      },
+      edit(taskTplId) {
+        this.step = 2;
+        this.taskTplId = taskTplId;
+        this.$nextTick(() => {
+          this.$refs.step2.editTask();
+        })
       },
       pre() {
         this.step = 1;

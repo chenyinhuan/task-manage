@@ -42,3 +42,27 @@ export const getTaskDetail = (params) => api.post(`/task-admin/task/tk/sender/ta
  * @params params
  */
 export const turnonoff = (params) => api.post(`/task-admin/task/tasktpl/turnonoff/${params.taskTplId}/${params.status}`, params)
+
+/**
+ * 删除任务模板
+ * @params params
+ */
+export const delTaskTpl = (params) => api.post(`/task-admin/task/tasktpl/delTaskTpl/${params.id}`, params)
+
+/**
+ * 获取任务模板第一步详情
+ * @params params
+ */
+export const getTaskTplDetail = (params) => api.post(`/task-admin/task/tasktpl/getTaskTplDetail/${params.id}`, params)
+
+/**
+ * 获取任务模板第二步详情
+ * @params params
+ */
+export const getTaskTargeTplDetail = (params) => api.post(`/task-admin/task/tasktpl/getTaskTargeTplDetail/${params.id}`, params)
+
+/**
+ * 更新任务模板（第一步）
+ * @params params
+ */
+export const updateTaskTpl = (params) => api.post(`/task-admin/task/tasktpl/updateTaskTpl`, params);

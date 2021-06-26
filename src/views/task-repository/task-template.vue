@@ -25,6 +25,7 @@
             <el-button type="text" @click="editItem(scope.row)">编辑</el-button>
             <el-button type="text" v-if="scope.row.status == 1" @click="option(scope.row,2)">下架</el-button>
             <el-button type="text" v-if="scope.row.status == 2" @click="option(scope.row,1)">上架</el-button>
+            <el-button type="text" v-if="scope.row.status == 2" @click="deleteItem(scope.row)">删除</el-button>
           </div>
           <div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
         </template>
@@ -43,7 +44,8 @@
 <script>
   import {
     getTasktplList,
-    turnonoff
+    turnonoff,
+	  delTaskTpl
   } from '@/api/task-repository/index'
   export default {
     data() {
@@ -141,6 +143,25 @@
             }
             else this.$message.warning(res.msg)
           })
+        })
+      },
+      deleteItem(item) {
+        this.$confirm(`删除后将无法恢复此模板的相关记录如果已经被调用将无法删除，希望删除请删除关联字段、指标`, '是否确认删除模板？', {
+        	confirmButtonText: '确定',
+        	cancelButtonText: '取消',
+        	type: 'warning'
+        }).then(() => {
+        	let params = {
+        	  id: item.id,
+        	}
+        	delTaskTpl(params).then(res => {
+        	  if(res.code == 0) {
+        	    this.$message.success(`删除成功`);
+              this.searchParams.page = 1;
+        	    this.init();
+        	  }
+        	  else this.$message.warning(res.msg)
+        	})
         })
       }
     }

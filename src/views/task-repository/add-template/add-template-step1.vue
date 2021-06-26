@@ -22,7 +22,9 @@
 					<div class="field-item" v-for="(item,index) in taskTplVO.taskTplBasicFieldEntities" :key="index">
 						<div class="field-sitem">
 							<span>{{item.fieldName}}</span>
-							<el-input v-model="item.fieldValue" :placeholder="'请输入'+item.fieldName" disabled></el-input>
+							<el-input v-model="item.fieldValue"
+              :placeholder="item.formType==1?`请输入${item.fieldName}`:(item.formType == 2 || item.formType ==3?`请选择${item.fieldName}`:'')"
+              disabled></el-input>
 						</div>
 						<div class="field-sitem">
 							<span>是否必填</span>
@@ -94,7 +96,13 @@
 					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 						v-for="(item, index) in tableColumn" :key="index">
 						<template slot-scope="scope">
-							<div>{{ scope.row[item.prop] }}</div>
+              <div v-if="item.slot && item.prop == 'dataType'">
+                <!-- {{dataType.find(n => n.value == scope.row[item.prop]).label}} -->
+              </div>
+              <div v-if="item.slot && item.prop == 'formType'">
+                <!-- {{formType.find(n => n.value == scope.row[item.prop]).label}} -->
+              </div>
+							<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -104,7 +112,7 @@
 					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 						v-for="(item, index) in tableColumn1" :key="index">
 						<template slot-scope="scope">
-							<div>{{ scope.row[item.prop] }}</div>
+							<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -126,7 +134,9 @@
 		getNativeList
 	} from '@/api/filed-manage/index';
 	import {
-		saveTaskTpl
+		saveTaskTpl,
+    getTaskTplDetail,
+    updateTaskTpl
 	} from '@/api/task-repository/index'
 	export default {
 		components: {
@@ -159,18 +169,8 @@
 						// }
 					]
 				},
-				originalField: [{
-					id: 1
-				}, {
-					id: 2
-				}],
-				extendField: [{
-					id: 1
-				}, {
-					id: 2
-				}, {
-					id: 3
-				}],
+				originalField: [],
+				extendField: [],
 				addDialog: false,
 				type: "",
 				dialogVisible: false,
@@ -185,10 +185,12 @@
 					{
 						label: "数据类型",
 						prop: "dataType",
+            slot: true
 					},
 					{
 						label: "表单类型",
 						prop: "formType",
+            slot: true
 					},
 					{
 						label: "字段描述",
@@ -204,6 +206,7 @@
 					{
 						label: "数据类型",
 						prop: "dataType",
+            slot: true
 					},
 					{
 						label: "字段描述",
@@ -216,10 +219,28 @@
 				fieldType: '',
 				taskTplId: '',
 				showValidate: false,
-				checkTaskName: false
+				checkTaskName: false,
+        dataType: this.$dataTypeList,
+        formType: this.$formTypeList
 			};
 		},
-		created() {},
+		created() {
+      if(this.$route.query.id) {
+        this.taskTplId = this.$route.query.id;
+        let params = {
+          id: this.taskTplId
+        }
+        getTaskTplDetail(params).then(res => {
+          if(res.code == 0) {
+            this.taskTplVO.taskName = res.taskTpl.taskName;
+            this.taskTplVO.description = res.taskTpl.description;
+            this.taskTplVO.status = res.taskTpl.status;
+            this.taskTplVO.taskTplBasicFieldEntities = res.taskTpl.taskTplBasicFieldEntities;
+            this.taskTplVO.taskTplComplexFieldEntities = res.taskTpl.taskTplComplexFieldEntities;
+          }
+        })
+      }
+    },
 		mounted() {},
 		computed: {},
 		methods: {
@@ -312,10 +333,6 @@
 				this.dialogVisible = true;
 			},
 			next() {
-				if (this.taskTplId) {
-					this.$emit("next", this.taskTplId);
-					return;
-				}
 				if (this.taskTplVO.taskName == '' || this.taskTplVO.taskTplBasicFieldEntities.length == 0 || this.taskTplVO.taskTplComplexFieldEntities
 					.length == 0 || this.checkTaskName) return this.showValidate = true;
 				for (let i = 0; i < this.taskTplVO.taskTplBasicFieldEntities.length; i++) {
@@ -326,12 +343,23 @@
 					let item = this.taskTplVO.taskTplComplexFieldEntities[i];
 					item.sort = i + 1;
 				}
-				saveTaskTpl(this.taskTplVO).then(res => {
-					if (res.code == 0) {
-						this.taskTplId = res.taskTplId;
-						this.$emit("next", res.taskTplId);
-					} else this.$message.warning(res.msg)
-				})
+        if (this.taskTplId) {
+          let params = JSON.parse(JSON.stringify(this.taskTplVO));
+          params.id = this.taskTplId;
+        	updateTaskTpl(params).then(res => {
+            if(res.code == 0)   {
+              this.$message.success('更新成功！');
+              this.$emit("edit", this.taskTplId);
+            } else this.$message.warning(res.msg);
+          })
+        }else {
+          saveTaskTpl(this.taskTplVO).then(res => {
+          	if (res.code == 0) {
+          		this.taskTplId = res.taskTplId;
+          		this.$emit("next", res.taskTplId);
+          	} else this.$message.warning(res.msg)
+          })
+        }
 			},
 			handleSizeChange(val) {
 				console.log(`每页 ${val} 条`);
