@@ -105,6 +105,7 @@
 											v-if="citem.ifResult == 3">
 											<colorPicker v-model="citem.color" />
 										</div>
+
 										<el-checkbox style="margin: 0px 30px" :label="0"
                      v-model="citem.ifResultShow" @change="changeCheck(citem.ifResultShow)">
 											不显示数值</el-checkbox>
@@ -525,7 +526,7 @@
 
 					if (flag) {
             console.log(item.taskTplTargeelseEntity.elseResultShow[0])
-						item.taskTplTargeelseEntity.elseResultShow = item.taskTplTargeelseEntity.elseResultShow[0] == undefined ?1:item.taskTplTargeelseEntity.elseResultShow[0];
+						item.taskTplTargeelseEntity.elseResultShow = item.taskTplTargeelseEntity.elseResultShow.length ==2 ?item.taskTplTargeelseEntity.elseResultShow[1]:item.taskTplTargeelseEntity.elseResultShow[0];
 						item.taskTplTargeelseEntity.elseResultShowType = item.taskTplTargeelseEntity
 							.elseResultShowType[0];
 						item.taskTplTargetEntity.targetResultShowType = item.taskTplTargetEntity
@@ -533,7 +534,7 @@
               // 不显示数值不一定要选
 						item.taskTplTargeifVOs.forEach(citem => {
               console.log(citem.ifResultShow[0])
-							citem.ifResultShow = citem.ifResultShow[0] == undefined ? 1: citem.ifResultShow[0]
+							citem.ifResultShow = citem.ifResultShow.length == 2 ? citem.ifResultShow[1]: citem.ifResultShow[0]
 							citem.ifResultShowType = citem.ifResultShowType[0];
 						})
 					}
@@ -601,11 +602,11 @@
               let item = res.taskTplTarges.taskTplTargetVOs[i];
               if(item.taskTplTargetEntity.targetResultShowType == 1){
                 item.taskTplTargetEntity.elseStatus = item.taskTplTargetEntity.targetResultShowType == 1?true:false;
-                item.taskTplTargeelseEntity.elseResultShow = item.taskTplTargeelseEntity.elseResultShow?[item.taskTplTargeelseEntity.elseResultShow]:[0];
+                item.taskTplTargeelseEntity.elseResultShow = item.taskTplTargeelseEntity.elseResultShow?[item.taskTplTargeelseEntity.elseResultShow]:[1,0];
                 item.taskTplTargeelseEntity.elseResultShowType = item.taskTplTargeelseEntity.elseResultShowType?[item.taskTplTargeelseEntity.elseResultShowType]:[];
                 item.taskTplTargetEntity.targetResultShowType = item.taskTplTargetEntity.targetResultShowType?[item.taskTplTargetEntity.targetResultShowType]:[];
                 item.taskTplTargeifVOs.forEach(citem => {
-                	citem.ifResultShow = citem.ifResultShow ?[citem.ifResultShow]:[0];
+                	citem.ifResultShow = citem.ifResultShow ?[citem.ifResultShow]:[1,0];
                 	citem.ifResultShowType = citem.ifResultShowType?[citem.ifResultShowType]:[];
                 })
               }else {
@@ -643,7 +644,7 @@
         })
       },
       changeCheck(val) {
-        val.splice(0, 1)
+        // if(val.length > 0) val.splice(0, 1)
       }
 		}
 	}
