@@ -106,7 +106,6 @@
       }
     },
     created() {
-      console.log(this.targetId)
       if (this.targetId && this.type == 1) {
         this.getDetail();
       }
@@ -159,6 +158,7 @@
           "formTypes": [], //表单类型，为空时取全部
           "type": '' //字段类型1：原生2衍生，为空时取全部
         }
+        console.log(this.form.targeFieldVO.logicAction != 5)
         if (this.form.targeFieldVO.logicAction != 5) {
           params.dataTypes = [2, 3]
         }

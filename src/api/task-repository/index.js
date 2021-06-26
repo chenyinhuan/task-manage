@@ -66,3 +66,9 @@ export const getTaskTargeTplDetail = (params) => api.post(`/task-admin/task/task
  * @params params
  */
 export const updateTaskTpl = (params) => api.post(`/task-admin/task/tasktpl/updateTaskTpl`, params);
+
+/**
+ * 更新任务模板（第一步）
+ * @params params
+ */
+export const upateTaskTargeTpl = (params) => api.post(`/task-admin/task/tasktpl/upateTaskTargeTpl/${params.taskTplId}`, params);

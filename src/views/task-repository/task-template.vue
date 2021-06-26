@@ -22,10 +22,10 @@
           </div>
           <div v-if="item.slot && item.prop=='opt'">
             <el-button type="text" @click="copy(scope.row)">复制</el-button>
-            <el-button type="text" @click="editItem(scope.row)">编辑</el-button>
+            <el-button type="text" @click="editItem(scope.row)" v-if="scope.row.status == 2">编辑</el-button>
             <el-button type="text" v-if="scope.row.status == 1" @click="option(scope.row,2)">下架</el-button>
             <el-button type="text" v-if="scope.row.status == 2" @click="option(scope.row,1)">上架</el-button>
-            <el-button type="text" v-if="scope.row.status == 2" @click="deleteItem(scope.row)">删除</el-button>
+            <!-- <el-button type="text" v-if="scope.row.status == 2" @click="deleteItem(scope.row)">删除</el-button> -->
           </div>
           <div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
         </template>

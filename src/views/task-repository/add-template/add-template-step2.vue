@@ -46,43 +46,46 @@
 									<label class="label">如果</label>
 									<div>
 										<div v-for="(sitem,sindex) in citem.taskTplTargeifExtEntityList" :key="sindex"
-											style="margin-bottom: 10px;">
+											style="margin-bottom: 10px; position: relative;">
 											<el-select v-model="sitem.logicType" placeholder="请选择" v-if="sindex != 0">
 												<el-option v-for="(ltitem, ltindex) in logicTypeList"
 													:value="ltitem.value" :label="ltitem.label" :key="ltindex">
 												</el-option>
 											</el-select>
+                      <span class="validate-info2"
+                      :style="{'bottom': sitem.targetEndId != null && sitem.targetEndId == 0 && sindex != 0?'24px':''}"
+                       v-if="sindex != 0 && showValidate && sitem.logicType == null">请选择</span>
 											<el-select v-model="sitem.targetStartId" placeholder="选择指标">
 												<el-option v-for="(titem, tindex) in targetList" :value="titem.id"
 													:label="titem.targetName" :key="tindex"></el-option>
 											</el-select>
+                      <span :style="{'left':sindex==0?'':'180px',
+                      'bottom': sitem.targetEndId != null && sitem.targetEndId == 0 && sindex != 0?'24px':''}"
+                      class="validate-info2"
+                      v-if="showValidate && sitem.targetStartId == null">请选择</span>
 											<el-select v-model="sitem.logicAction" placeholder="判断选择">
 												<el-option v-for="(litem, lindex) in logicAction" :label="litem.label"
 													:value="litem.value" :key="lindex"></el-option>
 											</el-select>
+                      <span :style="{'left':sindex==0?'180px':'360px',
+                      'bottom': sitem.targetEndId != null && sitem.targetEndId == 0 && sindex != 0?'24px':''}"
+                      class="validate-info2" v-if="showValidate && sitem.logicAction == null">请选择</span>
 											<el-select v-model="sitem.targetEndId" placeholder="选择指标">
 												<el-option label="自定义数值" :value="0"></el-option>
 												<el-option v-for="(titem, tindex) in targetList" :value="titem.id"
 													:label="titem.targetName" :key="tindex"></el-option>
 											</el-select>
-											<el-input-number :controls="false" controls-position="right"
+                      <span :style="{'left':sindex==0?'360px':'540px',
+                      'bottom': sitem.targetEndId != null && sitem.targetEndId == 0 && sindex != 0?'24px':''}"
+                      class="validate-info2" v-if="showValidate && sitem.targetEndId == null">请选择</span>
+											<el-input-number placeholder="请输入自定义数值" :controls="false" controls-position="right"
 												style="width: 160px;margin-right: 10px;"
 												v-model="sitem.targeDefineValue"
 												v-if="sitem.targetEndId != null && sitem.targetEndId == 0">
 											</el-input-number>
-											<a style="color: #fd6b6d; position: absolute;margin-top: 4px;right: -8px;"
+											<a :style="{'right': sitem.targetEndId != null && sitem.targetEndId == 0?'-8px':'-27px'}" style="color: #fd6b6d; position: absolute;margin-top: 4px;"
 												@click="deleteIf(citem.taskTplTargeifExtEntityList,sindex)"
 												class="add-list" v-if="sindex != 0">X 删除</a>
-											<!-- <span class="validate-info" style="color: #FF8C00;"
-												v-if="showValidate && sitem.logicType == ''">请选择</span>
-											<span class="validate-info" style="color: #FF8C00;"
-												v-if="showValidate && sitem.logicType == ''">请选择指标</span>
-											<span class="validate-info" style="color: #FF8C00;"
-												v-if="showValidate && sitem.logicType == ''">请选判断方式</span>
-											<span class="validate-info" style="color: #FF8C00;"
-												v-if="showValidate && sitem.logicType == ''">请选择指标</span>
-										    <span class="validate-info" style="color: #FF8C00;"
-											v-if="showValidate && sitem.targetEndId != null && sitem.targetEndId == 0">请输入自定义数值</span> -->
 										</div>
 										<a @click="addIf(cindex)" class="add-list"
 											:style="{'margin-top':item.taskTplTargeifVOs.length > 1?'5px':''}">+ 新增</a>
@@ -95,50 +98,59 @@
 											<el-option v-for="(eitem, eindex) in complateList" :label="eitem.label"
 												:value="eitem.value" :key="eindex"></el-option>
 										</el-select>
+                    <span v-if="showValidate && !citem.ifResult" class="validate-info1">请选择</span>
 										<el-input v-model="citem.defineValue" v-if="citem.ifResult == 3"></el-input>
-										<div style="border: 1px solid rgb(217, 217, 217);border-radius: 4px;z-index: 2;width: 60px;height: 32px;background: #ffffff;padding: 0px 6px;"
+										<span v-if="showValidate && citem.ifResult == 3 && citem.defineValue == ''" class="validate-info1" style="left: 180px;">请选择</span>
+                    <div style="border: 1px solid rgb(217, 217, 217);border-radius: 4px;z-index: 2;width: 60px;height: 32px;background: #ffffff;padding: 0px 6px;"
 											v-if="citem.ifResult == 3">
 											<colorPicker v-model="citem.color" />
 										</div>
-										<el-checkbox style="margin: 0px 30px" :label="0" v-model="citem.ifResultShow">
+										<el-checkbox style="margin: 0px 30px" :label="0"
+                     v-model="citem.ifResultShow" @change="changeCheck(citem.ifResultShow)">
 											不显示数值</el-checkbox>
+                    <span v-if="showValidate && citem.ifResultShow.length == 0" class="validate-info1" :style="{'left': citem.ifResult == 3?'440px':'210px'}">请选择</span>
 										<el-checkbox-group :style="{'position': citem.ifResult == 3?'absolute':'',
                     'margin-top': citem.ifResult == 3?'70px':''}" v-model="citem.ifResultShowType"
 											@change="bindCheckBox(citem.ifResultShowType)">
 											<el-checkbox :label="1">显示百分数（两位小数)</el-checkbox>
 											<el-checkbox :label="2">显示数值（两位小数）</el-checkbox>
 										</el-checkbox-group>
+                    <span v-if="showValidate && citem.ifResultShowType.length == 0" class="validate-info1" :style="{'left': citem.ifResult == 3?'':'335px','bottom':citem.ifResult == 3?'-58px':''}">请选择</span>
 									</div>
 								</li>
 							</ul>
 						</div>
 						<div class="add-term">
 							<el-button type="text" @click="addList(index)">+ 如果输出</el-button>
-							<el-button type="text" @click="elseStatus = true">+ 否则输出</el-button>
+							<el-button type="text" @click="item.taskTplTargetEntity.elseStatus = true">+ 否则输出</el-button>
 						</div>
-						<div class="else1" v-if="elseStatus">
+						<div class="else1" v-if="item.taskTplTargetEntity.elseStatus">
 							<label class="label">否则</label>
 							<div style="position: relative;">
 								<el-select v-model="item.taskTplTargeelseEntity.elseResult" placeholder="选择输出类型">
 									<el-option v-for="(eitem, eindex) in complateList" :label="eitem.label"
 										:value="eitem.value" :key="eindex"></el-option>
 								</el-select>
+                <span v-if="showValidate && !item.taskTplTargeelseEntity.elseResult" class="validate-info1">请选择</span>
 								<el-input v-model="item.taskTplTargeelseEntity.defineValue"
 									v-if="item.taskTplTargeelseEntity.elseResult == 3"></el-input>
+                  <span v-if="showValidate && item.taskTplTargeelseEntity.elseResult == 3 && item.taskTplTargeelseEntity.defineValue == ''" class="validate-info1" style="left: 180px;">请选择</span>
 								<div style="border: 1px solid rgb(217, 217, 217);border-radius: 4px;z-index: 2;width: 60px;height: 32px;background: #ffffff;padding: 0px 6px;"
 									v-if="item.taskTplTargeelseEntity.elseResult == 3">
 									<colorPicker v-model="item.taskTplTargeelseEntity.color" />
 								</div>
-								<el-checkbox style="margin: 0px 30px" :label="0"
+								<el-checkbox @change="changeCheck(item.taskTplTargeelseEntity.elseResultShow)" style="margin: 0px 30px" :label="0"
 									v-model="item.taskTplTargeelseEntity.elseResultShow">
 									不显示数值</el-checkbox>
+                <span v-if="showValidate && item.taskTplTargeelseEntity.elseResultShow.length == 0" class="validate-info1" :style="{'left': item.taskTplTargeelseEntity.elseResult == 3?'440px':'210px'}">请选择</span>
 								<el-checkbox-group :style="{'position': item.taskTplTargeelseEntity.elseResult == 3?'absolute':'',
-                'margin-top': item.taskTplTargeelseEntity.elseResult == 3?'70px':''}"
+                'margin-top': item.taskTplTargeelseEntity.elseResult == 3?'95px':''}"
 									v-model="item.taskTplTargeelseEntity.elseResultShowType"
 									@change="bindCheckBox(item.taskTplTargeelseEntity.elseResultShowType)">
 									<el-checkbox :label="1">显示百分数（两位小数)</el-checkbox>
 									<el-checkbox :label="2">显示数值（两位小数）</el-checkbox>
 								</el-checkbox-group>
+                <span v-if="showValidate && item.taskTplTargeelseEntity.elseResultShowType.length == 0" class="validate-info1" :style="{'left': item.taskTplTargeelseEntity.elseResult == 3?'':'335px','bottom':item.taskTplTargeelseEntity.elseResult == 3?'-58px':''}">请选择</span>
 							</div>
 						</div>
 					</div>
@@ -220,7 +232,8 @@
 	} from '@/api/target-manage/index.js'
 	import {
 		saveTaskTargeTpl,
-    getTaskTargeTplDetail
+    getTaskTargeTplDetail,
+    upateTaskTargeTpl
 	} from '@/api/task-repository/index.js'
 	export default {
 		props: {
@@ -233,7 +246,6 @@
 		},
 		data() {
 			return {
-				elseStatus: false,
 				template: '',
 				checkList: [1],
 				testTimeTypeList: this.$testTimeTypeList,
@@ -251,7 +263,7 @@
 						"color": '#000000', //颜色
 						"defineValue": '', //自定义
 						"elseResult": null, //1:完成， 2未完成， 3自定义
-						"elseResultShow": [], //是否显示  0：不显示 1：显示
+						"elseResultShow": [1], //是否显示  0：不显示 1：显示
 						"elseResultShowType": [], //1：显示百分比 2：显示数值（小数2位）
 						"sort": 0,
 						"id": 0,
@@ -260,7 +272,7 @@
 						"color": '#000000', //颜色
 						"defineValue": '', //结果自定义值
 						"ifResult": null, //1:完成， 2未完成， 3自定义
-						"ifResultShow": [], //是否显示  0：不显示 1：显示
+						"ifResultShow": [1], //是否显示  0：不显示 1：显示
 						"ifResultShowType": [], //1：显示百分比 2：显示数值（小数2位）
 						"sort": 0,
 						"taskTplTargeifExtEntityList": [{ //如果规则列给
@@ -269,7 +281,6 @@
 							"targetEndId": null, //指标id
 							"targetStartId": null, //指标id
 							"targeDefineValue": null, //自定义对比值
-							taskTplTargetIfId: 0
 						}],
 						"taskTplTargetId": 0,
 					}],
@@ -285,6 +296,7 @@
 						"testDate": '', //俱体日期
 						"testTimeType": '', //考核时间类型：1：任务派发后固定时间 2：指定日期，3：周期性任务
 						"taskTplId": 0,
+            elseStatus: false
 					}
 				}],
 				weekDay: [{
@@ -373,7 +385,7 @@
 					"color": '', //颜色
 					"defineValue": '', //结果自定义值
 					"ifResult": null, //1:完成， 2未完成， 3自定义
-					"ifResultShow": [], //是否显示  0：不显示 1：显示
+					"ifResultShow": [1], //是否显示  0：不显示 1：显示
 					"ifResultShowType": [], //1：显示百分比 2：显示数值（小数2位）
 					"sort": 0,
 					"taskTplTargeifExtEntityList": [{ //如果规则列给
@@ -431,7 +443,7 @@
 						"color": '', //颜色
 						"defineValue": '', //自定义
 						"elseResult": null, //1:完成， 2未完成， 3自定义
-						"elseResultShow": [], //是否显示  0：不显示 1：显示
+						"elseResultShow": [1], //是否显示  0：不显示 1：显示
 						"elseResultShowType": [], //1：显示百分比 2：显示数值（小数2位）
 						"sort": 0,
 						"id": 0,
@@ -440,7 +452,7 @@
 						"color": '', //颜色
 						"defineValue": '', //结果自定义值
 						"ifResult": null, //1:完成， 2未完成， 3自定义
-						"ifResultShow": [], //是否显示  0：不显示 1：显示
+						"ifResultShow": [1], //是否显示  0：不显示 1：显示
 						"ifResultShowType": [], //1：显示百分比 2：显示数值（小数2位）
 						"sort": 0,
 						"taskTplTargeifExtEntityList": [{ //如果规则列给
@@ -462,6 +474,7 @@
 						"monthDay": '', //月考核1-31
 						"testDate": '', //俱体日期
 						"testTimeType": '', //考核时间类型：1：任务派发后固定时间 2：指定日期，3：周期性任务
+            elseStatus: false
 					}
 				})
 			},
@@ -488,28 +501,39 @@
 				let msg = '';
 				let taskTplTargetVOs = JSON.parse(JSON.stringify(this.taskTplTargetVOs))
 				taskTplTargetVOs.forEach(item => {
-
-					if (item.taskTplTargetEntity.targetName == '') {
+          console.log(item.taskTplTargeelseEntity.elseResultShow)
+					if (item.taskTplTargetEntity.targetName == '' || this.checkTaskName(item.taskTplTargetEntity.targetName)) {
 						flag = false;
 					}
-					flag = !this.checkTaskName(item.taskTplTargetEntity.targetName);
+          console.log(flag)
 					if (item.taskTplTargetEntity.targetResultShowType[0] == 1 && !item.taskTplTargeelseEntity
-						.elseResult &&
-						flag) {
+						.elseResult) {
 						flag = false;
 						this.checkElseResult = true;
+            console.log(flag)
 					}
-
-					if (item.taskTplTargetEntity.targetResultShowType == 2 && item.taskTplTargetEntity.targetId ==
+          // 直接输出指标
+					if (item.taskTplTargetEntity.targetResultShowType[0] == 2 && item.taskTplTargetEntity.targetId ==
 						'') flag = false;
+
+          // 逻辑判断
+          if(item.taskTplTargetEntity.targetResultShowType[0] == 1) {
+            // if(item.taskTplTargeelseEntity.elseResultShow.length == 0) flag = false;
+            if(item.taskTplTargeelseEntity.elseResultShow[0] == 0 &&
+            item.taskTplTargeelseEntity.elseResultShowType.length == 0) flag = false;
+          }
+
 					if (flag) {
-						item.taskTplTargeelseEntity.elseResultShow = item.taskTplTargeelseEntity.elseResultShow[0];
+            console.log(item.taskTplTargeelseEntity.elseResultShow[0])
+						item.taskTplTargeelseEntity.elseResultShow = item.taskTplTargeelseEntity.elseResultShow[0] == undefined ?1:item.taskTplTargeelseEntity.elseResultShow[0];
 						item.taskTplTargeelseEntity.elseResultShowType = item.taskTplTargeelseEntity
 							.elseResultShowType[0];
 						item.taskTplTargetEntity.targetResultShowType = item.taskTplTargetEntity
 							.targetResultShowType[0];
+              // 不显示数值不一定要选
 						item.taskTplTargeifVOs.forEach(citem => {
-							citem.ifResultShow = citem.ifResultShow[0]
+              console.log(citem.ifResultShow[0])
+							citem.ifResultShow = citem.ifResultShow[0] == undefined ? 1: citem.ifResultShow[0]
 							citem.ifResultShowType = citem.ifResultShowType[0];
 						})
 					}
@@ -521,18 +545,30 @@
           if(item.taskTplTargetEntity.testTimeType == 3 && item.taskTplTargetEntity.testCycle == 2 && item.taskTplTargetEntity.weekDay == '') flag = false;
            if(item.taskTplTargetEntity.testTimeType == 3 && item.taskTplTargetEntity.testCycle == 3 && item.taskTplTargetEntity.testDays == '') flag = false;
         })
-
 				if (flag == false) {
 					this.showValidate = true;
 					return
 				}
+        taskTplTargetVOs = taskTplTargetVOs.map(item => {
+          if(item.taskTplTargetEntity.targetResultShowType == 2) {
+            return {
+              taskTplTargetEntity: item.taskTplTargetEntity
+            }
+          }else return item
+        })
+        let params = {
+        	taskTplTargetVOs: taskTplTargetVOs,
+        	taskTplId: this.taskTplId ? this.taskTplId : ''
+        }
 				if(this.$route.query.id) {
-
+          upateTaskTargeTpl(params).then(res => {
+            if(res.code == 0) {
+              this.$message.success('更新成功！');
+              this.$router.push('/task-repository/task-template');
+            }
+            else this.$message.warning(res.msg);
+          })
         }else {
-          let params = {
-          	taskTplTargetVOs: taskTplTargetVOs,
-          	taskTplId: this.taskTplId ? this.taskTplId : ''
-          }
           saveTaskTargeTpl(params).then(res => {
           	if (res.code != 0) return this.$message.warning(res.msg)
           	else {
@@ -561,21 +597,53 @@
         }
         getTaskTargeTplDetail(params).then(res => {
           if(res.code == 0 && res.taskTplTarges.taskTplTargetVOs) {
-            this.taskTplTargetVOs = JSON.parse(JSON.stringify(res.taskTplTarges.taskTplTargetVOs))
-            for(let i=0;i<this.taskTplTargetVOs.length;i++) {
-              let item = this.taskTplTargetVOs[i];
-              console.log(item)
-              item.taskTplTargeelseEntity.elseResultShow = [item.taskTplTargeelseEntity.elseResultShow];
-              item.taskTplTargeelseEntity.elseResultShowType = [item.taskTplTargeelseEntity.elseResultShowType];
-              item.taskTplTargetEntity.targetResultShowType = [item.taskTplTargetEntity
-              	.targetResultShowType];
-              item.taskTplTargeifVOs.forEach(citem => {
-              	citem.ifResultShow = [citem.ifResultShow];
-              	citem.ifResultShowType = [citem.ifResultShowType];
-              })
+            for(let i=0;i<res.taskTplTarges.taskTplTargetVOs.length;i++) {
+              let item = res.taskTplTarges.taskTplTargetVOs[i];
+              if(item.taskTplTargetEntity.targetResultShowType == 1){
+                item.taskTplTargetEntity.elseStatus = item.taskTplTargetEntity.targetResultShowType == 1?true:false;
+                item.taskTplTargeelseEntity.elseResultShow = item.taskTplTargeelseEntity.elseResultShow?[item.taskTplTargeelseEntity.elseResultShow]:[0];
+                item.taskTplTargeelseEntity.elseResultShowType = item.taskTplTargeelseEntity.elseResultShowType?[item.taskTplTargeelseEntity.elseResultShowType]:[];
+                item.taskTplTargetEntity.targetResultShowType = item.taskTplTargetEntity.targetResultShowType?[item.taskTplTargetEntity.targetResultShowType]:[];
+                item.taskTplTargeifVOs.forEach(citem => {
+                	citem.ifResultShow = citem.ifResultShow ?[citem.ifResultShow]:[0];
+                	citem.ifResultShowType = citem.ifResultShowType?[citem.ifResultShowType]:[];
+                })
+              }else {
+                item.taskTplTargetEntity.elseStatus = item.taskTplTargetEntity.targetResultShowType == 1?true:false;
+                item.taskTplTargetEntity.targetResultShowType = item.taskTplTargetEntity.targetResultShowType?[item.taskTplTargetEntity.targetResultShowType]:[];
+                  item.taskTplTargeifVOs = [{ //如果数据对象
+                    "color": '#000000', //颜色
+                    "defineValue": '', //结果自定义值
+                    "ifResult": null, //1:完成， 2未完成， 3自定义
+                    "ifResultShow": [1], //是否显示  0：不显示 1：显示
+                    "ifResultShowType": [], //1：显示百分比 2：显示数值（小数2位）
+                    "sort": 0,
+                    "taskTplTargeifExtEntityList": [{ //如果规则列给
+                      "logicAction": null, //状态  1：<, 2:<=, 3:>, 4:>=，5:= 6:!=
+                      "logicType": null, //状态  1：且运算 2：或运算
+                      "targetEndId": null, //指标id
+                      "targetStartId": null, //指标id
+                      "targeDefineValue": null, //自定义对比值
+                    }],
+                    "taskTplTargetId": 0,
+                  }]
+                  item.taskTplTargeelseEntity = {
+                    "color": '', //颜色
+                    "defineValue": '', //自定义
+                    "elseResult": null, //1:完成， 2未完成， 3自定义
+                    "elseResultShow": [1], //是否显示  0：不显示 1：显示
+                    "elseResultShowType": [], //1：显示百分比 2：显示数值（小数2位）
+                    "sort": 0,
+                    "id": 0,
+                  }
+              }
             }
+            this.taskTplTargetVOs = JSON.parse(JSON.stringify(res.taskTplTarges.taskTplTargetVOs))
           }
         })
+      },
+      changeCheck(val) {
+        val.splice(0, 1)
       }
 		}
 	}
@@ -709,7 +777,13 @@
 				font-size: 12px;
 				color: #FF8C00;
 			}
-
+      .validate-info2 {
+      	position: absolute;
+      	left: 0px;
+      	bottom: -12px;
+      	font-size: 12px;
+      	color: #FF8C00;
+      }
 			.type-select {
 				margin-bottom: 20px;
 			}
