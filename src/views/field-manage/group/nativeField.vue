@@ -33,7 +33,7 @@
           <el-option v-for="item in dataTypeList" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
-        <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && !form.dataType&& form.formType != 4">请选择数据类型</span>
+        <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.formType != '' && !form.dataType&& form.formType != 4">请选择数据类型</span>
       </div>
       <div class="item">
         <p v-if="form.formType == 2 || form.formType == 3">枚举值</p>
