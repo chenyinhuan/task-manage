@@ -75,8 +75,8 @@
     getTasktpl
   } from '@/api/task-repository/index'
   import {
-    getAccountList
-  } from '@/api/user-manage/account'
+    getDeptListusers
+  } from '@/api/user-manage/organization/index'
   export default {
     components: {
       assigment
@@ -170,14 +170,10 @@
         getTasktpl().then(res => {
           if (res.code == 0) this.taskTplList = res.taskTplList
         })
-        let params = {
-          page: 1,
-          limit: 1000,
-          username: '',
-          deptId: 1
-        }
-        getAccountList(params).then(res => {
-          if (res.code == 0) this.userList = res.page.list;
+        getDeptListusers().then(res => {
+          if (res.code == 0){
+            this.userList = res.deptUsers;
+          }
           else return this.$message.warning(res.msg)
         })
       },

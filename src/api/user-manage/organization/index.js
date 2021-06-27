@@ -21,3 +21,8 @@ export const saveAddDept = (params) => api.post(`/task-admin/sys/dept/save`, par
  * @params params
  */
 export const updateAddDept = (params) => api.post(`/task-admin/sys/dept/update`, params)
+/**
+ * 树形用户列表
+ * @params params
+ */
+export const getDeptListusers = (params) => api.get(`/task-admin/sys/dept/listusers`, params)
