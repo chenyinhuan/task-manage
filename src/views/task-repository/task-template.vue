@@ -45,7 +45,8 @@
   import {
     getTasktplList,
     turnonoff,
-	  delTaskTpl
+	  delTaskTpl,
+    copyTaskTpl
   } from '@/api/task-repository/index'
   export default {
     data() {
@@ -120,7 +121,15 @@
         this.$router.push('/task-repository/add-template')
       },
       copy(item) {
-
+        copyTaskTpl({taskTplId: item.id}).then(res => {
+          if(res.code == 0) {
+            this.$message.success('复制成功！');
+            this.searchParams.page = 1;
+            this.init();
+          }else {
+            this.$message.warning(res.msg);
+          }
+        })
       },
       editItem(item) {
         console.log(item)

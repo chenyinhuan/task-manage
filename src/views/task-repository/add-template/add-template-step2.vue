@@ -105,7 +105,6 @@
 											v-if="citem.ifResult == 3">
 											<colorPicker v-model="citem.color" />
 										</div>
-
 										<el-checkbox style="margin: 0px 30px" :label="0"
                      v-model="citem.ifResultShow" @change="changeCheck(citem.ifResultShow)">
 											不显示数值</el-checkbox>
@@ -116,7 +115,7 @@
 											<el-checkbox :label="1">显示百分数（两位小数)</el-checkbox>
 											<el-checkbox :label="2">显示数值（两位小数）</el-checkbox>
 										</el-checkbox-group>
-                    <span v-if="showValidate && citem.ifResultShowType.length == 0" class="validate-info1" :style="{'left': citem.ifResult == 3?'':'335px','bottom':citem.ifResult == 3?'-58px':''}">请选择</span>
+                    <span v-if="showValidate && citem.ifResultShow.length == 1 && citem.ifResultShowType.length == 0" class="validate-info1" :style="{'left': citem.ifResult == 3?'':'335px','bottom':citem.ifResult == 3?'-58px':''}">请选择</span>
 									</div>
 								</li>
 							</ul>
@@ -151,7 +150,7 @@
 									<el-checkbox :label="1">显示百分数（两位小数)</el-checkbox>
 									<el-checkbox :label="2">显示数值（两位小数）</el-checkbox>
 								</el-checkbox-group>
-                <span v-if="showValidate && item.taskTplTargeelseEntity.elseResultShowType.length == 0" class="validate-info1" :style="{'left': item.taskTplTargeelseEntity.elseResult == 3?'':'335px','bottom':item.taskTplTargeelseEntity.elseResult == 3?'-58px':''}">请选择</span>
+                <span v-if="showValidate && item.taskTplTargeelseEntity.elseResultShow.length == 1 && item.taskTplTargeelseEntity.elseResultShowType.length == 0" class="validate-info1" :style="{'left': item.taskTplTargeelseEntity.elseResult == 3?'':'335px','bottom':item.taskTplTargeelseEntity.elseResult == 3?'-58px':''}">请选择</span>
 							</div>
 						</div>
 					</div>
@@ -502,42 +501,39 @@
 				let msg = '';
 				let taskTplTargetVOs = JSON.parse(JSON.stringify(this.taskTplTargetVOs))
 				taskTplTargetVOs.forEach(item => {
-          console.log(item.taskTplTargeelseEntity.elseResultShow)
 					if (item.taskTplTargetEntity.targetName == '' || this.checkTaskName(item.taskTplTargetEntity.targetName)) {
 						flag = false;
 					}
-          console.log(flag)
 					if (item.taskTplTargetEntity.targetResultShowType[0] == 1 && !item.taskTplTargeelseEntity
 						.elseResult) {
 						flag = false;
 						this.checkElseResult = true;
-            console.log(flag)
 					}
           // 直接输出指标
 					if (item.taskTplTargetEntity.targetResultShowType[0] == 2 && item.taskTplTargetEntity.targetId ==
 						'') flag = false;
-
           // 逻辑判断
           if(item.taskTplTargetEntity.targetResultShowType[0] == 1) {
-            // if(item.taskTplTargeelseEntity.elseResultShow.length == 0) flag = false;
-            if(item.taskTplTargeelseEntity.elseResultShow[0] == 0 &&
+            if(item.taskTplTargeelseEntity.elseResultShow.length == 1 &&
             item.taskTplTargeelseEntity.elseResultShowType.length == 0) flag = false;
           }
-
-					if (flag) {
-            console.log(item.taskTplTargeelseEntity.elseResultShow[0])
-						item.taskTplTargeelseEntity.elseResultShow = item.taskTplTargeelseEntity.elseResultShow.length ==2 ?item.taskTplTargeelseEntity.elseResultShow[1]:item.taskTplTargeelseEntity.elseResultShow[0];
-						item.taskTplTargeelseEntity.elseResultShowType = item.taskTplTargeelseEntity
-							.elseResultShowType[0];
-						item.taskTplTargetEntity.targetResultShowType = item.taskTplTargetEntity
-							.targetResultShowType[0];
-              // 不显示数值不一定要选
-						item.taskTplTargeifVOs.forEach(citem => {
-              console.log(citem.ifResultShow[0])
-							citem.ifResultShow = citem.ifResultShow.length == 2 ? citem.ifResultShow[1]: citem.ifResultShow[0]
-							citem.ifResultShowType = citem.ifResultShowType[0];
-						})
-					}
+          item.taskTplTargeelseEntity.elseResultShow = item.taskTplTargeelseEntity.elseResultShow.length ==2 ?item.taskTplTargeelseEntity.elseResultShow[1]:item.taskTplTargeelseEntity.elseResultShow[0];
+          item.taskTplTargeelseEntity.elseResultShowType = item.taskTplTargeelseEntity.elseResultShowType[0];
+          item.taskTplTargetEntity.targetResultShowType = item.taskTplTargetEntity.targetResultShowType[0];
+            // 不显示数值不一定要选
+            if(item.taskTplTargetEntity.targetResultShowType == 1) {
+              item.taskTplTargeifVOs.forEach((citem, cindex) => {
+              	citem.ifResultShow = citem.ifResultShow.length == 2 ? citem.ifResultShow[1]: citem.ifResultShow[0]
+                if(citem.ifResultShow == 1 && citem.ifResultShowType.length == 0) flag = false;
+                citem.ifResultShowType = citem.ifResultShowType.length >0? citem.ifResultShowType[0]: '';
+                citem.taskTplTargeifExtEntityList.forEach((sitem,sindex) => {
+                  if(sindex != 0 && !sitem.logicType) flag = false;
+                  if(!sitem.targetStartId) flag = false;
+                  if(!sitem.logicAction) flag = false;
+                  if(sitem.targetEndId == null) flag = false;
+                })
+              })
+            }
           // 考核结束时间类型
           if(item.taskTplTargetEntity.testTimeType == '') flag = false;
           if(item.taskTplTargetEntity.testTimeType == 1 && item.taskTplTargetEntity.testDays <= 0) flag = false;

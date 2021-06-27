@@ -72,3 +72,9 @@ export const updateTaskTpl = (params) => api.post(`/task-admin/task/tasktpl/upda
  * @params params
  */
 export const upateTaskTargeTpl = (params) => api.post(`/task-admin/task/tasktpl/upateTaskTargeTpl/${params.taskTplId}`, params);
+
+/**
+ * 复制模板
+ * @params params
+ */
+export const copyTaskTpl = (params) => api.post(`/task-admin/task/tasktpl/copyTaskTpl/${params.taskTplId}`, params);
