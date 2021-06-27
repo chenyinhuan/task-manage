@@ -2,10 +2,12 @@
   <div id="tasktemplate" :style="{'height': tableData.length==0?'661px':''}">
     <section class="hd">
       <div>
-        <el-input v-model="keyword" placeholder="模版名称" @keyup.enter.native="search"><i slot="prefix"
+        <el-input v-model="searchParams.taskName" placeholder="模板名称" @keyup.enter.native="search"><i slot="prefix"
             class="el-input__icon el-icon-search"></i></el-input>
-        <el-input v-model="keyword" placeholder="模版状态" @keyup.enter.native="search"><i slot="prefix"
-            class="el-input__icon el-icon-search"></i></el-input>
+        <el-select v-model="searchParams.status" placeholder="模板状态" @change="search()" clearable>
+        	<el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value">
+        	</el-option>
+        </el-select>
       </div>
       <el-button type="primary" @click="go()">新增模板</el-button>
     </section>
@@ -54,19 +56,19 @@
         tableData: [],
         tableColumn: [ // 表格列数据
           {
-            label: '模版ID',
+            label: '模板ID',
             prop: 'id',
           },
           {
-            label: '模版名称',
+            label: '模板名称',
             prop: 'taskName',
           },
           {
-            label: '模版说明',
+            label: '模板说明',
             prop: 'description',
           },
           {
-            label: '模版状态',
+            label: '模板状态',
             prop: 'status',
             slot: true,
           },
@@ -82,10 +84,12 @@
           },
         ],
         isShow: false,
-        keyword: '',
+        statusList: [{value:1,label: '未上架'},{value:2,label: '正常'}],
         searchParams: {
           page: 1,
-          limit: 10
+          limit: 10,
+          taskName: '',
+          status: '',
         },
         total: 0
       }
@@ -115,7 +119,8 @@
         this.init()
       },
       search() {
-        console.log(this.keyword)
+        this.searchParams.page = 1;
+        this.init();
       },
       go() {
         this.$router.push('/task-repository/add-template')
@@ -172,7 +177,7 @@
         	  else this.$message.warning(res.msg)
         	})
         })
-      }
+      },
     }
   }
 </script>

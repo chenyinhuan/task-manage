@@ -108,8 +108,7 @@
     created() {
       if (this.targetId && this.type == 1) {
         this.getDetail();
-      }
-      this.changeLogic();
+      }else this.changeLogic();
     },
     methods: {
       back() {
@@ -127,6 +126,7 @@
             this.form.targeFieldVO.countFieldTargeValue = res.target.targeFieldVO.countFieldTargeValue;
             this.form.targeFieldVO.fieldEnumIds = res.target.targeFieldVO.fieldEnumIds;
             this.form.targeFieldVO.chooseType = res.target.targeFieldVO.chooseType;
+            this.changeLogic();
           }
         })
       },
@@ -158,13 +158,14 @@
           "formTypes": [], //表单类型，为空时取全部
           "type": '' //字段类型1：原生2衍生，为空时取全部
         }
-        console.log(this.form.targeFieldVO.logicAction != 5)
         if (this.form.targeFieldVO.logicAction != 5) {
           params.dataTypes = [2, 3]
         }
         getNativeList(params).then(res => {
           if (res.code == 0) {
             this.nativeList = res.fields;
+            let json = this.nativeList.find(n => n.id == this.form.targeFieldVO.fieldId);
+            if(!json) this.form.targeFieldVO.fieldId = '';
           }
         })
       },
