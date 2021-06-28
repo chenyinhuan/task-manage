@@ -134,7 +134,6 @@
           },
         },
         /* end*/
-        disable: false
       }
     },
     created() {
@@ -153,8 +152,6 @@
         this.$router.push('/task-repository/task-list')
       },
       submit() {
-        if(this.disable) return;
-        this.disable = true;
         if ( this.checkTaskName|| this.form.taskName == '' || this.form.recordType == '' ||
           this.form.taskTplId == '' || this.form.startTime == '' ||
           this.form.endTime == '' || this.form.users.length == 0 || ((new Date(this.form.endTime).getTime()) - (
@@ -164,7 +161,6 @@
             this.$message.success('保存成功')
             this.$router.push('/task-repository/task-list')
           } else {
-            this.disable = false;
             this.$message.warning(res.msg)
           }
         })
