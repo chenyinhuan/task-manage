@@ -6,10 +6,10 @@
     </div>
     <div class="schedule-calendar-details"
 	:style="detailsPost" ref="details">
-      <el-popover v-if="data.find(n => n.today == formatDate) && (data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout >0 || 
-		 data.find(n => n.today == formatDate).dailyTaskTargetCompleteCout >0 || 
+      <el-popover v-if="data.find(n => n.today == formatDate) && (data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout >0 ||
+		 data.find(n => n.today == formatDate).dailyTaskTargetCompleteCout >0 ||
 		 data.find(n => n.today == formatDate).dailyTaskTargetUncompleteCout >0)"
-	:class="{ expanded }"
+      :class="{ expanded }"
       :visible-arrow="false"
         popper-class="detail-info"
         placement="bottom-start"
@@ -18,22 +18,22 @@
         <ul class="task-info">
         	<li>
         		<div class="dot" style="background-color: #00B043;"></div>
-        		<p>任务指标今日待考核：{{data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout}}</p>
+        		<p>任务指标今日待考核{{data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout}}</p>
         	</li>
         	<li>
         		<div class="dot" style="background-color: #FF9300;"></div>
-        		<p>任务指标考核完成：{{data.find(n => n.today == formatDate).dailyTaskTargetCompleteCout}}</p>
+        		<p>任务指标考核完成{{data.find(n => n.today == formatDate).dailyTaskTargetCompleteCout}}</p>
         	</li>
         	<li>
         		<div class="dot" style="background-color: #FE642B;"></div>
-        		<p>任务指标考核未完成：{{data.find(n => n.today == formatDate).dailyTaskTargetUncompleteCout}}</p>
+        		<p>任务指标考核未完成{{data.find(n => n.today == formatDate).dailyTaskTargetUncompleteCout}}</p>
         	</li>
         </ul>
         <div v-if="!isToday && type != 'prev' && type != 'next'" class="progress" slot="reference">
           <el-progress type="circle" color="#FF8C00" :stroke-width="4" :width="40" :percentage="Number(data.find(n => n.today == formatDate).percentDailyTaskTargetComelete.replace('%',''))?Number(data.find(n => n.today == formatDate).percentDailyTaskTargetComelete.replace('%','')):0"></el-progress>
-          <span class="des">进行中任务数：{{data.find(n => n.today == formatDate)?data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout:''}}</span>
+          <span class="des">进行中任务数:{{data.find(n => n.today == formatDate)?data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout:''}}</span>
         </div>
-		<div slot="reference" v-if="isToday && type != 'prev' && type != 'next'" class="today-des">进行中任务数：{{data.find(n => n.today == formatDate)?data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout:''}}</div>
+		<div slot="reference" v-if="isToday && type != 'prev' && type != 'next'" class="today-des">进行中任务数:{{data.find(n => n.today == formatDate)?data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout:''}}</div>
       </el-popover>
     </div>
   </div>
@@ -142,14 +142,14 @@
         EventBus.$emit('item-drop', e, format(this.date, 'yyyy-MM-dd'), this.type, this.index)
       },
       cellClick(e) {
-        if(this.type != 'current') return 
+        if(this.type != 'current') return
         // 此时为收缩单页格，不触发 date-click
         if (Store.hasExpand) {
           // 设为 false，下次正常触发 date-click
           Store.hasExpand = false
           return
         }
-        EventBus.$emit('date-click', e, format(this.date, 'yyyy-MM-dd'))
+        // EventBus.$emit('date-click', e, format(this.date, 'yyyy-MM-dd'))
       },
     },
     mounted() {
@@ -198,7 +198,7 @@
   .task-info {
     display: block;
   	width: 100%;
-  	padding: 12px 0px 11px 23px;
+  	padding: 12px 0px 11px 18px;
   	background-color: #FFFFFF;
   	border-radius: 4px;
   	>li {
@@ -266,7 +266,7 @@
         text-align: center;
         border-radius: 50%;
       }
-      
+
       &.today {
         .schedule-calendar-date-label {
           color: @sc-body-color;
