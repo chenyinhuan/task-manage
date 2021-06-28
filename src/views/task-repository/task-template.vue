@@ -4,7 +4,7 @@
       <div>
         <el-input v-model="searchParams.taskName" placeholder="模板名称" @keyup.enter.native="search"><i slot="prefix"
             class="el-input__icon el-icon-search"></i></el-input>
-        <el-select v-model="searchParams.status" placeholder="模板状态" @change="search()" clearable>
+        <el-select style="width: 160px;" v-model="searchParams.status" placeholder="模板状态" @change="search()" clearable>
         	<el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value">
         	</el-option>
         </el-select>

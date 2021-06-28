@@ -35,7 +35,7 @@
           </el-select>
           <span class="validate-info1" style="left: 524px;"
             v-if="showValidate && form.targetQuoteEndId == ''">请选择指标</span>
-          <a @click="addTarget()" class="add-list" v-if="form.targesubs.length == 1">+新增</a>
+          <span @click="addTarget()" class="add-list" v-if="form.targesubs.length == 1">+新增</span>
         </div>
       </div>
       <div>
@@ -52,7 +52,7 @@
           </el-select>
           <span class="validate-info1" style="top: 33px;left: 260px;"
             v-if="showValidate && item.targetQuoteStartId == ''">请选择运算方式</span>
-          <a @click="addTarget()" class="add-list" v-if="index == form.targesubs.length -1">+新增</a>
+          <span @click="addTarget()" class="add-list" v-if="index == form.targesubs.length -1">+新增</span>
           <a class="del" v-if="form.targesubs.length>1" @click="deleteItem()">X删除</a>
         </div>
       </div>
@@ -296,13 +296,12 @@
       }
 
       .add-list {
+        padding: 6px 20px;
         font-size: 14px;
         color: #2A7ED1;
-        height: 32px;
         line-height: 32px;
         background-color: #F8FAFB;
         border-radius: 4px;
-        width: 82px;
         text-align: center;
         margin-left: 20px;
       }

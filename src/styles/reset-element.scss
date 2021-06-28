@@ -12,6 +12,10 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .el-select .el-input__icon {
   line-height: 32px;
 }
+
+.el-select .el-input .el-select__caret {
+  color: #666666;
+}
 .el-textarea {
   .el-textarea__inner::placeholder {
 		color: #999999;

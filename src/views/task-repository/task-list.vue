@@ -6,11 +6,11 @@
 						slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
 				<!--        <el-input v-model="searchParams.taskState" placeholder="任务状态" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>-->
 				<!--        <el-input v-model="searchParams.taskType" placeholder="任务来源" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>-->
-				<el-select v-model="searchParams.taskState" placeholder="任务状态" @change="search" clearable>
+				<el-select style="width: 160px;" v-model="searchParams.taskState" placeholder="任务状态" @change="search" clearable>
 					<el-option v-for="item in taskStatus" :key="item.code" :label="item.label" :value="item.code">
 					</el-option>
 				</el-select>
-				<el-select style="margin-left: 20px;" v-model="searchParams.taskType" placeholder="任务来源" @change="search" clearable>
+				<el-select  style="margin-left: 20px;width: 160px;" v-model="searchParams.taskType" placeholder="任务来源" @change="search" clearable>
 					<el-option v-for="item in taskTypeList" :key="item.code" :label="item.label" :value="item.code">
 					</el-option>
 				</el-select>
