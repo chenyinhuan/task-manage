@@ -164,7 +164,7 @@
       },
       confirm(val) {
         this.form.users = val
-        this.submit()
+        // this.submit()
       },
       init() {
         getTasktpl().then(res => {
