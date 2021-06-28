@@ -75,8 +75,11 @@
     getTasktpl
   } from '@/api/task-repository/index'
   import {
-    getDeptListusers
-  } from '@/api/user-manage/organization/index'
+    getAccountList
+  } from '@/api/user-manage/account'
+  // import {
+  //   getDeptListusers
+  // } from '@/api/user-manage/organization/index'
   export default {
     components: {
       assigment
@@ -174,12 +177,22 @@
         getTasktpl().then(res => {
           if (res.code == 0) this.taskTplList = res.taskTplList
         })
-        getDeptListusers().then(res => {
-          if (res.code == 0){
-            this.userList = res.deptUsers;
-          }
+        let params = {
+          page: 1,
+          limit: 1000,
+          username: '',
+          deptId: 1
+        }
+        getAccountList(params).then(res => {
+          if (res.code == 0) this.userList = res.page.list;
           else return this.$message.warning(res.msg)
         })
+        // getDeptListusers().then(res => {
+        //   if (res.code == 0){
+        //     this.userList = res.deptUsers;
+        //   }
+        //   else return this.$message.warning(res.msg)
+        // })
       },
       openDialog() {
         this.$refs.assigment.open();

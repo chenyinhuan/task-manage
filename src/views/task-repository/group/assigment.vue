@@ -85,8 +85,8 @@
 				keyarr: [],
 				filterText: "",
 				defaultProps: {
-					children: "deptUsersVOS",
-					label: "name",
+          children: "children",
+          label: "username",
 				},
 				taskName: '',
 				title: '',
