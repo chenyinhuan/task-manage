@@ -1,283 +1,289 @@
 <template>
-  <div id="addRecord">
-    <section class="hd">
-      <p>新增任务/编辑任务</p>
-    </section>
-    <section class="container">
-      <div class="content">
-        <div class="content-item" v-for="(item, index) in taskRecordDetailBasicVOs" :key="index"
-          @click="checkItem(item)">
-          <span class="tit">{{item.fieldName}}</span>
-          <el-input placeholder="请输入" v-model="item.fieldValue" v-if="item.formType == 1 && item.dataType == 1">
-          </el-input>
-          <el-input-number placeholder="请输入" :controls="false" v-model="item.fieldValue"
-            v-if="item.formType == 1 && (item.dataType == 3 || item.dataType == 2)"></el-input-number>
-          <el-date-picker v-if="item.formType == 1 && item.dataType == 4" v-model="form.date" type="date"
-            placeholder="请填写日期">
-          </el-date-picker>
-          <el-time-picker v-if="item.formType == 1 && item.dataType == 5" v-model="item.fieldValue" type="date"
-            placeholder="请填写日期">
-          </el-time-picker>
-          <el-select placeholder="请输入" v-model="item.fieldValue" v-if="item.formType == 2 || item.formType == 3"
-            :multiple="item.formType == 2?false:true">
-            <el-option v-for="citem in item.enums" :key="citem.id" :label="citem.enumValue" :value="citem.id">
-            </el-option>
-          </el-select>
-          <div v-if=" item.formType == 4" style="display: flex;align-items: center;">
-            <div @click="preview(item)" v-if="item.fieldValue" class="upload-img">
-              <img style="max-height: 34px;max-width: 34px;cursor: pointer;" :src="item.fieldValue"/>
-            </div>
-            <el-upload :style="{'margin-left':item.fieldValue?'24px':''}" class="upload-demo" drag :action="uploadUrl" :show-file-list="false" :with-credentials="true"
-              :on-success="successUpload" :before-upload="beforeUpload">
-              <img class="img" src="@/images/my-task/upload.png">
-              <span>上传图片</span>
-            </el-upload>
-          </div>
-        </div>
-      </div>
-    </section>
-    <div class="footer-btn">
-      <el-button type="primary" @click="saveGood()">保存商品</el-button>
-      <el-button @click="cancel()">取消</el-button>
-    </div>
-    <el-dialog width="900px" :visible="dialogVisible" @close="dialogVisible = false">
-      <img style="max-width: 800px;max-height: 800px;" :src="url">
-      <div style="height: 24px;"></div>
-    </el-dialog>
-  </div>
+	<div id="addRecord">
+		<section class="hd">
+			<p>新增任务/编辑任务</p>
+		</section>
+		<section class="container">
+			<div class="content">
+				<div class="content-item" v-for="(item, index) in taskRecordDetailBasicVOs" :key="index"
+					@click="checkItem(item)">
+					<span class="tit">{{item.fieldName}}</span>
+					<el-input placeholder="请输入" v-model="item.fieldValue"
+						v-if="item.formType == 1 && item.dataType == 1">
+					</el-input>
+					<el-input-number placeholder="请输入" :controls="false" v-model="item.fieldValue"
+						v-if="item.formType == 1 && (item.dataType == 3 || item.dataType == 2)"></el-input-number>
+					<el-date-picker v-if="item.formType == 1 && item.dataType == 4" v-model="form.date" type="date"
+						placeholder="请填写日期">
+					</el-date-picker>
+					<el-time-picker v-if="item.formType == 1 && item.dataType == 5" v-model="item.fieldValue"
+						type="date" placeholder="请填写日期">
+					</el-time-picker>
+					<el-select placeholder="请输入" v-model="item.fieldValue"
+						v-if="item.formType == 2 || item.formType == 3" :multiple="item.formType == 2?false:true">
+						<el-option v-for="citem in item.enums" :key="citem.id" :label="citem.enumValue"
+							:value="citem.id">
+						</el-option>
+					</el-select>
+					<div v-if=" item.formType == 4" style="display: flex;align-items: center;">
+						<div @click="preview(item)" v-if="item.fieldValue" class="upload-img">
+							<img style="max-height: 34px;max-width: 34px;cursor: pointer;" :src="item.fieldValue" />
+						</div>
+						<el-upload :style="{'margin-left':item.fieldValue?'24px':''}" class="upload-demo" drag
+							:action="uploadUrl" :show-file-list="false" :with-credentials="true"
+							:on-success="successUpload" :before-upload="beforeUpload">
+							<img class="img" src="@/images/my-task/upload.png">
+							<span>上传图片</span>
+						</el-upload>
+					</div>
+				</div>
+			</div>
+		</section>
+		<div class="footer-btn">
+			<el-button type="primary" @click="saveGood()">保存商品</el-button>
+			<el-button @click="cancel()">取消</el-button>
+		</div>
+		<el-dialog width="900px" :visible="dialogVisible" @close="dialogVisible = false">
+			<img style="max-width: 800px;max-height: 800px;" :src="url">
+			<div style="height: 24px;"></div>
+		</el-dialog>
+	</div>
 </template>
 <script>
-  import {
-    getRecordListInputs,
-    saveTaskRecord
-  } from '@/api/task-center/my-task/index.js'
-  export default {
-    data() {
-      return {
-        form: {
-          brandId: '',
-          date: '',
-          name: '',
-          progress: '',
-          shopName: '',
-          isFeed: '',
-          account: '',
-          accountName: '',
-          companyName: '',
-          linkId: '',
-          orderNo: '',
-          orderCode: '',
-          expressNo: '',
-          taskFeed: '',
-          receive: '',
-          noReceive: '',
-          imageUrl: '',
-          fileList: [{
-            name: 'food.jpeg',
-            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-          }, {
-            name: 'food2.jpeg',
-            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-          }]
-        },
-        taskRecords: '',
-        taskId: '',
-        taskRecordDetailBasicVOs: [],
-        uploadUrl: `${window.$globalConfig.API_BASE_Tabel}/sys/oss/upload`,
-        uploadItem: '',
-        dialogVisible: false,
-        url: ''
+	import {
+		getRecordListInputs,
+		saveTaskRecord
+	} from '@/api/task-center/my-task/index.js'
+	export default {
+		data() {
+			return {
+				form: {
+					brandId: '',
+					date: '',
+					name: '',
+					progress: '',
+					shopName: '',
+					isFeed: '',
+					account: '',
+					accountName: '',
+					companyName: '',
+					linkId: '',
+					orderNo: '',
+					orderCode: '',
+					expressNo: '',
+					taskFeed: '',
+					receive: '',
+					noReceive: '',
+					imageUrl: '',
+					fileList: [{
+						name: 'food.jpeg',
+						url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+					}, {
+						name: 'food2.jpeg',
+						url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+					}]
+				},
+				taskRecords: '',
+				taskId: '',
+				taskRecordDetailBasicVOs: [],
+				uploadUrl: `${window.$globalConfig.API_BASE_Tabel}/sys/oss/upload`,
+				uploadItem: '',
+				dialogVisible: false,
+				url: ''
 
-      }
-    },
-    created() {
-      if (this.$route.query.id) this.taskId = this.$route.query.id;
-      let params = {
-        taskId: this.taskId
-      }
-      getRecordListInputs(params).then(res => {
-        if (res.code == 0) {
-          this.taskRecords = JSON.parse(JSON.stringify(res.taskRecords))
-          this.taskRecordDetailBasicVOs = JSON.parse(JSON.stringify(res.taskRecords
-            .taskRecordDetailBasicVOs))
-        }
-      })
-    },
-    mounted() {
+			}
+		},
+		created() {
+			if (this.$route.query.id) this.taskId = this.$route.query.id;
+			let params = {
+				taskId: this.taskId
+			}
+			getRecordListInputs(params).then(res => {
+				if (res.code == 0) {
+					this.taskRecords = JSON.parse(JSON.stringify(res.taskRecords))
+					this.taskRecordDetailBasicVOs = JSON.parse(JSON.stringify(res.taskRecords
+						.taskRecordDetailBasicVOs))
+				}
+			})
+		},
+		mounted() {
 
-    },
+		},
 
-    methods: {
-      saveGood() {
-        if(this.taskId == '') return this.$message.warning('任务id不能为空！')
-        let taskRecordDetailBasicVOs = JSON.parse(JSON.stringify(this.taskRecordDetailBasicVOs));
-        if(taskRecordDetailBasicVOs.length > 0) {
-          taskRecordDetailBasicVOs.forEach(item => {
-            if(item.formType == 2 || item.formType == 3) {
-              item.fieldValue = item.fieldValue.join('@#')
-            }
-          })
-        }
-        let params = {
-          taskRecordDetailBasicVOs: taskRecordDetailBasicVOs,
-          taskRecordDetailComplexVOs: this.taskRecords.taskRecordDetailComplexVOs,
-          taskTplId: this.taskRecords.taskTplId,
-          taskId: this.taskId,
-        }
-        saveTaskRecord(params).then(res => {
-          if (res.code == 0) this.$message.success('保存成功！');
-          else this.$message.warning(res.msg);
-        })
-      },
-      cancel() {
-        this.$router.go(-1)
-      },
-      //上传
-      successUpload(response, file, fileList) {
-        if (response.code == 0) this.uploadItem.fieldValue = response.url;
-        console.log(this.taskRecordDetailBasicVOs)
-      },
-      beforeUpload(file) {
-        const isCheck = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
-        const isLt10M = file.size / 1024 / 1024 < 10;
-        if (!isCheck) {
-          this.$message.warning('上传图片只能是 JPG 格式、PNG 格式!');
-        }
-        if (!isLt10M) {
-          this.$message.warning('上传图片大小不能超过 10MB!');
-        }
-        return isCheck && isLt10M;
-      },
-      checkItem(item) {
-        this.uploadItem = item;
-      },
-      preview(item) {
-        this.url = item.fieldValue;
-        this.dialogVisible = true;
-      }
-    }
-  }
+		methods: {
+			saveGood() {
+				if (this.taskId == '') return this.$message.warning('任务id不能为空！')
+				let taskRecordDetailBasicVOs = JSON.parse(JSON.stringify(this.taskRecordDetailBasicVOs));
+				if (taskRecordDetailBasicVOs.length > 0) {
+					taskRecordDetailBasicVOs.forEach(item => {
+						if (item.formType == 2 || item.formType == 3) {
+							item.fieldValue = item.fieldValue.join('@#')
+						}
+					})
+				}
+				let params = {
+					taskRecordDetailBasicVOs: taskRecordDetailBasicVOs,
+					taskRecordDetailComplexVOs: this.taskRecords.taskRecordDetailComplexVOs,
+					taskTplId: this.taskRecords.taskTplId,
+					taskId: this.taskId,
+				}
+				saveTaskRecord(params).then(res => {
+					if (res.code == 0) {
+						this.$message.success('保存成功！');
+						this.$router.push(`/task-center/task-dtl-list?id=${this.taskId}`)
+					} else this.$message.warning(res.msg);
+				})
+			},
+			cancel() {
+				this.$router.push(`/task-center/task-dtl-list?id=${this.taskId}`)
+			},
+			//上传
+			successUpload(response, file, fileList) {
+				if (response.code == 0) this.uploadItem.fieldValue = response.url;
+				console.log(this.taskRecordDetailBasicVOs)
+			},
+			beforeUpload(file) {
+				const isCheck = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
+				const isLt10M = file.size / 1024 / 1024 < 10;
+				if (!isCheck) {
+					this.$message.warning('上传图片只能是 JPG 格式、PNG 格式!');
+				}
+				if (!isLt10M) {
+					this.$message.warning('上传图片大小不能超过 10MB!');
+				}
+				return isCheck && isLt10M;
+			},
+			checkItem(item) {
+				this.uploadItem = item;
+			},
+			preview(item) {
+				this.url = item.fieldValue;
+				this.dialogVisible = true;
+			}
+		}
+	}
 </script>
 <style lang="scss" scoped>
-  @import '@/styles/variables.scss';
+	@import '@/styles/variables.scss';
 
-  #addRecord {
-    padding: 36px 25px 36px 50px;
-    margin: 30px 0px 30px 30px;
-    width: calc(100% - 72px);
-    background-color: #FFFFFF;
-    border-radius: 12px;
-    box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
+	#addRecord {
+		padding: 36px 25px 36px 50px;
+		margin: 30px 0px 30px 30px;
+		width: calc(100% - 72px);
+		background-color: #FFFFFF;
+		border-radius: 12px;
+		box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
 
-    .hd {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+		.hd {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
 
-      p {
-        font-weight: bold;
-        color: #292933;
-        font-size: 20px;
-        line-height: 28px;
-      }
-    }
+			p {
+				font-weight: bold;
+				color: #292933;
+				font-size: 20px;
+				line-height: 28px;
+			}
+		}
 
-    .container {
-      .content {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        margin-top: 40px;
-        padding-right: 200px;
+		.container {
+			.content {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				margin-top: 40px;
+				padding-right: 200px;
 
-        .content-item {
-          display: inline-flex;
-          flex-direction: column;
-          margin-bottom: 30px;
-          width: 270px;
-          text-align: left;
+				.content-item {
+					display: inline-flex;
+					flex-direction: column;
+					margin-bottom: 30px;
+					width: 270px;
+					text-align: left;
 
-          .tit {
-            font-size: 12px;
-            color: #666777;
-            margin-bottom: 4px;
-          }
+					.tit {
+						font-size: 12px;
+						color: #666777;
+						margin-bottom: 4px;
+					}
 
-          .el-input,
-          .el-input-number {
-            >>>.el-input__inner {
-              border: 0px;
-              font-size: 14px;
-              padding: 0px;
-              color: #323232;
-              text-align: left;
-            }
-          }
+					.el-input,
+					.el-input-number {
+						>>>.el-input__inner {
+							border: 0px;
+							font-size: 14px;
+							padding: 0px;
+							color: #323232;
+							text-align: left;
+						}
+					}
 
-          .el-select {
-            // width: 105px;
+					.el-select {
+						// width: 105px;
 
-            >>>.el-input__inner {
-              border: 0px;
-              padding: 0px;
-              font-size: 14px;
-            }
-          }
+						>>>.el-input__inner {
+							border: 0px;
+							padding: 0px;
+							font-size: 14px;
+						}
+					}
 
-          .img {
-            width: 10px;
-            height: 10px;
-          }
+					.img {
+						width: 10px;
+						height: 10px;
+					}
 
-          .el-date-editor {
-            position: relative;
+					.el-date-editor {
+						position: relative;
 
-            >>>.el-input__prefix {
-              left: 0px;
-              right: 50px;
-              color: #CDCDD5;
-            }
-          }
+						>>>.el-input__prefix {
+							left: 0px;
+							right: 50px;
+							color: #CDCDD5;
+						}
+					}
 
-          >>>.el-upload-dragger {
-            width: 115px;
-            height: 30px;
-            line-height: 27px;
-            border-radius: 4px;
-            font-size: 12px;
+					>>>.el-upload-dragger {
+						width: 115px;
+						height: 30px;
+						line-height: 27px;
+						border-radius: 4px;
+						font-size: 12px;
 
-            span {
-              margin-left: 4px;
-            }
-          }
-        }
-      }
-      .upload-img {
-        width: 36px;
-        height: 36px;
-        border: 1px solid #d9d9d9;
-        border-radius: 4px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
+						span {
+							margin-left: 4px;
+						}
+					}
+				}
+			}
 
-    .footer-btn {
-      .el-button {
-        width: 160px;
-        font-size: 18px;
+			.upload-img {
+				width: 36px;
+				height: 36px;
+				border: 1px solid #d9d9d9;
+				border-radius: 4px;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+			}
+		}
 
-        &.el-button--primary {
-          background-color: #0079FE;
-        }
+		.footer-btn {
+			.el-button {
+				width: 160px;
+				font-size: 18px;
 
-        &.el-button--default {
-          background-color: #F8FAFB;
-          color: #9596AB;
-          border-color: #F8FAFB;
-        }
-      }
-    }
-  }
+				&.el-button--primary {
+					background-color: #0079FE;
+				}
+
+				&.el-button--default {
+					background-color: #F8FAFB;
+					color: #9596AB;
+					border-color: #F8FAFB;
+				}
+			}
+		}
+	}
 </style>

@@ -112,11 +112,18 @@
     methods: {
       ...mapActions('module', ['generateRoutes','setActiveMenu']),
       getMenu() {
-        getNav().then(res => {
-          if (res.code == 0) {
-            this.menuList = res.menuList;
-          }
-        })
+		let menuList = localStorage.getItem('menuList');
+		if(menuList) {
+			this.menuList = JSON.parse(menuList);
+		}else {
+			console.log(123)
+			getNav().then(res => {
+			  if (res.code == 0) {
+			    this.menuList = res.menuList;
+				localStorage.setItem('menuList', JSON.stringify(this.menuList))
+			  }
+			})
+		}
       },
       go(path) {
         Cookies.set('activePath', path)

@@ -20,12 +20,12 @@
 						<div v-if="item.slot && item.prop=='opt'">
 							<el-button type="primary" @click.stop="go(scope.row)">查看明细</el-button>
 						</div>
-            <div v-if="item.slot && item.prop=='taskType'">
-              {{scope.row.taskType == 1?'直接派发':'由下级派发'}}
-            </div>
-            <div v-if="item.slot && item.prop == 'taskTarget'">
-              <span @click="editRow(scope.row)" style="color: #0079FE;cursor: pointer">管理</span>
-            </div>
+						<div v-if="item.slot && item.prop=='taskType'">
+							{{scope.row.taskType == 1?'直接派发':'由下级派发'}}
+						</div>
+						<div v-if="item.slot && item.prop == 'taskTarget'">
+							<span @click="editRow(scope.row)" style="color: #0079FE;cursor: pointer">管理</span>
+						</div>
 						<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 					</template>
 				</el-table-column>
@@ -39,50 +39,53 @@
 				<p>还没有任务～</p>
 			</div>
 		</section>
-    <el-dialog title="任务指标管理" :visible.sync="dialogVisible" width="782px" :before-close="handleClose">
-      <div class="dialog-content">
-        <el-table ref="table" :data="tableData1" style="width: 100%; margin-top: 10px" v-if="tableData1.length > 0">
-          <el-table-column :prop="item.prop" :label="item.label" :width="item.width"
-                           v-for="(item, index) in tableColumn1" :key="index">
-            <div v-if="item.slot && item.prop == 'taskTargetState'">
-              <span>{{$taskTargetState.find((n) => n.value == scope.row.taskTargetState).label}}</span>
-            </div>
-            <template v-if="item.slot && item.prop == 'delayTime'">
-              <a v-if="scope.row.taskTargetState==2" @click="editTime(scope.row)">{{scope.row.delayTime}}</a>
-            </template>
-            <template slot-scope="scope" v-if="!item.slot">
-              <div>{{ scope.row[item.prop] }}</div>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="tempty" style="text-align: center" v-if="tableData1.length==0">
-          <p>还没有记录～</p>
-        </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
+		<el-dialog title="任务指标管理" :visible.sync="dialogVisible" width="782px" :before-close="handleClose">
+			<div class="dialog-content">
+				<el-table ref="table" :data="tableData1" style="width: 100%; margin-top: 10px"
+					v-if="tableData1.length > 0">
+					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
+						v-for="(item, index) in tableColumn1" :key="index">
+						<template slot-scope="scope">
+							<div v-if="item.slot && item.prop == 'taskTargetState'">
+								<span>{{$taskTargetState.find((n) => n.value == scope.row.taskTargetState).label}}</span>
+							</div>
+							<template v-if="item.slot && item.prop == 'delayTime'">
+								<a v-if="scope.row.taskTargetState==2"
+									@click="editTime(scope.row)">{{scope.row.delayTime}}</a>
+							</template>
+							<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
+						</template>
+						
+					</el-table-column>
+				</el-table>
+				<div class="tempty" style="text-align: center" v-if="tableData1.length==0">
+					<p>还没有记录～</p>
+				</div>
+			</div>
+			<span slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false">取 消</el-button>
 				<el-button type="primary" @click="confirmSelected">确 定</el-button>
 			</span>
-    </el-dialog>
-    <el-dialog title="信息提示" :visible.sync="warningDialog" width="498px" :before-close="handleClose2">
-      <div class="dialog-content">
-        <div style="padding: 10px 0">修改任务考核指标结束时间会导致周期性考核任务的后续考核批次同步顺延，请确认修改后的时间处于任务的整体覆盖时间范围之内。</div>
-      </div>
-      <span slot="footer" class="dialog-footer">
+		</el-dialog>
+		<el-dialog title="信息提示" :visible.sync="warningDialog" width="498px" :before-close="handleClose2">
+			<div class="dialog-content">
+				<div style="padding: 10px 0">修改任务考核指标结束时间会导致周期性考核任务的后续考核批次同步顺延，请确认修改后的时间处于任务的整体覆盖时间范围之内。</div>
+			</div>
+			<span slot="footer" class="dialog-footer">
 				<el-button type="primary" @click="agree">我已知晓，确定修改</el-button>
 			</span>
-    </el-dialog>
-    <el-dialog title="任务指标管理" :visible.sync="timeDialog" width="498px" :before-close="handleClose1">
-      <div class="dialog-content">
-        <el-date-picker v-model="newEndTime" type="datetime" :clearable="false"
-                        value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
-        </el-date-picker>
-      </div>
-      <span slot="footer" class="dialog-footer">
+		</el-dialog>
+		<el-dialog title="任务指标管理" :visible.sync="timeDialog" width="498px" :before-close="handleClose1">
+			<div class="dialog-content">
+				<el-date-picker v-model="newEndTime" type="datetime" :clearable="false"
+					value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
+				</el-date-picker>
+			</div>
+			<span slot="footer" class="dialog-footer">
 				<el-button @click="timeDialog = false">取 消</el-button>
 				<el-button type="primary" @click="confirmSelected">确 定</el-button>
 			</span>
-    </el-dialog>
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -90,15 +93,19 @@
 	import task from '@/images/my-task/task.png';
 	import taskcomplete from '@/images/my-task/task-complete.png';
 	import sending from '@/images/my-task/sending.png';
-	import {getTaskList} from '@/api/task-repository/index'
-  import {getTaskTargetList} from '@/api/task-center/my-task/index'
+	import {
+		getTaskList
+	} from '@/api/task-repository/index'
+	import {
+		getTaskTargetList
+	} from '@/api/task-center/my-task/index'
 	export default {
 		data() {
 			return {
-        warningDialog: false,
-        newEndTime: '',
-        timeDialog: false,
-        dialogVisible: false,
+				warningDialog: false,
+				newEndTime: '',
+				timeDialog: false,
+				dialogVisible: false,
 				countList: [{
 						imageUrl: waite,
 						title: '进行中任务数',
@@ -124,37 +131,37 @@
 						bgColor: '#FE642B'
 					},
 				],
-        total: 0,
+				total: 0,
 				tableData: [],
-        tableData1: [],
-        tableColumn1: [ // 表格列数据
-          {
-            label: '任务指标名称',
-            prop: 'taskTplTargeName',
-          },
-          {
-            label: '周期考核',
-            prop: 'id',
-          },
-          {
-            label: '批次',
-            prop: 'taskTplTargeBatch',
-          },
-          {
-            label: '考核状态',
-            prop: 'taskTargetState',
-            slot: true
-          },
-          {
-            label: '考核结束时间',
-            prop: 'endTime',
-          },
-          {
-            label: '延期后考核结束时间',
-            prop: 'delayTime',
-            slot: true
-          },
-        ],
+				tableData1: [],
+				tableColumn1: [ // 表格列数据
+					{
+						label: '任务指标名称',
+						prop: 'taskTplTargeName',
+					},
+					{
+						label: '周期考核',
+						prop: 'id',
+					},
+					{
+						label: '批次',
+						prop: 'taskTplTargeBatch',
+					},
+					{
+						label: '考核状态',
+						prop: 'taskTargetState',
+						slot: true
+					},
+					{
+						label: '考核结束时间',
+						prop: 'endTime',
+					},
+					{
+						label: '延期后考核结束时间',
+						prop: 'delayTime',
+						slot: true
+					},
+				],
 				tableColumn: [ // 表格列数据
 					{
 						label: '任务ID',
@@ -163,12 +170,12 @@
 					{
 						label: '任务名称',
 						prop: 'taskName',
-            width: '230',
+						width: '230',
 					},
 					{
 						label: '派发类型',
 						prop: 'taskType',
-            slot: true
+						slot: true
 					},
 					{
 						label: '任务开始时间',
@@ -185,12 +192,12 @@
 						prop: 'userCount',
 						width: '150',
 					},
-          {
-          	label: '任务指标',
-          	prop: 'taskTarget',
-          	width: '150',
-            slot: true,
-          },
+					{
+						label: '任务指标',
+						prop: 'taskTarget',
+						width: '150',
+						slot: true,
+					},
 					{
 						label: '操作',
 						prop: 'opt',
@@ -216,33 +223,37 @@
 
 		},
 		methods: {
-		  agree(){
-		    this.warningDialog = false
-        this.timeDialog = true
-      },
-      editTime(item){
-        this.newEndTime = item.delayTime
-        this.warningDialog = true
-      },
-      editRow(item){
-        getTaskTargetList({taskId: item.id}).then(res=>{
-          if(res.taskTarget.page) this.tableData1 = res.taskTarget.page.list
-        })
-        this.dialogVisible = true
-      },
-      handleClose2(){
-		    this.warningDialog = false
-      },
-      handleClose1(){
-        this.timeDialog = false
-      },
-      handleClose() {
-        this.dialogVisible = false;
-      },
-      confirmSelected(){
-		    // 修改时间接口
-        this.dialogVisible = false;
-      },
+			agree() {
+				this.warningDialog = false
+				this.timeDialog = true
+			},
+			editTime(item) {
+				this.newEndTime = item.delayTime
+				this.warningDialog = true
+			},
+			editRow(item) {
+				getTaskTargetList({
+					taskId: item.id
+				}).then(res => {
+					if(res.code != 500) {
+						if (res.taskTarget.page) this.tableData1 = res.taskTarget.page.list
+					}
+				})
+				this.dialogVisible = true
+			},
+			handleClose2() {
+				this.warningDialog = false
+			},
+			handleClose1() {
+				this.timeDialog = false
+			},
+			handleClose() {
+				this.dialogVisible = false;
+			},
+			confirmSelected() {
+				// 修改时间接口
+				this.dialogVisible = false;
+			},
 			init() {
 				getTaskList(this.searchParams).then(res => {
 					this.tableData = res.page.list

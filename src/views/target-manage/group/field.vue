@@ -48,7 +48,10 @@
       </el-select>
       <!-- 非选择类  & 自定义-->
       <span style="margin-left: 11px;"
-        v-if="form.targeFieldVO.logicAction == 5 && form.targeFieldVO.chooseType == 4 && nativeList.length>0 && nativeList.find(n => n.id == form.targeFieldVO.fieldId) && !(nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 2 || nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 3)">
+        v-if="form.targeFieldVO.logicAction == 5 && form.targeFieldVO.chooseType == 4 && nativeList.length>0 
+				&& nativeList.find(n => n.id == form.targeFieldVO.fieldId) && 
+				!(nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 2 || 
+				nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 3)">
         <span>=</span>
         <el-input style="margin-left: 11px;width: 240px;" v-model="form.targeFieldVO.countFieldTargeValue"
           placeholder="请输入计数字段内容"></el-input>
@@ -92,6 +95,7 @@
           "targeFieldVO": {
             "logicAction": 1, //聚合类型： 1：求和  2：平均, 3：最大数, 4：最小数, 5：计数
             "fieldId": '', //字段id
+			chooseType: '',
             countFieldTargeValue: '',
             fieldEnumIds: []
           }

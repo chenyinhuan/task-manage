@@ -16,8 +16,8 @@
         :key="index">
         <template slot-scope="scope">
           <div v-if="item.slot && item.prop=='status'" class="percent">
-            <div class="dot" :class="[scope.row.status == 1?'green':'grey']">
-            </div><span> {{scope.row.status == 2?'未上架':'正常'}}</span>
+            <div class="dot" :class="[scope.row.status == 1?'green':'',scope.row.status == 2?'grey':'']">
+            </div><span> {{scope.row.status == 2?'未上架':''}}{{scope.row.status == 1?'正常':''}}</span>
           </div>
           <div v-if="item.slot && item.prop=='createUserName'" class="percent">
             <span>{{scope.row.createUserName}}/{{scope.row.createTime}}</span>
@@ -84,7 +84,7 @@
           },
         ],
         isShow: false,
-        statusList: [{value:1,label: '未上架'},{value:2,label: '正常'}],
+        statusList: [{value:2,label: '未上架'},{value:1,label: '正常'}],
         searchParams: {
           page: 1,
           limit: 10,

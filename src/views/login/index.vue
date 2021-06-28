@@ -7,7 +7,8 @@
 				<p>任务管理系统</p>
 				<div style="position: relative;"
 					:class="[tip?'validate-error1':'',validate && password == ''?'validate-empty1':'']">
-					<el-input v-model="phonenumber" placeholder="请输入登录账号" class="phone" @keyup.enter.native="enterPhone">
+					<el-input v-model="phonenumber" placeholder="请输入登录账号" class="phone"
+						@keyup.enter.native="enterPhone">
 						<template slot="prepend">
 							<div class="pre"><span>+86</span>
 								<div class="line"></div>
@@ -15,7 +16,8 @@
 						</template>
 					</el-input>
 					<span v-if="validate && phonenumber == ''" class="error or">请填写登录账号</span>
-					<el-input ref="psw" v-model="password" placeholder="请输入6至20位登录密码" maxlength="20" show-password class="password" @keyup.enter.native="goLogin">
+					<el-input ref="psw" v-model="password" placeholder="请输入6至20位登录密码" maxlength="20" show-password
+						class="password" @keyup.enter.native="goLogin">
 					</el-input>
 					<span v-if="validate && password == ''" class="error or">请填写登录密码</span>
 					<span v-if="tip" class="error red">账号或密码错误</span>
@@ -30,9 +32,9 @@
 	import {
 		apiLogin
 	} from '@/api/common/index.js'
-  import {
-    getNav
-  } from '@/api/common/index.js'
+	import {
+		getNav
+	} from '@/api/common/index.js'
 	import Cookies from 'js-cookie'
 	export default {
 		data() {
@@ -63,36 +65,36 @@
 					username: this.phonenumber
 				}
 				apiLogin(params).then(res => {
-					if (res.code == 500)  {
-            this.$message.warning(res.msg);
-            if(res.msg != '账号已被锁定,请联系管理员') this.tip = true;
-            return
-          }
-					else this.tip = false;
+					if (res.code == 500) {
+						this.$message.warning(res.msg);
+						if (res.msg != '账号已被锁定,请联系管理员') this.tip = true;
+						return
+					} else this.tip = false;
 					if (res.code == 0) {
 						this.$message.success('登录成功！');
-            if(this.$route.query.redirect) this.$router.push(this.$route.query.redirect)
-            else {
-              getNav().then(res => {
-                if(res.code == 0) {
-                  if(res.menuList.length > 0 && res.menuList[0].menuId == 1 && res.menuList.length > 2) {
-                    if(res.menuList[0].list && res.menuList[1].list.length>0) {
-                      this.$router.push(res.menuList[1].url);
-                    }
-                    else {
-                      this.$router.push(res.menuList[1].url);
-                    }
-                  }else if(res.menuList.length > 0 && res.menuList[0].menuId != 1) {
-                    if(res.menuList[0].list && res.menuList[0].list.length>0) {
-                      this.$router.push(res.menuList[0].url);
-                    }
-                    else {
-                      this.$router.push(res.menuList[0].url);
-                    }
-                  }
-                }
-              })
-            }
+						localStorage.removeItem('menuList');
+						localStorage.removeItem('menuBtnList');
+						if (this.$route.query.redirect) this.$router.push(this.$route.query.redirect)
+						else {
+							getNav().then(res => {
+								if (res.code == 0) {
+									if (res.menuList.length > 0 && res.menuList[0].menuId == 1 && res
+										.menuList.length > 2) {
+										if (res.menuList[0].list && res.menuList[1].list.length > 0) {
+											this.$router.push(res.menuList[1].url);
+										} else {
+											this.$router.push(res.menuList[1].url);
+										}
+									} else if (res.menuList.length > 0 && res.menuList[0].menuId != 1) {
+										if (res.menuList[0].list && res.menuList[0].list.length > 0) {
+											this.$router.push(res.menuList[0].url);
+										} else {
+											this.$router.push(res.menuList[0].url);
+										}
+									}
+								}
+							})
+						}
 					}
 				}).catch(e => {
 					this.tip = true;
