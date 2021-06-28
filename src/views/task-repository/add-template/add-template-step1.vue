@@ -82,7 +82,7 @@
 				v-if="showValidate && taskTplVO.taskTplComplexFieldEntities.length == 0">请选择监测字段</span>
 		</section>
 		<div class="foot">
-			<el-button type="primary" @click="next()">下一步</el-button>
+			<el-button type="primary" @click="next()" v-preventReClick>下一步</el-button>
 			<el-button class="cancel" @click="cancel">取消</el-button>
 		</div>
 		<el-dialog :title="`选择${fieldType == 1 ? '表单' : '检测'}字段（${fieldType == 1 ? '原生字段' : '衍生字段'}）`"

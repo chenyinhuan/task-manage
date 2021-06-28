@@ -62,7 +62,7 @@
         v-if="showValidate && form.recordType == ''">请选择任务类型</span>
     </section>
     <div class="foot">
-      <el-button type="primary" @click="submit">提交任务</el-button>
+      <el-button type="primary" @click="submit" v-preventReClick>提交任务</el-button>
       <el-button class="cancel" @click="cancel">取消</el-button>
     </div>
     <assigment ref="assigment" :data.sync="userList" @confirm="confirm"></assigment>

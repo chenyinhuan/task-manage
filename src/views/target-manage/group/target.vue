@@ -66,7 +66,7 @@
       </div>
     </section>
     <div class="foot">
-      <el-button type="primary" @click="save">保存指标</el-button>
+      <el-button type="primary" @click="save" v-preventReClick>保存指标</el-button>
       <el-button class="cancel" @click="back">取消</el-button>
     </div>
   </div>

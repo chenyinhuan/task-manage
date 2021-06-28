@@ -48,9 +48,9 @@
       </el-select>
       <!-- 非选择类  & 自定义-->
       <span style="margin-left: 11px;"
-        v-if="form.targeFieldVO.logicAction == 5 && form.targeFieldVO.chooseType == 4 && nativeList.length>0 
-				&& nativeList.find(n => n.id == form.targeFieldVO.fieldId) && 
-				!(nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 2 || 
+        v-if="form.targeFieldVO.logicAction == 5 && form.targeFieldVO.chooseType == 4 && nativeList.length>0
+				&& nativeList.find(n => n.id == form.targeFieldVO.fieldId) &&
+				!(nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 2 ||
 				nativeList.find(n => n.id == form.targeFieldVO.fieldId).formType == 3)">
         <span>=</span>
         <el-input style="margin-left: 11px;width: 240px;" v-model="form.targeFieldVO.countFieldTargeValue"
@@ -58,7 +58,7 @@
       </span>
     </section>
     <div class="foot">
-      <el-button type="primary" @click="save">保存指标</el-button>
+      <el-button type="primary" @click="save" v-preventReClick>保存指标</el-button>
       <el-button class="cancel" @click="back">取消</el-button>
     </div>
   </div>

@@ -104,7 +104,7 @@
             </el-option>
           </el-select>
           <span class="validate-info" style="color: #FF8C00;"
-                v-if="showValidate && form.fieldStartId == ''">选择字段</span>
+                v-if="showValidate && !form.fieldStartId">选择字段</span>
         </div>
 				<div
 					v-if="nativeList.find(n => n.id == form.fieldStartId) && (nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3)">
@@ -165,7 +165,7 @@
 			</div>
 		</section>
 		<div class="foot">
-			<el-button type="primary" @click="save()">保存</el-button>
+			<el-button type="primary" @click="save()" v-preventReClick>保存</el-button>
 			<el-button class="cancel" @click="back()">取消</el-button>
 		</div>
 	</div>
@@ -407,6 +407,7 @@
 						"type": this.form.type
 					}
 				} else {
+				  if(!this.form.fieldStartId) return this.showValidate = true
 					let fieldComplexCastRuleVOs = [];
 					// if (this.checkField.formType == 2 || this.checkField.formType == 3) { // 选择类
           if(this.nativeList.find(n => n.id == this.form.fieldStartId) && (this.nativeList.find(n => n.id == this.form.fieldStartId).formType == 2 || this.nativeList.find(n => n.id == this.form.fieldStartId).formType == 3)){

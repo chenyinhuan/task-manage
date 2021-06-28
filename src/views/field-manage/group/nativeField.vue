@@ -60,7 +60,7 @@
       <!-- <el-input v-model="form.description" placeholder="请输入描述" maxlength="200" show-word-limit></el-input> -->
     </section>
     <div class="foot">
-      <el-button type="primary" @click="save()">保存</el-button>
+      <el-button type="primary" @click="save()" v-preventReClick>保存</el-button>
       <el-button class="cancel" @click="back()">取消</el-button>
     </div>
   </div>
@@ -137,12 +137,14 @@
       },
       save() {
         console.log(this.form)
-        if (this.form.fieldName == '' || this.form.name == '' || !this.form.dataType || this.form.formType == '' || this.checkFieldName || this.checkName) return this.showValidate = true;
+        if (this.form.fieldName == '' || this.form.name == '' ||  this.form.formType == '' || this.checkFieldName || this.checkName) return this.showValidate = true;
+
         if(this.form.formType == 2 || this.form.formType == 3){
           for(let i in this.enums){
             if(!this.enums[i].enumValue) return this.showValidate = true;
           }
         }
+        if(this.form.formType !== 4 && !this.form.dataType) return this.showValidate = true;
         let params = {
           "dataType": this.form.dataType, //数据类型 1：字符串型string，2：整数int，3小数数值float，4日期date，5 时间time
           "description": this.form.description, //描述

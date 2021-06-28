@@ -220,7 +220,7 @@
 		</section>
 		<div class="foot">
 			<el-button @click="pre">上一步</el-button>
-			<el-button type="primary" @click="save()">保存模版</el-button>
+			<el-button type="primary" @click="save()" v-preventReClick>保存模版</el-button>
 			<el-button class="cancel" @click="cancel()">取消</el-button>
 		</div>
 	</div>
