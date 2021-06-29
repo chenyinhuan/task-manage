@@ -61,6 +61,8 @@
 				this.toggleSideBar();
 			},
 			async logout() {
+        localStorage.removeItem('menuList');
+        localStorage.removeItem('menuBtnList');
 				this.$router.push(`/login?redirect=${this.$route.fullPath}`)
 			},
 			getUserInfo() {

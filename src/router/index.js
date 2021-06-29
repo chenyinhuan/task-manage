@@ -320,11 +320,36 @@ export const routes = [
       }
     }]
   },
-  // 匹配所有重定向首页
   {
-    path: '*',
-    redirect: '/task-center'
-  }
+    path: '/database',
+    name: 'Database',
+    component: Layout,
+    redirect: '/database/index',
+    children: [{
+      path: '',
+      component: () => import( /* webpackChunkName: "login" */ '@/views/database/index'),
+      hidden: false,
+      meta: {
+        title: '数据库管理',
+        noCache: true
+      }
+    },
+    {
+      path: '/database/field',
+      component: () => import( /* webpackChunkName: "login" */ '@/views/database/database-field'),
+      hidden: false,
+      meta: {
+        title: '数据库管理',
+        noCache: true
+      }
+    }
+    ]
+  },
+  // 匹配所有重定向首页
+  // {
+  //   path: '*',
+  //   redirect: '/task-center'
+  // }
 ]
 
 const router = new Router({
