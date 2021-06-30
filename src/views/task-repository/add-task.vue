@@ -72,7 +72,9 @@
   import assigment from '@/views/task-repository/group/assigment.vue'
   import {
     saveTask,
-    getTasktpl
+    getTasktpl,
+	getTaskDtl,
+	updateTask
   } from '@/api/task-repository/index'
   import {
     getAccountList

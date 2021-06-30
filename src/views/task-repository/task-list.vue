@@ -6,11 +6,13 @@
 						slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
 				<!--        <el-input v-model="searchParams.taskState" placeholder="任务状态" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>-->
 				<!--        <el-input v-model="searchParams.taskType" placeholder="任务来源" @keyup.enter.native="search"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>-->
-				<el-select style="width: 160px;" v-model="searchParams.taskState" placeholder="任务状态" @change="search" clearable>
+				<el-select style="width: 160px;" v-model="searchParams.taskState" placeholder="任务状态" @change="search"
+					clearable>
 					<el-option v-for="item in taskStatus" :key="item.code" :label="item.label" :value="item.code">
 					</el-option>
 				</el-select>
-				<el-select  style="margin-left: 20px;width: 160px;" v-model="searchParams.taskType" placeholder="任务来源" @change="search" clearable>
+				<el-select style="margin-left: 20px;width: 160px;" v-model="searchParams.taskType" placeholder="任务来源"
+					@change="search" clearable>
 					<el-option v-for="item in taskTypeList" :key="item.code" :label="item.label" :value="item.code">
 					</el-option>
 				</el-select>
@@ -28,9 +30,9 @@
 							{{scope.$index == 0?'进行中':''}}{{scope.$index == 1?'已取消，已结束':''}}{{scope.$index == 2?'待开始':''}}</span>
 					</div>
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="text" v-if="scope.$index != 2">查看</el-button>
-						<el-button type="text" v-if="scope.$index != 2">编辑</el-button>
-						<el-button type="text" v-if="scope.$index != 2">取消</el-button>
+						<el-button type="text" v-if="scope.$index != 2" @click="goDetail(scope.row)">查看</el-button>
+						<el-button type="text" v-if="scope.$index != 2" @click="edit(scope.row)">编辑</el-button>
+						<el-button type="text" v-if="scope.$index != 2" @click="cancel(scope.row)">取消</el-button>
 						<el-button type="text" v-if="scope.$index == 2" @click="viewDes(scope.row)">查看说明</el-button>
 						<el-button type="text" v-if="scope.$index == 2" @click="openDialog(scope.row)">派发任务</el-button>
 					</div>
@@ -46,26 +48,31 @@
 			<img src="@/images/my-task/illustration.png">
 			<p>还没有任务～</p>
 		</div>
-    <el-dialog class="add-dialog" title="任务说明" :visible.sync="visibleDialog" width="498px"
-    	:before-close="close">
-    	<div>
-    		<p class="">{{description}}</p>
-    		<div slot="footer" class="dialog-footer">
-    			<el-button type="primary" @click="visibleDialog = false">确 定</el-button>
-    		</div>
-    	</div>
-     </el-dialog>
-    <assigment ref="assigment" :data.sync="userList" @confirm="confirm"></assigment>
-  </div>
+		<el-dialog class="add-dialog" title="任务说明" :visible.sync="visibleDialog" width="498px" :before-close="close">
+			<div>
+				<p class="">{{description}}</p>
+				<div slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="visibleDialog = false">确 定</el-button>
+				</div>
+			</div>
+		</el-dialog>
+		<assigment ref="assigment" :data.sync="userList" @confirm="confirm"></assigment>
+	</div>
 </template>
 <script>
-  import assigment from '@/views/task-repository/group/assigment.vue'
-  import {getTaskList,saveTask} from '@/api/task-repository/index'
-  import {getAccountList} from '@/api/user-manage/account'
+	import assigment from '@/views/task-repository/group/assigment.vue'
+	import {
+		getTaskList,
+		saveTask,
+		cancelTask
+	} from '@/api/task-repository/index'
+	import {
+		getAccountList
+	} from '@/api/user-manage/account'
 	export default {
-    components: {
-      assigment
-    },
+		components: {
+			assigment
+		},
 		data() {
 			return {
 				taskTypeList: [{
@@ -131,7 +138,7 @@
 						label: '任务来源',
 						prop: 'taskType',
 						width: 113,
-            slot: true,
+						slot: true,
 					},
 					{
 						label: '创建人/创建时间',
@@ -150,11 +157,11 @@
 					limit: 10
 				},
 				total: 0,
-        description: '',
-        visibleDialog: false,
-        userList: [],
-        users: [],
-        formData:{}
+				description: '',
+				visibleDialog: false,
+				userList: [],
+				users: [],
+				formData: {}
 			}
 		},
 		created() {
@@ -167,39 +174,39 @@
 
 		},
 		methods: {
-      confirm(val) {
-        this.formData.users = val
-        saveTask(this.formData).then(res=>{
-          if (res.code == 0) {
-            this.$message.success('保存成功')
-            this.init()
-          } else {
-            this.$message.warning(res.msg)
-          }
-        })
-      },
-      openDialog(item) {
-        this.formData = item
-        let params = {
-          page: 1,
-          limit: 1000,
-          username: '',
-          deptId: 1
-        }
-        getAccountList(params).then(res => {
-          if (res.code == 0) this.userList = res.page.list;
-          else return this.$message.warning(res.msg)
-        })
-        this.$refs.assigment.open();
-      },
+			confirm(val) {
+				this.formData.users = val
+				saveTask(this.formData).then(res => {
+					if (res.code == 0) {
+						this.$message.success('保存成功')
+						this.init()
+					} else {
+						this.$message.warning(res.msg)
+					}
+				})
+			},
+			openDialog(item) {
+				this.formData = item
+				let params = {
+					page: 1,
+					limit: 1000,
+					username: '',
+					deptId: 1
+				}
+				getAccountList(params).then(res => {
+					if (res.code == 0) this.userList = res.page.list;
+					else return this.$message.warning(res.msg)
+				})
+				this.$refs.assigment.open();
+			},
 			init() {
 				getTaskList(this.searchParams).then(res => {
 					this.tableData = res.page.list
 					this.total = res.page.totalCount
-          this.isShow = true;
+					this.isShow = true;
 				}).catch(e => {
-          this.isShow = true;
-        })
+					this.isShow = true;
+				})
 			},
 			handleSizeChange(val) {
 				this.searchParams.limit = val
@@ -210,7 +217,7 @@
 				this.init()
 			},
 			search() {
-        this.searchParams.page = 1;
+				this.searchParams.page = 1;
 				this.init()
 			},
 			addTask() {
@@ -218,14 +225,26 @@
 					path: '/task-repository/add-task'
 				})
 			},
-      viewDes(row) {
-      	this.visibleDialog = true;
-      	this.description = row.description?row.description:``;
-      },
-      close() {
-      	this.description = '';
-      	this.visibleDialog = false;
-      }
+			viewDes(row) {
+				this.visibleDialog = true;
+				this.description = row.description ? row.description : ``;
+			},
+			close() {
+				this.description = '';
+				this.visibleDialog = false;
+			},
+			cancel(item) {
+				cancelTask({id: item.id}).then(res => {
+					if(res.code == 0) return this.$message.success('取消成功！');
+					else this.$message.warning(res.msg);
+				})
+			},
+			goDetail(item) {
+				this.$router.push(`/task-repository/add-task?id=${item.id}&type=1`);
+			},
+			edit(item) {
+				this.$router.push(`/task-repository/add-task?id=${item.id}&type=2`);
+			}
 		}
 	}
 </script>
@@ -345,26 +364,30 @@
 		}
 
 	}
-  .add-dialog {
-  	>>>.el-dialog__body {
-  		padding: 0px;
-  	}
-  	p {
-  		font-size: 14px;
-  		padding: 16px 24px;
-  	}
-  	.dialog-footer {
-  	  border-top: 1px solid #D9D9D9;
-  	  padding: 12px 24px;
-  	  margin: 32px 0px 0px;
-  	  text-align: right;
-  	  >>> .el-button--primary {
-  	    width: 124px;
-  	    height: 40px;
-  	    font-size: 18px;
-  	    background: #0079fe;
-  	    border-radius: 6px;
-  	  }
-  	}
-  }
+
+	.add-dialog {
+		>>>.el-dialog__body {
+			padding: 0px;
+		}
+
+		p {
+			font-size: 14px;
+			padding: 16px 24px;
+		}
+
+		.dialog-footer {
+			border-top: 1px solid #D9D9D9;
+			padding: 12px 24px;
+			margin: 32px 0px 0px;
+			text-align: right;
+
+			>>>.el-button--primary {
+				width: 124px;
+				height: 40px;
+				font-size: 18px;
+				background: #0079fe;
+				border-radius: 6px;
+			}
+		}
+	}
 </style>
