@@ -15,7 +15,7 @@
 					</el-option>
 				</el-select>
 			</div>
-			<el-button type="primary" @click="addTask">新增任务</el-button>
+			<el-button type="primary" @click="addTask(0)">新增任务</el-button>
 		</section>
 		<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
@@ -31,7 +31,7 @@
             {{scope.row.userName}}{{scope.row.createTime?'/'+scope.row.createTime:''}}
           </div>
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="text">查看</el-button>
+						<el-button type="text" @click="getDetail(scope.row)">查看</el-button>
 						<el-button type="text" v-if="scope.row.taskState == 1" @click="addTask(scope.row)">编辑</el-button>
 						<el-button type="text" v-if="scope.row.taskState == 1 || scope.row.taskState == 2" @click="cancelCurTask(scope.row)">取消</el-button>
 						<el-button type="text" @click="viewDes(scope.row)">查看说明</el-button>
@@ -233,6 +233,9 @@
         this.searchParams.page = 1;
 				this.init()
 			},
+      getDetail(item){
+        this.$router.push(`/task-repository/add-task?isDisabled=true&id=${item && item.id?item.id:''}`)
+      },
 			addTask(item) {
         this.$router.push(`/task-repository/add-task?isEdit=${item?1:0}&id=${item && item.id?item.id:''}`)
       },

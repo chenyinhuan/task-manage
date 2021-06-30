@@ -3,7 +3,7 @@
     <p class="title">任务信息</p>
     <section>
       <p>任务名称</p>
-      <el-input :class="[showValidate && form.taskName == ''?'validate-empty':'',
+      <el-input :disabled="isDisabled" :class="[showValidate && form.taskName == ''?'validate-empty':'',
 		  showValidate && form.taskName != '' && checkTaskName?'validate-error':'']" v-model="form.taskName"
         placeholder="请输入任务名称" @blur="inputTaskName" maxlength="20" show-word-limit></el-input>
       <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && form.taskName == ''">请输入任务名称</span>
@@ -12,11 +12,11 @@
     </section>
     <section>
       <p>任务说明</p>
-      <el-input v-model="form.description" placeholder="请输入任务说明" maxlength="200" show-word-limit></el-input>
+      <el-input :disabled="isDisabled" v-model="form.description" placeholder="请输入任务说明" maxlength="200" show-word-limit></el-input>
     </section>
     <section>
       <p>任务模版</p>
-      <el-select v-model="form.taskTplId" placeholder="选择任务模版">
+      <el-select v-model="form.taskTplId" placeholder="选择任务模版" :disabled="isDisabled">
         <el-option v-for="(item,index) in taskTplList" :value="item.id" :key="index" :label="item.taskName">
         </el-option>
       </el-select>
@@ -29,11 +29,11 @@
         <span>任务结束时间</span>
       </div>
       <div>
-        <el-date-picker v-model="form.startTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+        <el-date-picker :disabled="isDisabled" v-model="form.startTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
           :picker-options="startTimeRule" :clearable="false" placeholder="选择日期">
         </el-date-picker>
         <span style="margin: 0px 3px;">-</span>
-        <el-date-picker v-model="form.endTime" type="datetime" :clearable="false" :picker-options="endTimeRule"
+        <el-date-picker :disabled="isDisabled" v-model="form.endTime" type="datetime" :clearable="false" :picker-options="endTimeRule"
           value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
         </el-date-picker>
       </div>
@@ -47,14 +47,14 @@
       <p>派发名单</p>
       <div class="assigment">
         <span v-for="(item,index) in form.users" :key="index" style="margin-right: 10px">{{item.username}}</span>
-        <span class="add" @click="openDialog">+ 新增</span>
+        <span v-if="!isDisabled" class="add" @click="openDialog">+ 新增</span>
       </div>
       <span class="validate-info" style="color: #FF8C00;bottom: -22px;"
         v-if="showValidate && form.users.length == 0">请选择派发名单</span>
     </section>
     <section>
       <p>任务类型</p>
-      <el-radio-group v-model="form.recordType">
+      <el-radio-group v-model="form.recordType" :disabled="isDisabled">
         <el-radio :label="1">单记录任务</el-radio>
         <el-radio :label="2">多记录任务</el-radio>
       </el-radio-group>
@@ -62,7 +62,7 @@
         v-if="showValidate && form.recordType == ''">请选择任务类型</span>
     </section>
     <div class="foot">
-      <el-button type="primary" @click="submit" v-preventReClick>提交任务</el-button>
+      <el-button :disabled="isDisabled" type="primary" @click="submit" v-preventReClick>提交任务</el-button>
       <el-button class="cancel" @click="cancel">取消</el-button>
     </div>
     <assigment ref="assigment" :data.sync="userList" @confirm="confirm"></assigment>
@@ -132,14 +132,16 @@
         },
         /* end*/
         isEdit: 0,
-        taskId: ''
+        taskId: '',
+        isDisabled: false
       }
     },
     created() {
       this.init()
       this.isEdit = this.$route.query.isEdit;
       this.taskId = this.$route.query.id
-      if(this.isEdit == 1) {
+      this.isDisabled = Boolean(this.$route.query.isDisabled)
+      if(this.isEdit == 1 || this.isDisabled == true) {
         getTaskDetailById({id: this.$route.query.id}).then(res => {
           if(res.code == 0) {
             this.form = res.task
