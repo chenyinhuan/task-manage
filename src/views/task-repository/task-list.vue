@@ -234,10 +234,17 @@
 				this.visibleDialog = false;
 			},
 			cancel(item) {
-				cancelTask({id: item.id}).then(res => {
-					if(res.code == 0) return this.$message.success('取消成功！');
-					else this.$message.warning(res.msg);
+				this.$confirm(`删除后将无法恢复此任务`, '是否确认取消任务？', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					cancelTask({id: item.id}).then(res => {
+						if(res.code == 0) return this.$message.success('取消成功！');
+						else this.$message.warning(res.msg);
+					})
 				})
+				
 			},
 			goDetail(item) {
 				this.$router.push(`/task-repository/add-task?id=${item.id}&type=1`);
