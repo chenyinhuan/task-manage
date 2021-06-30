@@ -70,10 +70,7 @@
 </template>
 <script>
   import assigment from '@/views/task-repository/group/assigment.vue'
-  import {
-    saveTask,
-    getTasktpl
-  } from '@/api/task-repository/index'
+  import {saveTask, getTasktpl,getTaskDetailById,updateTaskDetail} from '@/api/task-repository/index'
   import {
     getAccountList
   } from '@/api/user-manage/account'
@@ -134,10 +131,21 @@
           },
         },
         /* end*/
+        isEdit: 0,
+        taskId: ''
       }
     },
     created() {
       this.init()
+      this.isEdit = this.$route.query.isEdit;
+      this.taskId = this.$route.query.id
+      if(this.isEdit == 1) {
+        getTaskDetailById({id: this.$route.query.id}).then(res => {
+          if(res.code == 0) {
+            this.form = res.task
+          }
+        })
+      }
     },
     mounted() {
 
@@ -156,14 +164,25 @@
           this.form.taskTplId == '' || this.form.startTime == '' ||
           this.form.endTime == '' || this.form.users.length == 0 || ((new Date(this.form.endTime).getTime()) - (
             new Date(this.form.startTime).getTime()) > 0 ? false : true)) return this.showValidate = true;
-        saveTask(this.form).then(res => {
-          if (res.code == 0) {
-            this.$message.success('保存成功')
-            this.$router.push('/task-repository/task-list')
-          } else {
-            this.$message.warning(res.msg)
-          }
-        })
+        if(this.isEdit){
+          updateTaskDetail(this.form).then(res => {
+            if (res.code == 0) {
+              this.$message.success('更新成功')
+              this.$router.push('/task-repository/task-list')
+            } else {
+              this.$message.warning(res.msg)
+            }
+          })
+        }else{
+          saveTask(this.form).then(res => {
+            if (res.code == 0) {
+              this.$message.success('保存成功')
+              this.$router.push('/task-repository/task-list')
+            } else {
+              this.$message.warning(res.msg)
+            }
+          })
+        }
       },
       confirm(val) {
         this.form.users = val

@@ -21,18 +21,21 @@
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
-					<div v-if="item.slot && item.prop=='weight'" class="percent">
+					<div v-if="item.slot && item.prop=='taskState'" class="percent">
 						<div class="dot"
-							:class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'',scope.$index == 2?'blue':'']">
+							:class="[scope.row.taskState == 2?'green':'',scope.row.taskState == 3 || scope.row.taskState == 4?'grey':'',scope.row.taskState == 1?'blue':'']">
 						</div><span>
-							{{scope.$index == 0?'进行中':''}}{{scope.$index == 1?'已取消，已结束':''}}{{scope.$index == 2?'待开始':''}}</span>
+							{{scope.row.taskState == 1?'待开始':''}}{{scope.row.taskState == 2?'进行中':''}}{{scope.row.taskState == 3?'已结束':''}}{{scope.row.taskState == 4?'已取消':''}}</span>
 					</div>
+          <div v-if="item.slot && item.prop=='createTime'">
+            {{scope.row.userName}}{{scope.row.createTime?'/'+scope.row.createTime:''}}
+          </div>
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="text" v-if="scope.$index != 2">查看</el-button>
-						<el-button type="text" v-if="scope.$index != 2">编辑</el-button>
-						<el-button type="text" v-if="scope.$index != 2">取消</el-button>
-						<el-button type="text" v-if="scope.$index == 2" @click="viewDes(scope.row)">查看说明</el-button>
-						<el-button type="text" v-if="scope.$index == 2" @click="openDialog(scope.row)">派发任务</el-button>
+						<el-button type="text">查看</el-button>
+						<el-button type="text" v-if="scope.row.taskState == 1" @click="addTask(scope.row)">编辑</el-button>
+						<el-button type="text" v-if="scope.row.taskState == 1 || scope.row.taskState == 2" @click="cancelCurTask(scope.row)">取消</el-button>
+						<el-button type="text" @click="viewDes(scope.row)">查看说明</el-button>
+<!--						<el-button type="text" v-if="scope.$index == 2" @click="openDialog(scope.row)">派发任务</el-button>-->
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 				</template>
@@ -60,7 +63,7 @@
 </template>
 <script>
   import assigment from '@/views/task-repository/group/assigment.vue'
-  import {getTaskList,saveTask} from '@/api/task-repository/index'
+  import {getTaskList,saveTask,cancelTask} from '@/api/task-repository/index'
   import {getAccountList} from '@/api/user-manage/account'
 	export default {
     components: {
@@ -124,7 +127,7 @@
 					},
 					{
 						label: '任务状态',
-						prop: 'taskStatus', // 任务状态 1：待开始, 2:进行中,3已结束,4已取消'
+						prop: 'taskState', // 任务状态 1：待开始, 2:进行中,3已结束,4已取消'
 						slot: true,
 					},
 					{
@@ -136,7 +139,8 @@
 					{
 						label: '创建人/创建时间',
 						prop: 'createTime',
-						width: 176
+						width: 176,
+            slot: true,
 					},
 					{
 						label: '操作',
@@ -167,6 +171,22 @@
 
 		},
 		methods: {
+      cancelCurTask(item){
+        this.$confirm('确定取消该任务吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          cancelTask({id: item.id}).then(res => {
+            if (res.code == 500) return this.$message.warning(res.msg);
+            else {
+              this.$message.success('已取消');
+              this.init();
+            }
+          })
+        }).catch(() => {
+        })
+      },
       confirm(val) {
         this.formData.users = val
         saveTask(this.formData).then(res=>{
@@ -213,11 +233,9 @@
         this.searchParams.page = 1;
 				this.init()
 			},
-			addTask() {
-				this.$router.push({
-					path: '/task-repository/add-task'
-				})
-			},
+			addTask(item) {
+        this.$router.push(`/task-repository/add-task?isEdit=${item?1:0}&id=${item && item.id?item.id:''}`)
+      },
       viewDes(row) {
       	this.visibleDialog = true;
       	this.description = row.description?row.description:``;

@@ -12,12 +12,12 @@
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
-					<div v-if="item.slot && item.prop=='materialName'" class="percent">
-						<div class="dot"
-							:class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'',scope.$index == 2?'blue':'']">
-						</div><span>
-							{{scope.$index == 0?'进行中':''}}{{scope.$index == 1?'已取消，已结束':''}}{{scope.$index == 2?'待开始':''}}</span>
-					</div>
+					<div v-if="item.slot && item.prop=='taskState'" class="percent">
+            <div class="dot"
+                 :class="[scope.row.taskState == 2?'green':'',scope.row.taskState == 3 || scope.row.taskState == 4?'grey':'',scope.row.taskState == 1?'blue':'']">
+            </div><span>
+							{{scope.row.taskState == 1?'待开始':''}}{{scope.row.taskState == 2?'进行中':''}}{{scope.row.taskState == 3?'已结束':''}}{{scope.row.taskState == 4?'已取消':''}}</span>
+          </div>
 					<div v-if="item.slot && item.prop=='description'" @click="viewDes(scope.row)"
 						style="color: #0079FE;"><a>查看说明</a></div>
 					<div v-if="item.slot && item.prop=='opt'">
@@ -103,7 +103,7 @@
 					},
 					{
 						label: '任务状态',
-						prop: 'materialName',
+            prop: 'taskState', // 任务状态 1：待开始, 2:进行中,3已结束,4已取消'
 						width: '151',
 						slot: true
 					},

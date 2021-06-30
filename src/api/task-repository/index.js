@@ -78,3 +78,20 @@ export const upateTaskTargeTpl = (params) => api.post(`/task-admin/task/tasktpl/
  * @params params
  */
 export const copyTaskTpl = (params) => api.post(`/task-admin/task/tasktpl/copyTaskTpl/${params.taskTplId}`, params);
+
+/**
+ * 取消任务
+ * @params params
+ */
+export const cancelTask = (params) => api.post(`/task-admin/task/tk/cancel/${params.id}`, params)
+
+/**
+ * 任务详情
+ * @params params
+ */
+export const getTaskDetailById = (params) => api.post(`/task-admin/task/tk/getDetail/${params.id}`, params)
+/**
+ * 更新任务
+ * @params params
+ */
+export const updateTaskDetail = (params) => api.post(`/task-admin/task/tk/repo/update`, params)
