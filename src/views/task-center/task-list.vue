@@ -133,20 +133,7 @@
 			}
 		},
 		created() {
-			let params = {
-				limit: this.limit,
-				page: this.currentPage
-			}
-			getMyTaskList(params).then(res => {
-				if (res.code == 0) {
-          this.tabList[0].number = res.task.todayTaskCount;
-          this.tabList[1].number = res.task.completeRate;
-          this.tabList[2].number = res.task.todayTargetCount;
-          this.tabList[3].number = res.task.todayCompleteTargetCount;
-					this.tableData = res.task.pageUtils.list;
-					this.total = res.task.pageUtils.totalCount;
-				}
-			})
+			this.init();
 		},
 		mounted() {
 
@@ -155,11 +142,32 @@
 
 		},
 		methods: {
+			init() {
+				let params = {
+				limit: this.limit,
+				page: this.currentPage
+			}
+			getMyTaskList(params).then(res => {
+				if (res.code == 0) {
+					this.tabList[0].number = res.task.todayTaskCount;
+					this.tabList[1].number = res.task.completeRate;
+					this.tabList[2].number = res.task.todayTargetCount;
+					this.tabList[3].number = res.task.todayCompleteTargetCount;
+					this.tableData = res.task.pageUtils.list;
+					this.total = res.task.pageUtils.totalCount;
+				}
+			})
+			},
 			handleSizeChange(val) {
 				console.log(`每页 ${val} 条`);
+				this.limit = val;
+				this.currentPage = 1;
+				this.init();
 			},
 			handleCurrentChange(val) {
 				console.log(`当前页: ${val}`);
+				this.currentPage = val;
+				this.init()
 			},
 			go(row) {
 				this.$router.push({
