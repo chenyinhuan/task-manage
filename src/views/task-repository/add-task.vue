@@ -16,7 +16,7 @@
     </section>
     <section>
       <p>任务模版</p>
-      <el-select v-model="form.taskTplId" placeholder="选择任务模版" :disabled="isDisabled">
+      <el-select v-model="form.taskTplId" placeholder="选择任务模版" :disabled="isDisabled || isEdit==1">
         <el-option v-for="(item,index) in taskTplList" :value="item.id" :key="index" :label="item.taskName">
         </el-option>
       </el-select>

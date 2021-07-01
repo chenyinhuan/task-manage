@@ -30,12 +30,15 @@
           <div v-if="item.slot && item.prop=='createTime'">
             {{scope.row.userName}}{{scope.row.createTime?'/'+scope.row.createTime:''}}
           </div>
+          <div v-if="item.slot && item.prop=='createUserId'">
+            {{scope.row.createUserId==userInfo.userId?'自建':'上级'}}
+          </div>
           <div v-if="item.slot && item.prop=='opt'">
             <el-button type="text" @click="getDetail(scope.row)">查看</el-button>
-            <el-button type="text" v-if="scope.row.taskState == 1" @click="addTask(scope.row)">编辑</el-button>
+            <el-button type="text" v-if="scope.row.taskState == 3 || scope.row.taskState == 4" @click="addTask(scope.row)">编辑</el-button>
             <el-button type="text" v-if="scope.row.taskState == 1 || scope.row.taskState == 2" @click="cancelCurTask(scope.row)">取消</el-button>
             <el-button type="text" @click="viewDes(scope.row)">查看说明</el-button>
-            <!--						<el-button type="text" v-if="scope.$index == 2" @click="openDialog(scope.row)">派发任务</el-button>-->
+            <el-button type="text" v-if="(scope.row.createUserId!=userInfo.userId && scope.row.taskState == 1) || scope.row.createUserId!=userInfo.userId && scope.row.taskState == 2" @click="openDialog(scope.row)">派发任务</el-button>
           </div>
           <div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
         </template>
@@ -132,7 +135,7 @@ export default {
         },
         {
           label: '任务来源',
-          prop: 'taskType',
+          prop: 'createUserId',
           width: 113,
           slot: true,
         },
@@ -158,10 +161,12 @@ export default {
       visibleDialog: false,
       userList: [],
       users: [],
-      formData:{}
+      formData:{},
+      userInfo:{}
     }
   },
   created() {
+    this.userInfo = localStorage.getItem('userInfo')
     this.init()
   },
   mounted() {
