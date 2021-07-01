@@ -138,7 +138,7 @@ export default {
   },
   created() {
     this.init()
-    this.isEdit = this.$route.query.isEdit;
+    this.isEdit = Number(this.$route.query.isEdit);
     this.taskId = this.$route.query.id
     this.isDisabled = Boolean(this.$route.query.isDisabled)
     if(this.isEdit == 1 || this.isDisabled == true) {
@@ -166,7 +166,7 @@ export default {
         this.form.taskTplId == '' || this.form.startTime == '' ||
         this.form.endTime == '' || this.form.users.length == 0 || ((new Date(this.form.endTime).getTime()) - (
           new Date(this.form.startTime).getTime()) > 0 ? false : true)) return this.showValidate = true;
-      if(this.isEdit){
+      if(this.isEdit == 1){
         updateTaskDetail(this.form).then(res => {
           if (res.code == 0) {
             this.$message.success('更新成功')
