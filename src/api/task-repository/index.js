@@ -83,6 +83,7 @@ export const copyTaskTpl = (params) => api.post(`/task-admin/task/tasktpl/copyTa
  * 取消任务
  * @params params
  */
+
 export const cancelTask = (params) => api.post(`/task-admin/task/tk/cancel/${params.id}`, params)
 
 /**
@@ -94,4 +95,6 @@ export const getTaskDetailById = (params) => api.post(`/task-admin/task/tk/getDe
  * 更新任务
  * @params params
  */
+
 export const updateTaskDetail = (params) => api.post(`/task-admin/task/tk/repo/update`, params)
+

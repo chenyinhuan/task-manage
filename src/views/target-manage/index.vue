@@ -126,7 +126,7 @@
 					deleteTarget({id: item.id}).then(res => {
 						if(res.code == 0) {
 							_this.$message.success('删除成功');
-							this.searchParams.page = 1;
+							_this.searchParams.page = 1;
 							_this.init();
 						}
 						else _this.$message.warning(res.msg);
