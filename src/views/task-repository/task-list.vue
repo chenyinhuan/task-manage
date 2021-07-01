@@ -61,12 +61,12 @@
         </div>
       </div>
     </el-dialog>
-    <assigment ref="assigment" :data.sync="userList" @confirm="confirm"></assigment>
+    <assigment ref="assigment" :data.sync="userList" :selectedData="selectedData" @confirm="confirm"></assigment>
   </div>
 </template>
 <script>
 import assigment from '@/views/task-repository/group/assigment.vue'
-import {getTaskList,saveTask,cancelTask} from '@/api/task-repository/index'
+import {getTaskList,saveTask,cancelTask,getTaskDetailById} from '@/api/task-repository/index'
 import {getAccountList} from '@/api/user-manage/account'
 export default {
   components: {
@@ -162,7 +162,8 @@ export default {
       userList: [],
       users: [],
       formData:{},
-      userInfo:{}
+      userInfo:{},
+      selectedData: []
     }
   },
   created() {
@@ -205,6 +206,16 @@ export default {
     },
     openDialog(item) {
       this.formData = item
+      getTaskDetailById({id: item.id}).then(res => {
+        if(res.code == 0) {
+          this.form = res.task
+          if(this.form.users.length){
+            for(var i=0;i< this.form.users.length;i++){
+              this.selectedData.push(this.form.users[i].userId)
+            }
+          }
+        }
+      })
       let params = {
         page: 1,
         limit: 1000,
