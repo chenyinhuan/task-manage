@@ -65,7 +65,7 @@
       <el-button :disabled="isDisabled" type="primary" @click="submit" v-preventReClick>提交任务</el-button>
       <el-button class="cancel" @click="cancel">取消</el-button>
     </div>
-    <assigment ref="assigment" :data.sync="userList" @confirm="confirm"></assigment>
+    <assigment ref="assigment" :data.sync="userList" :selectedData="selectedData" @confirm="confirm"></assigment>
   </div>
 </template>
 <script>
@@ -133,7 +133,8 @@ export default {
       /* end*/
       isEdit: 0,
       taskId: '',
-      isDisabled: false
+      isDisabled: false,
+      selectedData: []
     }
   },
   created() {
@@ -145,6 +146,11 @@ export default {
       getTaskDetailById({id: this.$route.query.id}).then(res => {
         if(res.code == 0) {
           this.form = res.task
+          if(this.form.users.length){
+            for(var i=0;i< this.form.users.length;i++){
+              this.selectedData.push(this.form.users[i].userId)
+            }
+          }
         }
       })
     }

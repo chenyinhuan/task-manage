@@ -29,8 +29,8 @@
 						</el-input>
 					</div>
 					<div class="wordbox">
-						<el-tree @check="getData" show-checkbox class="filter-tree" node-key="id" :data="data"
-							:props="defaultProps" :filter-node-method="filterNode" ref="tree"></el-tree>
+						<el-tree @check="getData" show-checkbox class="filter-tree" node-key="userId" :data="data"
+							:props="defaultProps" :filter-node-method="filterNode" ref="tree" :default-checked-keys="selectedData"></el-tree>
 					</div>
 				</div>
 				&emsp;
@@ -73,6 +73,10 @@
 		// },
     props:{
       data: {
+        type: Array,
+        default: []
+      },
+      selectedData:{
         type: Array,
         default: []
       }
