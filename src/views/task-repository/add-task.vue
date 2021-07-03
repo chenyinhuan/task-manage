@@ -46,7 +46,8 @@
     <section>
       <p>派发名单</p>
       <div class="assigment">
-        <span v-for="(item,index) in form.users" :key="index" style="margin-right: 10px">{{item.username}}</span>
+        <span v-for="(item,index) in form.users" :key="index" style="margin-right: 10px" v-if="!isDisabled">{{item.username}}</span>
+		<span v-for="(item,index) in selectedData" :key="index" v-else>{{item.username}}</span>
         <span v-if="!isDisabled" class="add" @click="openDialog">+ 新增</span>
       </div>
       <span class="validate-info" style="color: #FF8C00;bottom: -22px;"
@@ -74,9 +75,9 @@ import {saveTask, getTasktpl,getTaskDetailById,updateTaskDetail} from '@/api/tas
 import {
   getAccountList
 } from '@/api/user-manage/account'
-// import {
-//   getDeptListusers
-// } from '@/api/user-manage/organization/index'
+import {
+  getDeptListusers
+} from '@/api/user-manage/organization/index'
 export default {
   components: {
     assigment
@@ -143,16 +144,30 @@ export default {
     this.taskId = this.$route.query.id
     this.isDisabled = Boolean(this.$route.query.isDisabled)
     if(this.isEdit == 1 || this.isDisabled == true) {
-      getTaskDetailById({id: this.$route.query.id}).then(res => {
-        if(res.code == 0) {
-          this.form = res.task
-          if(this.form.users.length){
-            for(var i=0;i< this.form.users.length;i++){
-              this.selectedData.push(this.form.users[i].userId)
-            }
-          }
-        }
-      })
+		getTaskDetailById({
+			id: this.$route.query.id
+		}).then(res => {
+			if (res.code == 0) {
+				this.form = res.task
+				getDeptListusers().then(res => {
+					if (res.code == 0) {
+						for (var i = 0; i < res.deptUsers.length; i++) {
+							let item = res.deptUsers
+							for (var j = 0; j < item[i].deptUsersVOS.length; j++) {
+								let citem = item[i].deptUsersVOS[j];
+								citem.disabled = this.form.users.some(n => n.userId == citem.userId)
+								if(this.form.users.some(n => n.userId == citem.userId)) {
+									this.selectedData.push(citem)
+								}
+							}
+						}
+						let temp = this.$transformDeptUser(JSON.parse(JSON.stringify(res.deptUsers)));
+						let arr = this.$dealingDeptUser(JSON.parse(JSON.stringify(temp)));
+						this.userList = this.deleteChildren(arr);
+					} else return this.$message.warning(res.msg)
+				})
+			}
+		})
     }
   },
   mounted() {
@@ -206,17 +221,27 @@ export default {
         username: '',
         deptId: 1
       }
-      getAccountList(params).then(res => {
-        if (res.code == 0) this.userList = res.page.list;
-        else return this.$message.warning(res.msg)
+      getDeptListusers().then(res => {
+      	if (res.code == 0) {
+      		let temp = this.$transformDeptUser(JSON.parse(JSON.stringify(res.deptUsers)));
+      		let arr = this.$dealingDeptUser(JSON.parse(JSON.stringify(temp)));
+      		this.userList = this.deleteChildren(arr);
+      	} else return this.$message.warning(res.msg)
       })
-      // getDeptListusers().then(res => {
-      //   if (res.code == 0){
-      //     this.userList = res.deptUsers;
-      //   }
-      //   else return this.$message.warning(res.msg)
-      // })
     },
+	deleteChildren(arr) {
+		let childs = arr
+	  for (let i = childs.length; i--; i > 0) {
+		if (childs[i].children) {
+		  if (childs[i].children.length && !childs[i].userId) {
+			this.deleteChildren(childs[i].children)
+		  } else {
+			delete childs[i].children
+		  }
+		}
+	  }
+	  return arr
+	},
     openDialog() {
       this.$refs.assigment.open();
     },
