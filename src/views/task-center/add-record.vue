@@ -119,6 +119,9 @@
 						if (item.formType == 2 || item.formType == 3) {
 							item.fieldValue = item.fieldValue.join('@#')
 						}
+            if(item.dataType == 2 || item.dataType == 3) {
+              item.fieldValue = Number(item.fieldValue);
+            }
 					})
 				}
 				let params = {
