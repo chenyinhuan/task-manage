@@ -33,7 +33,7 @@
 						{{scope.row.userName}}{{scope.row.createTime?'/'+scope.row.createTime:''}}
 					</div>
 					<div v-if="item.slot && item.prop=='createUserId'">
-						{{scope.row.createUserId==userInfo.userId?'自建':'上级'}
+						{{scope.row.createUserId==userInfo.userId?'自建':'上级'}}
 					</div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="text" @click="getDetail(scope.row)" v-if="scope.row.createUserId==userInfo.userId">查看</el-button>
