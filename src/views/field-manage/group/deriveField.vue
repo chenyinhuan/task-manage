@@ -163,7 +163,60 @@
 					</div>
 				</div>
 			</div>
-		</section>
+      <div class="item" v-if="form.ruleType ==3">
+        <div class="options">
+          <div style="position: relative;">
+            <h4>选择接口:</h4>
+            <el-select v-model="form.fieldStartId" filterable placeholder="选择接口" @change="$forceUpdate()">
+              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+                         :value="item.id"></el-option>
+            </el-select>
+            <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+                  v-if="showValidate && !form.fieldStartId">选择字段</span>
+          </div>
+        </div>
+        <div class="options">
+          <div style="position: relative;">
+            <h4>原生字段1:</h4>
+            <el-select v-model="form.fieldStartId" filterable placeholder="原生字段1" @change="$forceUpdate()">
+              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+                         :value="item.id"></el-option>
+            </el-select>
+            <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+                  v-if="showValidate && !form.fieldStartId">选择字段</span>
+          </div>
+          <div style="position: relative;">
+            <h4>关联接口请求参数:</h4>
+            <el-select v-model="form.fieldStartId" filterable placeholder="关联接口请求参数：" @change="$forceUpdate()">
+              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+                         :value="item.id"></el-option>
+            </el-select>
+            <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+                  v-if="showValidate && !form.fieldStartId">选择字段</span>
+          </div>
+        </div>
+        <div class="options">
+          <div style="position: relative;">
+            <h4>原生字段2:</h4>
+            <el-select v-model="form.fieldStartId" filterable placeholder="原生字段2" @change="$forceUpdate()">
+              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+                         :value="item.id"></el-option>
+            </el-select>
+            <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+                  v-if="showValidate && !form.fieldStartId">选择字段</span>
+          </div>
+          <div style="position: relative;">
+            <h4>关联接口请求参数:</h4>
+            <el-select v-model="form.fieldStartId" filterable placeholder="关联接口请求参数：" @change="$forceUpdate()">
+              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+                         :value="item.id"></el-option>
+            </el-select>
+            <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+                  v-if="showValidate && !form.fieldStartId">选择字段</span>
+          </div>
+        </div>
+      </div>
+    </section>
 		<div class="foot">
 			<el-button type="primary" @click="save()" v-preventReClick>保存</el-button>
 			<el-button class="cancel" @click="back()">取消</el-button>
@@ -206,6 +259,10 @@
 						value: 2,
 						label: '关系映射'
 					},
+          {
+            value: 3,
+            label: '关联接口'
+          }
 				],
 				dataTypeList: this.$dataTypeList,
 				enums: [{

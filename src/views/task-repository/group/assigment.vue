@@ -29,8 +29,8 @@
 						</el-input>
 					</div>
 					<div class="wordbox">
-						<el-tree @check="getData" show-checkbox class="filter-tree" node-key="userId" :data="data"
-							:props="defaultProps" :filter-node-method="filterNode" ref="tree" :default-checked-keys="selectedData"></el-tree>
+						<el-tree @check="getData" show-checkbox class="filter-tree" default-expand-all node-key="userId" :data="data"
+							:props="defaultProps" :filter-node-method="filterNode" ref="tree" :default-checked-keys="checkData"></el-tree>
 					</div>
 				</div>
 				&emsp;
@@ -38,26 +38,21 @@
 				&emsp;
 				<div class="conbox">
 					<div class="wordbox" style="margin-top: 0">
-						<!--            <ul>-->
-						<!--              <li v-for="(item,index) in keyarr" :key="index">-->
-						<!--                <div class="inli">-->
-
-						<!--                  <i class="el-icon-s-custom"></i>-->
-						<!--                  <span>{{item.label}}</span>-->
-						<!--                  <i class="el-icon-close" @click="removeData(item)"></i>-->
-						<!--                </div>-->
-						<!--              </li>-->
-						<!--            </ul>-->
-						<el-tag @close="removeData(item)" v-for="(item,index) in keyarr" :key="index" closable
+						<el-tag v-for="(item,index) in selectedData" :key="index"
 							type="info">
 							{{item.username}}
 						</el-tag>
+						<template v-for="(item,index) in keyarr"  v-if="!selectedData.some(n => n.userId == item.userId)">
+							<el-tag @close="removeData(item)"  closable type="info" :key="index">
+								{{item.username}}
+							</el-tag>
+						</template>
 					</div>
 				</div>
 
 			</div>
 			<span slot="footer" class="dialog-footer">
-				<span class="count">已选择派发人数：{{keyarr.length}}人</span>
+				<span class="count">已选择派发人数：{{checkFlag?keyarr.length:selectedData.length}}人</span>
 				<el-button @click="visibleDialog = false">取 消</el-button>
 				<el-button type="primary" @click="confirm">确 定</el-button>
 			</span>
@@ -89,14 +84,16 @@
 				keyarr: [],
 				filterText: "",
 				defaultProps: {
-          children: "children",
-          label: "username",
+				  children: "children",
+				  label: "name",
 				},
 				taskName: '',
 				title: '',
 				mode: "transfer", // transfer addressList
 				toData: [],
-				visibleDialog: false
+				visibleDialog: false,
+				checkFlag: false
+				// checkData: []
 			}
 		},
 		created() {
@@ -107,12 +104,18 @@
 		},
 
 		computed: {
-
+			checkData() {
+				let arr = [];
+				for (var i = 0; i < this.selectedData.length; i++) {
+					arr.push(this.selectedData[i].userId)
+				}
+				return arr;
+			}
 		},
 		watch: {
 			filterText(val) {
 				this.$refs.tree.filter(val);
-			}
+			},
 		},
 		methods: {
 			changeType(type) {
@@ -124,15 +127,14 @@
 				return data.label.indexOf(value) !== -1;
 			},
 			getData() {
+				this.checkFlag = true; // 点击复选框标记
 				this.keyarr = []
 				this.checkList = this.$refs.tree.getCheckedNodes();
-				console.log(this.checkList)
-				if (this.checkList.length != 0) {
+				if (this.checkList.length > 0) {
 					for (var i = 0; i < this.checkList.length; i++) {
-						if (!this.checkList[i].children) {
+						if (!this.checkList[i].children && this.checkList[i].userId) {
 						  this.checkList[i].taskType = this.type
 							this.keyarr.push(this.checkList[i])
-							console.log(this.checkList[i])
 						}
 					}
 
@@ -145,13 +147,11 @@
 			},
 			removeData(data) {
 				let checklist = this.keyarr;
-				console.log(this.keyarr)
 				for (var i = 0; i < checklist.length; i++) {
 					if (checklist[i].username === data.username) {
 						checklist.splice(i, 1);
 					}
 				}
-				console.log(this.keyarr)
 				this.keyarr = checklist;
 				this.setCheckedNodes(this.keyarr);
 			},
