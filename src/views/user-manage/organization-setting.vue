@@ -58,10 +58,10 @@
             label: '所属组织',
             prop: 'parentName',
           },
-          {
-            label: '手机号',
-            prop: 'explain',
-          },
+          // {
+          //   label: '手机号',
+          //   prop: 'explain',
+          // },
           {
             label: '创建人',
             prop: 'weight'
