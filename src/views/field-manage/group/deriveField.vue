@@ -167,24 +167,25 @@
         <div class="options">
           <div style="position: relative;">
             <h4>选择接口:</h4>
-            <el-select v-model="form.fieldStartId" filterable placeholder="选择接口" @change="$forceUpdate()">
-              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+            <el-select v-model="form.apiId" filterable placeholder="选择接口" @change="$forceUpdate()">
+              <el-option v-for="(item,index) in apiList" :key="index" :label="item.fieldName"
                          :value="item.id"></el-option>
             </el-select>
             <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                  v-if="showValidate && !form.fieldStartId">选择字段</span>
+                  v-if="showValidate && !form.apiId">选择字段</span>
           </div>
         </div>
         <div class="options">
           <div style="position: relative;">
             <h4>原生字段1:</h4>
-            <el-select v-model="form.fieldStartId" filterable placeholder="原生字段1" @change="$forceUpdate()">
+            <el-select v-model="form.nativeField1" filterable placeholder="原生字段1" @change="$forceUpdate()">
               <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
                          :value="item.id"></el-option>
             </el-select>
             <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                  v-if="showValidate && !form.fieldStartId">选择字段</span>
+                  v-if="showValidate && !form.nativeField1">选择字段</span>
           </div>
+          <span class="el-icon-link" style="margin: 25px 10px 0"></span>
           <div style="position: relative;">
             <h4>关联接口请求参数:</h4>
             <el-select v-model="form.fieldStartId" filterable placeholder="关联接口请求参数：" @change="$forceUpdate()">
@@ -198,18 +199,28 @@
         <div class="options">
           <div style="position: relative;">
             <h4>原生字段2:</h4>
-            <el-select v-model="form.fieldStartId" filterable placeholder="原生字段2" @change="$forceUpdate()">
+            <el-select v-model="form.nativeField2" filterable placeholder="原生字段2" @change="$forceUpdate()">
+              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+                         :value="item.id"  :disabled="item.id == form.nativeField1"></el-option>
+            </el-select>
+          </div>
+          <span class="el-icon-link" style="margin: 25px 10px 0"></span>
+          <div style="position: relative;">
+            <h4>关联接口请求参数:</h4>
+            <el-select v-model="form.nativeField2" filterable placeholder="关联接口请求参数：" @change="$forceUpdate()">
               <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
                          :value="item.id"></el-option>
             </el-select>
             <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
                   v-if="showValidate && !form.fieldStartId">选择字段</span>
           </div>
+        </div>
+        <div class="options">
           <div style="position: relative;">
-            <h4>关联接口请求参数:</h4>
-            <el-select v-model="form.fieldStartId" filterable placeholder="关联接口请求参数：" @change="$forceUpdate()">
+            <h4>衍生字段关联返回参数:</h4>
+            <el-select v-model="form.nativeField" filterable placeholder="原生字段2" @change="$forceUpdate()">
               <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-                         :value="item.id"></el-option>
+                         :value="item.id"  :disabled="item.id == form.nativeField1"></el-option>
             </el-select>
             <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
                   v-if="showValidate && !form.fieldStartId">选择字段</span>
@@ -237,6 +248,24 @@
 		data() {
 			return {
 				calcType: this.$logicAction,
+        apiList: [
+          {
+            value: 1,
+            label: '快递查询'
+          },
+          {
+            value: 2,
+            label: '工作进度查询'
+          },
+          {
+            value: 3,
+            label: '订单状态查询'
+          },
+          {
+            value: 4,
+            label: '退款率查询'
+          },
+        ],
 				nativeList: [],
 				nativeList1: [{
 						value: 1,
@@ -563,7 +592,15 @@
 					margin-right: 10px;
 				}
 			}
-
+      &.options{
+        h4{
+          font-size: 14px;
+          margin-bottom: 10px;
+        }
+        .el-select {
+          margin-left: 0;
+        }
+      }
 			.el-input {
 				width: 181px;
 				height: 32px;
