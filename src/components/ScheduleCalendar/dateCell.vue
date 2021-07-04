@@ -1,39 +1,39 @@
 <template>
-  <div class="schedule-calendar-date" :class="[type,{'current-first':date.getDate() == 1 && type=='current'} , { today: isToday, dragged: draggedIndex === index }]"
+  <div class="schedule-calendar-date"
+    :class="[type,{'current-first':date.getDate() == 1 && type=='current'} , { today: isToday, dragged: draggedIndex === index }]"
     @dragover.prevent="" @dragenter.prevent="dragenter" @drop="onDrop" @click="cellClick">
     <div class="schedule-calendar-date-hd">
-      <div class="schedule-calendar-date-label">{{type != 'prev' && type != 'next' ?date.getDate():''}}</div>
+      <div class="schedule-calendar-date-label" v-if="type != 'prev' && type != 'next'">{{type != 'prev' && type != 'next' ?date.getDate():''}}</div>
     </div>
-    <div class="schedule-calendar-details"
-	:style="detailsPost" ref="details">
+    <div class="schedule-calendar-details" :style="detailsPost" ref="details">
       <el-popover v-if="data.find(n => n.today == formatDate) && (data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout >0 ||
 		 data.find(n => n.today == formatDate).dailyTaskTargetCompleteCout >0 ||
-		 data.find(n => n.today == formatDate).dailyTaskTargetUncompleteCout >0)"
-      :class="{ expanded }"
-      :visible-arrow="false"
-        popper-class="detail-info"
-        placement="bottom-start"
-        width="215"
-        trigger="hover">
+		 data.find(n => n.today == formatDate).dailyTaskTargetUncompleteCout >0)" :class="{ expanded }"
+        :visible-arrow="false" popper-class="detail-info" placement="bottom-start" width="215" trigger="hover">
         <ul class="task-info">
-        	<li>
-        		<div class="dot" style="background-color: #00B043;"></div>
-        		<p>任务指标今日待考核{{data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout}}</p>
-        	</li>
-        	<li>
-        		<div class="dot" style="background-color: #FF9300;"></div>
-        		<p>任务指标考核完成{{data.find(n => n.today == formatDate).dailyTaskTargetCompleteCout}}</p>
-        	</li>
-        	<li>
-        		<div class="dot" style="background-color: #FE642B;"></div>
-        		<p>任务指标考核未完成{{data.find(n => n.today == formatDate).dailyTaskTargetUncompleteCout}}</p>
-        	</li>
+          <li>
+            <div class="dot" style="background-color: #00B043;"></div>
+            <p>任务指标今日待考核{{data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout}}</p>
+          </li>
+          <li>
+            <div class="dot" style="background-color: #FF9300;"></div>
+            <p>任务指标考核完成{{data.find(n => n.today == formatDate).dailyTaskTargetCompleteCout}}</p>
+          </li>
+          <li>
+            <div class="dot" style="background-color: #FE642B;"></div>
+            <p>任务指标考核未完成{{data.find(n => n.today == formatDate).dailyTaskTargetUncompleteCout}}</p>
+          </li>
         </ul>
         <div v-if="!isToday && type != 'prev' && type != 'next'" class="progress" slot="reference">
-          <el-progress type="circle" color="#FF8C00" :stroke-width="4" :width="40" :percentage="Number(data.find(n => n.today == formatDate).percentDailyTaskTargetComelete.replace('%',''))?Number(data.find(n => n.today == formatDate).percentDailyTaskTargetComelete.replace('%','')):0"></el-progress>
-          <span class="des">进行中任务数:{{data.find(n => n.today == formatDate)?data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout:''}}</span>
+          <el-progress type="circle" color="#FF8C00" :stroke-width="4" :width="40"
+            :percentage="Number(data.find(n => n.today == formatDate).percentDailyTaskTargetComelete.replace('%',''))?Number(data.find(n => n.today == formatDate).percentDailyTaskTargetComelete.replace('%','')):0">
+          </el-progress>
+          <span
+            class="des">进行中任务数:{{data.find(n => n.today == formatDate)?data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout:''}}</span>
         </div>
-		<div slot="reference" v-if="isToday && type != 'prev' && type != 'next'" class="today-des">进行中任务数:{{data.find(n => n.today == formatDate)?data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout:''}}</div>
+        <div slot="reference" v-if="isToday && type != 'prev' && type != 'next'" class="today-des">
+          进行中任务数:{{data.find(n => n.today == formatDate)?data.find(n => n.today == formatDate).dailyTaskTargetWorkingCout:''}}
+        </div>
       </el-popover>
     </div>
   </div>
@@ -60,21 +60,21 @@
       return {
         volume: 0,
         expanded: false,
-		formatDate: ''
+        formatDate: ''
       }
     },
-	watch: {
-	  data: {
-	    handler(val, oldVal) {
-	      // console.log(val)
-	    },
-	    immediate: true,
-	    deep: true //true 深度监听
-	  }
-	},
-	created() {
-		this.format();
-	},
+    watch: {
+      data: {
+        handler(val, oldVal) {
+          // console.log(val)
+        },
+        immediate: true,
+        deep: true //true 深度监听
+      }
+    },
+    created() {
+      this.format();
+    },
     computed: {
       isToday() {
         return isSameDay(new Date(), this.date)
@@ -108,8 +108,8 @@
     },
     methods: {
       format() {
-		  this.formatDate = moment(this.date).format('YYYY-MM-DD')
-	  },
+        this.formatDate = moment(this.date).format('YYYY-MM-DD')
+      },
       calcVolume() {
         this.volume = Math.floor(this.$refs.details.clientHeight / 27)
       },
@@ -142,7 +142,7 @@
         EventBus.$emit('item-drop', e, format(this.date, 'yyyy-MM-dd'), this.type, this.index)
       },
       cellClick(e) {
-        if(this.type != 'current') return
+        if (this.type != 'current') return
         // 此时为收缩单页格，不触发 date-click
         if (Store.hasExpand) {
           // 设为 false，下次正常触发 date-click
@@ -164,11 +164,13 @@
 </script>
 <style lang="less">
   @import "./variables.less";
+
   .progress {
     display: inline-flex;
     align-items: center;
     margin-top: 9px;
     cursor: pointer;
+
     .des {
       font-size: 12px;
       line-height: 17px;
@@ -182,48 +184,55 @@
       font-weight: bold;
     }
   }
+
   .today-des {
-  	display: flex;
-  	align-items: center;
-  	justify-content: center;
-  	width: 151px;
-  	height: 45px;
-  	font-size: 12px;
-  	line-height: 17px;
-  	border-radius: 22.5px;
-  	margin-top: 16px;
-  	background-color: #F8FAFB;
-  	padding: 0px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 151px;
+    height: 45px;
+    font-size: 12px;
+    line-height: 17px;
+    border-radius: 22.5px;
+    margin-top: 16px;
+    background-color: #F8FAFB;
+    padding: 0px 12px;
   }
+
   .task-info {
     display: block;
-  	width: 100%;
-  	padding: 12px 0px 11px 18px;
-  	background-color: #FFFFFF;
-  	border-radius: 4px;
-  	>li {
-  		display: flex;
-  		align-items: center;
-  		margin-bottom: 2px;
+    width: 100%;
+    padding: 12px 0px 11px 18px;
+    background-color: #FFFFFF;
+    border-radius: 4px;
+
+    >li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2px;
       cursor: pointer;
-  		.dot {
-  			width: 8px;
-  			height: 8px;
-  			border-radius: 50%;
-  		}
-  		p {
-  			font-size: 14px;
-  			line-height: 20px;
-  			margin-left: 12px;
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+
+      p {
+        font-size: 14px;
+        line-height: 20px;
+        margin-left: 12px;
         flex: 1;
-  		}
-  	}
+      }
+    }
 
   }
+
   .detail-info {
     padding: 12px;
 
   }
+
   .schedule-calendar- {
     &date {
       position: relative;
@@ -237,27 +246,34 @@
       border-top: 1px solid @sc-border-color;
       border-right: 1px solid @sc-border-color;
       user-select: none;
+
       &.current-first {
         border-left: 1px solid @sc-border-color;
       }
+
       &:nth-child(7n+1) {
         border-left: none;
       }
+
       &:nth-child(7n) {
         border-right: none;
       }
+
       &.prev,
       &.next {
         color: #FFFFFF;
         background: #FFFFFF;
       }
-       &.prev {
+
+      &.prev {
         border-top: 0px;
         border-right: 0px;
       }
+
       &.next {
         border-right: 0px solid @sc-border-color;
       }
+
       &-label {
         width: @sc-data-label-size;
         height: @sc-data-label-size;
