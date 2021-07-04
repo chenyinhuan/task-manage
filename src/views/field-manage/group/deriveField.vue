@@ -185,7 +185,7 @@
             <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
                   v-if="showValidate && !form.nativeField1">选择字段</span>
           </div>
-          <span class="el-icon-link" style="margin: 25px 10px 0"></span>
+          <span class="el-icon-connection" style="margin: 30px 10px 0"></span>
           <div style="position: relative;">
             <h4>关联接口请求参数:</h4>
             <el-select v-model="form.fieldStartId" filterable placeholder="关联接口请求参数：" @change="$forceUpdate()">
@@ -204,7 +204,7 @@
                          :value="item.id"  :disabled="item.id == form.nativeField1"></el-option>
             </el-select>
           </div>
-          <span class="el-icon-link" style="margin: 25px 10px 0"></span>
+          <span class="el-icon-connection" style="margin: 30px 10px 0"></span>
           <div style="position: relative;">
             <h4>关联接口请求参数:</h4>
             <el-select v-model="form.nativeField2" filterable placeholder="关联接口请求参数：" @change="$forceUpdate()">
