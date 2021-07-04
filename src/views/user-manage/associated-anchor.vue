@@ -26,22 +26,22 @@
 						<span> {{scope.$index == 1?'未上架':'正常'}}</span>
 					</div>
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="text">编辑</el-button>
-						<el-button type="text">删除</el-button>
+						<el-button type="text" @click="editItem(scope.row)">编辑</el-button>
+						<el-button type="text" @click="deleteItem(scope.row)">删除</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-button class="associated" type="primary">关联</el-button>
+		<el-button class="associated" type="primary">保存关联</el-button>
 		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
-			:current-page.sync="currentPage" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
+			:current-page.sync="currentPage" :page-size="limit" layout="prev, pager, next, jumper" :total="total">
 		</el-pagination>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
 			<p>还没有任务明细～</p>
 		</div>
-		<el-dialog class="add-dialog" title="新增主播" :visible.sync="addDialog" width="782px" :before-close="handleClose">
+		<el-dialog class="add-dialog" :title="isEdit?'编辑主播':'新增主播'" :visible.sync="addDialog" width="782px" :before-close="handleClose">
 			<div class="add">
 				<el-input v-model="name"></el-input>
 				<span v-if="tip" class="error">主播名称已存在!</span>
@@ -97,11 +97,15 @@
 					},
 				],
 				currentPage: 0,
+        limit: 10,
+        total: 0,
 				isShow: false,
 				keyword: '',
 				addDialog: false,
 				name: '',
-				tip: false
+				tip: false,
+        isEdit: false,
+        currentRow: ''
 			}
 		},
 		created() {
@@ -117,24 +121,48 @@
 			handleExceed() {
 
 			},
+      init() {
+
+      },
 			handleSizeChange(val) {
-				console.log(`每页 ${val} 条`);
+        this.limit = val;
+        this.currentPage = 1;
+        this.init();
 			},
 			handleCurrentChange(val) {
-				console.log(`当前页: ${val}`);
+        this.currentPage = val;
+        this.init();
 			},
 			search() {
 				console.log(this.keyword)
+        this.currentPage = 1;
+        this.init();
 			},
 			addAnchor() {
 				this.addDialog = true;
 			},
 			confirm() {
 				this.tip = true;
-				// this.handleClose();
+				this.handleClose();
 			},
+      editItem(item) {
+        this.isEdit = true;
+        this.currentRow = item;
+        this.name = this.currentRow.name;
+        this.addDialog = true;
+      },
+      deleteItem(item) {
+        this.$confirm(`确定删除该主播吗？`, {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+
+        })
+      },
 			handleClose() {
 				this.addDialog = false;
+        this.isEdit = false;
 				this.tip = false;
 				this.name = '';
 			}

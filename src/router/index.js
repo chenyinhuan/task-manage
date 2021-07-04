@@ -333,15 +333,6 @@ export const routes = [
         title: '数据库管理',
         noCache: true
       }
-    },
-    {
-      path: '/database/field',
-      component: () => import( /* webpackChunkName: "login" */ '@/views/database/database-field'),
-      hidden: false,
-      meta: {
-        title: '数据库管理',
-        noCache: true
-      }
     }
     ]
   },

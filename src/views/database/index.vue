@@ -4,13 +4,6 @@
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
-					<div v-if="item.slot && item.prop=='createUserName'">
-						<div>{{scope.row.createUserName}}</div>
-            <div>{{scope.row.createTime}}</div>
-					</div>
-					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="text" @click="goDetail(scope.row)">查看</el-button>
-					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 				</template>
 			</el-table-column>
@@ -21,7 +14,7 @@
 		</el-pagination>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
-			<p>还没有数据库表～</p>
+			<p>还没有数据接口～</p>
 		</div>
 	</div>
 </template>
@@ -38,29 +31,27 @@
 				tableData: [],
 				tableColumn: [ // 表格列数据
 					{
-						label: '表名称',
+						label: '接口名称',
 						prop: 'targetName',
 					},
 					{
-						label: '所属数据库',
+						label: '请求参数',
 						prop: 'description',
 					},
 					{
-						label: '备注名',
+						label: '请求参数说明',
 						prop: 'type',
 					},
 					{
-						label: '创建人/创建时间',
+						label: '返回参数',
 						prop: 'createUserName',
 					},
 					{
-						label: '字段表',
+						label: '返回参数说明',
 						prop: 'opt',
 						align: 'center',
-						slot: true,
 					},
 				],
-				currentPage: 1,
 				isShow: false,
 				searchParams: {
 					page: 1,
@@ -97,9 +88,6 @@
 			search() {
 				this.searchParams.page = 1;
 				this.init();
-			},
-			goDetail(item) {
-        this.$router.push(`/database/field?id=${item.id}`)
 			}
 		}
 	}

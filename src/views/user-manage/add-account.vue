@@ -26,6 +26,13 @@
       <span class="error" style="color: #FF8C00;" v-show="conPswValidate && !form.conPassword">请输入登录密码</span>
       <span class="error" style="color: #C03639;" v-show="pswError">输入密码不一致！</span>
     </section>
+	<section>
+	  <p style="margin-bottom: 0px;">是否可被任务派发</p>
+    <span class="label">如果可派发，则可被上级派发任务“由下级派发”时被选中为操作对象</span>
+    <el-select class="ass-select" v-model="form.assigment" placeholder="选择派发权限">
+      <el-option v-for="(item, index) in assigmentList" :key="index" :value="item.value" :label="item.label"></el-option>
+    </el-select>
+	</section>
     <section>
       <p>匹配角色</p>
       <div v-for="(item, index) in permission" :key="index" style="display: flex;align-items: center;position: relative;">
@@ -43,7 +50,7 @@
       <el-button class="add-role" type="primary" @click="addRole()">+新增</el-button>
     </section>
     <div class="foot">
-      <el-button type="primary" @click="create">{{isEdit?'保存':'创建'}}</el-button>
+      <el-button type="primary" @click="create">{{isEdit == 1?'修改':'创建'}}</el-button>
     </div>
   </div>
 </template>
@@ -68,7 +75,8 @@
           conPassword: '',
           deptId: '',
           roleIdList: [],
-          email: '5688888@qq.com'
+          email: '5688888@qq.com',
+          assigment: ''
         },
         deptlist: [],
         roleList: [],
@@ -80,7 +88,11 @@
         nameValidate: false,
         pswValidate: false,
         conPswValidate: false,
-        deptValidate: false
+        deptValidate: false,
+        assigmentList: [
+          {value: 1, label: '可派发'},
+          {value: 2, label: '不可派发'}
+        ]
       }
     },
     created() {
@@ -258,7 +270,13 @@
     }
     section{
       position: relative;
-
+      .label{
+        font-size: 12px;
+        color: #FF8C00;
+        display: block;
+        margin-bottom: 32px;
+        margin-top: 8px;
+      }
       .validate-info {
       	position: absolute;
       	left: 0px;
@@ -278,6 +296,7 @@
         line-height: 28px;
         margin-bottom: 20px;
       }
+
       .el-select{
         width: 181px;
         height: 32px;
@@ -294,6 +313,11 @@
           line-height: 30px;
         }
       }
+      .ass-select {
+        width: 440px;
+        margin-bottom: 32px;
+      }
+
       .el-input {
         width: 440px;
         height: 32px;

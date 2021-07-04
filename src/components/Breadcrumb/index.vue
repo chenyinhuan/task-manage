@@ -505,29 +505,12 @@ export default {
           path: '/database',
           matched: [
             {
-              name: '数据库表管理',
+              name: '数据接口管理',
               path: '/database',
               active: true
             }
           ]
-        },
-        {
-          // 用户管理-角色配置
-          path: '/database/field',
-          matched: [
-            {
-              name: '数据库表管理',
-              path: '/database',
-              active: true
-            },
-            {
-              name: '字段表',
-              path: '',
-              active: false
-            }
-          ]
-        },
-
+        }
       ]
     }
   },
