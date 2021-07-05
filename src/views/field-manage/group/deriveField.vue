@@ -267,18 +267,7 @@
           },
         ],
 				nativeList: [],
-				nativeList1: [{
-						value: 1,
-						label: '合同进度'
-					},
-					{
-						value: 2,
-						label: '是否付费'
-					},
-					{
-						value: 3,
-						label: '已收佣金'
-					},
+				nativeList1: [
 				],
 				options: [{
 						value: 1,

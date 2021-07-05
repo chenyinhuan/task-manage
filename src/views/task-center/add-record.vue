@@ -7,7 +7,7 @@
 			<div class="content">
 				<div class="content-item" v-for="(item, index) in taskRecordDetailBasicVOs" :key="index"
 					@click="checkItem(item)">
-					<span class="tit">{{item.fieldName}}</span>
+					<span class="tit"><span style="color: #C03639;" v-if="item.fieldInputType == 1">*</span>{{item.fieldName}}</span>
 					<el-input placeholder="请输入" v-model="item.fieldValue"
 						v-if="item.formType == 1 && item.dataType == 1">
 					</el-input>
@@ -116,7 +116,7 @@
 				let taskRecordDetailBasicVOs = JSON.parse(JSON.stringify(this.taskRecordDetailBasicVOs));
 				if (taskRecordDetailBasicVOs.length > 0) {
 					taskRecordDetailBasicVOs.forEach(item => {
-						if (item.formType == 2 || item.formType == 3) {
+						if (item.formType == 3) {
 							item.fieldValue = item.fieldValue.join('@#')
 						}
             if(item.dataType == 2 || item.dataType == 3) {
@@ -223,7 +223,7 @@
 					}
 
 					.el-select {
-						// width: 105px;
+						width: 105px;
 
 						>>>.el-input__inner {
 							border: 0px;
