@@ -36,6 +36,11 @@
 							<span>上传图片</span>
 						</el-upload>
 					</div>
+          <span class="validate-info" style="color: #FF8C00;" v-if="showValidate && item.fieldInputType == 1 && item.fieldValue == ''">
+            {{item.formType == 1? `请输入${item.fieldName}`:''}}
+            {{item.formType == 2 || item.formType == 3? `请选择${item.fieldName}`:''}}
+            {{item.formType == 4? `请上传${item.fieldName}`:''}}
+            </span>
 				</div>
 			</div>
 		</section>
@@ -89,11 +94,12 @@
 				uploadUrl: `${window.$globalConfig.API_BASE_Tabel}/sys/oss/upload`,
 				uploadItem: '',
 				dialogVisible: false,
-				url: ''
-
+				url: '',
+        showValidate: false
 			}
 		},
 		created() {
+      this.showValidate = false;
 			if (this.$route.query.id) this.taskId = this.$route.query.id;
 			let params = {
 				taskId: this.taskId
@@ -113,6 +119,12 @@
 		methods: {
 			saveGood() {
 				if (this.taskId == '') return this.$message.warning('任务id不能为空！')
+        let flag = false;
+        for(let i=0;i<this.taskRecordDetailBasicVOs.length;i++) {
+          let item = this.taskRecordDetailBasicVOs[i];
+           if(item.fieldInputType == 1 && item.fieldValue == '') flag = true;
+        }
+        if(flag) return this.showValidate = true;
 				let taskRecordDetailBasicVOs = JSON.parse(JSON.stringify(this.taskRecordDetailBasicVOs));
 				if (taskRecordDetailBasicVOs.length > 0) {
 					taskRecordDetailBasicVOs.forEach(item => {
@@ -204,7 +216,14 @@
 					margin-bottom: 30px;
 					width: 270px;
 					text-align: left;
+          position: relative;
 
+          .validate-info {
+            position: absolute;
+            left: 0px;
+            bottom: -18px;
+            font-size: 12px;
+          }
 					.tit {
 						font-size: 12px;
 						color: #666777;

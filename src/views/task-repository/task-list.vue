@@ -43,7 +43,7 @@
 							@click="cancelCurTask(scope.row)">取消</el-button>
 						<el-button type="text" @click="viewDes(scope.row)" v-if="scope.row.createUserId!=userInfo.userId">查看说明</el-button>
 						<el-button type="text"
-							v-if="scope.row.createUserId!=userInfo.userId && (scope.row.taskState == 1 ||  scope.row.taskState == 2)"
+							v-if="scope.row.createUserId!=userInfo.userId &&(scope.row.taskState == 1 ||  scope.row.taskState == 2)"
 							@click="openDialog(scope.row)">派发任务</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
@@ -73,7 +73,7 @@
 	import assigment from '@/views/task-repository/group/assigment.vue'
 	import {
 		getTaskList,
-		saveTask,
+		saveuser,
 		cancelTask,
 		getTaskDetailById
 	} from '@/api/task-repository/index'
@@ -180,6 +180,7 @@
 			}
 		},
 		created() {
+      this.userInfo = {};
 			this.userInfo = localStorage.getItem('userInfo')?JSON.parse(localStorage.getItem('userInfo')):{}
 			this.init()
 		},
@@ -208,8 +209,15 @@
 				}).catch(() => {})
 			},
 			confirm(val) {
-				this.formData.users = val
-				saveTask(this.formData).then(res => {
+        console.log(val)
+        let users = []
+        if(val.length > 0) {
+          val.forEach(item => {
+            if(!item.disabled) users.push(item);
+          })
+        }
+				this.formData.users = users
+				saveuser(this.formData).then(res => {
 					if (res.code == 0) {
 						this.$message.success('保存成功')
 						this.init()
@@ -237,10 +245,12 @@
 									let item = res.deptUsers
 									for (var j = 0; j < item[i].deptUsersVOS.length; j++) {
 										let citem = item[i].deptUsersVOS[j];
-										citem.disabled = this.form.users.some(n => n.userId == citem.userId)
-										if(this.form.users.some(n => n.userId == citem.userId)) {
-											this.selectedData.push(citem)
-										}
+                    if(this.form.users.length > 0) {
+                      if(this.form.users.some(n => n.userId == citem.userId)) {
+                      	this.selectedData.push(citem)
+                      }
+                      citem.disabled = this.form.users.some(n => n.userId == citem.userId)
+                    }else citem.disabled = false;
 									}
 								}
 								let temp = this.$transformDeptUser(JSON.parse(JSON.stringify(res.deptUsers)));

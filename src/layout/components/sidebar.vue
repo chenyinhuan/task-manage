@@ -72,12 +72,14 @@
           manage: require('../../images/sider-bar/manage.png'),
           user: require('../../images/sider-bar/user.png'),
           center: require('../../images/sider-bar/center.png'),
+          database: require('../../images/sider-bar/database.png'),
           taskActive: require('../../images/sider-bar/task-active.png'),
           fieldActive: require('../../images/sider-bar/field-active.png'),
           targrtActive: require('../../images/sider-bar/targrt-active.png'),
           manageActive: require('../../images/sider-bar/manage-active.png'),
           userActive: require('../../images/sider-bar/user-active.png'),
-          centerActive: require('../../images/sider-bar/center-active.png')
+          centerActive: require('../../images/sider-bar/center-active.png'),
+          databaseActive: require('../../images/sider-bar/database-active.png')
         },
         userInfo: ''
       };

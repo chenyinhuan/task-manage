@@ -91,10 +91,16 @@ export const cancelTask = (params) => api.post(`/task-admin/task/tk/cancel/${par
  * @params params
  */
 export const getTaskDetailById = (params) => api.post(`/task-admin/task/tk/getDetail/${params.id}`, params)
+
 /**
  * 更新任务
  * @params params
  */
 
 export const updateTaskDetail = (params) => api.post(`/task-admin/task/tk/repo/update`, params)
+/**
+ * 任务列表-派发人员
+ * @params params
+ */
 
+export const saveuser = (params) => api.post(`/task-admin/task/tk/repo/saveuser`, params)

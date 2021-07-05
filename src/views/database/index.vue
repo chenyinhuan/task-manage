@@ -20,9 +20,8 @@
 </template>
 <script>
 	import {
-		getTargeList,
-		deleteTarget
-	} from '@/api/target-manage/index';
+		getPageList,
+	} from '@/api/database/index.js';
 	export default {
 		components: {},
 		data() {
@@ -32,24 +31,23 @@
 				tableColumn: [ // 表格列数据
 					{
 						label: '接口名称',
-						prop: 'targetName',
+						prop: 'apiName',
 					},
 					{
 						label: '请求参数',
-						prop: 'description',
+						prop: 'params',
 					},
 					{
 						label: '请求参数说明',
-						prop: 'type',
+						prop: 'paramsDes',
 					},
 					{
 						label: '返回参数',
-						prop: 'createUserName',
+						prop: 'responses',
 					},
 					{
 						label: '返回参数说明',
-						prop: 'opt',
-						align: 'center',
+						prop: 'responsesDes',
 					},
 				],
 				isShow: false,
@@ -71,9 +69,51 @@
 		},
 		methods: {
 			init() {
-				getTargeList(this.searchParams).then(res => {
-					this.tableData = res.page.list
-					this.total = res.page.totalCount
+				getPageList(this.searchParams).then(res => {
+          if(res.code == 0) {
+            let arr = [];
+            for (let i=0;i<res.apis.length;i++) {
+              let item = res.apis[i];
+              // arr.push({
+              //   apiName: item.apiName,
+              //   apiId: item.apiId,
+              //   params: item.params && item.params.length > 0?item.params[0].apiName:'',
+              //   paramsDes: item.params && item.params.length > 0?item.params[0].description:'',
+              //   responses: item.responses && item.responses.length > 0?item.responses[0].apiName:'',
+              //   responsesDes: item.responses && item.responses.length > 0?item.responses[0].description:'',
+              // })
+              let tempArr = [];
+              if(item.params && item.params.length && item.responses && item.responses.length) {
+                if(item.params.length>=item.responses.length) {
+                  tempArr = item.params.map((citem, cindex) => {
+                    return {
+                      apiName: cindex==0?item.apiName:'',
+                      apiId: item.apiId,
+                      params: citem.apiName,
+                      paramsDes: citem.description,
+                      responses: item.responses[cindex]?item.responses[cindex].apiName:'',
+                      responsesDes: item.responses[cindex]?item.responses[cindex].description:'',
+                    }
+                  })
+                }else {
+                  tempArr = item.responses.map((citem, cindex) => {
+                    return {
+                      apiName: cindex==0?item.apiName:'',
+                      apiId: item.apiId,
+                      params: item.params[cindex]?item.params[cindex].apiName:'',
+                      paramsDes: item.params[cindex]?item.params[cindex].description:'',
+                      responses: citem.apiName,
+                      responsesDes: citem.description,
+                    }
+                  })
+                }
+              }
+             console.log(tempArr)
+              arr = [...arr, ...tempArr]
+            }
+            this.tableData = JSON.parse(JSON.stringify(arr))
+            this.total = res.totalCount || 0;
+          }
 				})
 			},
 			handleSizeChange(val) {
