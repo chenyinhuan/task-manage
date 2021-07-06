@@ -35,16 +35,16 @@
 	import {
 		monthlyCalendar
 	} from "@/components/ScheduleCalendar/utils";
-	import {getTaskCenter} from '@/api/task-center/my-task/index.js'
+	import {getTaskCenter,countTaskCenter} from '@/api/task-center/my-task/index.js'
 	export default {
 		data() {
 			return {
 				countList: [
-					{imageUrl: sending,title: "累计考核任务指标数",number: 78,bgColor: "#FF9300"},
-					{imageUrl: completed,title: "累计完成任务指标数",number: 59,bgColor: "#00B043"},
-					{imageUrl: taskcomplete,title: "任务指标完成率",number: "50%",bgColor: "#0089FE"},
-					{imageUrl: task,title: "考核中的任务指标数",number: 45,bgColor: "#FE642B"},
-					{imageUrl: waite,title: "进行中任务数",number: 6,bgColor: "#7718A6"}
+					{imageUrl: sending,title: "累计考核任务指标数",number: 0,bgColor: "#FF9300"},
+					{imageUrl: completed,title: "累计完成任务指标数",number: 0,bgColor: "#00B043"},
+					{imageUrl: taskcomplete,title: "任务指标完成率",number: "0%",bgColor: "#0089FE"},
+					{imageUrl: task,title: "考核中的任务指标数",number: 0,bgColor: "#FE642B"},
+					{imageUrl: waite,title: "进行中任务数",number: 0,bgColor: "#7718A6"}
 				],
 				tabList: [
 					{title: "本月应考核任务指标数：",number: 0},
@@ -72,10 +72,22 @@
 			this.calandarNextNum = monthlyCalendar(new Date().getFullYear(), new Date().getMonth(), 1).nextNum;
 			let date = moment().format('YYYY-MM-DD');
 			this.getMothData(date);
+			this.getCount();
 		},
 		mounted() {},
 		computed: {},
 		methods: {
+			getCount() {
+				countTaskCenter().then(res => {
+					if(res.code ==0) {
+						this.countList[0].number = res.taskCenterCount.taskTargetCount;
+						this.countList[1].number = res.taskCenterCount.taskCompleteCount;
+						this.countList[2].number = res.taskCenterCount.taskCompletePercent;
+						this.countList[3].number = res.taskCenterCount.taskTargetInProcess;
+						this.countList[4].number = res.taskCenterCount.taskInProcess;
+					}
+				})
+			},
 			getMothData(date) {
 				let params = {
 					startTime: moment(moment(date).startOf('month').valueOf()).format('YYYY-MM-DD HH:mm:ss'),

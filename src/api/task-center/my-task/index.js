@@ -42,3 +42,14 @@ export const getTaskTargetList = (params) => api.post(`/task-admin/task/tk/targe
  */
 export const getTaskCenter = (params) => api.post(`/task-admin/task/tk/user/taskcenter`, params);
 
+/**
+ * 我派发的任务头部统计接口
+ * @params params
+ */
+export const countRepo = (params) => api.post(`/task-admin/task/tk/repo/page/count`, params);
+
+/**
+ * 任务中心头部统计接口
+ * @params params
+ */
+export const countTaskCenter = (params) => api.post(`/task-admin/task/tk/user/taskcenter/count`, params);

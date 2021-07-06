@@ -97,7 +97,8 @@
 		getTaskList
 	} from '@/api/task-repository/index'
 	import {
-		getTaskTargetList
+		getTaskTargetList,
+		countRepo
 	} from '@/api/task-center/my-task/index'
 	export default {
 		data() {
@@ -106,30 +107,10 @@
 				newEndTime: '',
 				timeDialog: false,
 				dialogVisible: false,
-				countList: [{
-						imageUrl: waite,
-						title: '进行中任务数',
-						number: 6,
-						bgColor: '#00B043'
-					},
-					{
-						imageUrl: sending,
-						title: '累计派发任务数',
-						number: 78,
-						bgColor: '#FF9300'
-					},
-					{
-						imageUrl: taskcomplete,
-						title: '任务指标完成率',
-						number: '50%',
-						bgColor: '#0089FE'
-					},
-					{
-						imageUrl: task,
-						title: '累计派发任务人数',
-						number: 45,
-						bgColor: '#FE642B'
-					},
+				countList: [{imageUrl: waite,title: '进行中任务数',number: 0,bgColor: '#00B043'},
+				{imageUrl: sending,title: '累计派发任务数',number: 0,bgColor: '#FF9300'},
+				{imageUrl: taskcomplete,title: '任务指标完成率',number: '0%',bgColor: '#0089FE'},
+				{imageUrl: task,title: '累计派发任务人数',number: 0,bgColor: '#FE642B'}
 				],
 				total: 0,
 				tableData: [],
@@ -215,6 +196,7 @@
 		},
 		created() {
 			this.init()
+			this.getCount()
 		},
 		mounted() {
 
@@ -223,6 +205,16 @@
 
 		},
 		methods: {
+			getCount() {
+				countRepo().then(res => {
+					if(res.code ==0) {
+						this.countList[0].number = res.taskCenterCount.taskInProcessCount;
+						this.countList[1].number = res.taskCenterCount.taskSendCount;
+						this.countList[2].number = res.taskCenterCount.taskCompletePercent;
+						this.countList[3].number = res.taskCenterCount.taskUserCount;
+					}
+				})
+			},
 			agree() {
 				this.warningDialog = false
 				this.timeDialog = true
