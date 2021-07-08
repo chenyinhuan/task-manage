@@ -208,7 +208,7 @@
 				})
 			},
 			assocoated(item) {
-				this.$router.push('/user-manage/associated-anchor')
+				this.$router.push(`/user-manage/associated-anchor?userId=${item.userId}`)
 			},
 			filterNode(value, data) {
 				if (!value) return true;

@@ -2,7 +2,7 @@
 	<div id="targetManage" :style="{'height': tableData.length==0?'661px':''}">
 		<section class="hd">
 			<div>
-				<el-input v-model="keyword" placeholder="指标名称" @keyup.enter.native="search"><i slot="prefix"
+				<el-input v-model="searchParams.targetName" placeholder="指标名称" @keyup.enter.native="search"><i slot="prefix"
 						class="el-input__icon el-icon-search"></i></el-input>
 			</div>
 			<el-button type="primary" @click="addTask">新增</el-button>
@@ -41,7 +41,6 @@
 		components: {},
 		data() {
 			return {
-				keyword: '',
 				tableData: [],
 				tableColumn: [ // 表格列数据
 					{
@@ -76,7 +75,8 @@
 				isShow: false,
 				searchParams: {
 					page: 1,
-					limit: 10
+					limit: 10,
+          targetName: ''
 				},
 				total: 0
 			}
@@ -114,7 +114,6 @@
 			search() {
 				this.searchParams.page = 1;
 				this.init();
-				console.log(this.keyword)
 			},
 			deleteItem(item) {
 				let _this = this;

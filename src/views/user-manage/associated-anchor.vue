@@ -17,7 +17,14 @@
 				<el-button size="small" type="primary" @click="addAnchor">新增主播</el-button>
 			</div>
 		</section>
-		<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
+		<el-table ref="table" :data="tableData" style="width: 100%;margin-top: 10px;"
+    @selection-change="handleSelectionChange"
+    @row-click="rowSelect"
+    v-if="tableData.length>0">
+    <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
@@ -53,6 +60,7 @@
 	</div>
 </template>
 <script>
+  import {} from '@/api/user-manage/account/anchor.js'
 	export default {
 		data() {
 			return {
@@ -165,7 +173,13 @@
         this.isEdit = false;
 				this.tip = false;
 				this.name = '';
-			}
+			},
+      handleSelectionChange(val) {
+
+      },
+      rowSelect(row) {
+          this.$refs.table.toggleRowSelection(row);
+      }
 		}
 	}
 </script>
