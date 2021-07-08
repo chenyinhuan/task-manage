@@ -41,193 +41,198 @@
 			<span class="validate-info" style="color: #FF8C00;"
 				v-if="showValidate && form.ruleType == ''">请选择加工方式</span>
 			<span class="warning-info" v-if="form.ruleType == 1">说明：四则运算只针对number型（int、float）数据类型计算</span>
-      <div class="item" v-if="form.ruleType ==1">
-        <div class="options">
-          <label>衍生字段=</label>
-          <div style="position: relative;">
-            <el-select v-model="form.fieldStartId" filterable placeholder="选择字段" @change="$forceUpdate()">
-              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-                         :value="item.id"></el-option>
-            </el-select>
-            <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                  v-if="showValidate && !form.fieldStartId">选择字段</span>
-          </div>
-          <div v-for="(item, index) in enums" :key="index" v-if="index == 0" style="display: flex">
-            <div style="position: relative">
-              <el-select v-model="item.logicAction" placeholder="运算方式">
-                <el-option v-for="item in calcType" :key="item.value" :label="item.label"
-                           :value="item.value">
-                </el-option>
-              </el-select>
-              <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                    v-if="showValidate && !item.logicAction">运算方式</span>
-            </div>
-            <div style="position: relative;">
-              <el-select v-model="item.fieldStartId" filterable placeholder="选择字段">
-                <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-                           :value="item.id"></el-option>
-              </el-select>
-              <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                    v-if="showValidate && item.fieldStartId == ''">选择字段</span>
-            </div>
-            <a class="add-btn" v-if="index == enums.length-1" @click="addEditDomain()">+新增</a>
-            <a class="delete-btn" v-if="index != 0" @click="deleteEditDomain(index)">X 删除</a>
-          </div>
-        </div>
-        <div v-for="(item, index) in enums" :key="index" v-if="index > 0" class="add-item" style="display: flex">
-          <div style="position: relative">
-            <el-select v-model="item.logicAction" placeholder="运算方式">
-              <el-option v-for="item in calcType" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-            <span class="validate-info" style="color: #FF8C00;bottom: -5px;"
-                  v-if="showValidate && item.logicAction == ''">运算方式</span>
-          </div>
-          <div style="position: relative;margin-left: 10px;">
-            <el-select v-model="item.fieldStartId" filterable placeholder="选择字段">
-              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-                         :value="item.id"></el-option>
-            </el-select>
-            <span class="validate-info" style="color: #FF8C00;bottom: -5px;"
-                  v-if="showValidate && item.fieldStartId == ''">选择字段</span>
-          </div>
-          <a class="add-btn" v-if="index == enums.length-1" @click="addEditDomain()">+新增</a>
-          <a class="delete-btn" v-if="index != 0" @click="deleteEditDomain(index)">X 删除</a>
-        </div>
-      </div>
-      <div class="item" style="display: flex;"
-           :class="[nativeList.find(n => n.id == form.fieldStartId) && !(nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3)?'cast':'']"
-           v-if="form.ruleType ==2">
-        <div style="position: relative;margin-right: 10px">
-          <el-select v-model="form.fieldStartId" filterable placeholder="选择字段" @change="$forceUpdate()">
-            <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName" :value="item.id">
-            </el-option>
-          </el-select>
-          <span class="validate-info" style="color: #FF8C00;"
-                v-if="showValidate && !form.fieldStartId">选择字段</span>
-        </div>
+			<div class="item" v-if="form.ruleType ==1">
+				<div class="options">
+					<label>衍生字段=</label>
+					<div style="position: relative;margin-left: 10px;">
+						<el-select v-model="form.fieldStartId" filterable placeholder="选择字段" @change="$forceUpdate()">
+							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+								:value="item.id"></el-option>
+						</el-select>
+						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+							v-if="showValidate && !form.fieldStartId">选择字段</span>
+					</div>
+					<div v-for="(item, index) in enums" :key="index" v-if="index == 0" style="display: flex">
+						<div style="position: relative;margin-left: 10px;">
+							<el-select v-model="item.logicAction" placeholder="运算方式">
+								<el-option v-for="item in calcType.slice(0,4)" :key="item.value" :label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+							<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+								v-if="showValidate && !item.logicAction">运算方式</span>
+						</div>
+						<div style="position: relative;margin-left: 10px;">
+							<el-select v-model="item.fieldStartId" filterable placeholder="选择字段">
+								<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+									:value="item.id"></el-option>
+							</el-select>
+							<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+								v-if="showValidate && item.fieldStartId == ''">选择字段</span>
+						</div>
+						<a class="add-btn" v-if="index == enums.length-1" @click="addEditDomain()">+新增</a>
+						<a class="delete-btn" v-if="index != 0" @click="deleteEditDomain(index)">X 删除</a>
+					</div>
+				</div>
+				<div v-for="(item, index) in enums" :key="index" v-if="index > 0" class="add-item"
+					style="display: flex">
+					<div style="position: relative">
+						<el-select v-model="item.logicAction" placeholder="运算方式">
+							<el-option v-for="item in calcType.slice(0,4)" :key="item.value" :label="item.label"
+								:value="item.value">
+							</el-option>
+						</el-select>
+						<span class="validate-info" style="color: #FF8C00;bottom: -5px;"
+							v-if="showValidate && item.logicAction == ''">运算方式</span>
+					</div>
+					<div style="position: relative;margin-left: 10px;">
+						<el-select v-model="item.fieldStartId" filterable placeholder="选择字段">
+							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+								:value="item.id"></el-option>
+						</el-select>
+						<span class="validate-info" style="color: #FF8C00;bottom: -5px;"
+							v-if="showValidate && item.fieldStartId == ''">选择字段</span>
+					</div>
+					<a class="add-btn" v-if="index == enums.length-1" @click="addEditDomain()">+新增</a>
+					<a class="delete-btn" v-if="index != 0" @click="deleteEditDomain(index)">X 删除</a>
+				</div>
+			</div>
+			<div class="item" style="display: flex;"
+				:class="[nativeList.find(n => n.id == form.fieldStartId) && !(nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3)?'cast':'']"
+				v-if="form.ruleType ==2">
+				<div style="position: relative;margin-right: 10px">
+					<el-select v-model="form.fieldStartId" filterable placeholder="选择字段" @change="$forceUpdate()">
+						<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+							:value="item.id">
+						</el-option>
+					</el-select>
+					<span class="validate-info" style="color: #FF8C00;"
+						v-if="showValidate && !form.fieldStartId">选择字段</span>
+				</div>
 				<div
 					v-if="nativeList.find(n => n.id == form.fieldStartId) && (nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3)">
 					<div class="options" v-for="(citem,index) in form.fieldComplexCastRuleVOs">
-            <div style="position: relative;">
-              <el-input v-model="citem.enumValue" disabled>
-                <template style=" background: #D9D9D9;" slot="prepend">选项{{index+1}}</template>
-              </el-input>
-<!--              <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"-->
-<!--                    v-if="showValidate && !citem.enumValue">不能为空</span>-->
-            </div>
+						<div style="position: relative;">
+							<el-input v-model="citem.enumValue" disabled>
+								<template style=" background: #D9D9D9;" slot="prepend">选项{{index+1}}</template>
+							</el-input>
+							<!--              <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"-->
+							<!--                    v-if="showValidate && !citem.enumValue">不能为空</span>-->
+						</div>
 						<span style="margin: 0 15px">则</span>
 						<label style="margin-right: 10px">衍生字段=</label>
-            <div style="position: relative;">
-						  <el-input v-model="citem.complexValue"></el-input>
-              <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                    v-if="showValidate && !citem.complexValue">不能为空</span>
-            </div>
-            <div style="position: relative;">
-              <el-select v-model="citem.complexDataType" placeholder="选择数据类型">
-                <el-option v-for="item in dataTypeList" :key="item.value" :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-              <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                    v-if="showValidate && !citem.complexDataType">请选择数据类型</span>
-            </div>
+						<div style="position: relative;">
+							<el-input v-model="citem.complexValue"></el-input>
+							<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+								v-if="showValidate && !citem.complexValue">不能为空</span>
+						</div>
+						<div style="position: relative;">
+							<el-select v-model="citem.complexDataType" placeholder="选择数据类型">
+								<el-option v-for="item in dataTypeList" :key="item.value" :label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+							<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+								v-if="showValidate && !citem.complexDataType">请选择数据类型</span>
+						</div>
 					</div>
 				</div>
 				<div
 					v-if="form.fieldStartId && !(nativeList.find(n => n.id == form.fieldStartId) && (nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3))">
 					<div v-for="(item, index) in enums1" :key="index" class="options options1">
-            <div style="position: relative;">
-              <el-select v-model="item.logicAction" placeholder="运算方式" style="margin-left: 15px;">
-                <el-option v-for="item in calcType.slice(0,4)" :key="item.value" :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-              <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                    v-if="showValidate && !item.logicAction">运算方式</span>
-            </div>
-            <div style="position: relative;">
-						  <el-input v-model="item.logicTargetValue"></el-input>
-              <span class="validate-info" style="color: #FF8C00;bottom: -20px;"
-                    v-if="showValidate && !item.logicTargetValue">不能为空</span>
-            </div>
+						<div style="position: relative;">
+							<el-select v-model="item.logicAction" placeholder="运算方式" style="margin-left: 15px;">
+								<el-option v-for="item in calcType.slice(4,10)" :key="item.value" :label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+							<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+								v-if="showValidate && !item.logicAction">运算方式</span>
+						</div>
+						<div style="position: relative;">
+							<el-input v-model="item.logicTargetValue"></el-input>
+							<span class="validate-info" style="color: #FF8C00;bottom: -20px;"
+								v-if="showValidate && !item.logicTargetValue">不能为空</span>
+						</div>
 						<span style="margin: 0 15px">则</span>
 						<label style="margin-right: 10px">衍生字段=</label>
-            <div style="position: relative;">
-						  <el-input v-model="item.complexValue"></el-input>
-              <span class="validate-info" style="color: #FF8C00;bottom: -20px;"
-                    v-if="showValidate && !item.complexValue">不能为空</span>
-            </div>
+						<div style="position: relative;">
+							<el-input v-model="item.complexValue"></el-input>
+							<span class="validate-info" style="color: #FF8C00;bottom: -20px;"
+								v-if="showValidate && !item.complexValue">不能为空</span>
+						</div>
 						<a class="add-btn" v-if="index == enums1.length-1" @click="addEditDomain1()">+ 新增</a>
 						<a class="delete-btn" v-if="index != 0" @click="deleteEditDomain1(index)">X 删除</a>
 					</div>
 				</div>
 			</div>
-      <div class="item" v-if="form.ruleType ==3">
-        <div class="options">
-          <div style="position: relative;">
-            <h4>选择接口:</h4>
-            <el-select v-model="form.apiId" filterable placeholder="选择接口" @change="$forceUpdate()">
-              <el-option v-for="(item,index) in apiList" :key="index" :label="item.fieldName"
-                         :value="item.id"></el-option>
-            </el-select>
-            <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                  v-if="showValidate && !form.apiId">选择字段</span>
-          </div>
-        </div>
-        <div class="options">
-          <div style="position: relative;">
-            <h4>原生字段1:</h4>
-            <el-select v-model="form.nativeField1" filterable placeholder="原生字段1" @change="$forceUpdate()">
-              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-                         :value="item.id"></el-option>
-            </el-select>
-            <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                  v-if="showValidate && !form.nativeField1">选择字段</span>
-          </div>
-          <span class="el-icon-connection" style="margin: 30px 10px 0"></span>
-          <div style="position: relative;">
-            <h4>关联接口请求参数:</h4>
-            <el-select v-model="form.fieldStartId" filterable placeholder="关联接口请求参数：" @change="$forceUpdate()">
-              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-                         :value="item.id"></el-option>
-            </el-select>
-            <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                  v-if="showValidate && !form.fieldStartId">选择字段</span>
-          </div>
-        </div>
-        <div class="options">
-          <div style="position: relative;">
-            <h4>原生字段2:</h4>
-            <el-select v-model="form.nativeField2" filterable placeholder="原生字段2" @change="$forceUpdate()">
-              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-                         :value="item.id"  :disabled="item.id == form.nativeField1"></el-option>
-            </el-select>
-          </div>
-          <span class="el-icon-connection" style="margin: 30px 10px 0"></span>
-          <div style="position: relative;">
-            <h4>关联接口请求参数:</h4>
-            <el-select v-model="form.nativeField2" filterable placeholder="关联接口请求参数：" @change="$forceUpdate()">
-              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-                         :value="item.id"></el-option>
-            </el-select>
-            <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                  v-if="showValidate && !form.fieldStartId">选择字段</span>
-          </div>
-        </div>
-        <div class="options">
-          <div style="position: relative;">
-            <h4>衍生字段关联返回参数:</h4>
-            <el-select v-model="form.nativeField" filterable placeholder="原生字段2" @change="$forceUpdate()">
-              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-                         :value="item.id"  :disabled="item.id == form.nativeField1"></el-option>
-            </el-select>
-            <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                  v-if="showValidate && !form.fieldStartId">选择字段</span>
-          </div>
-        </div>
-      </div>
-    </section>
+			<div class="item" v-if="form.ruleType ==3">
+				<div class="options">
+					<div style="position: relative;">
+						<h4>选择接口:</h4>
+						<el-select v-model="form.apiId" filterable placeholder="选择接口" @change="$forceUpdate()">
+							<el-option v-for="(item,index) in apiList" :key="index" :label="item.fieldName"
+								:value="item.id"></el-option>
+						</el-select>
+						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+							v-if="showValidate && !form.apiId">选择字段</span>
+					</div>
+				</div>
+				<div class="options">
+					<div style="position: relative;">
+						<h4>原生字段1:</h4>
+						<el-select v-model="form.nativeField1" filterable placeholder="原生字段1" @change="$forceUpdate()">
+							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+								:value="item.id"></el-option>
+						</el-select>
+						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+							v-if="showValidate && !form.nativeField1">选择字段</span>
+					</div>
+					<span class="el-icon-connection" style="margin: 30px 10px 0"></span>
+					<div style="position: relative;">
+						<h4>关联接口请求参数:</h4>
+						<el-select v-model="form.fieldStartId" filterable placeholder="关联接口请求参数："
+							@change="$forceUpdate()">
+							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+								:value="item.id"></el-option>
+						</el-select>
+						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+							v-if="showValidate && !form.fieldStartId">选择字段</span>
+					</div>
+				</div>
+				<div class="options">
+					<div style="position: relative;">
+						<h4>原生字段2:</h4>
+						<el-select v-model="form.nativeField2" filterable placeholder="原生字段2" @change="$forceUpdate()">
+							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+								:value="item.id" :disabled="item.id == form.nativeField1"></el-option>
+						</el-select>
+					</div>
+					<span class="el-icon-connection" style="margin: 30px 10px 0"></span>
+					<div style="position: relative;">
+						<h4>关联接口请求参数:</h4>
+						<el-select v-model="form.nativeField2" filterable placeholder="关联接口请求参数："
+							@change="$forceUpdate()">
+							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+								:value="item.id"></el-option>
+						</el-select>
+						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+							v-if="showValidate && !form.fieldStartId">选择字段</span>
+					</div>
+				</div>
+				<div class="options">
+					<div style="position: relative;">
+						<h4>衍生字段关联返回参数:</h4>
+						<el-select v-model="form.nativeField" filterable placeholder="原生字段2" @change="$forceUpdate()">
+							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+								:value="item.id" :disabled="item.id == form.nativeField1"></el-option>
+						</el-select>
+						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
+							v-if="showValidate && !form.fieldStartId">选择字段</span>
+					</div>
+				</div>
+			</div>
+		</section>
 		<div class="foot">
 			<el-button type="primary" @click="save()" v-preventReClick>保存</el-button>
 			<el-button class="cancel" @click="back()">取消</el-button>
@@ -236,7 +241,13 @@
 </template>
 
 <script>
-	import {getNativeList, getNativeEnums, saveComplex,getComplexcDetail,updateComplex} from '@/api/filed-manage/index.js'
+	import {
+		getNativeList,
+		getNativeEnums,
+		saveComplex,
+		getComplexcDetail,
+		updateComplex
+	} from '@/api/filed-manage/index.js'
 	export default {
 		name: "deriveField",
 		props: {
@@ -247,28 +258,26 @@
 		},
 		data() {
 			return {
-				calcType: this.$logicAction,
-        apiList: [
-          {
-            value: 1,
-            label: '快递查询'
-          },
-          {
-            value: 2,
-            label: '工作进度查询'
-          },
-          {
-            value: 3,
-            label: '订单状态查询'
-          },
-          {
-            value: 4,
-            label: '退款率查询'
-          },
-        ],
-				nativeList: [],
-				nativeList1: [
+				calcType: this.$calcType,
+				apiList: [{
+						value: 1,
+						label: '快递查询'
+					},
+					{
+						value: 2,
+						label: '工作进度查询'
+					},
+					{
+						value: 3,
+						label: '订单状态查询'
+					},
+					{
+						value: 4,
+						label: '退款率查询'
+					},
 				],
+				nativeList: [],
+				nativeList1: [],
 				options: [{
 						value: 1,
 						label: '四则运算'
@@ -277,10 +286,10 @@
 						value: 2,
 						label: '关系映射'
 					},
-          {
-            value: 3,
-            label: '关联接口'
-          }
+					{
+						value: 3,
+						label: '关联接口'
+					}
 				],
 				dataTypeList: this.$dataTypeList,
 				enums: [{
@@ -300,7 +309,7 @@
 					type: 2, //衍生
 					fieldStartId: '',
 					"fieldComplexCastRuleVOs": [],
-          complexMahtRuleVOs: []
+					complexMahtRuleVOs: []
 					// "fieldComplexCastRuleVOs": [{
 					//   "logicAction": 5,               //逻辑算法5-10
 					//   "complexValue": "100",          //最后一个input, 衍生字段值
@@ -323,33 +332,34 @@
 		},
 		watch: {
 			'form.fieldStartId': { //深度监听，可监听到对象、数组的变化
-        handler(val, oldVal) {
-          console.log(val, oldVal)
-          if (val && this.form.ruleType == 2 && ((this.nativeList.find(n => n.id == val) && this.nativeList.find(n => n.id == val).formType == 2) || (this
-            .nativeList.find(n => n.id == val) && this
-              .nativeList.find(n => n.id == val).formType == 3))) {
-            getNativeEnums({
-              id: this.form.fieldStartId
-            }).then(res => {
-              if (res.code == 0) {
-                this.form.fieldComplexCastRuleVOs = [];
-                for (let i = 0; i < res.field.fieldEnumEntityList.length; i++) {
-                  this.form.fieldComplexCastRuleVOs.push({
-                    complexValue: '',
-                    enumValue: res.field.fieldEnumEntityList[i].enumValue, //枚举值
-                    fieldStartId: this.form.fieldStartId, //第一个原生字段id
-                    complexDataType: '', //数据类型 1：字符串型string，2：整数int，3小数数值float，4日期date，5 时间time
-                    fieldEnumId: res.field.fieldEnumEntityList[i].id, //枚举id
-                  })
-                }
-              }
-            })
-          }
-        },
-      immediate: true,
-      deep: true //true 深度监听
-    }
-  },
+				handler(val, oldVal) {
+					console.log(val, oldVal)
+					if (val && this.form.ruleType == 2 && ((this.nativeList.find(n => n.id == val) && this.nativeList.find(
+							n => n.id == val).formType == 2) || (this
+							.nativeList.find(n => n.id == val) && this
+							.nativeList.find(n => n.id == val).formType == 3))) {
+						getNativeEnums({
+							id: this.form.fieldStartId
+						}).then(res => {
+							if (res.code == 0) {
+								this.form.fieldComplexCastRuleVOs = [];
+								for (let i = 0; i < res.field.fieldEnumEntityList.length; i++) {
+									this.form.fieldComplexCastRuleVOs.push({
+										complexValue: '',
+										enumValue: res.field.fieldEnumEntityList[i].enumValue, //枚举值
+										fieldStartId: this.form.fieldStartId, //第一个原生字段id
+										complexDataType: '', //数据类型 1：字符串型string，2：整数int，3小数数值float，4日期date，5 时间time
+										fieldEnumId: res.field.fieldEnumEntityList[i].id, //枚举id
+									})
+								}
+							}
+						})
+					}
+				},
+				immediate: true,
+				deep: true //true 深度监听
+			}
+		},
 		created() {
 			if (this.id) {
 				this.init()
@@ -357,47 +367,49 @@
 		},
 		methods: {
 			init() {
-        getComplexcDetail({id: this.id}).then(res=>{
-          this.form = res.field
-          this.form.name = this.form.name.replace("complex_","");
+				getComplexcDetail({
+					id: this.id
+				}).then(res => {
+					this.form = res.field
+					this.form.name = this.form.name.replace("complex_", "");
 
-          if(this.form.complexMahtRuleVOs && this.form.complexMahtRuleVOs.length){
-            this.form.fieldStartId = this.form.complexMahtRuleVOs[0].fieldStartId;
-            this.enums = this.form.complexMahtRuleVOs
-          }else{
-            this.enums = [{
-              logicAction: '',
-              fieldStartId: ''
-            }]
-          }
-          if(this.form.fieldComplexCastRuleVOs && this.form.fieldComplexCastRuleVOs.length) {
-            console.log(this.form.fieldComplexCastRuleVOs)
-            this.form.fieldStartId = this.form.fieldComplexCastRuleVOs[0].fieldStartId;
-          }
-          if(this.form.ruleType == 1){
-            let params = {
-              "dataTypes": [3], //数据类型，为空时取全部
-              "formTypes": [1], //表单类型，为空时取全部
-              "type": '1' //字段类型1：原生2衍生，为空时取全部
-            }
-            getNativeList(params).then(res => {
-              if (res.code == 0) {
-                this.nativeList = res.fields;
-              }
-            })
-          }else {
-            let params = {
-              "dataTypes": [], //数据类型，为空时取全部
-              "formTypes": [1,2,3], //表单类型，为空时取全部
-              "type": '1' //字段类型1：原生2衍生，为空时取全部
-            }
-            getNativeList(params).then(res => {
-              if (res.code == 0) {
-                this.nativeList = res.fields;
-              }
-            })
-          }
-        })
+					if (this.form.complexMahtRuleVOs && this.form.complexMahtRuleVOs.length) {
+						this.form.fieldStartId = this.form.complexMahtRuleVOs[0].fieldStartId;
+						this.enums = this.form.complexMahtRuleVOs
+					} else {
+						this.enums = [{
+							logicAction: '',
+							fieldStartId: ''
+						}]
+					}
+					if (this.form.fieldComplexCastRuleVOs && this.form.fieldComplexCastRuleVOs.length) {
+						console.log(this.form.fieldComplexCastRuleVOs)
+						this.form.fieldStartId = this.form.fieldComplexCastRuleVOs[0].fieldStartId;
+					}
+					if (this.form.ruleType == 1) {
+						let params = {
+							"dataTypes": [3], //数据类型，为空时取全部
+							"formTypes": [1], //表单类型，为空时取全部
+							"type": '1' //字段类型1：原生2衍生，为空时取全部
+						}
+						getNativeList(params).then(res => {
+							if (res.code == 0) {
+								this.nativeList = res.fields;
+							}
+						})
+					} else {
+						let params = {
+							"dataTypes": [], //数据类型，为空时取全部
+							"formTypes": [1, 2, 3], //表单类型，为空时取全部
+							"type": '1' //字段类型1：原生2衍生，为空时取全部
+						}
+						getNativeList(params).then(res => {
+							if (res.code == 0) {
+								this.nativeList = res.fields;
+							}
+						})
+					}
+				})
 			},
 			addEditDomain() {
 				if (this.enums.length >= 6) return this.$message.warning('最多只能新增5个！')
@@ -423,37 +435,38 @@
 			},
 			changeRuleType() {
 				this.form.fieldStartId = '';
-        if(this.form.ruleType == 1){
-          let params = {
-            "dataTypes": [3], //数据类型，为空时取全部
-            "formTypes": [1], //表单类型，为空时取全部
-            "type": '1' //字段类型1：原生2衍生，为空时取全部
-          }
-          getNativeList(params).then(res => {
-            if (res.code == 0) {
-              this.nativeList = res.fields;
-            }
-          })
-        }else {
-          let params = {
-            "dataTypes": [], //数据类型，为空时取全部
-            "formTypes": [1,2,3], //表单类型，为空时取全部
-            "type": '1' //字段类型1：原生2衍生，为空时取全部
-          }
-          getNativeList(params).then(res => {
-            if (res.code == 0) {
-              this.nativeList = res.fields;
-            }
-          })
-        }
+				if (this.form.ruleType == 1) {
+					let params = {
+						"dataTypes": [3], //数据类型，为空时取全部
+						"formTypes": [1], //表单类型，为空时取全部
+						"type": '1' //字段类型1：原生2衍生，为空时取全部
+					}
+					getNativeList(params).then(res => {
+						if (res.code == 0) {
+							this.nativeList = res.fields;
+						}
+					})
+				} else {
+					let params = {
+						"dataTypes": [], //数据类型，为空时取全部
+						"formTypes": [1, 2, 3], //表单类型，为空时取全部
+						"type": '1' //字段类型1：原生2衍生，为空时取全部
+					}
+					getNativeList(params).then(res => {
+						if (res.code == 0) {
+							this.nativeList = res.fields;
+						}
+					})
+				}
 			},
 			save() {
-				if (this.form.fieldName == '' || this.form.name == '' || this.form.ruleType == '' || this.checkFieldName || this.checkName) return this.showValidate = true;
-        let params = {};
+				if (this.form.fieldName == '' || this.form.name == '' || this.form.ruleType == '' || this.checkFieldName ||
+					this.checkName) return this.showValidate = true;
+				let params = {};
 				if (this.form.ruleType == 1) {
-				  for(let i in this.enums){
-				    if(!this.enums[i].fieldStartId || !this.enums[i].logicAction) return this.showValidate = true;
-          }
+					for (let i in this.enums) {
+						if (!this.enums[i].fieldStartId || !this.enums[i].logicAction) return this.showValidate = true;
+					}
 					let complexMahtRuleVOs = [];
 					if (this.enums.length == 1) {
 						complexMahtRuleVOs = [{
@@ -482,20 +495,26 @@
 						"type": this.form.type
 					}
 				} else {
-				  if(!this.form.fieldStartId) return this.showValidate = true
+					if (!this.form.fieldStartId) return this.showValidate = true
 					let fieldComplexCastRuleVOs = [];
 					// if (this.checkField.formType == 2 || this.checkField.formType == 3) { // 选择类
-          if(this.nativeList.find(n => n.id == this.form.fieldStartId) && (this.nativeList.find(n => n.id == this.form.fieldStartId).formType == 2 || this.nativeList.find(n => n.id == this.form.fieldStartId).formType == 3)){
-					  console.log('0',this.form.fieldComplexCastRuleVOs)
-            for(let i in this.form.fieldComplexCastRuleVOs){
-              if( !this.form.fieldComplexCastRuleVOs[i].complexDataType || !this.form.fieldComplexCastRuleVOs[i].complexValue) return this.showValidate = true;
-            }
+					if (this.nativeList.find(n => n.id == this.form.fieldStartId) && (this.nativeList.find(n => n.id ==
+							this.form.fieldStartId).formType == 2 || this.nativeList.find(n => n.id == this.form
+							.fieldStartId).formType == 3)) {
+						console.log('0', this.form.fieldComplexCastRuleVOs)
+						for (let i in this.form.fieldComplexCastRuleVOs) {
+							if (!this.form.fieldComplexCastRuleVOs[i].complexDataType || !this.form
+								.fieldComplexCastRuleVOs[i].complexValue) return this.showValidate = true;
+						}
 						fieldComplexCastRuleVOs = this.form.fieldComplexCastRuleVOs;
-					} else if(this.form.fieldStartId && !(this.nativeList.find(n => n.id == this.form.fieldStartId) && (this.nativeList.find(n => n.id == this.form.fieldStartId).formType == 2 || this.nativeList.find(n => n.id == this.form.fieldStartId).formType == 3))){ // 非选择类
-            console.log('1',this.enums1)
-            for(let i in this.enums1){
-              if(!this.enums1[i].complexValue || !this.enums1[i].logicAction || !this.enums1[i].logicTargetValue) return this.showValidate = true;
-            }
+					} else if (this.form.fieldStartId && !(this.nativeList.find(n => n.id == this.form.fieldStartId) && (
+							this.nativeList.find(n => n.id == this.form.fieldStartId).formType == 2 || this.nativeList
+							.find(n => n.id == this.form.fieldStartId).formType == 3))) { // 非选择类
+						console.log('1', this.enums1)
+						for (let i in this.enums1) {
+							if (!this.enums1[i].complexValue || !this.enums1[i].logicAction || !this.enums1[i]
+								.logicTargetValue) return this.showValidate = true;
+						}
 						for (let i = 0; i < this.enums1.length; i++) {
 							fieldComplexCastRuleVOs.push({
 								logicAction: this.enums1[i].logicAction,
@@ -518,20 +537,20 @@
 				console.log(params)
 				if (this.id) { //编辑
 					params.id = this.id
-          //修改方法
-          updateComplex(params).then(res => {
-            if (res.code == 0) {
-              this.$message.success('编辑成功！');
-              this.$router.push('/field-manage')
-            } else {
-              this.$message.warning(res.msg);
-            }
-          })
+					//修改方法
+					updateComplex(params).then(res => {
+						if (res.code == 0) {
+							this.$message.success('编辑成功！');
+							this.$router.push('/field-manage')
+						} else {
+							this.$message.warning(res.msg);
+						}
+					})
 				} else { //新增
 					saveComplex(params).then(res => {
 						if (res.code == 0) {
 							this.$message.success('新增成功！');
-              this.$router.push('/field-manage')
+							this.$router.push('/field-manage')
 						} else {
 							this.$message.warning(res.msg ? res.msg : '新增失败！');
 						}
@@ -581,15 +600,18 @@
 					margin-right: 10px;
 				}
 			}
-      &.options{
-        h4{
-          font-size: 14px;
-          margin-bottom: 10px;
-        }
-        .el-select {
-          margin-left: 0;
-        }
-      }
+
+			&.options {
+				h4 {
+					font-size: 14px;
+					margin-bottom: 10px;
+				}
+
+				.el-select {
+					margin-left: 0;
+				}
+			}
+
 			.el-input {
 				width: 181px;
 				height: 32px;
@@ -609,14 +631,16 @@
 			font-size: 14px;
 			margin-left: 15px;
 			color: #0079FE;
-      line-height: 32px;
-      cursor: pointer;
+			line-height: 32px;
+			cursor: pointer;
 		}
 
 		.delete-btn {
 			font-size: 14px;
 			margin-left: 15px;
 			color: #f44336;
+			line-height: 32px;
+			cursor: pointer;
 		}
 
 		>>>.el-checkbox__input.is-checked {
@@ -745,7 +769,8 @@
 
 		.add-item {
 			margin-left: 84px;
-      margin-bottom: 10px;
+			margin-bottom: 10px;
+
 			.el-select,
 			.el-input {
 				margin-bottom: 15px;

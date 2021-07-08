@@ -29,7 +29,7 @@ Vue.prototype.$aggregateFun = [
   {value: 4,label: '最小值'},
   {value: 5,label: '计数'}
 ]
-Vue.prototype.$logicAction = [{value: 1,label: '加法'},
+Vue.prototype.$calcType = [{value: 1,label: '增加'},
 {value: 2,label: '减法'},
 {value: 3,label: '除'},
 {value: 4,label: '乘'},
