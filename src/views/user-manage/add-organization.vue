@@ -13,7 +13,7 @@
       <span  style="font-size: 14px;margin-left: 10px;">说明：只允许填入整数，数值越小位置越靠前</span>
     </section>
     <div class="foot">
-      <el-button type="primary" @click="addDept">{{type?'创建':'修改'}}</el-button>
+      <el-button type="primary" @click="addDept"  v-preventReClick>{{type?'创建':'修改'}}</el-button>
     </div>
   </div>
 </template>

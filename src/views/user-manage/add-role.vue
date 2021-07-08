@@ -8,7 +8,7 @@
       <span class="error" style="color: #C03639;" v-show="validate && formData.roleName!='' && checkName">支持中文、英文，20字符以内</span>
     </section>
     <div class="foot">
-      <el-button type="primary" @click="addRole">{{type?'创建':'修改'}}</el-button>
+      <el-button type="primary" @click="addRole"  v-preventReClick>{{type?'创建':'修改'}}</el-button>
     </div>
   </div>
 </template>

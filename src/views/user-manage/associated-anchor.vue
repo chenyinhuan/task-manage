@@ -33,7 +33,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-button class="associated" type="primary">保存关联</el-button>
+		<el-button class="associated" type="primary"  v-preventReClick>保存关联</el-button>
 		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
 			:current-page.sync="currentPage" :page-size="limit" layout="prev, pager, next, jumper" :total="total">
 		</el-pagination>

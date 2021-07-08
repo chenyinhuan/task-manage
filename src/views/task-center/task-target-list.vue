@@ -106,7 +106,7 @@
 				this.$router.push({
 					path: `/task-center/task-dtl-list`,
 					query: {
-						id: row.id
+						id: this.taskId
 					}
 				})
 			},

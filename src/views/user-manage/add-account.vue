@@ -50,7 +50,7 @@
       <el-button class="add-role" type="primary" @click="addRole()">+新增</el-button>
     </section>
     <div class="foot">
-      <el-button type="primary" @click="create">{{isEdit == 1?'修改':'创建'}}</el-button>
+      <el-button type="primary" @click="create"  v-preventReClick>{{isEdit == 1?'修改':'创建'}}</el-button>
     </div>
   </div>
 </template>

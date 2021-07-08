@@ -45,7 +45,7 @@
 			</div>
 		</section>
 		<div class="footer-btn">
-			<el-button type="primary" @click="saveGood()">保存商品</el-button>
+			<el-button type="primary" @click="saveGood()" v-preventReClick>保存商品</el-button>
 			<el-button @click="cancel()">取消</el-button>
 		</div>
 		<el-dialog width="900px" :visible="dialogVisible" @close="dialogVisible = false">
@@ -62,32 +62,6 @@
 	export default {
 		data() {
 			return {
-				form: {
-					brandId: '',
-					date: '',
-					name: '',
-					progress: '',
-					shopName: '',
-					isFeed: '',
-					account: '',
-					accountName: '',
-					companyName: '',
-					linkId: '',
-					orderNo: '',
-					orderCode: '',
-					expressNo: '',
-					taskFeed: '',
-					receive: '',
-					noReceive: '',
-					imageUrl: '',
-					fileList: [{
-						name: 'food.jpeg',
-						url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-					}, {
-						name: 'food2.jpeg',
-						url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-					}]
-				},
 				taskRecords: '',
 				taskId: '',
 				taskRecordDetailBasicVOs: [],
