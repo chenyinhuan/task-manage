@@ -102,7 +102,7 @@
 				this.$router.push({
 					path: '/task-center/add-record',
 					query: {
-						id: this.taskId
+						taskId: this.taskId
 					}
 				})
 			},
@@ -110,12 +110,22 @@
 				if(type == 'scan') {
 					localStorage.setItem('taskDtl', JSON.stringify({list: this.list[index],tableColumn: this.tableColumn}))
 				}
-				this.$router.push({
-					path: type == 'scan' ? '/task-center/task-dtl' : '/task-center/add-record',
-					query: {
-						id: this.list[index].id
-					}
-				})
+				if(type == 'scan') {
+					this.$router.push({
+						path: '/task-center/task-dtl',
+						query: {
+							id: this.list[index].id
+						}
+					})
+				}else {
+					this.$router.push({
+						path: '/task-center/add-record',
+						query: {
+							taskId: this.list[index].id
+						}
+					})
+				}
+				
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 <template>
 	<div id="addRecord">
 		<section class="hd">
-			<p>新增任务/编辑任务</p>
+			<p>{{isEdit==1?'编辑任务':'新增任务'}}</p>
 		</section>
 		<section class="container">
 			<div class="content">
@@ -69,12 +69,13 @@
 				uploadItem: '',
 				dialogVisible: false,
 				url: '',
-        showValidate: false
+				showValidate: false,
+				isEdit: 0
 			}
 		},
 		created() {
       this.showValidate = false;
-			if (this.$route.query.id) this.taskId = this.$route.query.id;
+			if (this.$route.query.taskId) this.taskId = this.$route.query.taskId;
 			let params = {
 				taskId: this.taskId
 			}
