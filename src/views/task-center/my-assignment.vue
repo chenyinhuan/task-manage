@@ -62,7 +62,7 @@
 					<p>还没有记录～</p>
 				</div>
 			</div>
-			<span slot="footer" class="dialog-footer">
+			<span slot="footer" class="dialog-footer" style="border-top: 0px;">
 				<el-button @click="dialogVisible = false">取 消</el-button>
 				<el-button type="primary" @click="confirmSelected">确 定</el-button>
 			</span>
@@ -81,7 +81,7 @@
 					value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
 				</el-date-picker>
 			</div>
-			<span slot="footer" class="dialog-footer" style="border: 0px;">
+			<span slot="footer" class="dialog-footer" style="border-top: 0px;">
 				<el-button @click="timeDialog = false">取 消</el-button>
 				<el-button type="primary" @click="confirmSelected">确 定</el-button>
 			</span>
