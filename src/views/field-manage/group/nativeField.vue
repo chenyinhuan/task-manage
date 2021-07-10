@@ -52,7 +52,7 @@
     </section>
     <section>
       <p>字段描述</p>
-      <div style="width: 420px;">
+      <div style="width: 440px;">
         <el-input :autosize="true" type="textarea" placeholder="请输入描述" v-model="form.description" maxlength="200"
           show-word-limit>
         </el-input>
@@ -288,7 +288,7 @@
       }
 
       .el-select {
-        width: 181px;
+        width: 160px;
         height: 32px;
         border-radius: 4px;
         margin-bottom: 32px;

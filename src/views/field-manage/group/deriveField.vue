@@ -23,7 +23,7 @@
 		</section>
 		<section>
 			<p>字段描述</p>
-			<div style="width: 420px;">
+			<div style="width: 440px;">
 				<el-input :autosize="true" type="textarea" placeholder="请输入描述" v-model="form.description"
 					maxlength="200" show-word-limit>
 				</el-input>
@@ -181,7 +181,7 @@
 				<div class="options">
 					<div style="position: relative;">
 						<h4>原生字段1:</h4>
-						<el-select v-model="form.nativeField1" filterable placeholder="原生字段1" @change="$forceUpdate()">
+						<el-select v-model="form.nativeField1" filterable placeholder="选择一个原生字段作为请求值" @change="$forceUpdate()">
 							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
 								:value="item.id"></el-option>
 						</el-select>
@@ -191,7 +191,7 @@
 					<span class="el-icon-connection" style="margin: 30px 10px 0"></span>
 					<div style="position: relative;">
 						<h4>关联接口请求参数:</h4>
-						<el-select v-model="form.fieldStartId" filterable placeholder="关联接口请求参数："
+						<el-select v-model="form.fieldStartId" filterable placeholder="选择请求参数"
 							@change="$forceUpdate()">
 							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
 								:value="item.id"></el-option>
@@ -203,7 +203,7 @@
 				<div class="options">
 					<div style="position: relative;">
 						<h4>原生字段2:</h4>
-						<el-select v-model="form.nativeField2" filterable placeholder="原生字段2" @change="$forceUpdate()">
+						<el-select v-model="form.nativeField2" filterable placeholder="选择另一个原生字段组成联合请求值" @change="$forceUpdate()">
 							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
 								:value="item.id" :disabled="item.id == form.nativeField1"></el-option>
 						</el-select>
@@ -211,7 +211,7 @@
 					<span class="el-icon-connection" style="margin: 30px 10px 0"></span>
 					<div style="position: relative;">
 						<h4>关联接口请求参数:</h4>
-						<el-select v-model="form.nativeField2" filterable placeholder="关联接口请求参数："
+						<el-select v-model="form.nativeField2" filterable placeholder="选择请求参数"
 							@change="$forceUpdate()">
 							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
 								:value="item.id"></el-option>
@@ -223,7 +223,7 @@
 				<div class="options">
 					<div style="position: relative;">
 						<h4>衍生字段关联返回参数:</h4>
-						<el-select v-model="form.nativeField" filterable placeholder="原生字段2" @change="$forceUpdate()">
+						<el-select v-model="form.nativeField" filterable placeholder="选择返回参数" @change="$forceUpdate()">
 							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
 								:value="item.id" :disabled="item.id == form.nativeField1"></el-option>
 						</el-select>
@@ -613,7 +613,7 @@
 			}
 
 			.el-input {
-				width: 181px;
+				width: 160px;
 				height: 32px;
 				border-radius: 4px;
 				margin-bottom: 0;
@@ -731,7 +731,7 @@
 			}
 
 			.el-select {
-				width: 181px;
+				width: 160px;
 				height: 32px;
 				border-radius: 4px;
 				margin-bottom: 32px;
