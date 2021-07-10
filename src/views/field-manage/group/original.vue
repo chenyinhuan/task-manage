@@ -29,7 +29,7 @@
 		</el-pagination>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
-			<p>还没有原字段～</p>
+			<p>还没有原生字段～</p>
 		</div>
 	</div>
 </template>
