@@ -170,7 +170,7 @@
 				<div class="options">
 					<div style="position: relative;">
 						<h4>选择接口:</h4>
-						<el-select v-model="form.apiId" filterable placeholder="选择接口" @change="$forceUpdate()">
+						<el-select v-model="form.apiId" filterable placeholder="选择关联接口" @change="$forceUpdate()">
 							<el-option v-for="(item,index) in apiList" :key="index" :label="item.fieldName"
 								:value="item.id"></el-option>
 						</el-select>
