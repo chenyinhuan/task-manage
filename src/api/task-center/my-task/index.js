@@ -7,12 +7,6 @@ import api from '@/api/index';
 export const getMyTaskList = (params) => api.post(`/task-admin/task/tk/user/page?page=${params.page}&limit=${params.limit}`, params);
 
 /**
- * 我的任务-新增任务记录
- * @params params
- */
-export const saveTaskRecord = (params) => api.post(`/task-admin/task/tk/record/saveTaskRecord`, params);
-
-/**
  * 我的任务-任务记录
  * @params params
  */
@@ -23,12 +17,6 @@ export const getRecordList = (params) => api.post(`/task-admin/task/tk/record/re
  * @params params
  */
 export const getTaskTplField = (params) => api.post(`/task-admin/task/task-admin/tasktpl/field/list/${params.taskTplId}`, params);
-
-/**
- * 获取任务模板字段列表
- * @params params
- */
-export const getRecordListInputs = (params) => api.post(`/task-admin/task/tk/record/listInputs/${params.taskId}`, params);
 
 /**
  * 我的任务页：任务指标情况
@@ -53,3 +41,9 @@ export const countRepo = (params) => api.post(`/task-admin/task/tk/repo/page/cou
  * @params params
  */
 export const countTaskCenter = (params) => api.post(`/task-admin/task/tk/user/taskcenter/count`, params);
+
+/**
+ * 添加上级评论
+ * @params params
+ */
+export const saveComment = (params) => api.post(`/task-admin/task/tk/sender/task/comment/${params.id}/${params.comment}`, params);

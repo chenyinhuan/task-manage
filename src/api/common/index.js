@@ -35,3 +35,18 @@ export const getMenuById = (params) => api.post(`/task-admin/sys/menu/info/${par
  * @params params
  */
 export const upload = (params) => api.post(`/task-admin/sys/oss/upload`, params,{ headers: { 'Content-Type': 'multipart/form-data' } })
+
+/**
+/**
+ * 导入统一方法
+ * @param params
+ * @returns {*}
+ */
+export function importExcel (params) {
+  return api({
+    url:`/task-admin/sys/streamer/import`,
+    method: 'post',
+    data:params,
+    // responseType: 'blob'
+  }).then(res => res);
+}

@@ -208,10 +208,10 @@
 			getCount() {
 				countRepo().then(res => {
 					if(res.code ==0) {
-						this.countList[0].number = res.taskCenterCount.taskInProcessCount;
-						this.countList[1].number = res.taskCenterCount.taskSendCount;
-						this.countList[2].number = res.taskCenterCount.taskCompletePercent;
-						this.countList[3].number = res.taskCenterCount.taskUserCount;
+						this.countList[0].number = res.senderCount.taskInProcessCount;
+						this.countList[1].number = res.senderCount.taskSendCount;
+						this.countList[2].number = res.senderCount.taskCompletePercent;
+						this.countList[3].number = res.senderCount.taskUserCount;
 					}
 				})
 			},

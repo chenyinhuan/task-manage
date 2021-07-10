@@ -7,13 +7,20 @@
 			</div>
 			<div class="upload">
 				<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
-					:on-exceed="handleExceed">
+					:on-exceed="handleChange">
 					<el-button class="excel" size="small">Excel模版</el-button>
 				</el-upload>
-				<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
-					:on-exceed="handleExceed">
-					<el-button size="small" type="primary">导入主播名单</el-button>
-				</el-upload>
+        <el-upload
+          ref="upload"
+          class="upload-demo"
+          :action="uploadUrl"
+          :on-change="handleChange"
+          :show-file-list="false"
+          :limit="1"
+          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+          :auto-upload="false">
+          <el-button size="small" type="primary">导入主播名单</el-button>
+        </el-upload>
 				<el-button size="small" type="primary" @click="addAnchor">新增主播</el-button>
 			</div>
 		</section>
@@ -21,17 +28,13 @@
     @selection-change="handleSelectionChange"
     @row-click="rowSelect"
     v-if="tableData.length>0">
-    <el-table-column
+      <el-table-column
           type="selection"
           width="55">
         </el-table-column>
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
-					<div v-if="item.slot && item.prop=='weight'" class="percent">
-						<div class="dot" :class="[scope.$index == 0?'green':'',scope.$index == 1?'grey':'']"></div>
-						<span> {{scope.$index == 1?'未上架':'正常'}}</span>
-					</div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="text" @click="editItem(scope.row)">编辑</el-button>
 						<el-button type="text" @click="deleteItem(scope.row)">删除</el-button>
@@ -40,18 +43,18 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-button class="associated" type="primary"  v-preventReClick>保存关联</el-button>
+		<el-button class="associated" type="primary"  v-if="tableData.length>0" @click="saveAssociated" v-preventReClick>保存关联</el-button>
 		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
 			:current-page.sync="currentPage" :page-size="limit" layout="prev, pager, next, jumper" :total="total">
 		</el-pagination>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
-			<p>还没有任务明细～</p>
+			<p>还没有主播～</p>
 		</div>
 		<el-dialog class="add-dialog" :title="isEdit?'编辑主播':'新增主播'" :visible.sync="addDialog" width="782px" :before-close="handleClose">
 			<div class="add">
-				<el-input v-model="name"></el-input>
-				<span v-if="tip" class="error">主播名称已存在!</span>
+				<el-input v-model="name" placeholder="输入主播名称"></el-input>
+				<span v-if="tip" class="error">{{message}}</span>
 				<div slot="footer" class="dialog-footer">
 					<el-button type="primary" @click="confirm">确 定</el-button>
 				</div>
@@ -60,31 +63,16 @@
 	</div>
 </template>
 <script>
-  import {} from '@/api/user-manage/account/anchor.js'
+  import {importExcel} from '@/api/common/index.js'
+  import {getAnchorList, delAnchor, addAnchor, updateAnchor, saveAssociatedAnchor} from '@/api/user-manage/account/anchor.js'
 	export default {
 		data() {
 			return {
-				tableData: [{
-					date: '2016-05-02',
-					userName: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}, {
-					date: '2016-05-04',
-					userName: '王小虎',
-					address: '上海市普陀区金沙江路 1517 弄'
-				}, {
-					date: '2016-05-01',
-					userName: '王小虎',
-					address: '上海市普陀区金沙江路 1519 弄'
-				}, {
-					date: '2016-05-03',
-					userName: '王小虎',
-					address: '上海市普陀区金沙江路 1516 弄'
-				}],
+				tableData: [],
 				tableColumn: [ // 表格列数据
 					{
 						label: '主播名称',
-						prop: 'userName',
+						prop: 'name ',
 					},
 					{
 						label: '关联账号',
@@ -92,11 +80,11 @@
 					},
 					{
 						label: '创建人',
-						prop: 'explain',
+						prop: 'createUser',
 					},
 					{
-						label: '创建人/创建时间',
-						prop: 'weight'
+						label: '创建时间',
+						prop: 'createTime'
 					},
 					{
 						label: '操作',
@@ -113,11 +101,13 @@
 				name: '',
 				tip: false,
         isEdit: false,
-        currentRow: ''
+        currentRow: '',
+        uploadUrl: `${window.$globalConfig.API_BASE_Tabel}/task-admin/sys/streamer/import`,
+        message: '主播名称已存在!'
 			}
 		},
 		created() {
-
+      this.init()
 		},
 		mounted() {
 
@@ -126,11 +116,24 @@
 
 		},
 		methods: {
-			handleExceed() {
-
-			},
       init() {
-
+        let params = {
+          "name": this.keyword,
+          "page": this.currentPage,
+          "limit": this.limit,
+          "orderBy":null,
+          "sort":true
+        }
+        getAnchorList(params).then(res => {
+          if(res.code == 0) {
+            this.tableData = res.page.list;
+            this.total = res.page.total;
+          }else {
+            this.isShow = true;
+          }
+        }).catch(e => {
+          this.isShow = true;
+        })
       },
 			handleSizeChange(val) {
         this.limit = val;
@@ -147,11 +150,42 @@
         this.init();
 			},
 			addAnchor() {
+        this.isEdit = false;
 				this.addDialog = true;
 			},
 			confirm() {
-				this.tip = true;
-				this.handleClose();
+        if(this.isEdit) {
+          let params = {
+            id: this.currentRow.id,
+            name: this.name
+          }
+          updateAnchor(params).then(res => {
+            this.tip = false;
+            if(res.code == 0) {
+              this.$message.success('修改成功！');
+              this.handleClose();
+            }
+            else {
+              this.message = res.msg;
+              this.tip = true;
+            }
+          })
+        }else {
+          let params = {
+            name: this.name
+          }
+          addAnchor(params).then(res => {
+            this.tip = false;
+            if(res.code == 0) {
+              this.$message.success('新增成功！');
+              this.handleClose();
+            }else {
+              this.message = res.msg;
+              this.tip = true;
+            }
+          })
+        }
+
 			},
       editItem(item) {
         this.isEdit = true;
@@ -165,7 +199,13 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-
+          let params = {
+            id: item.id
+          }
+          delAnchor(params).then(res => {
+            if(res.code == 0) this.$message.success('保存成功！');
+            else this.$message.warning(res.msg)
+          })
         })
       },
 			handleClose() {
@@ -179,6 +219,32 @@
       },
       rowSelect(row) {
           this.$refs.table.toggleRowSelection(row);
+      },
+      handleChange(file){
+      		let files = file.raw;
+      		let fileName = file.name;
+      		if(fileName == ""){
+      		  this.$message.warning('请选择要上传的文件！');
+      		  return false
+      		}
+      		let fileFormData = new FormData();
+      		fileFormData.append('file', files);//filename是键，file是值，就是要传的文件，test.zip是要传的文件名
+      		importExcel(fileFormData).then((res) => {
+      		  console.log(res)
+
+      		})
+      		this.$refs.upload.clearFiles()
+      },
+      saveAssociated() {
+        let ids = [];
+        let params = {
+          ids: ids,
+          userId: this.$route.query.userId
+        }
+        saveAssociatedAnchor(params).then(res => {
+          if(res.code == 0) this.$message.success('保存成功');
+          else this.$message.warning(res.msg);
+        })
       }
 		}
 	}

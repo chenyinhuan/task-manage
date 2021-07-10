@@ -58,7 +58,7 @@
 	import {
 		getRecordListInputs,
 		saveTaskRecord
-	} from '@/api/task-center/my-task/index.js'
+	} from '@/api/task-center/my-task/record.js'
 	export default {
 		data() {
 			return {
