@@ -171,8 +171,8 @@
 					<div style="position: relative;">
 						<h4>选择接口:</h4>
 						<el-select v-model="form.apiId" filterable placeholder="选择关联接口" @change="$forceUpdate()">
-							<el-option v-for="(item,index) in apiList" :key="index" :label="item.fieldName"
-								:value="item.id"></el-option>
+							<el-option v-for="(item,index) in fieldApiList" :key="index" :label="item.apiName"
+								:value="item.apiId"></el-option>
 						</el-select>
 						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
 							v-if="showValidate && !form.apiId">选择字段</span>
@@ -193,11 +193,11 @@
 						<h4>关联接口请求参数:</h4>
 						<el-select v-model="form.fieldStartId" filterable placeholder="选择请求参数"
 							@change="$forceUpdate()">
-							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-								:value="item.id"></el-option>
+							<el-option v-for="(item,index) in fieldApiList" :key="index" :label="item.apiName"
+								:value="item.apiId"></el-option>
 						</el-select>
 						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-							v-if="showValidate && !form.fieldStartId">选择字段</span>
+							v-if="showValidate && !form.fieldStartId">选择关联接口请求参数</span>
 					</div>
 				</div>
 				<div class="options">
@@ -213,11 +213,11 @@
 						<h4>关联接口请求参数:</h4>
 						<el-select v-model="form.nativeField2" filterable placeholder="选择请求参数"
 							@change="$forceUpdate()">
-							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-								:value="item.id"></el-option>
+							<el-option v-for="(item,index) in fieldApiList" :key="index" :label="item.apiName"
+								:value="item.apiId"></el-option>
 						</el-select>
 						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-							v-if="showValidate && !form.fieldStartId">选择字段</span>
+							v-if="showValidate && !form.nativeField2">选择关联接口请求参数</span>
 					</div>
 				</div>
 				<div class="options">
@@ -228,7 +228,7 @@
 								:value="item.id" :disabled="item.id == form.nativeField1"></el-option>
 						</el-select>
 						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-							v-if="showValidate && !form.fieldStartId">选择字段</span>
+							v-if="showValidate && !form.nativeField">选择衍生字段关联返回参数</span>
 					</div>
 				</div>
 			</div>
@@ -246,7 +246,7 @@
 		getNativeEnums,
 		saveComplex,
 		getComplexcDetail,
-		updateComplex
+		updateComplex,getFieldApiList
 	} from '@/api/filed-manage/index.js'
 	export default {
 		name: "deriveField",
@@ -278,6 +278,7 @@
 				],
 				nativeList: [],
 				nativeList1: [],
+        fieldApiList: [],
 				options: [{
 						value: 1,
 						label: '四则运算'
@@ -364,6 +365,7 @@
 			if (this.id) {
 				this.init()
 			}
+
 		},
 		methods: {
 			init() {
@@ -446,7 +448,7 @@
 							this.nativeList = res.fields;
 						}
 					})
-				} else {
+				} else if(this.form.ruleType == 2){
 					let params = {
 						"dataTypes": [], //数据类型，为空时取全部
 						"formTypes": [1, 2, 3], //表单类型，为空时取全部
@@ -457,7 +459,22 @@
 							this.nativeList = res.fields;
 						}
 					})
-				}
+				}else{
+          let params = {
+            "dataTypes": [], //数据类型，为空时取全部
+            "formTypes": [1, 2, 3], //表单类型，为空时取全部
+            "type": '1' //字段类型1：原生2衍生，为空时取全部
+          }
+          getNativeList(params).then(res => {
+            if (res.code == 0) {
+              this.nativeList = res.fields;
+            }
+          })
+          getFieldApiList().then(res=>{
+            console.log(res.apis)
+              this.fieldApiList = res.apis
+          })
+        }
 			},
 			save() {
 				if (this.form.fieldName == '' || this.form.name == '' || this.form.ruleType == '' || this.checkFieldName ||

@@ -38,7 +38,7 @@ export const getPageList = (params) => api.post(`/task-admin/task/field/page?pag
 
  /**
  *  编辑原生字段
- * @params 
+ * @params
  */
   export const updateBasic = (params) => api.post(`/task-admin/task/field/basic/update`, params)
 
@@ -59,4 +59,8 @@ export const getPageList = (params) => api.post(`/task-admin/task/field/page?pag
  * @params id
  */
     export const deleteField = (params) => api.post(`/task-admin/task/field/del/${params.id}`, params)
-    
+/**
+ * 获取接口名称和入参、回参
+ * @params id
+ */
+export const getFieldApiList = (params) => api.post(`/task-admin/task/field/api/list`, params)
