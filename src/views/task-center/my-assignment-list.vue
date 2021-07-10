@@ -16,7 +16,7 @@
             <el-button type="primary" @click.stop="go(scope.row)">查看详情</el-button>
           </div>
           <div v-if="item.slot && item.prop == 'leaderComment'">
-            <el-input v-model="scope.row.leaderComment" maxlength="200" @blur="save(scope.row)"></el-input>
+            <el-input v-model="scope.row.leaderComment" maxlength="200" ></el-input>
           </div>
           <div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
         </template>
@@ -35,7 +35,6 @@
   import {
     getTaskDetail
   } from '@/api/task-repository/index'
-  import {saveComment} from '@/api/task-center/my-task/index.js'
   export default {
     data() {
       return {
@@ -120,16 +119,6 @@
           query: {
             id: row.taskId
           }
-        })
-      },
-      save(item) {
-        let params = {
-          id: item.id,
-          comment: item.leaderComment
-        }
-        saveComment(params).then(res => {
-          if(res.code == 0) this.$message.success('保存成功！');
-          else this.$message.warning(res.msg);
         })
       }
     }

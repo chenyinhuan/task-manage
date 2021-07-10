@@ -35,6 +35,9 @@
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
+          <div v-if="item.slot && item.prop=='userInfoVOS'">
+            <div v-for="citem in scope.row.userInfoVOS" :key="citem.userName">{{citem.userName}}/{{citem.mobile}}</div>
+          </div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="text" @click="editItem(scope.row)">编辑</el-button>
 						<el-button type="text" @click="deleteItem(scope.row)">删除</el-button>
@@ -53,8 +56,10 @@
 		</div>
 		<el-dialog class="add-dialog" :title="isEdit?'编辑主播':'新增主播'" :visible.sync="addDialog" width="782px" :before-close="handleClose">
 			<div class="add">
-				<el-input v-model="name" placeholder="输入主播名称"></el-input>
+				<el-input :class="[showValidate && name == ''?'validate-empty':'']"
+         v-model="name" placeholder="输入主播名称"></el-input>
 				<span v-if="tip" class="error">{{message}}</span>
+        <span class="error" style="color: #FF8C00;" v-if="showValidate && name == '' && tip == false">{{showValidate}}{{tip == false}}请输入主播名称</span>
 				<div slot="footer" class="dialog-footer">
 					<el-button type="primary" @click="confirm">确 定</el-button>
 				</div>
@@ -72,11 +77,12 @@
 				tableColumn: [ // 表格列数据
 					{
 						label: '主播名称',
-						prop: 'name ',
+						prop: 'name',
 					},
 					{
 						label: '关联账号',
-						prop: 'specName',
+						prop: 'userInfoVOS',
+            slot: true
 					},
 					{
 						label: '创建人',
@@ -103,7 +109,9 @@
         isEdit: false,
         currentRow: '',
         uploadUrl: `${window.$globalConfig.API_BASE_Tabel}/task-admin/sys/streamer/import`,
-        message: '主播名称已存在!'
+        message: '主播名称已存在!',
+        checkedData: [],
+        showValidate: false
 			}
 		},
 		created() {
@@ -145,7 +153,6 @@
         this.init();
 			},
 			search() {
-				console.log(this.keyword)
         this.currentPage = 1;
         this.init();
 			},
@@ -154,13 +161,15 @@
 				this.addDialog = true;
 			},
 			confirm() {
+        this.tip = false;
+        if(this.name == '') return this.showValidate = true;
+        else this.showValidate = false;
         if(this.isEdit) {
           let params = {
             id: this.currentRow.id,
             name: this.name
           }
           updateAnchor(params).then(res => {
-            this.tip = false;
             if(res.code == 0) {
               this.$message.success('修改成功！');
               this.handleClose();
@@ -179,6 +188,8 @@
             if(res.code == 0) {
               this.$message.success('新增成功！');
               this.handleClose();
+              this.currentPage = 1;
+              this.init();
             }else {
               this.message = res.msg;
               this.tip = true;
@@ -203,7 +214,11 @@
             id: item.id
           }
           delAnchor(params).then(res => {
-            if(res.code == 0) this.$message.success('保存成功！');
+            if(res.code == 0) {
+              this.$message.success('删除成功！');
+              this.currentPage = 1;
+              this.init();
+            }
             else this.$message.warning(res.msg)
           })
         })
@@ -215,7 +230,7 @@
 				this.name = '';
 			},
       handleSelectionChange(val) {
-
+        this.checkedData = val;
       },
       rowSelect(row) {
           this.$refs.table.toggleRowSelection(row);
@@ -228,21 +243,30 @@
       		  return false
       		}
       		let fileFormData = new FormData();
-      		fileFormData.append('file', files);//filename是键，file是值，就是要传的文件，test.zip是要传的文件名
+      		fileFormData.append('multipartFile', files);//filename是键，file是值，就是要传的文件，test.zip是要传的文件名
       		importExcel(fileFormData).then((res) => {
-      		  console.log(res)
-
+            if(res.code == 0) this.$message.success('导入成功！');
+            else this.$message.warning(res.msg);
       		})
       		this.$refs.upload.clearFiles()
       },
       saveAssociated() {
+        if(this.checkedData.length == 0) return this.$message.warning('请选择任意一条数据');
         let ids = [];
+        if(this.checkedData.length > 0) {
+          ids = this.checkedData.map(item => {
+            return item.id
+          })
+        }
         let params = {
           ids: ids,
           userId: this.$route.query.userId
         }
         saveAssociatedAnchor(params).then(res => {
-          if(res.code == 0) this.$message.success('保存成功');
+          if(res.code == 0) {
+            this.$message.success('保存关联成功');
+            this.init()
+          }
           else this.$message.warning(res.msg);
         })
       }

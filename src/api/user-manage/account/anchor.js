@@ -16,7 +16,7 @@ export const delAnchor = (params) => api.post(`/task-admin/sys/streamer/updateSt
  * 新增主播
  * @params params
  */
-export const addAnchor = (params) => api.post(`/task-admin/sys/streamer/addStreamer`, params);
+export const addAnchor = (params) => api.post(`/task-admin/sys/streamer/addStreamer?name=${params.name}`, params);
 
 /**
  * 编辑主播名

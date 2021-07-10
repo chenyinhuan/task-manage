@@ -55,7 +55,7 @@
 							</template>
 							<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 						</template>
-						
+
 					</el-table-column>
 				</el-table>
 				<div class="tempty" style="text-align: center" v-if="tableData1.length==0">
@@ -81,7 +81,7 @@
 					value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
 				</el-date-picker>
 			</div>
-			<span slot="footer" class="dialog-footer">
+			<span slot="footer" class="dialog-footer" style="border: 0px;">
 				<el-button @click="timeDialog = false">取 消</el-button>
 				<el-button type="primary" @click="confirmSelected">确 定</el-button>
 			</span>
@@ -136,11 +136,13 @@
 					{
 						label: '考核结束时间',
 						prop: 'endTime',
+            width: 160
 					},
 					{
 						label: '延期后考核结束时间',
 						prop: 'delayTime',
-						slot: true
+						slot: true,
+            width: 160
 					},
 				],
 				tableColumn: [ // 表格列数据
@@ -220,7 +222,7 @@
 				this.timeDialog = true
 			},
 			editTime(item) {
-				this.newEndTime = item.delayTime
+				this.newEndTime = item.delayTime  || '2021-07-10'
 				this.warningDialog = true
 			},
 			editRow(item) {

@@ -11,3 +11,21 @@ export const saveTaskRecord = (params) => api.post(`/task-admin/task/tk/record/s
  * @params params
  */
 export const getRecordListInputs = (params) => api.post(`/task-admin/task/tk/record/listInputs/${params.taskId}`, params);
+
+/**
+ * 更新记录
+ * @params params
+ */
+export const updateTaskRecord = (params) => api.post(`/task-admin/task/tk/record/updateTaskRecord`, params);
+
+/**
+ * 删除记录
+ * @params params
+ */
+export const removeTaskRecord = (params) => api.post(`/task-admin/task/tk/record/records/remove/${params.id}`, params);
+
+/**
+ * 获取某一条记录详情
+ * @params params
+ */
+export const getTaskRecord = (params) => api.post(`/task-admin/task/tk/record/getTaskRecord/${params.id}`, params);

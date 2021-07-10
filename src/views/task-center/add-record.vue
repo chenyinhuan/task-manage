@@ -57,7 +57,9 @@
 <script>
 	import {
 		getRecordListInputs,
-		saveTaskRecord
+		saveTaskRecord,
+    getTaskRecord,
+    updateTaskRecord
 	} from '@/api/task-center/my-task/record.js'
 	export default {
 		data() {
@@ -70,22 +72,37 @@
 				dialogVisible: false,
 				url: '',
 				showValidate: false,
-				isEdit: 0
+				isEdit: 0,
+        id: ''
 			}
 		},
 		created() {
       this.showValidate = false;
 			if (this.$route.query.taskId) this.taskId = this.$route.query.taskId;
-			let params = {
-				taskId: this.taskId
-			}
-			getRecordListInputs(params).then(res => {
-				if (res.code == 0) {
-					this.taskRecords = JSON.parse(JSON.stringify(res.taskRecords))
-					this.taskRecordDetailBasicVOs = JSON.parse(JSON.stringify(res.taskRecords
-						.taskRecordDetailBasicVOs))
-				}
-			})
+      if(this.$route.query.id) {
+        this.isEdit = 1;
+        this.id = this.$route.query.id;
+      }
+      if(this.isEdit == 1) {// 编辑
+        let params = {
+          id: this.id
+        }
+        getTaskRecord(params).then(res => {
+
+        })
+      }else {// 新增
+        let params = {
+        	taskId: this.taskId
+        }
+        getRecordListInputs(params).then(res => {
+        	if (res.code == 0) {
+        		this.taskRecords = JSON.parse(JSON.stringify(res.taskRecords))
+        		this.taskRecordDetailBasicVOs = JSON.parse(JSON.stringify(res.taskRecords
+        			.taskRecordDetailBasicVOs))
+        	}
+        })
+      }
+
 		},
 		mounted() {
 
@@ -217,7 +234,7 @@
 					}
 
 					.el-select {
-						width: 105px;
+						width: 130px;
 
 						>>>.el-input__inner {
 							border: 0px;

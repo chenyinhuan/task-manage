@@ -13,7 +13,7 @@
 					<div v-if="item.slot && item.fieldId=='opt'">
 						<el-button type="text" @click="go('scan', scope.row, scope.$index)">查看</el-button>
 						<el-button type="text" @click="go('edit', scope.row, scope.$index)">编辑</el-button>
-						<el-button type="text">删除</el-button>
+						<el-button type="text" @click="deleteItem(scope.row)">删除</el-button>
 					</div>
 					<div v-if="item.slot && item.fieldId=='createTime'">{{ scope.row.createTime }}</div>
 					<div v-if="!item.slot">{{ scope.row[item.fieldId] }}</div>
@@ -25,7 +25,7 @@
 		</el-pagination>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
-			<p>还没有任务明细～</p>
+			<p>还没有任务详情～</p>
 		</div>
 	</div>
 </template>
@@ -33,6 +33,7 @@
 	import {
 		getRecordList
 	} from '@/api/task-center/my-task/index.js'
+  import {removeTaskRecord} from '@/api/task-center/my-task/record.js'
 	export default {
 		data() {
 			return {
@@ -78,10 +79,12 @@
 								}
 							}
 							json.createTime = item.createTime;
+              json.id = item.id;
 							tableData.push(json)
 						}
 						this.tableData = tableData;
-					}
+            if(this.tableData.length == 0) this.isShow = true;
+					}else this.isShow = true;
 				})
 			}
 		},
@@ -121,12 +124,33 @@
 					this.$router.push({
 						path: '/task-center/add-record',
 						query: {
-							taskId: this.list[index].id
+							taskId: this.taskId,
+              id: this.list[index].id,
 						}
 					})
 				}
-				
-			}
+
+			},
+      deleteItem(item) {
+        console.log(item)
+        this.$confirm(`确定删除该记录吗？`, {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let params = {
+            id: item.id
+          }
+          removeTaskRecord(params).then(res => {
+            if(res.code == 0) {
+              this.$message.success('删除成功！');
+              this.currentPage = 1;
+              this.init();
+            }
+            else this.$message.warning(res.mag);
+          })
+        })
+      }
 		}
 	}
 </script>
