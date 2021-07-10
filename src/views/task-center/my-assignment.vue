@@ -229,8 +229,13 @@
 				getTaskTargetList({
 					taskId: item.id
 				}).then(res => {
-					if(res.code != 500) {
-						if (res.taskTarget.page) this.tableData1 = res.taskTarget.page.list
+					if(res.code == 0) {
+            this.tableData1 = [];
+						if (res.taskTarget.page &&  res.taskTarget.page.list.length>0) {
+              res.taskTarget.page.list.forEach(item => {// 只显示进行中和已结束数据，已结束状态数据不能延期
+                if(item.taskTargetState == 2 || item.taskTargetState == 3) this.tableData1.push(item);
+              })
+            }
 					}
 				})
 				this.dialogVisible = true
