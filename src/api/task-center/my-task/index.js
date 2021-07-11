@@ -52,3 +52,9 @@ export const countTaskCenter = (params) => api.post(`/task-admin/task/tk/user/ta
  * @params params
  */
 export const saveComment = (params) => api.post(`/task-admin/task/tk/sender/task/comment/${params.id}/${params.comment}`, params);
+
+/**
+ * 添加上级评论
+ * @params params
+ */
+export const updateDelayTime = (params) => api.post(`/task-admin/task/tk/target/sendUser/delayTime/${params.taskTargetId}`, params);

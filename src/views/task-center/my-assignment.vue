@@ -100,7 +100,8 @@
 	} from '@/api/task-repository/index'
 	import {
 		getTaskTargetListDialog,
-		countRepo
+		countRepo,
+    updateDelayTime
 	} from '@/api/task-center/my-task/index'
 	export default {
 		data() {
@@ -121,6 +122,7 @@
 					{
 						label: '任务指标名称',
 						prop: 'taskTplTargeName',
+            width: 160
 					},
 					{
 						label: '周期考核',
@@ -138,13 +140,13 @@
 					{
 						label: '考核结束时间',
 						prop: 'endTime',
-            width: 160
+            width: 180
 					},
 					{
 						label: '延期后考核结束时间',
 						prop: 'delayTime',
 						slot: true,
-            width: 160
+            width: 180
 					},
 				],
 				tableColumn: [ // 表格列数据
@@ -274,8 +276,17 @@
         // 调用修改时间接口
         if(this.newEndTime == '') return this.showValidate = true
         else this.showValidate = false;
-        this.dialogVisible = false;
-        this.timeDialog = false;
+        let params = {
+          taskTargetId: this.currentRow.id,
+          delayTime: this.newEndTime
+        }
+        updateDelayTime(params).then(res => {
+          if(res.code == 0) {
+            this.$message.success('修改成功');
+            this.dialogVisible = false;
+            this.timeDialog = false;
+          }else this.$message.warning(res.msg);
+        })
       },
 			init() {
 				getTaskList(this.searchParams).then(res => {
