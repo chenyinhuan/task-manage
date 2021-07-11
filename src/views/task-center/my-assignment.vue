@@ -50,8 +50,9 @@
 								<span>{{$taskTargetState.find((n) => n.value == scope.row.taskTargetState).label}}</span>
 							</div>
 							<template v-if="item.slot && item.prop == 'delayTime'">
-								<a v-if="scope.row.taskTargetState==2"
-									@click="editTime(scope.row)">{{scope.row.delayTime}}</a>
+								<a v-if="scope.row.taskTargetState==3">{{scope.row.delayTime}}</a>
+                <a style="color: #0079FE;" v-if="scope.row.taskTargetState==2"
+                  	@click="editTime(scope.row)">{{scope.row.delayTime || '延迟时间'}}</a>
 							</template>
 							<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 						</template>
@@ -76,14 +77,15 @@
 			</span>
 		</el-dialog>
 		<el-dialog title="任务指标管理" :visible.sync="timeDialog" width="498px" :before-close="handleClose1">
-			<div class="dialog-content">
-				<el-date-picker v-model="newEndTime" type="datetime" :clearable="false"
+			<div class="dialog-content" style="position: relative;">
+				<el-date-picker v-model="newEndTime" :picker-options="endTimeRule" type="datetime" :clearable="false"
 					value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
 				</el-date-picker>
+        <span style="color: #FF8C00;font-size: 12px;left: 0px;position: absolute;bottom: -22px;" v-if="showValidate && newEndTime == ''" >请选择考核结束时间</span>
 			</div>
 			<span slot="footer" class="dialog-footer" style="border-top: 0px;">
 				<el-button @click="timeDialog = false">取 消</el-button>
-				<el-button type="primary" @click="confirmSelected">确 定</el-button>
+				<el-button type="primary" @click="confirmEdit">确 定</el-button>
 			</span>
 		</el-dialog>
 	</div>
@@ -97,7 +99,7 @@
 		getTaskList
 	} from '@/api/task-repository/index'
 	import {
-		getTaskTargetList,
+		getTaskTargetListDialog,
 		countRepo
 	} from '@/api/task-center/my-task/index'
 	export default {
@@ -194,6 +196,20 @@
 					page: 1,
 					limit: 10
 				},
+        currentRow: '',
+        endTimeRule: {
+          disabledDate: time => {
+            console.log(this.currentRow.endTime)
+            if (this.currentRow.endTime) {
+              return (
+                time.getTime() < new Date(this.currentRow.endTime).getTime()
+              );
+            } else {
+              return time.getTime() + 86400000 < Date.now();
+            }
+          },
+        },
+        showValidate: false
 			}
 		},
 		created() {
@@ -222,11 +238,12 @@
 				this.timeDialog = true
 			},
 			editTime(item) {
-				this.newEndTime = item.delayTime  || '2021-07-10'
+        this.currentRow = item;
+				this.newEndTime = item.delayTime  || ''
 				this.warningDialog = true
 			},
 			editRow(item) {
-				getTaskTargetList({
+				getTaskTargetListDialog({
 					taskId: item.id
 				}).then(res => {
 					if(res.code == 0) {
@@ -253,6 +270,13 @@
 				// 修改时间接口
 				this.dialogVisible = false;
 			},
+      confirmEdit() {
+        // 调用修改时间接口
+        if(this.newEndTime == '') return this.showValidate = true
+        else this.showValidate = false;
+        this.dialogVisible = false;
+        this.timeDialog = false;
+      },
 			init() {
 				getTaskList(this.searchParams).then(res => {
 					this.tableData = res.page.list

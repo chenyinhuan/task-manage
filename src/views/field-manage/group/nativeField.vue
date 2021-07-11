@@ -101,7 +101,7 @@
       }
     },
     created() {
-      if (this.id) {
+      if (this.id && this.$route.query.type == 1) {
         this.init()
       }
     },

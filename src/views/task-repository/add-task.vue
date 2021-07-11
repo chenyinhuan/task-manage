@@ -169,6 +169,8 @@
                     }
                   }
                 }
+                this.form.users = JSON.parse(JSON.stringify(this.selectedData))
+                console.log(this.form.users)
                 let temp = this.$transformDeptUser(JSON.parse(JSON.stringify(res.deptUsers)));
                 let arr = this.$dealingDeptUser(JSON.parse(JSON.stringify(temp)));
                 this.userList = this.deleteChildren(arr);

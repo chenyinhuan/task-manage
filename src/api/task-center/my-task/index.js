@@ -25,6 +25,11 @@ export const getTaskTplField = (params) => api.post(`/task-admin/task/task-admin
 export const getTaskTargetList = (params) => api.post(`/task-admin/task/tk/target/user/page/${params.taskId}`, params);
 
 /**
+ * 任务中心：任务指标-弹窗
+ * @params params
+ */
+export const getTaskTargetListDialog = (params) => api.post(`task-admin/task/tk/target/sendUser/page/${params.taskId}`, params);
+/**
  * 任务中心-日历
  * @params params
  */
