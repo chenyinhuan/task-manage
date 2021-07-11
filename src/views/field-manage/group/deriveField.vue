@@ -170,7 +170,7 @@
 				<div class="options">
 					<div style="position: relative;">
 						<h4>选择接口:</h4>
-						<el-select v-model="form.apiId" filterable placeholder="选择关联接口">
+						<el-select v-model="form.apiId" filterable placeholder="选择关联接口" @change="getParamsLength">
 							<el-option v-for="(item,index) in fieldApiList" :key="index" :label="item.apiName"
 								:value="item.apiId"></el-option>
 						</el-select>
@@ -178,51 +178,29 @@
 							v-if="showValidate && !form.apiId">选择接口</span>
 					</div>
 				</div>
-				<div class="options">
+				<div class="options" v-for="(sItem,sIndex) in paramsList" :key="sIndex">
 					<div style="position: relative;">
-						<h4>原生字段1:</h4>
-						<el-select v-model="form.nativeField1" filterable placeholder="选择一个原生字段作为请求值" @change="$forceUpdate()">
+						<h4>原生字段{{sIndex+1}}:</h4>
+						<el-select v-model="sItem.fieldStartId" filterable placeholder="选择一个原生字段作为请求值" @change="$forceUpdate()">
 							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-								:value="item.id"></el-option>
+								:value="item.id" :disabled="paramsList.find(n=> n.fieldStartId == item.id)?true:false"></el-option>
 						</el-select>
 						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-							v-if="showValidate && !form.nativeField1">选择原生字段1</span>
+							v-if="showValidate && !sItem.fieldStartId">选择原生字段</span>
 					</div>
 					<span class="el-icon-connection" style="margin: 30px 10px 0"></span>
 					<div style="position: relative;">
 						<h4>关联接口请求参数:</h4>
-						<el-select v-model="form.params1" filterable placeholder="选择请求参数"
+						<el-select v-model="sItem.fieldApiId" filterable placeholder="选择请求参数"
 							@change="$forceUpdate()">
 							<el-option v-for="(item,index) in fieldApiList.find(n => n.apiId == form.apiId) ? fieldApiList.find(n => n.apiId == form.apiId).params : []" :key="index" :label="item.apiName"
-								:value="item.id"></el-option>
+								:value="item.id" :disabled="paramsList.find(n=> n.fieldApiId == item.id)?true:false"></el-option>
 						</el-select>
 						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-							v-if="showValidate && !form.params1">选择关联接口请求参数</span>
+							v-if="showValidate && !sItem.fieldApiId">选择关联接口请求参数</span>
 					</div>
 				</div>
-				<div class="options">
-					<div style="position: relative;">
-						<h4>原生字段2:</h4>
-						<el-select v-model="form.nativeField2" filterable placeholder="选择另一个原生字段组成联合请求值" @change="$forceUpdate()">
-							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-								:value="item.id" :disabled="item.id == form.nativeField1"></el-option>
-						</el-select>
-            <span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-                  v-if="showValidate && !form.nativeField2">选择原生字段2</span>
-					</div>
-					<span class="el-icon-connection" style="margin: 30px 10px 0"></span>
-					<div style="position: relative;">
-						<h4>关联接口请求参数:</h4>
-						<el-select v-model="form.params2" filterable placeholder="选择请求参数"
-							@change="$forceUpdate()">
-							<el-option v-for="(item,index) in fieldApiList.find(n => n.apiId == form.apiId) ? fieldApiList.find(n => n.apiId == form.apiId).params : []" :key="index" :label="item.apiName"
-								:value="item.id" :disabled="item.id == form.params1"></el-option>
-						</el-select>
-						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-							v-if="showValidate && !form.params2">选择关联接口请求参数</span>
-					</div>
-				</div>
-				<div class="options">
+				<div class="options" v-if="form.apiId">
 					<div style="position: relative;">
 						<h4>衍生字段关联返回参数:</h4>
 						<el-select v-model="form.responseId" filterable placeholder="选择返回参数" @change="$forceUpdate()">
@@ -281,6 +259,7 @@
 				nativeList: [],
 				nativeList1: [],
         fieldApiList: [],
+        paramsList: [],
 				options: [{
 						value: 1,
 						label: '四则运算'
@@ -376,6 +355,18 @@
 
 		},
 		methods: {
+      getParamsLength(){
+        this.paramsList = []
+        let length = this.fieldApiList.find(n => n.apiId == this.form.apiId).params.length
+        for(var i=0;i<length;i++){
+          this.paramsList.push({
+            apiType: 1,   //1表示参数，2表示reponse
+            fieldApiId: '',  //接口id
+            fieldId: 0,     //不填
+            fieldStartId: '' //原生类型field id
+          })
+        }
+      },
 			init() {
 				getComplexcDetail({
 					id: this.id
@@ -387,11 +378,7 @@
 						this.form.fieldStartId = this.form.complexMahtRuleVOs[0].fieldStartId;
 						this.enums = this.form.complexMahtRuleVOs
 					} else if (this.form.fieldAPIRuleVOS && this.form.fieldAPIRuleVOS.length){
-            this.form.apiId = this.form.fieldAPIRuleVOS[0].apiType
-            this.form.nativeField1 =  this.form.fieldAPIRuleVOS[0].fieldStartId
-            this.form.nativeField2 =  this.form.fieldAPIRuleVOS[1].fieldStartId
-            this.form.params1 =  this.form.fieldAPIRuleVOS[0].fieldApiId
-            this.form.params2 =  this.form.fieldAPIRuleVOS[1].fieldApiId
+            this.paramsList = this.form.fieldAPIRuleVOS.substr(0,this.form.fieldAPIRuleVOS.length-1);
           }else {
 						this.enums = [{
 							logicAction: '',
@@ -581,23 +568,18 @@
 						"type": this.form.type
 					}
 				}else{
-          if (!this.form.apiId || !this.form.nativeField1 || !this.form.nativeField2 || !this.form.params1 || !this.form.params2) return this.showValidate = true
-            let fieldAPIRuleVOS = [
-              {
-                apiType: this.form.apiId,   //1表示参数，2表示reponse
-                fieldApiId: this.form.params1,  //接口id
-                fieldId: '',     //不填
-                fieldStartId: this.form.nativeField1 //原生类型field id
-              },
-              {
-                apiType:this.form.apiId,
-                fieldApiId: this.form.params2,  //接口id
-                fieldId: '', //不填
-                fieldStartId: this.form.nativeField2 //类型为返回数据时不填
-              }
-            ]
+          if (!this.form.apiId) return this.showValidate = true
+          for (let i in this.paramsList) {
+            if (!this.paramsList[i].fieldApiId || !this.paramsList[i].fieldStartId) return this.showValidate = true;
+          }
+          let fieldAPIRuleVOS = JSON.parse(JSON.stringify(this.paramsList))
+          fieldAPIRuleVOS.push( {
+              apiType:2,
+              fieldId: 0,
+              fieldApiId: this.form.responseId,  //接口id
+            })
             params = {
-              "fieldComplexCastRuleVOs": fieldAPIRuleVOS,
+              "fieldAPIRuleVOS": fieldAPIRuleVOS,
               "fieldName": this.form.fieldName,
               "dataType": '', // 暂时不传，如果有限制就随便传一个
               "ruleType": this.form.ruleType,
