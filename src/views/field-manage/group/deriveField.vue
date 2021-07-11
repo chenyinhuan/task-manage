@@ -182,9 +182,8 @@
 					<div style="position: relative;">
 						<h4>原生字段{{sIndex+1}}:</h4>
 						<el-select v-model="sItem.fieldStartId" filterable placeholder="选择一个原生字段作为请求值" @change="$forceUpdate()">
-							<!-- :disabled="form.fieldAPIRuleVOS.find(n=> n.fieldStartId == item.id)?true:false" -->
               <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-								:value="item.id" ></el-option>
+								:value="item.id" :disabled="form.fieldAPIRuleVOS.find(n=> n.fieldStartId == item.id)?true:false"></el-option>
 						</el-select>
 						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
 							v-if="showValidate && !sItem.fieldStartId">选择原生字段</span>
