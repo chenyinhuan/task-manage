@@ -178,7 +178,7 @@
 							v-if="showValidate && !form.apiId">选择接口</span>
 					</div>
 				</div>
-				<div class="options" v-for="(sItem,sIndex) in form.fieldAPIRuleVOS" :key="sIndex">
+				<div class="options" v-for="(sItem,sIndex) in form.fieldAPIRuleVOS" :key="sIndex" v-if="sItem.apiType == 1">
 					<div style="position: relative;">
 						<h4>原生字段{{sIndex+1}}:</h4>
 						<el-select v-model="sItem.fieldStartId" filterable placeholder="选择一个原生字段作为请求值" @change="$forceUpdate()">
@@ -358,13 +358,14 @@
 		},
 		methods: {
       getParamsLength(){
-        this.form.fieldAPIRuleVOS = []
+        this.form.fieldAPIRuleVOS = [];
+        this.form.responseId = '';
         let length = this.fieldApiList.find(n => n.apiId == this.form.apiId).params.length
         for(var i=0;i<length;i++){
           this.form.fieldAPIRuleVOS.push({
             apiType: 1,   //1表示参数，2表示reponse
             fieldApiId: '',  //接口id
-            fieldId: 0,     //不填
+            fieldId: null,     //不填
             fieldStartId: '' //原生类型field id
           })
         }
@@ -382,6 +383,11 @@
 					} else if (this.form.fieldAPIRuleVOS && this.form.fieldAPIRuleVOS.length){
             // this.form.fieldAPIRuleVOS = this.form.fieldAPIRuleVOS.substr(0,this.form.fieldAPIRuleVOS.length-1);
             this.form.responseId = this.form.fieldAPIRuleVOS.find(n => n.apiType == 2)? this.form.fieldAPIRuleVOS.find(n => n.apiType == 2).fieldApiId:'';
+            let temp = [];
+            this.form.fieldAPIRuleVOS.forEach(item => {
+              if(item.apiType == 1) temp.push(item);
+            })
+            this.form.fieldAPIRuleVOS = JSON.parse(JSON.stringify(temp));
           }else {
 						this.enums = [{
 							logicAction: '',
@@ -418,7 +424,7 @@
 					}else{
             let params = {
               "dataTypes": [], //数据类型，为空时取全部
-              "formTypes": [], //表单类型，为空时取全部1, 2, 3
+              "formTypes": [1, 2, 3], //表单类型，为空时取全部1, 2, 3
               "type": '1' //字段类型1：原生2衍生，为空时取全部
             }
             getNativeList(params).then(res => {
@@ -481,7 +487,7 @@
 				}else{
           let params = {
             "dataTypes": [], //数据类型，为空时取全部
-            "formTypes": [], //表单类型，为空时取全部 1, 2, 3
+            "formTypes": [1, 2, 3], //表单类型，为空时取全部 1, 2, 3
             "type": '1' //字段类型1：原生2衍生，为空时取全部
           }
           getNativeList(params).then(res => {
@@ -577,7 +583,7 @@
           let fieldAPIRuleVOS = JSON.parse(JSON.stringify(this.form.fieldAPIRuleVOS))
           fieldAPIRuleVOS.push( {
               apiType:2,
-              fieldId: 0,
+              fieldId: null,
               fieldApiId: this.form.responseId,  //接口id
             })
             params = {
