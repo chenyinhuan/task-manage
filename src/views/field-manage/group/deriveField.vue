@@ -586,18 +586,18 @@
               {
                 apiType: this.form.apiId,   //1表示参数，2表示reponse
                 fieldApiId: this.form.params1,  //接口id
-                fieldId: '',     //不填
+                fieldId: 0,     //不填
                 fieldStartId: this.form.nativeField1 //原生类型field id
               },
               {
                 apiType:this.form.apiId,
                 fieldApiId: this.form.params2,  //接口id
-                fieldId: '', //不填
+                fieldId: 0, //不填
                 fieldStartId: this.form.nativeField2 //类型为返回数据时不填
               }
             ]
             params = {
-              "fieldComplexCastRuleVOs": fieldAPIRuleVOS,
+              "fieldAPIRuleVOS": fieldAPIRuleVOS,
               "fieldName": this.form.fieldName,
               "dataType": '', // 暂时不传，如果有限制就随便传一个
               "ruleType": this.form.ruleType,
