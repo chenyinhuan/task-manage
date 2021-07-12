@@ -29,8 +29,9 @@
 						</el-input>
 					</div>
 					<div class="wordbox">
-						<el-tree @check="getData" show-checkbox class="filter-tree" default-expand-all node-key="userId" :data="data"
-							:props="defaultProps" :filter-node-method="filterNode" ref="tree" :default-checked-keys="checkData"></el-tree>
+						<el-tree @check="getData" show-checkbox class="filter-tree" default-expand-all node-key="userId"
+							:data="data" :props="defaultProps" :filter-node-method="filterNode" ref="tree"
+							:default-checked-keys="checkData"></el-tree>
 					</div>
 				</div>
 				&emsp;
@@ -38,12 +39,12 @@
 				&emsp;
 				<div class="conbox">
 					<div class="wordbox" style="margin-top: 0">
-						<el-tag v-for="(item,index) in selectedData" :key="index"
-							type="info">
+						<el-tag v-for="(item,index) in selectedData" :key="index" type="info">
 							{{item.username}}
 						</el-tag>
-						<template v-for="(item,index) in keyarr"  v-if="!selectedData.some(n => n.userId == item.userId)">
-							<el-tag @close="removeData(item)"  closable type="info" :key="index">
+						<template v-for="(item,index) in keyarr"
+							v-if="!selectedData.some(n => n.userId == item.userId)">
+							<el-tag @close="removeData(item)" closable type="info" :key="index">
 								{{item.username}}
 							</el-tag>
 						</template>
@@ -66,16 +67,16 @@
 		// components: {
 		// 	treeTransfer
 		// },
-    props:{
-      data: {
-        type: Array,
-        default: []
-      },
-      selectedData:{
-        type: Array,
-        default: []
-      }
-    },
+		props: {
+			data: {
+				type: Array,
+				default: []
+			},
+			selectedData: {
+				type: Array,
+				default: []
+			}
+		},
 		data() {
 			return {
 				type: 1,
@@ -84,8 +85,8 @@
 				keyarr: [],
 				filterText: "",
 				defaultProps: {
-				  children: "children",
-				  label: "name",
+					children: "children",
+					label: "name",
 				},
 				taskName: '',
 				title: '',
@@ -133,7 +134,7 @@
 				if (this.checkList.length > 0) {
 					for (var i = 0; i < this.checkList.length; i++) {
 						if (!this.checkList[i].children && this.checkList[i].userId) {
-						  this.checkList[i].taskType = this.type
+							this.checkList[i].taskType = this.type
 							this.keyarr.push(this.checkList[i])
 						}
 					}
@@ -162,8 +163,10 @@
 				this.visibleDialog = false;
 			},
 			confirm() {
+				this.getData();
+				console.log(this.keyarr)
 				this.$emit('confirm', this.keyarr)
-        this.visibleDialog = false
+				this.visibleDialog = false
 			},
 			// 切换模式 现有树形穿梭框模式transfer 和通讯录模式addressList
 			changeMode() {
@@ -208,6 +211,7 @@
 					padding-bottom: 7px;
 					text-align: center;
 					cursor: pointer;
+
 					&.active {
 						color: #1890FF;
 						position: relative;

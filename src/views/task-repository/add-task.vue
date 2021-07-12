@@ -164,8 +164,7 @@
                     let citem = item[i].deptUsersVOS[j];
                     citem.disabled = this.form.users.some(n => n.userId == citem.userId)
                     if (this.form.users.some(n => n.userId == citem.userId)) {
-                      this.selectedData.push(citem)
-                      console.log(this.selectedData)
+                      this.selectedData.push({...citem,...{taskType: this.form.users[0].taskType}})
                     }
                   }
                 }
@@ -198,7 +197,16 @@
           this.form.endTime == '' || this.form.users.length == 0 || ((new Date(this.form.endTime).getTime()) - (
             new Date(this.form.startTime).getTime()) > 0 ? false : true)) return this.showValidate = true;
         if (this.isEdit == 1) {
-          updateTaskDetail(this.form).then(res => {
+			let arr = [];
+			let form = JSON.parse(JSON.stringify(this.form))
+			if(this.selectedData[0].taskType == this.form.users[0].taskType) {
+			  for (let i=0;i<this.form.users.length;i++) {
+				let item = this.form.users[i];
+				if(!this.selectedData.find(n => n.userId == item.userId)) arr.push(item);
+			  }
+			  form.users = arr;
+			}
+          updateTaskDetail(form).then(res => {
             if (res.code == 0) {
               this.$message.success('更新成功')
               this.$router.push('/task-repository/task-list')
@@ -254,6 +262,10 @@
       },
       openDialog() {
         this.$refs.assigment.open();
+		this.$nextTick(() => {
+			console.log(this.form.users[0])
+			if(this.form.users.length > 0)this.$refs.assigment.changeType(this.form.users[0].taskType);
+		})
       },
       handleClose() {
 
