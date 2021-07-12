@@ -178,12 +178,16 @@
 							v-if="showValidate && !form.apiId">选择接口</span>
 					</div>
 				</div>
-				<div class="options" v-for="(sItem,sIndex) in form.fieldAPIRuleVOS" :key="sIndex" v-if="sItem.apiType == 1">
+				<div class="options" v-for="(sItem,sIndex) in form.fieldAPIRuleVOS" :key="sIndex"
+					v-if="sItem.apiType == 1">
 					<div style="position: relative;">
 						<h4>原生字段{{sIndex+1}}:</h4>
-						<el-select v-model="sItem.fieldStartId" filterable placeholder="选择一个原生字段作为请求值" @change="$forceUpdate()">
-              <el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
-								:value="item.id" :disabled="form.fieldAPIRuleVOS.find(n=> n.fieldStartId == item.id)?true:false"></el-option>
+						<el-select v-model="sItem.fieldStartId" filterable placeholder="选择一个原生字段作为请求值"
+							@change="$forceUpdate()">
+							<el-option v-for="(item,index) in nativeList" :key="index" :label="item.fieldName"
+								:value="item.id"
+								:disabled="form.fieldAPIRuleVOS.find(n=> n.fieldStartId == item.id)?true:false">
+							</el-option>
 						</el-select>
 						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
 							v-if="showValidate && !sItem.fieldStartId">选择原生字段</span>
@@ -191,11 +195,12 @@
 					<span class="el-icon-connection" style="margin: 30px 10px 0"></span>
 					<div style="position: relative;">
 						<h4>关联接口请求参数:</h4>
-						<el-select v-model="sItem.fieldApiId" filterable placeholder="选择请求参数"
-							@change="$forceUpdate()">
-              <!-- :disabled="form.fieldAPIRuleVOS.find(n=> n.fieldApiId == item.id)?true:false" -->
-							<el-option v-for="(item,index) in fieldApiList.find(n => n.apiId == form.apiId) ? fieldApiList.find(n => n.apiId == form.apiId).params : []" :key="index" :label="item.apiName"
-								:value="item.id" ></el-option>
+						<el-select v-model="sItem.fieldApiId" filterable placeholder="选择请求参数" @change="$forceUpdate()">
+							<el-option
+								v-for="(item,index) in fieldApiList.find(n => n.apiId == form.apiId) ? fieldApiList.find(n => n.apiId == form.apiId).params : []"
+								:key="index" :label="item.apiName" :value="item.id"
+								:disabled="form.fieldAPIRuleVOS.find(n=> n.fieldApiId == item.id)?true:false">
+							</el-option>
 						</el-select>
 						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
 							v-if="showValidate && !sItem.fieldApiId">选择关联接口请求参数</span>
@@ -205,8 +210,9 @@
 					<div style="position: relative;">
 						<h4>衍生字段关联返回参数:</h4>
 						<el-select v-model="form.responseId" filterable placeholder="选择返回参数" @change="$forceUpdate()">
-							<el-option v-for="(item,index) in fieldApiList.find(n => n.apiId == form.apiId) ? fieldApiList.find(n => n.apiId == form.apiId).responses : []" :key="index" :label="item.apiName"
-								:value="item.id"></el-option>
+							<el-option
+								v-for="(item,index) in fieldApiList.find(n => n.apiId == form.apiId) ? fieldApiList.find(n => n.apiId == form.apiId).responses : []"
+								:key="index" :label="item.apiName" :value="item.id"></el-option>
 						</el-select>
 						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
 							v-if="showValidate && !form.responseId">选择衍生字段关联返回参数</span>
@@ -227,7 +233,8 @@
 		getNativeEnums,
 		saveComplex,
 		getComplexcDetail,
-		updateComplex,getFieldApiList
+		updateComplex,
+		getFieldApiList
 	} from '@/api/filed-manage/index.js'
 	export default {
 		name: "deriveField",
@@ -259,7 +266,7 @@
 				],
 				nativeList: [],
 				nativeList1: [],
-        fieldApiList: [],
+				fieldApiList: [],
 				options: [{
 						value: 1,
 						label: '四则运算'
@@ -284,12 +291,12 @@
 					logicAction: '',
 				}],
 				form: {
-				  apiId: '',
-          params1: '',
-          params2: '',
-          responseId: '',
-          nativeField1: '',
-          nativeField2: '',
+					apiId: '',
+					params1: '',
+					params2: '',
+					responseId: '',
+					nativeField1: '',
+					nativeField2: '',
 					fieldName: '',
 					name: '',
 					description: '',
@@ -298,7 +305,7 @@
 					fieldStartId: '',
 					"fieldComplexCastRuleVOs": [],
 					complexMahtRuleVOs: [],
-          fieldAPIRuleVOS: [],
+					fieldAPIRuleVOS: [],
 					// "fieldComplexCastRuleVOs": [{
 					//   "logicAction": 5,               //逻辑算法5-10
 					//   "complexValue": "100",          //最后一个input, 衍生字段值
@@ -356,38 +363,39 @@
 
 		},
 		methods: {
-      getParamsLength(){
-        this.form.fieldAPIRuleVOS = [];
-        this.form.responseId = '';
-        let length = this.fieldApiList.find(n => n.apiId == this.form.apiId).params.length
-        for(var i=0;i<length;i++){
-          this.form.fieldAPIRuleVOS.push({
-            apiType: 1,   //1表示参数，2表示reponse
-            fieldApiId: '',  //接口id
-            fieldId: null,     //不填
-            fieldStartId: '' //原生类型field id
-          })
-        }
-      },
+			getParamsLength() {
+				this.form.fieldAPIRuleVOS = [];
+				this.form.responseId = '';
+				let length = this.fieldApiList.find(n => n.apiId == this.form.apiId).params.length
+				for (var i = 0; i < length; i++) {
+					this.form.fieldAPIRuleVOS.push({
+						apiType: 1, //1表示参数，2表示reponse
+						fieldApiId: '', //接口id
+						fieldId: null, //不填
+						fieldStartId: '' //原生类型field id
+					})
+				}
+			},
 			init() {
 				getComplexcDetail({
 					id: this.id
 				}).then(res => {
 					this.form = res.field
 					this.form.name = this.form.name.replace("complex_", "");
-          console.log(this.form.ruleType)
+					console.log(this.form.ruleType)
 					if (this.form.complexMahtRuleVOs && this.form.complexMahtRuleVOs.length) {
 						this.form.fieldStartId = this.form.complexMahtRuleVOs[0].fieldStartId;
 						this.enums = this.form.complexMahtRuleVOs
-					} else if (this.form.fieldAPIRuleVOS && this.form.fieldAPIRuleVOS.length){
-            // this.form.fieldAPIRuleVOS = this.form.fieldAPIRuleVOS.substr(0,this.form.fieldAPIRuleVOS.length-1);
-            this.form.responseId = this.form.fieldAPIRuleVOS.find(n => n.apiType == 2)? this.form.fieldAPIRuleVOS.find(n => n.apiType == 2).fieldApiId:'';
-            let temp = [];
-            this.form.fieldAPIRuleVOS.forEach(item => {
-              if(item.apiType == 1) temp.push(item);
-            })
-            this.form.fieldAPIRuleVOS = JSON.parse(JSON.stringify(temp));
-          }else {
+					} else if (this.form.fieldAPIRuleVOS && this.form.fieldAPIRuleVOS.length) {
+						// this.form.fieldAPIRuleVOS = this.form.fieldAPIRuleVOS.substr(0,this.form.fieldAPIRuleVOS.length-1);
+						this.form.responseId = this.form.fieldAPIRuleVOS.find(n => n.apiType == 2) ? this.form
+							.fieldAPIRuleVOS.find(n => n.apiType == 2).fieldApiId : '';
+						let temp = [];
+						this.form.fieldAPIRuleVOS.forEach(item => {
+							if (item.apiType == 1) temp.push(item);
+						})
+						this.form.fieldAPIRuleVOS = JSON.parse(JSON.stringify(temp));
+					} else {
 						this.enums = [{
 							logicAction: '',
 							fieldStartId: ''
@@ -409,7 +417,7 @@
 								this.nativeList = res.fields;
 							}
 						})
-					} else  if(this.form.ruleType == 2){
+					} else if (this.form.ruleType == 2) {
 						let params = {
 							"dataTypes": [], //数据类型，为空时取全部
 							"formTypes": [1, 2, 3], //表单类型，为空时取全部
@@ -420,21 +428,21 @@
 								this.nativeList = res.fields;
 							}
 						})
-					}else{
-            let params = {
-              "dataTypes": [], //数据类型，为空时取全部
-              "formTypes": [1, 2, 3], //表单类型，为空时取全部1, 2, 3
-              "type": '1' //字段类型1：原生2衍生，为空时取全部
-            }
-            getNativeList(params).then(res => {
-              if (res.code == 0) {
-                this.nativeList = res.fields;
-              }
-            })
-            getFieldApiList().then(res=>{
-              this.fieldApiList = res.apis
-            })
-          }
+					} else {
+						let params = {
+							"dataTypes": [], //数据类型，为空时取全部
+							"formTypes": [1, 2, 3], //表单类型，为空时取全部1, 2, 3
+							"type": '1' //字段类型1：原生2衍生，为空时取全部
+						}
+						getNativeList(params).then(res => {
+							if (res.code == 0) {
+								this.nativeList = res.fields;
+							}
+						})
+						getFieldApiList().then(res => {
+							this.fieldApiList = res.apis
+						})
+					}
 				})
 			},
 			addEditDomain() {
@@ -472,7 +480,7 @@
 							this.nativeList = res.fields;
 						}
 					})
-				} else if(this.form.ruleType == 2){
+				} else if (this.form.ruleType == 2) {
 					let params = {
 						"dataTypes": [], //数据类型，为空时取全部
 						"formTypes": [1, 2, 3], //表单类型，为空时取全部
@@ -483,22 +491,22 @@
 							this.nativeList = res.fields;
 						}
 					})
-				}else{
-          let params = {
-            "dataTypes": [], //数据类型，为空时取全部
-            "formTypes": [1, 2, 3], //表单类型，为空时取全部 1, 2, 3
-            "type": '1' //字段类型1：原生2衍生，为空时取全部
-          }
-          getNativeList(params).then(res => {
-            if (res.code == 0) {
-              this.nativeList = res.fields;
-            }
-          })
-          getFieldApiList().then(res=>{
-            console.log(res.apis)
-              this.fieldApiList = res.apis
-          })
-        }
+				} else {
+					let params = {
+						"dataTypes": [], //数据类型，为空时取全部
+						"formTypes": [1, 2, 3], //表单类型，为空时取全部 1, 2, 3
+						"type": '1' //字段类型1：原生2衍生，为空时取全部
+					}
+					getNativeList(params).then(res => {
+						if (res.code == 0) {
+							this.nativeList = res.fields;
+						}
+					})
+					getFieldApiList().then(res => {
+						console.log(res.apis)
+						this.fieldApiList = res.apis
+					})
+				}
 			},
 			save() {
 				if (this.form.fieldName == '' || this.form.name == '' || this.form.ruleType == '' || this.checkFieldName ||
@@ -535,7 +543,7 @@
 						"description": this.form.description,
 						"type": this.form.type
 					}
-				} else if(this.form.ruleType == 2){
+				} else if (this.form.ruleType == 2) {
 					if (!this.form.fieldStartId) return this.showValidate = true
 					let fieldComplexCastRuleVOs = [];
 					// if (this.checkField.formType == 2 || this.checkField.formType == 3) { // 选择类
@@ -574,28 +582,29 @@
 						"description": this.form.description,
 						"type": this.form.type
 					}
-				}else{
-          if (!this.form.apiId) return this.showValidate = true
-          for (let i in this.form.fieldAPIRuleVOS) {
-            if (!this.form.fieldAPIRuleVOS[i].fieldApiId || !this.form.fieldAPIRuleVOS[i].fieldStartId) return this.showValidate = true;
-          }
-          let fieldAPIRuleVOS = JSON.parse(JSON.stringify(this.form.fieldAPIRuleVOS))
-          fieldAPIRuleVOS.push( {
-              apiType:2,
-              fieldId: null,
-              fieldApiId: this.form.responseId,  //接口id
-            })
-            params = {
-              "fieldAPIRuleVOS": fieldAPIRuleVOS,
-              "fieldName": this.form.fieldName,
-              "dataType": '', // 暂时不传，如果有限制就随便传一个
-              "ruleType": this.form.ruleType,
-              "name": `${this.prepend}${this.form.name}`,
-              "description": this.form.description,
-              "type": this.form.type,
-              apiId: this.form.apiId
-            }
-        }
+				} else {
+					if (!this.form.apiId) return this.showValidate = true
+					for (let i in this.form.fieldAPIRuleVOS) {
+						if (!this.form.fieldAPIRuleVOS[i].fieldApiId || !this.form.fieldAPIRuleVOS[i].fieldStartId)
+						return this.showValidate = true;
+					}
+					let fieldAPIRuleVOS = JSON.parse(JSON.stringify(this.form.fieldAPIRuleVOS))
+					fieldAPIRuleVOS.push({
+						apiType: 2,
+						fieldId: null,
+						fieldApiId: this.form.responseId, //接口id
+					})
+					params = {
+						"fieldAPIRuleVOS": fieldAPIRuleVOS,
+						"fieldName": this.form.fieldName,
+						"dataType": '', // 暂时不传，如果有限制就随便传一个
+						"ruleType": this.form.ruleType,
+						"name": `${this.prepend}${this.form.name}`,
+						"description": this.form.description,
+						"type": this.form.type,
+						apiId: this.form.apiId
+					}
+				}
 				console.log(params)
 				if (this.id) { //编辑
 					params.id = this.id
