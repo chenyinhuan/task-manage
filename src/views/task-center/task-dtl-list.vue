@@ -33,7 +33,9 @@
 	import {
 		getRecordList
 	} from '@/api/task-center/my-task/index.js'
-  import {removeTaskRecord} from '@/api/task-center/my-task/record.js'
+	import {
+		removeTaskRecord
+	} from '@/api/task-center/my-task/record.js'
 	export default {
 		data() {
 			return {
@@ -50,43 +52,7 @@
 		},
 		created() {
 			if (this.$route.query.id) this.taskId = this.$route.query.id;
-			if (this.taskId) {
-				let params = {
-					taskId: this.taskId,
-					limit: this.limit,
-					page: this.currentPage,
-				}
-				getRecordList(params).then(res => {
-					if (res.code == 0) {
-						this.list = JSON.parse(JSON.stringify(res.record.page.list));
-						this.taskTplFieldStructureDTOS = JSON.parse(JSON.stringify(res.record.taskTplFieldStructureDTOS));
-						res.record.taskTplFieldStructureDTOS = [...res.record.taskTplFieldStructureDTOS, ...[{fieldName: '创建时间',slot: true,fieldId: 'createTime'}
-						,{fieldName: '操作',fieldId: 'opt',width: 140,slot: true}]]
-						// this.tableData = res.record.page.list[0] ? res.record.page.list[0].taskRecordEntities : [];
-						this.tableColumn = res.record.taskTplFieldStructureDTOS;
-						this.total = res.record.page.totalCount;
-						let tableData = []
-						for (let i = 0; i < res.record.page.list.length; i++) {
-							let item = res.record.page.list[i];
-							let json = {};
-							for (let j in this.tableColumn) {
-								if (item.taskRecordEntities.find(n => n.fieldId == this.tableColumn[j]
-										.fieldId)) {
-
-									json[`${this.tableColumn[j].fieldId}`] = item.taskRecordEntities.find(n =>
-											n.fieldId == this.tableColumn[j].fieldId)
-										.fieldValue;
-								}
-							}
-							json.createTime = item.createTime;
-              json.id = item.id;
-							tableData.push(json)
-						}
-						this.tableData = tableData;
-            if(this.tableData.length == 0) this.isShow = true;
-					}else this.isShow = true;
-				})
-			}
+			this.init()
 		},
 		mounted() {
 
@@ -95,10 +61,63 @@
 
 		},
 		methods: {
+			init() {
+				if (this.taskId) {
+					let params = {
+						taskId: this.taskId,
+						limit: this.limit,
+						page: this.currentPage,
+					}
+					getRecordList(params).then(res => {
+						if (res.code == 0) {
+							this.list = JSON.parse(JSON.stringify(res.record.page.list));
+							this.taskTplFieldStructureDTOS = JSON.parse(JSON.stringify(res.record
+								.taskTplFieldStructureDTOS));
+							res.record.taskTplFieldStructureDTOS = [...res.record.taskTplFieldStructureDTOS, ...[{
+								fieldName: '创建时间',
+								slot: true,
+								fieldId: 'createTime'
+							}, {
+								fieldName: '操作',
+								fieldId: 'opt',
+								width: 140,
+								slot: true
+							}]]
+							// this.tableData = res.record.page.list[0] ? res.record.page.list[0].taskRecordEntities : [];
+							this.tableColumn = res.record.taskTplFieldStructureDTOS;
+							this.total = res.record.page.totalCount;
+							let tableData = []
+							for (let i = 0; i < res.record.page.list.length; i++) {
+								let item = res.record.page.list[i];
+								let json = {};
+								for (let j in this.tableColumn) {
+									if (item.taskRecordEntities.find(n => n.fieldId == this.tableColumn[j]
+											.fieldId)) {
+				
+										json[`${this.tableColumn[j].fieldId}`] = item.taskRecordEntities.find(n =>
+												n.fieldId == this.tableColumn[j].fieldId)
+											.fieldValue;
+									}
+								}
+								json.createTime = item.createTime;
+								json.id = item.id;
+								tableData.push(json)
+							}
+							this.tableData = tableData;
+							if (this.tableData.length == 0) this.isShow = true;
+						} else this.isShow = true;
+					})
+				}
+			},
 			handleSizeChange(val) {
+				this.currentPage = 1;
+				this.limit = val;
+				this.init();
 				console.log(`每页 ${val} 条`);
 			},
 			handleCurrentChange(val) {
+				this.currentPage = val;
+				this.init();
 				console.log(`当前页: ${val}`);
 			},
 			add() {
@@ -110,47 +129,49 @@
 				})
 			},
 			go(type, row, index) {
-				if(type == 'scan') {
-					localStorage.setItem('taskDtl', JSON.stringify({list: this.list[index],tableColumn: this.tableColumn}))
+				if (type == 'scan') {
+					localStorage.setItem('taskDtl', JSON.stringify({
+						list: this.list[index],
+						tableColumn: this.tableColumn
+					}))
 				}
-				if(type == 'scan') {
+				if (type == 'scan') {
 					this.$router.push({
 						path: '/task-center/task-dtl',
 						query: {
 							id: this.list[index].id
 						}
 					})
-				}else {
+				} else {
 					this.$router.push({
 						path: '/task-center/add-record',
 						query: {
 							taskId: this.taskId,
-              id: this.list[index].id,
+							id: this.list[index].id,
 						}
 					})
 				}
 
 			},
-      deleteItem(item) {
-        console.log(item)
-        this.$confirm(`确定删除该记录吗？`, {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let params = {
-            id: item.id
-          }
-          removeTaskRecord(params).then(res => {
-            if(res.code == 0) {
-              this.$message.success('删除成功！');
-              this.currentPage = 1;
-              this.init();
-            }
-            else this.$message.warning(res.mag);
-          })
-        })
-      }
+			deleteItem(item) {
+				console.log(item)
+				this.$confirm(`确定删除该记录吗？`, {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					let params = {
+						id: item.id
+					}
+					removeTaskRecord(params).then(res => {
+						if (res.code == 0) {
+							this.$message.success('删除成功！');
+							this.currentPage = 1;
+							this.init();
+						} else this.$message.warning(res.mag);
+					})
+				})
+			}
 		}
 	}
 </script>
