@@ -176,6 +176,7 @@
 						if (res.code == 0) {
 							this.$message.success('修改成功！');
 							this.handleClose();
+							this.init()
 						} else {
 							this.message = res.msg;
 							this.tip = true;

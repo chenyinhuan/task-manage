@@ -10,7 +10,7 @@ export const getAnchorList = (params) => api.post(`/task-admin/sys/streamer/list
  * 删除主播
  * @params params
  */
-export const delAnchor = (params) => api.post(`/task-admin/sys/streamer/updateStreamer`, params);
+export const delAnchor = (params) => api.post(`/task-admin/sys/streamer/deleteStreamer?id=${params.id}`, params);
 
 /**
  * 新增主播
@@ -22,7 +22,7 @@ export const addAnchor = (params) => api.post(`/task-admin/sys/streamer/addStrea
  * 编辑主播名
  * @params params
  */
-export const updateAnchor = (params) => api.post(`/task-admin/sys/streamer/updateStreamer`, params);
+export const updateAnchor = (params) => api.post(`/task-admin/sys/streamer/updateStreamer?name=${params.name}&id=${params.id}`, params);
 
 /**
  * 保存关联主播信息
