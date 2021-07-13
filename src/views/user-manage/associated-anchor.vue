@@ -5,7 +5,7 @@
 				<el-input v-model="keyword" placeholder="请输入主播名" @keyup.enter.native="search"><i slot="prefix"
 						class="el-input__icon el-icon-search"></i></el-input>
 			</div>
-			<div class="upload">
+			<div class="upload" v-if="!userId">
 				<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
 					:on-exceed="handleChange">
 					<el-button class="excel" size="small">Excel模版</el-button>
@@ -21,7 +21,7 @@
 		</section>
 		<el-table ref="table" :data="tableData" style="width: 100%;margin-top: 10px;"
 			@selection-change="handleSelectionChange" @row-click="rowSelect" v-if="tableData.length>0">
-			<el-table-column type="selection" width="55" :selectable="checkSelectable">
+			<el-table-column type="selection" width="55">
 			</el-table-column>
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
@@ -38,7 +38,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-button class="associated" type="primary" v-if="tableData.length>0" @click="saveAssociated" v-preventReClick>
+		<el-button class="associated" type="primary" v-if="tableData.length>0 && userId" @click="saveAssociated" v-preventReClick>
 			保存关联</el-button>
 		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
 			:current-page.sync="currentPage" :page-size="limit" layout="prev, pager, next, jumper" :total="total">
@@ -82,11 +82,11 @@
 						label: '主播名称',
 						prop: 'name',
 					},
-					{
-						label: '关联账号',
-						prop: 'userInfoVOS',
-						slot: true
-					},
+					// {
+					// 	label: '关联账号',
+					// 	prop: 'userInfoVOS',
+					// 	slot: true
+					// },
 					{
 						label: '创建人',
 						prop: 'createUser',
@@ -114,23 +114,20 @@
 				uploadUrl: `${window.$globalConfig.API_BASE_Tabel}/task-admin/sys/streamer/import`,
 				message: '主播名称已存在!',
 				checkedData: [],
-				showValidate: false
+				showValidate: false,
+				userId: ''
 			}
 		},
 		created() {
-			this.init()
+			if(this.$route.query.userId) this.userId = this.$route.query.userId;
 		},
 		mounted() {
-
+			this.init()
 		},
 		computed: {
 
 		},
 		methods: {
-			// 选中数据
-			checkSelectable(row, index) {
-				return row.isRelation? row.isRelation:false
-			},
 			init() {
 				let params = {
 					"name": this.keyword,
@@ -143,6 +140,14 @@
 					if (res.code == 0) {
 						this.tableData = res.page.list;
 						this.total = res.page.total;
+						for (let i=0;i<this.tableData.length;i++) {
+							let item = this.tableData[i];
+							if(item.isRelation) {
+								this.$nextTick(() => {
+									this.$refs.table.toggleRowSelection(item);
+								})
+							}
+						}
 					} else {
 						this.isShow = true;
 					}
