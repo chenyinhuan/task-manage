@@ -21,7 +21,7 @@
 		</section>
 		<el-table ref="table" :data="tableData" style="width: 100%;margin-top: 10px;"
 			@selection-change="handleSelectionChange" @row-click="rowSelect" v-if="tableData.length>0">
-			<el-table-column type="selection" width="55">
+			<el-table-column type="selection" width="55" :selectable="checkSelectable">
 			</el-table-column>
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
@@ -127,6 +127,10 @@
 
 		},
 		methods: {
+			// 选中数据
+			checkSelectable(row, index) {
+				return row.isRelation? row.isRelation:false
+			},
 			init() {
 				let params = {
 					"name": this.keyword,
@@ -260,9 +264,14 @@
 						return item.id
 					})
 				}
+				let currentIds = this.tableData.map(item => {
+					return item.id;
+				})
 				let params = {
+					page: this.currentPage,
+					currentIds: currentIds,
 					ids: ids,
-					userId: this.$route.query.userId
+					userId: this.$route.query.userId // 选中的主播
 				}
 				saveAssociatedAnchor(params).then(res => {
 					if (res.code == 0) {
