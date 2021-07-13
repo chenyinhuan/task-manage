@@ -47,11 +47,13 @@
 				isShow: false,
 				taskId: '',
 				list: [],
-				taskTplFieldStructureDTOS: []
+				taskTplFieldStructureDTOS: [],
+        date: ''
 			}
 		},
 		created() {
 			if (this.$route.query.id) this.taskId = this.$route.query.id;
+      if(this.$route.query.date) this.date = this.$route.query.date;
 			this.init()
 		},
 		mounted() {
@@ -124,7 +126,8 @@
 				this.$router.push({
 					path: '/task-center/add-record',
 					query: {
-						taskId: this.taskId
+						taskId: this.taskId,
+            date: this.date
 					}
 				})
 			},

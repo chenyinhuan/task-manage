@@ -181,7 +181,7 @@
 						v-model="item.taskTplTargetEntity.testDays" placeholder="请输入固定考核天数" type="number" :min="0"
 						v-if="item.taskTplTargetEntity.testTimeType == 1"></el-input-number>
 					<el-date-picker type="date" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd"
-						v-if="item.taskTplTargetEntity.testTimeType == 2" v-model="item.taskTplTargetEntity.testDate"
+						v-if="item.taskTplTargetEntity.testTimeType == 2" :picker-options="startTimeRule" v-model="item.taskTplTargetEntity.testDate"
 						placeholder="请选择日期">
 					</el-date-picker>
 					<div v-if="item.taskTplTargetEntity.testTimeType == 3">
@@ -358,7 +358,12 @@
 					value: 3
 				}],
 				showValidate: false,
-				checkElseResult: false
+				checkElseResult: false,
+        startTimeRule: {
+          disabledDate: time => {
+            return time.getTime() + 86400000 < Date.now();
+          }
+        },
 			}
 		},
 		created() {

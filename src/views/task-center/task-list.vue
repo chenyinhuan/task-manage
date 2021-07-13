@@ -129,10 +129,12 @@
 				isShow: false,
 				total: 0,
 				description: '',
-				visibleDialog: false
+				visibleDialog: false,
+				date: ''
 			}
 		},
 		created() {
+			if(this.$route.query.date) this.date = this.$route.query.date;
 			this.init();
 		},
 		mounted() {
@@ -173,7 +175,8 @@
 				this.$router.push({
 					path: `/task-center/task-dtl-list`,
 					query: {
-						id: row.id
+						id: row.id,
+						date: this.date
 					}
 				})
 			},

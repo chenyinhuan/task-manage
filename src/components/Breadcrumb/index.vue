@@ -185,7 +185,7 @@
 							},
 							{
 								name: '我的派发任务',
-								path: '/task-center/my-assignment-list',
+								path: '/task-center/my-assignment',
 								active: true
 							},
 							{
@@ -506,7 +506,13 @@
 					this.$router.push(redirect)
 					return
 				}
-				this.$router.push(path)
+        console.log(path)
+        if(path == '/task-center/task-dtl-list') {
+          this.$router.push(`${path}?id=${this.$route.query.id}&date=${this.$route.query.date || ''}`)
+        }else if(path == '/task-center/task-list') {
+          this.$router.push(`${path}?date=${this.$route.query.date || ''}`)
+        }
+				else this.$router.push(path)
 			}
 		}
 	}
