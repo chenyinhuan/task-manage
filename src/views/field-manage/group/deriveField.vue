@@ -190,7 +190,7 @@
 							</el-option>
 						</el-select>
 						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-							v-if="showValidate && !sItem.fieldStartId">选择原生字段</span>
+							v-if="showValidate && sIndex==0 && !sItem.fieldStartId">选择原生字段</span>
 					</div>
 					<span class="el-icon-connection" style="margin: 30px 10px 0"></span>
 					<div style="position: relative;">
@@ -203,7 +203,7 @@
 							</el-option>
 						</el-select>
 						<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
-							v-if="showValidate && !sItem.fieldApiId">选择关联接口请求参数</span>
+							v-if="showValidate && sIndex==0 &&  !sItem.fieldApiId">选择关联接口请求参数</span>
 					</div>
 				</div>
 				<div class="options" v-if="form.apiId">
@@ -583,12 +583,13 @@
 						"type": this.form.type
 					}
 				} else {
-					if (!this.form.apiId) return this.showValidate = true
+					if (!this.form.apiId || !this.form.responseId) return this.showValidate = true
 					for (let i in this.form.fieldAPIRuleVOS) {
-						if (!this.form.fieldAPIRuleVOS[i].fieldApiId || !this.form.fieldAPIRuleVOS[i].fieldStartId)
+						if (!this.form.fieldAPIRuleVOS[0].fieldApiId || !this.form.fieldAPIRuleVOS[0].fieldStartId)
 						return this.showValidate = true;
 					}
 					let fieldAPIRuleVOS = JSON.parse(JSON.stringify(this.form.fieldAPIRuleVOS))
+          fieldAPIRuleVOS = fieldAPIRuleVOS.filter(item => item.fieldApiId && item.fieldStartId)
 					fieldAPIRuleVOS.push({
 						apiType: 2,
 						fieldId: null,
