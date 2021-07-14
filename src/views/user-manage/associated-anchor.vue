@@ -5,8 +5,7 @@
 				<el-input v-model="keyword" placeholder="请输入主播名" @keyup.enter.native="search"><i slot="prefix"
 						class="el-input__icon el-icon-search"></i></el-input>
 			</div>
-      <!--  v-if="!userId" -->
-			<div class="upload">
+			<div class="upload" v-if="!userId">
 				<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
 					:on-exceed="handleChange">
 					<el-button class="excel" size="small">Excel模版</el-button>
@@ -22,8 +21,7 @@
 		</section>
 		<el-table ref="table" :data="tableData" style="width: 100%;margin-top: 10px;"
 			@selection-change="handleSelectionChange" @row-click="rowSelect" v-if="tableData.length>0">
-			<!-- v-if="userId" -->
-      <el-table-column type="selection" width="55" >
+      <el-table-column type="selection" width="55" v-if="userId">
 			</el-table-column>
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
@@ -40,8 +38,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
-    <!-- tableData.length>0 && userId -->
-		<el-button class="associated" type="primary" v-if="tableData.length>0" @click="saveAssociated" v-preventReClick>
+		<el-button class="associated" type="primary" v-if="tableData.length>0 && userId" @click="saveAssociated" v-preventReClick>
 			保存关联</el-button>
 		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
 			:current-page.sync="currentPage" :page-size="limit" layout="prev, pager, next, jumper" :total="total">
