@@ -208,7 +208,9 @@
 				})
 			},
 			assocoated(item) {
-				this.$router.push(`/user-manage/associated-anchor?userId=${item.userId}`)
+				// this.$router.push(`/user-manage/associated-anchor?userId=${item.userId}`)
+				// 显示弹窗
+				
 			},
 			filterNode(value, data) {
 				if (!value) return true;

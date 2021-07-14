@@ -249,15 +249,6 @@ export const routes = [
         }
       },
       {
-        path: 'associated-anchor',
-        component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/associated-anchor'),
-        hidden: true,
-        title: '关联主播',
-        meta: {
-          noCache: true
-        }
-      },
-      {
         path: 'organization-setting',
         component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/organization-setting'),
         hidden: false,
@@ -304,6 +295,21 @@ export const routes = [
         }
       },
     ]
+  },
+  {
+	  path: '/anchor-manage',
+	  name: 'AnchorManage',
+	  component: Layout,
+	  redirect: '/anchor-manage',
+	  children: [{
+	    path: '',
+	    component: () => import( /* webpackChunkName: "UserManage" */ '@/views/user-manage/anchor-manage'),
+	    hidden: true,
+	    title: '主播管理',
+	    meta: {
+	      noCache: true
+	    }
+	  }]
   },
   {
     path: '/user-center',

@@ -79,7 +79,9 @@
           manageActive: require('../../images/sider-bar/manage-active.png'),
           userActive: require('../../images/sider-bar/user-active.png'),
           centerActive: require('../../images/sider-bar/center-active.png'),
-          databaseActive: require('../../images/sider-bar/database-active.png')
+          databaseActive: require('../../images/sider-bar/database-active.png'),
+		  anchor: require('../../images/sider-bar/anchor.png'),
+		  anchorActive: require('../../images/sider-bar/anchor-active.png')
         },
         userInfo: ''
       };
