@@ -41,8 +41,7 @@
 		</section>
 		<el-dialog title="任务指标管理" :visible.sync="dialogVisible" width="782px" :before-close="handleClose">
 			<div class="dialog-content">
-				<el-table ref="table" :data="tableData1" style="width: 100%; margin-top: 10px"
-					v-if="tableData1.length > 0">
+				<el-table ref="table" :data="tableData1" style="width: 100%; margin-top: 10px">
 					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 						v-for="(item, index) in tableColumn1" :key="index">
 						<template slot-scope="scope">
@@ -51,17 +50,14 @@
 							</div>
 							<template v-if="item.slot && item.prop == 'delayTime'">
 								<a v-if="scope.row.taskTargetState==3">{{scope.row.delayTime}}</a>
-                <a style="color: #0079FE;" v-if="scope.row.taskTargetState==2"
-                  	@click="editTime(scope.row)">{{scope.row.delayTime || '延迟时间'}}</a>
+								<a style="color: #0079FE;" v-if="scope.row.taskTargetState==2"
+									@click="editTime(scope.row)">{{scope.row.delayTime || '延迟时间'}}</a>
 							</template>
 							<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 						</template>
 
 					</el-table-column>
 				</el-table>
-				<div class="tempty" style="text-align: center" v-if="tableData1.length==0">
-					<p>还没有记录～</p>
-				</div>
 			</div>
 			<span slot="footer" class="dialog-footer" style="border-top: 0px;">
 				<el-button @click="dialogVisible = false">取 消</el-button>
@@ -81,7 +77,8 @@
 				<el-date-picker v-model="newEndTime" :picker-options="endTimeRule" type="datetime" :clearable="false"
 					value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
 				</el-date-picker>
-        <span style="color: #FF8C00;font-size: 12px;left: 0px;position: absolute;bottom: -22px;" v-if="showValidate && newEndTime == ''" >请选择考核结束时间</span>
+				<span style="color: #FF8C00;font-size: 12px;left: 0px;position: absolute;bottom: -22px;"
+					v-if="showValidate && newEndTime == ''">请选择考核结束时间</span>
 			</div>
 			<span slot="footer" class="dialog-footer" style="border-top: 0px;">
 				<el-button @click="timeDialog = false">取 消</el-button>
@@ -101,7 +98,7 @@
 	import {
 		getTaskTargetListDialog,
 		countRepo,
-    updateDelayTime
+		updateDelayTime
 	} from '@/api/task-center/my-task/index'
 	export default {
 		data() {
@@ -110,10 +107,30 @@
 				newEndTime: '',
 				timeDialog: false,
 				dialogVisible: false,
-				countList: [{imageUrl: waite,title: '进行中任务数',number: 0,bgColor: '#00B043'},
-				{imageUrl: sending,title: '累计派发任务数',number: 0,bgColor: '#FF9300'},
-				{imageUrl: taskcomplete,title: '任务指标完成率',number: '0%',bgColor: '#0089FE'},
-				{imageUrl: task,title: '累计派发任务人数',number: 0,bgColor: '#FE642B'}
+				countList: [{
+						imageUrl: waite,
+						title: '进行中任务数',
+						number: 0,
+						bgColor: '#00B043'
+					},
+					{
+						imageUrl: sending,
+						title: '累计派发任务数',
+						number: 0,
+						bgColor: '#FF9300'
+					},
+					{
+						imageUrl: taskcomplete,
+						title: '任务指标完成率',
+						number: '0%',
+						bgColor: '#0089FE'
+					},
+					{
+						imageUrl: task,
+						title: '累计派发任务人数',
+						number: 0,
+						bgColor: '#FE642B'
+					}
 				],
 				total: 0,
 				tableData: [],
@@ -122,7 +139,7 @@
 					{
 						label: '任务指标名称',
 						prop: 'taskTplTargeName',
-            width: 160
+						width: 160
 					},
 					{
 						label: '周期考核',
@@ -140,13 +157,13 @@
 					{
 						label: '考核结束时间',
 						prop: 'endTime',
-            width: 180
+						width: 180
 					},
 					{
 						label: '延期后考核结束时间',
 						prop: 'delayTime',
 						slot: true,
-            width: 180
+						width: 180
 					},
 				],
 				tableColumn: [ // 表格列数据
@@ -198,20 +215,20 @@
 					page: 1,
 					limit: 10
 				},
-        currentRow: '',
-        endTimeRule: {
-          disabledDate: time => {
-            console.log(this.currentRow.endTime)
-            if (this.currentRow.endTime) {
-              return (
-                time.getTime() < new Date(this.currentRow.endTime).getTime()
-              );
-            } else {
-              return time.getTime() + 86400000 < Date.now();
-            }
-          },
-        },
-        showValidate: false
+				currentRow: '',
+				endTimeRule: {
+					disabledDate: time => {
+						console.log(this.currentRow.endTime)
+						if (this.currentRow.endTime) {
+							return (
+								time.getTime() < new Date(this.currentRow.endTime).getTime()
+							);
+						} else {
+							return time.getTime() + 86400000 < Date.now();
+						}
+					},
+				},
+				showValidate: false
 			}
 		},
 		created() {
@@ -227,7 +244,7 @@
 		methods: {
 			getCount() {
 				countRepo().then(res => {
-					if(res.code ==0) {
+					if (res.code == 0) {
 						this.countList[0].number = res.senderCount.taskInProcessCount;
 						this.countList[1].number = res.senderCount.taskSendCount;
 						this.countList[2].number = res.senderCount.taskCompletePercent;
@@ -240,21 +257,22 @@
 				this.timeDialog = true
 			},
 			editTime(item) {
-        this.currentRow = item;
-				this.newEndTime = item.delayTime  || ''
+				this.currentRow = item;
+				this.newEndTime = item.delayTime || ''
 				this.warningDialog = true
 			},
 			editRow(item) {
 				getTaskTargetListDialog({
 					taskId: item.id
 				}).then(res => {
-					if(res.code == 0) {
-            this.tableData1 = [];
-						if (res.taskTarget.page &&  res.taskTarget.page.list.length>0) {
-              res.taskTarget.page.list.forEach(item => {// 只显示进行中和已结束数据，已结束状态数据不能延期
-                if(item.taskTargetState == 2 || item.taskTargetState == 3) this.tableData1.push(item);
-              })
-            }
+					if (res.code == 0) {
+						this.tableData1 = [];
+						if (res.taskTarget.page && res.taskTarget.page.list.length > 0) {
+							res.taskTarget.page.list.forEach(item => { // 只显示进行中和已结束数据，已结束状态数据不能延期
+								if (item.taskTargetState == 2 || item.taskTargetState == 3) this.tableData1
+									.push(item);
+							})
+						}
 					}
 				})
 				this.dialogVisible = true
@@ -272,22 +290,22 @@
 				// 修改时间接口
 				this.dialogVisible = false;
 			},
-      confirmEdit() {
-        // 调用修改时间接口
-        if(this.newEndTime == '') return this.showValidate = true
-        else this.showValidate = false;
-        let params = {
-          taskTargetId: this.currentRow.id,
-          delayTime: this.newEndTime
-        }
-        updateDelayTime(params).then(res => {
-          if(res.code == 0) {
-            this.$message.success('修改成功');
-            this.dialogVisible = false;
-            this.timeDialog = false;
-          }else this.$message.warning(res.msg);
-        })
-      },
+			confirmEdit() {
+				// 调用修改时间接口
+				if (this.newEndTime == '') return this.showValidate = true
+				else this.showValidate = false;
+				let params = {
+					taskTargetId: this.currentRow.id,
+					delayTime: this.newEndTime
+				}
+				updateDelayTime(params).then(res => {
+					if (res.code == 0) {
+						this.$message.success('修改成功');
+						this.dialogVisible = false;
+						this.timeDialog = false;
+					} else this.$message.warning(res.msg);
+				})
+			},
 			init() {
 				getTaskList(this.searchParams).then(res => {
 					this.tableData = res.page.list
