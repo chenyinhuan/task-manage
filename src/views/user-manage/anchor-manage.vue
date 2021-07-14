@@ -1,5 +1,5 @@
 <template>
-	<div id="associatedAnchor" :style="{'height': tableData.length==0?'661px':''}">
+	<div id="associatedAnchor" :style="{'height': tableData.length==0?'661px':''}" :class="[userId?'no-background':'']">
 		<section class="hd">
 			<div>
 				<el-input v-model="keyword" placeholder="请输入主播名" @keyup.enter.native="search"><i slot="prefix"
@@ -19,7 +19,7 @@
 				<el-button size="small" type="primary" @click="addAnchor">新增主播</el-button>
 			</div>
 		</section>
-		<el-table ref="table" :data="tableData" style="width: 100%;margin-top: 10px;"
+		<el-table ref="table" :data="tableData" style="width: 100%;margin-top: 10px;padding: 0px 24px;"
 			@selection-change="handleSelectionChange" @row-click="rowSelect" v-if="tableData.length>0">
       <el-table-column type="selection" width="55" v-if="userId">
 			</el-table-column>
@@ -38,11 +38,13 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-button class="associated" type="primary" v-if="tableData.length>0 && userId" @click="saveAssociated" v-preventReClick>
-			保存关联</el-button>
 		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
 			:current-page.sync="currentPage" :page-size="limit" layout="prev, pager, next, jumper" :total="total">
 		</el-pagination>
+    <div class="associated" v-if="tableData.length>0 && userId">
+      <el-button type="primary" @click="saveAssociated" v-preventReClick>
+      	确定</el-button>
+    </div>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
 			<p>还没有主播～</p>
@@ -74,6 +76,12 @@
 		saveAssociatedAnchor
 	} from '@/api/user-manage/account/anchor.js'
 	export default {
+    props: {
+        userId: {
+          type: [Number,String],
+          default: ''
+        }
+    },
 		data() {
 			return {
 				tableData: [],
@@ -115,15 +123,32 @@
 				message: '主播名称已存在!',
 				checkedData: [],
 				showValidate: false,
-				userId: ''
+				// userId: ''
 			}
 		},
 		created() {
-			if(this.$route.query.userId) this.userId = this.$route.query.userId;
+			// if(this.$route.query.userId) this.userId = this.$route.query.userId;
+      if(this.userId) {
+        this.tableColumn = [ // 表格列数据
+					{
+						label: '主播名称',
+						prop: 'name',
+					}]
+      }
 		},
 		mounted() {
 			this.init()
 		},
+    watch: {
+      userId: {
+        handler(val, oldVal) {
+          if(val) {
+            this.init()
+          }
+        },
+        immediate: true,
+      }
+    },
 		computed: {
 
 		},
@@ -143,7 +168,7 @@
 						this.total = res.page.total;
 						for (let i=0;i<this.tableData.length;i++) {
 							let item = this.tableData[i];
-							if(item.isRelation) {
+							if(item.relation) {
 								this.$nextTick(() => {
 									this.$refs.table.toggleRowSelection(item);
 								})
@@ -277,12 +302,13 @@
 					page: this.currentPage,
 					allIds: currentIds,
 					ids: ids,
-					userId: this.$route.query.userId // 选中的主播
+					userId: this.userId // 选中的主播
 				}
 				saveAssociatedAnchor(params).then(res => {
 					if (res.code == 0) {
 						this.$message.success('保存关联成功');
-						this.init()
+						// this.init()
+            this.$emit('saveAssociated',true)
 					} else this.$message.warning(res.msg);
 				})
 			}
@@ -316,10 +342,23 @@
 		border-radius: 12px;
 		box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
 		min-height: 768px;
-
+    &.no-background {
+      padding: 0px;
+      margin: 0px;
+      box-shadow: unset;
+      width: 100%;
+      .hd {
+        padding: 0px 24px;
+      }
+      .el-table::before {
+        height: 0px !important;
+      }
+    }
 		.associated {
-			position: absolute;
-			margin-top: 32px;
+      border-top: 1px solid #D9D9D9;
+      padding: 12px 24px;
+      margin: 32px 0px 0px;
+      text-align: right;
 		}
 
 		.hd {
@@ -373,7 +412,10 @@
 				}
 			}
 		}
-
+    .el-pagination {
+      margin-top: 30px;
+      padding: 0px 24px;
+    }
 		.el-table {
 			// .el-table__header-wrapper tr th:nth-last-child(2) {
 			// 	text-align: center !important;

@@ -51,6 +51,9 @@
 				</el-pagination>
 			</div>
 		</div>
+    <el-dialog custom-class="anchor-dialog" title="关联主播" :visible.sync="dialogVisible" width="782px" :before-close="handleClose">
+      <anchor :userId="currentUserId" @saveAssociated="handleClose()"></anchor>
+    </el-dialog>
 	</div>
 </template>
 <script>
@@ -61,12 +64,16 @@
 	} from '@/api/user-manage/account';
 	import {
 		getDeptList
-	} from '@/api/user-manage/organization/index'
+	} from '@/api/user-manage/organization/index';
+  import anchor from './anchor-manage.vue'
   import {
   	mapGetters,
   	mapActions,
   } from 'vuex'
 	export default {
+    components: {
+      anchor
+    },
 		data() {
 			return {
 				filterText: '',
@@ -130,7 +137,9 @@
 				  page: 1,
 				  limit: 10
 				},
-        actionList: {}
+        actionList: {},
+        dialogVisible: false,
+        currentUserId: ''
 			}
 		},
 		created() {
@@ -210,8 +219,13 @@
 			assocoated(item) {
 				// this.$router.push(`/user-manage/associated-anchor?userId=${item.userId}`)
 				// 显示弹窗
-				
+         this.dialogVisible = true;
+         this.currentUserId = item.userId;
 			},
+      handleClose() {
+        this.dialogVisible = false;
+        this.currentUserId = '';
+      },
 			filterNode(value, data) {
 				if (!value) return true;
 				return data.name.indexOf(value) !== -1;

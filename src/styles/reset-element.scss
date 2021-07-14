@@ -182,6 +182,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 		font-size: 14px;
 	}
 }
+ .anchor-dialog {
+    .el-dialog__body {
+      padding: 0px !important;
+    }
+  }
 .el-dialog__body {
   padding: 0px 24px;
 }
