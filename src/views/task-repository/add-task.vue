@@ -108,15 +108,15 @@
         checkTaskName: false,
         /* start  */
         startTimeRule: {
-          disabledDate: time => {
-            if (this.form.endTime) {
-              return (
-                time.getTime() > new Date(this.form.endTime).getTime()
-              );
-            } else {
-              return time.getTime() > Date.now();
-            }
-          },
+			disabledDate: time => {
+				if (this.form.endTime) {
+					return (
+						time.getTime() > new Date(this.form.endTime).getTime()
+					);
+				} else {
+					return time.getTime() + 86400000 < Date.now();
+				}
+			}
         },
         endTimeRule: {
           disabledDate: time => {
