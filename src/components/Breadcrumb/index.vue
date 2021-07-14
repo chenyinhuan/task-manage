@@ -348,26 +348,26 @@
 							},
 						]
 					},
-					{
-						// 用户管理-关联主播
-						path: '/user-manage/associated-anchor',
-						matched: [{
-								name: '用户管理',
-								path: '/user-manage/account-config',
-								active: true
-							},
-							{
-								name: '账户配置',
-								path: '/user-manage/account-config',
-								active: true
-							},
-							{
-								name: '关联主播',
-								path: '',
-								active: false
-							},
-						]
-					},
+					// {
+					// 	// 用户管理-关联主播
+					// 	path: '/user-manage/associated-anchor',
+					// 	matched: [{
+					// 			name: '用户管理',
+					// 			path: '/user-manage/account-config',
+					// 			active: true
+					// 		},
+					// 		{
+					// 			name: '账户配置',
+					// 			path: '/user-manage/account-config',
+					// 			active: true
+					// 		},
+					// 		{
+					// 			name: '关联主播',
+					// 			path: '',
+					// 			active: false
+					// 		},
+					// 	]
+					// },
 					{
 						// 用户管理-组织配置
 						path: '/user-manage/organization-setting',
@@ -475,7 +475,16 @@
 							path: '/database',
 							active: true
 						}]
-					}
+					},
+					{
+						// 数据库表管理
+						path: '/anchor-manage',
+						matched: [{
+							name: '主播管理',
+							path: '/anchor-manage',
+							active: true
+						}]
+					},
 				]
 			}
 		},
