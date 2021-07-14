@@ -114,7 +114,7 @@
 						time.getTime() > new Date(this.form.endTime).getTime()
 					);
 				} else {
-					return time.getTime() + 86400000 < Date.now();
+					// return time.getTime() + 86400000 < Date.now();
 				}
 			}
         },
