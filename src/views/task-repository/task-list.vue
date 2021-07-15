@@ -36,12 +36,16 @@
 						{{scope.row.createUserId==userInfo.userId?'自建':'上级'}}
 					</div>
 					<div v-if="item.slot && item.prop=='opt'">
-						<el-button type="text" @click="getDetail(scope.row)" v-if="scope.row.createUserId==userInfo.userId">查看</el-button>
-						<el-button type="text" v-if="scope.row.createUserId==userInfo.userId && scope.row.taskState == 1"
+						<el-button type="text" @click="getDetail(scope.row)"
+							v-if="scope.row.createUserId==userInfo.userId">查看</el-button>
+						<el-button type="text"
+							v-if="scope.row.createUserId==userInfo.userId && scope.row.taskState == 1"
 							@click="addTask(scope.row)">编辑</el-button>
-						<el-button type="text" v-if="scope.row.createUserId==userInfo.userId && (scope.row.taskState == 1 || scope.row.taskState == 2)"
+						<el-button type="text"
+							v-if="scope.row.createUserId==userInfo.userId && (scope.row.taskState == 1 || scope.row.taskState == 2)"
 							@click="cancelCurTask(scope.row)">取消</el-button>
-						<el-button type="text" @click="viewDes(scope.row)" v-if="scope.row.createUserId!=userInfo.userId">查看说明</el-button>
+						<el-button type="text" @click="viewDes(scope.row)"
+							v-if="scope.row.createUserId!=userInfo.userId">查看说明</el-button>
 						<el-button type="text"
 							v-if="scope.row.createUserId!=userInfo.userId &&(scope.row.taskState == 1 ||  scope.row.taskState == 2)"
 							@click="openDialog(scope.row)">派发任务</el-button>
@@ -167,7 +171,10 @@
 				isShow: false,
 				searchParams: {
 					page: 1,
-					limit: 10
+					limit: 10,
+					taskName: '',
+					taskState: '',
+					taskType: ''
 				},
 				total: 0,
 				description: '',
@@ -180,8 +187,8 @@
 			}
 		},
 		created() {
-      this.userInfo = {};
-			this.userInfo = localStorage.getItem('userInfo')?JSON.parse(localStorage.getItem('userInfo')):{}
+			this.userInfo = {};
+			this.userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {}
 			this.init()
 		},
 		mounted() {
@@ -209,13 +216,13 @@
 				}).catch(() => {})
 			},
 			confirm(val) {
-        console.log(val)
-        let users = []
-        if(val.length > 0) {
-          val.forEach(item => {
-            if(!item.disabled) users.push(item);
-          })
-        }
+				console.log(val)
+				let users = []
+				if (val.length > 0) {
+					val.forEach(item => {
+						if (!item.disabled) users.push(item);
+					})
+				}
 				this.formData.users = users
 				saveuser(this.formData).then(res => {
 					if (res.code == 0) {
@@ -245,15 +252,17 @@
 									let item = res.deptUsers
 									for (var j = 0; j < item[i].deptUsersVOS.length; j++) {
 										let citem = item[i].deptUsersVOS[j];
-                    if(this.form.users.length > 0) {
-                      if(this.form.users.some(n => n.userId == citem.userId)) {
-                      	this.selectedData.push(citem)
-                      }
-                      citem.disabled = this.form.users.some(n => n.userId == citem.userId)
-                    }else citem.disabled = false;
+										if (this.form.users.length > 0) {
+											if (this.form.users.some(n => n.userId == citem.userId)) {
+												this.selectedData.push(citem)
+											}
+											citem.disabled = this.form.users.some(n => n.userId == citem
+												.userId)
+										} else citem.disabled = false;
 									}
 								}
-								let temp = this.$transformDeptUser(JSON.parse(JSON.stringify(res.deptUsers)));
+								let temp = this.$transformDeptUser(JSON.parse(JSON.stringify(res
+									.deptUsers)));
 								let arr = this.$dealingDeptUser(JSON.parse(JSON.stringify(temp)));
 								this.userList = this.deleteChildren(arr);
 							} else return this.$message.warning(res.msg)
@@ -265,18 +274,19 @@
 			},
 			deleteChildren(arr) {
 				let childs = arr
-			  for (let i = childs.length; i--; i > 0) {
-				if (childs[i].children) {
-				  if (childs[i].children.length && !childs[i].userId) {
-					this.deleteChildren(childs[i].children)
-				  } else {
-					delete childs[i].children
-				  }
+				for (let i = childs.length; i--; i > 0) {
+					if (childs[i].children) {
+						if (childs[i].children.length && !childs[i].userId) {
+							this.deleteChildren(childs[i].children)
+						} else {
+							delete childs[i].children
+						}
+					}
 				}
-			  }
-			  return arr
+				return arr
 			},
 			init() {
+				console.log(this.searchParams)
 				getTaskList(this.searchParams).then(res => {
 					this.tableData = res.page.list
 					this.total = res.page.totalCount

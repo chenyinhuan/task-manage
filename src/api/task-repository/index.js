@@ -20,7 +20,7 @@ export const saveTaskTargeTpl = (params) => api.post(`/task-admin/task/tasktpl/s
  * 任务列表
  * @params params
  */
-export const getTaskList = (params) => api.post(`/task-admin/task/tk/repo/page?page=${params.page}&limit=${params.limit}`, params)
+export const getTaskList = (params) => api.post(`/task-admin/task/tk/repo/page?page=${params.page}&limit=${params.limit}&taskName=${params.taskName}&taskState=${params.taskState}&taskType=${params.taskType}`, params)
   /**
  * 保存任务
  * @params params

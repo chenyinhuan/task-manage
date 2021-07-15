@@ -10,7 +10,7 @@
 		<section class="content">
 			<section class="hd">
 				<p>我的派发任务</p>
-				<el-input v-model="keyword" placeholder="考核批次" @keyup.enter.native="search"><i slot="prefix"
+				<el-input v-model="taskName" placeholder="任务名称" @keyup.enter.native="search"><i slot="prefix"
 						class="el-input__icon el-icon-search"></i></el-input>
 			</section>
 			<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
@@ -210,7 +210,7 @@
 				],
 				currentPage: 0,
 				isShow: false,
-				keyword: '',
+				taskName: '',
 				searchParams: {
 					page: 1,
 					limit: 10
@@ -307,7 +307,7 @@
 				})
 			},
 			init() {
-				getTaskList(this.searchParams).then(res => {
+				getTaskList({...{taskName: this.taskName},...this.searchParams}).then(res => {
 					this.tableData = res.page.list
 					this.total = res.page.totalCount
 					this.isShow = true;
@@ -315,6 +315,7 @@
 			},
 			handleSizeChange(val) {
 				this.searchParams.limit = val
+				this.searchParams.page = 1;
 				this.init()
 			},
 			handleCurrentChange(val) {
@@ -322,7 +323,9 @@
 				this.init()
 			},
 			search() {
-				console.log(this.keyword)
+				console.log(this.taskName);
+				this.searchParams.page = 1;
+				this.init()
 			},
 			go(row) {
 				this.$router.push({
