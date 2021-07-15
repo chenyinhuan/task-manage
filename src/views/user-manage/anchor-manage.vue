@@ -342,7 +342,7 @@
 		background-color: #FFFFFF;
 		border-radius: 12px;
 		box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
-		min-height: 768px;
+		// min-height: 768px;
     &.no-background {
       padding: 0px;
       margin: 0px;
