@@ -184,7 +184,8 @@
 				this.$router.push({
 					path: `/task-center/task-target-list`,
 					query: {
-						id: row.id
+						id: row.id,
+						date: this.date
 					}
 				})
 			},

@@ -6,10 +6,7 @@
 						class="el-input__icon el-icon-search"></i></el-input>
 			</div>
 			<div class="upload" v-if="!userId">
-				<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
-					:on-exceed="handleChange">
-					<el-button class="excel" size="small">Excel模版</el-button>
-				</el-upload>
+				<a download="主播导入模版.xlsx" href="../../../static/主播导入模版.xlsx"><el-button class="excel" size="small">Excel模版</el-button></a>
 				<el-upload ref="upload" class="upload-demo" :action="uploadUrl" :on-change="handleChange"
 					:show-file-list="false" :limit="1"
 					accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
@@ -282,7 +279,11 @@
 				let fileFormData = new FormData();
 				fileFormData.append('multipartFile', files); //filename是键，file是值，就是要传的文件，test.zip是要传的文件名
 				importExcel(fileFormData).then((res) => {
-					if (res.code == 0) this.$message.success('导入成功！');
+					if (res.code == 0) {
+						if(res.failCount > 0) {
+							this.$message.warning(`${res.failCount}条导入失败`);
+						}else this.$message.success('导入成功！');
+					}
 					else this.$message.warning(res.msg);
 				})
 				this.$refs.upload.clearFiles()
