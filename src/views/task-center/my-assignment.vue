@@ -308,8 +308,10 @@
 			},
 			init() {
 				getTaskList({...{taskName: this.taskName},...this.searchParams}).then(res => {
-					this.tableData = res.page.list
-					this.total = res.page.totalCount
+					if(res.code == 0) {
+						this.tableData = res.page.list
+						this.total = res.page.totalCount
+					}
 					this.isShow = true;
 				})
 			},
