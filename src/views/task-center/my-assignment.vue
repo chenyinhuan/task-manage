@@ -21,7 +21,7 @@
 							<el-button type="primary" @click.stop="go(scope.row)">查看明细</el-button>
 						</div>
 						<div v-if="item.slot && item.prop=='taskType'">
-							{{scope.row.taskType == 1?'直接派发':'由下级派发'}}
+							{{scope.row.taskType == 1?'直接派发':''}}{{scope.row.taskType == 2?'由下级派发':''}}
 						</div>
 						<div v-if="item.slot && item.prop == 'taskTarget'">
 							<span @click="editRow(scope.row)" style="color: #0079FE;cursor: pointer">管理</span>
