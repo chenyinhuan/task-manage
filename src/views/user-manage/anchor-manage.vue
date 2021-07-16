@@ -6,7 +6,9 @@
 						class="el-input__icon el-icon-search"></i></el-input>
 			</div>
 			<div class="upload" v-if="!userId">
-				<a download="主播导入模版.xlsx" href="../../../static/主播导入模版.xlsx"><el-button class="excel" size="small">Excel模版</el-button></a>
+				<a download="主播导入模版.xlsx" href="../../../static/主播导入模版.xlsx">
+					<el-button class="excel" size="small">Excel模版</el-button>
+				</a>
 				<el-upload ref="upload" class="upload-demo" :action="uploadUrl" :on-change="handleChange"
 					:show-file-list="false" :limit="1"
 					accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
@@ -16,16 +18,17 @@
 				<el-button size="small" type="primary" @click="addAnchor">新增主播</el-button>
 			</div>
 		</section>
-		<el-table ref="table" :data="tableData" style="width: 100%;margin-top: 10px;padding: 0px 24px;"
+		<el-table ref="table" :data="tableData" style="width: 100%;margin-top: 10px;" :style="{'padding': userId?'0px 24px':''}"
 			@selection-change="handleSelectionChange" @row-click="rowSelect" v-if="tableData.length>0">
-      <el-table-column type="selection" width="55" v-if="userId">
+			<el-table-column type="selection" width="55" v-if="userId">
 			</el-table-column>
 			<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
 					<div v-if="item.slot && item.prop=='userInfoVOS'">
 						<div v-for="citem in scope.row.userInfoVOS" :key="citem.userName">
-							{{citem.userName}}/{{citem.mobile}}</div>
+							{{citem.userName}}/{{citem.mobile}}
+						</div>
 					</div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="text" @click="editItem(scope.row)">编辑</el-button>
@@ -38,10 +41,10 @@
 		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-if="tableData.length>0"
 			:current-page.sync="currentPage" :page-size="limit" layout="prev, pager, next, jumper" :total="total">
 		</el-pagination>
-    <div class="associated" v-if="tableData.length>0 && userId">
-      <el-button type="primary" @click="saveAssociated" v-preventReClick>
-      	确定</el-button>
-    </div>
+		<div class="associated" v-if="tableData.length>0 && userId">
+			<el-button type="primary" @click="saveAssociated" v-preventReClick>
+				确定</el-button>
+		</div>
 		<div class="tempty" v-if="tableData.length==0 && isShow">
 			<img src="@/images/my-task/illustration.png">
 			<p>还没有主播～</p>
@@ -73,12 +76,12 @@
 		saveAssociatedAnchor
 	} from '@/api/user-manage/account/anchor.js'
 	export default {
-    props: {
-        userId: {
-          type: [Number,String],
-          default: ''
-        }
-    },
+		props: {
+			userId: {
+				type: [Number, String],
+				default: ''
+			}
+		},
 		data() {
 			return {
 				tableData: [],
@@ -125,27 +128,28 @@
 		},
 		created() {
 			// if(this.$route.query.userId) this.userId = this.$route.query.userId;
-      if(this.userId) {
-        this.tableColumn = [ // 表格列数据
+			if (this.userId) {
+				this.tableColumn = [ // 表格列数据
 					{
 						label: '主播名称',
 						prop: 'name',
-					}]
-      }
+					}
+				]
+			}
 		},
 		mounted() {
 			this.init()
 		},
-    watch: {
-      userId: {
-        handler(val, oldVal) {
-          if(val) {
-            this.init()
-          }
-        },
-        immediate: true,
-      }
-    },
+		watch: {
+			userId: {
+				handler(val, oldVal) {
+					if (val) {
+						this.init()
+					}
+				},
+				immediate: true,
+			}
+		},
 		computed: {
 
 		},
@@ -157,15 +161,15 @@
 					"limit": this.limit,
 					"orderBy": null,
 					"sort": true,
-          userId: this.userId
+					userId: this.userId
 				}
 				getAnchorList(params).then(res => {
 					if (res.code == 0) {
 						this.tableData = res.page.list;
 						this.total = res.page.total;
-						for (let i=0;i<this.tableData.length;i++) {
+						for (let i = 0; i < this.tableData.length; i++) {
 							let item = this.tableData[i];
-							if(item.relation) {
+							if (item.relation) {
 								this.$nextTick(() => {
 									this.$refs.table.toggleRowSelection(item);
 								})
@@ -280,11 +284,10 @@
 				fileFormData.append('multipartFile', files); //filename是键，file是值，就是要传的文件，test.zip是要传的文件名
 				importExcel(fileFormData).then((res) => {
 					if (res.code == 0) {
-						if(res.failCount > 0) {
+						if (res.failCount > 0) {
 							this.$message.warning(`${res.failCount}条导入失败`);
-						}else this.$message.success('导入成功！');
-					}
-					else this.$message.warning(res.msg);
+						} else this.$message.success('导入成功！');
+					} else this.$message.warning(res.msg);
 				})
 				this.$refs.upload.clearFiles()
 			},
@@ -309,7 +312,7 @@
 					if (res.code == 0) {
 						this.$message.success('保存关联成功');
 						// this.init()
-            this.$emit('saveAssociated',true)
+						this.$emit('saveAssociated', true)
 					} else this.$message.warning(res.msg);
 				})
 			}
@@ -342,24 +345,28 @@
 		background-color: #FFFFFF;
 		border-radius: 12px;
 		box-shadow: 0px 2px 4px 3px rgba(0, 0, 0, 0.03);
+
 		// min-height: 768px;
-    &.no-background {
-      padding: 0px;
-      margin: 0px;
-      box-shadow: unset;
-      width: 100%;
-      .hd {
-        padding: 0px 24px;
-      }
-      .el-table::before {
-        height: 0px !important;
-      }
-    }
+		&.no-background {
+			padding: 0px;
+			margin: 0px;
+			box-shadow: unset;
+			width: 100%;
+
+			.hd {
+				padding: 0px 24px;
+			}
+
+			.el-table::before {
+				height: 0px !important;
+			}
+		}
+
 		.associated {
-      border-top: 1px solid #D9D9D9;
-      padding: 12px 24px;
-      margin: 32px 0px 0px;
-      text-align: right;
+			border-top: 1px solid #D9D9D9;
+			padding: 12px 24px;
+			margin: 32px 0px 0px;
+			text-align: right;
 		}
 
 		.hd {
@@ -413,10 +420,12 @@
 				}
 			}
 		}
-    .el-pagination {
-      margin-top: 30px;
-      padding: 0px 24px;
-    }
+
+		.el-pagination {
+			margin-top: 30px;
+			padding: 0px 24px;
+		}
+
 		.el-table {
 			// .el-table__header-wrapper tr th:nth-last-child(2) {
 			// 	text-align: center !important;

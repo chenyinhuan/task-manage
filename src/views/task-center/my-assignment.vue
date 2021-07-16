@@ -39,7 +39,7 @@
 				<p>还没有任务～</p>
 			</div>
 		</section>
-		<el-dialog title="任务指标管理" :visible.sync="dialogVisible" width="782px" :before-close="handleClose">
+		<el-dialog title="任务指标管理" :visible.sync="dialogVisible" width="820px" :before-close="handleClose">
 			<div class="dialog-content">
 				<el-table ref="table" :data="tableData1" style="width: 100%; margin-top: 10px">
 					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"

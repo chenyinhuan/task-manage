@@ -232,7 +232,7 @@
 						// 指标库管理-新增指标
 						path: '/target-manage/add-target',
 						matched: [{
-								name: '新增指标',
+								name: '指标库管理',
 								path: '/target-manage',
 								active: true
 							},

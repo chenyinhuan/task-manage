@@ -2,7 +2,7 @@
 	<div id="targetManage" :style="{'height': tableData.length==0?'661px':''}">
 		<section class="hd">
 			<div>
-				<el-input v-model="searchParams.targetName" placeholder="指标名称" @keyup.enter.native="search"><i slot="prefix"
+				<el-input v-model="searchParams.target_name" placeholder="指标名称" @keyup.enter.native="search"><i slot="prefix"
 						class="el-input__icon el-icon-search"></i></el-input>
 			</div>
 			<el-button type="primary" @click="addTask">新增</el-button>
@@ -76,7 +76,7 @@
 				searchParams: {
 					page: 1,
 					limit: 10,
-          targetName: ''
+          target_name: ''
 				},
 				total: 0
 			}
