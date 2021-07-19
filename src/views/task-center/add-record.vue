@@ -13,11 +13,11 @@
           </el-input>
           <el-input-number placeholder="请输入" :controls="false" v-model="item.fieldValue"
             v-if="item.formType == 1 && (item.dataType == 3 || item.dataType == 2)"></el-input-number>
-          <el-date-picker v-if="item.formType == 1 && item.dataType == 4" v-model="form.date" type="date"
+          <el-date-picker v-if="item.formType == 1 && item.dataType == 4" value-format="yyyy-MM-dd" v-model="item.fieldValue" type="date"
             placeholder="请填写日期">
           </el-date-picker>
-          <el-time-picker v-if="item.formType == 1 && item.dataType == 5" v-model="item.fieldValue" type="date"
-            placeholder="请填写日期">
+          <el-time-picker v-if="item.formType == 1 && item.dataType == 5" v-model="item.fieldValue"
+            placeholder="请填写时间">
           </el-time-picker>
           <el-select placeholder="请输入" v-model="item.fieldValue" v-if="item.formType == 2 || item.formType == 3"
             :multiple="item.formType == 2?false:true">
