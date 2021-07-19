@@ -288,6 +288,7 @@
 							this.$message.warning(`${res.failCount}条导入失败`);
 						} else this.$message.success('导入成功！');
 					} else this.$message.warning(res.msg);
+          this.search();
 				})
 				this.$refs.upload.clearFiles()
 			},
