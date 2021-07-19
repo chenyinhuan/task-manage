@@ -5,16 +5,16 @@
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
 					<div v-if="item.slot && item.prop=='dataType'">
-						{{$dataTypeList.find(n => n.value == scope.row.dataType)?$dataTypeList.find(n => n.value == scope.row.dataType).label:''}}
+						{{formatDataType(scope.row)}}
 					</div>
-					<div v-if="item.slot && item.prop=='formType'">
-						{{$formTypeList.find(n => n.value == scope.row.formType)?$formTypeList.find(n => n.value == scope.row.formType).label:''}}
+					<div v-if="item.slot && item.prop=='source'">
+						{{formatSource(scope.row)}}
 					</div>
 					<div v-if="item.slot && item.prop=='createUserName'">
 						{{scope.row.createUserName}}/{{scope.row.createTime}}
 					</div>
 					<div v-if="item.slot && item.prop=='updateUserName'">
-						{{scope.row.updateUserName}}/{{scope.row.updateTime}}
+						{{scope.row.updateUserName}}/{{scope.row}}
 					</div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="text" @click="editInfo(scope.row)">编辑</el-button>
@@ -64,7 +64,7 @@
 					},
 					{
 						label: '来源字段',
-						prop: 'weight',
+						prop: 'source',
 						slot: true,
 					},
 					{
@@ -85,7 +85,8 @@
 				currentPage: 1,
 				limit: 10,
 				total: 0,
-				isShow: false
+				isShow: false,
+				dataType: this.$dataTypeList
 			}
 		},
 		created() {
@@ -95,9 +96,24 @@
 
 		},
 		computed: {
-
+			
 		},
 		methods: {
+			formatSource(item) {
+				let arr = [];
+				arr = item.fieldTypeDTO.map(item => {
+					return item.name;
+				})
+				return arr.join('、')
+			},
+			formatDataType(item) {
+				let arr = [];
+				arr = item.fieldTypeDTO.map(item => {
+					return this.dataType.find(n => n.dataType == item.dataType);
+				})
+				let newArr = [...new Set(arr)];
+				return newArr.join('、')
+			},
 			editInfo(item) {
 				this.$router.push('/field-manage/add-field?type=' + item.type + '&id=' + item.id)
 			},
