@@ -14,7 +14,7 @@
 						{{scope.row.createUserName}}/{{scope.row.createTime}}
 					</div>
 					<div v-if="item.slot && item.prop=='updateUserName'">
-						{{scope.row.updateUserName}}/{{scope.row}}
+						{{scope.row.updateUserName}}/{{scope.row.updateTime}}
 					</div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="text" @click="editInfo(scope.row)">编辑</el-button>
@@ -75,6 +75,7 @@
 					{
 						label: '修改人/修改后时间',
 						prop: 'updateUserName',
+            slot: true
 					},
 					{
 						label: '操作',
@@ -96,7 +97,7 @@
 
 		},
 		computed: {
-			
+
 		},
 		methods: {
 			formatSource(item) {
@@ -109,8 +110,9 @@
 			formatDataType(item) {
 				let arr = [];
 				arr = item.fieldTypeDTO.map(item => {
-					return this.dataType.find(n => n.dataType == item.dataType);
+					return this.dataType.find(n => n.value == item.dataType)?this.dataType.find(n => n.value == item.dataType).label: '';
 				})
+				console.log(arr)
 				let newArr = [...new Set(arr)];
 				return newArr.join('、')
 			},
