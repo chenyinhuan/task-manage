@@ -247,23 +247,7 @@
 		data() {
 			return {
 				calcType: this.$calcType,
-				apiList: [{
-						value: 1,
-						label: '快递查询'
-					},
-					{
-						value: 2,
-						label: '工作进度查询'
-					},
-					{
-						value: 3,
-						label: '订单状态查询'
-					},
-					{
-						value: 4,
-						label: '退款率查询'
-					},
-				],
+				apiList: [],
 				nativeList: [],
 				nativeList1: [],
 				fieldApiList: [],
@@ -519,20 +503,25 @@
 					let complexMahtRuleVOs = [];
 					if (this.enums.length == 1) {
 						complexMahtRuleVOs = [{
-							"logicAction": this.enums[0]
-								.logicAction, //运算方式 1：加法，2：减法，3除，4乘， 5等于，6不等于，7包含， 8不包含， 9空判断，10非空判断
+							"logicAction": this.enums[0].logicAction, //运算方式 1：加法，2：减法，3除，4乘， 5等于，6不等于，7包含， 8不包含， 9空判断，10非空判断
 							"fieldStartId": this.form.fieldStartId, //第一个字段id
 							"fieldEndId": this.enums[0].fieldStartId //第二个字段id
 						}]
-					} else if (this.enums.length == 2) {
-						complexMahtRuleVOs = [{
-							"logicAction": this.enums[0].cc,
-							"fieldStartId": this.form.fieldStartId, //第一个字段id
-							"fieldEndId": this.enums[0].fieldStartId //第二个字段id
-						}, {
-							"logicAction": this.enums[1].logicAction,
-							"fieldStartId": this.enums[1].fieldStartId
-						}]
+					} else if (this.enums.length > 1) {
+						complexMahtRuleVOs = this.enums.map((item,index) => {
+							if(index == 0) {
+								return {
+									"logicAction": item.logicAction,
+									"fieldStartId": this.form.fieldStartId, //第一个字段id
+									"fieldEndId": item.fieldStartId //第二个字段id
+								}
+							}else {
+								return {
+									"logicAction": item.logicAction,
+									"fieldStartId": item.fieldStartId
+								}
+							}
+						})
 					}
 					params = {
 						"complexMahtRuleVOs": complexMahtRuleVOs,
