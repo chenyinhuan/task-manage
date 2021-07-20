@@ -114,7 +114,7 @@
         this.init();
       },
       go(row) {
-		  localStorage.setItem('targetUserId', item.userId)
+		  localStorage.setItem('targetUserId', row.userId)
         this.$router.push({
           path: '/task-center/task-target-list',
           query: {
