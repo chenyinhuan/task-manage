@@ -110,11 +110,21 @@
 			formatDataType(item) {
 				let arr = [];
 				arr = item.fieldTypeDTO.map(item => {
-					return this.dataType.find(n => n.value == item.dataType)?this.dataType.find(n => n.value == item.dataType).label: '';
+					if(item.type == 1) {
+						if(item.dataType == 1) return 'number'
+					}else if(item.type == 2) {
+						if(item.dataType == 1) return '字符串string'
+						else if(item.dataType == 2) return '整数数值init'
+						else if(item.dataType == 3) return '小数数值float'
+						else if(item.dataType == 4) return '日期date'
+						else if(item.dataType == 5) return '时间time'
+					}else {
+						if(item.dataType == 1) return 'Json数据'
+					}
 				})
 				console.log(arr)
-				let newArr = [...new Set(arr)];
-				return newArr.join('、')
+				// let newArr = [...new Set(arr)];
+				return arr.join('、')
 			},
 			editInfo(item) {
 				this.$router.push('/field-manage/add-field?type=' + item.type + '&id=' + item.id)
