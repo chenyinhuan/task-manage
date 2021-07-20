@@ -48,7 +48,8 @@
 				taskId: '',
 				list: [],
 				taskTplFieldStructureDTOS: [],
-        date: ''
+        date: '',
+        userId: localStorage.getItem('recordUserId')
 			}
 		},
 		created() {
@@ -69,6 +70,7 @@
 						taskId: this.taskId,
 						limit: this.limit,
 						page: this.currentPage,
+            userId: this.userId
 					}
 					getRecordList(params).then(res => {
 						if (res.code == 0) {
@@ -95,7 +97,7 @@
 								for (let j in this.tableColumn) {
 									if (item.taskRecordEntities.find(n => n.fieldId == this.tableColumn[j]
 											.fieldId)) {
-				
+
 										json[`${this.tableColumn[j].fieldId}`] = item.taskRecordEntities.find(n =>
 												n.fieldId == this.tableColumn[j].fieldId)
 											.fieldValue;

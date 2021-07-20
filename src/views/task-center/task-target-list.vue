@@ -106,6 +106,7 @@
 				this.init();
 			},
 			go(row) {
+        localStorage.setItem('recordUserId',row.userId)
 				this.$router.push({
 					path: `/task-center/task-dtl-list`,
 					query: {
