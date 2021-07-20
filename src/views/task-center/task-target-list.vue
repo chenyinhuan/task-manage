@@ -30,7 +30,9 @@
 	</div>
 </template>
 <script>
-  import {getTaskTargetList} from '@/api/task-center/my-task/index.js'
+	import {
+		getTaskTargetList
+	} from '@/api/task-center/my-task/index.js'
 	export default {
 		data() {
 			return {
@@ -74,17 +76,18 @@
 					},
 				],
 				currentPage: 1,
-        limit: 10,
-        total: 0,
+				limit: 10,
+				total: 0,
 				isShow: false,
-        taskId: '',
-        taskTplId: '',
-        taskName: ''
+				taskId: '',
+				taskTplId: '',
+				taskName: '',
+				userId: localStorage.getItem('targetUserId') || ''
 			}
 		},
 		created() {
-      if(this.$route.query.id) this.taskId = this.$route.query.id;
-      this.init();
+			if (this.$route.query.id) this.taskId = this.$route.query.id;
+			this.init();
 		},
 		mounted() {
 
@@ -95,12 +98,12 @@
 		methods: {
 			handleSizeChange(val) {
 				this.limit = val;
-        this.currentPage = 1;
-        this.init();
+				this.currentPage = 1;
+				this.init();
 			},
 			handleCurrentChange(val) {
 				this.currentPage = val;
-        this.init();
+				this.init();
 			},
 			go(row) {
 				this.$router.push({
@@ -110,20 +113,21 @@
 					}
 				})
 			},
-      init() {
-        let params = {
-          taskId: this.taskId,
-          limit: this.limit,
-          page: this.currentPage
-        }
-        getTaskTargetList(params).then(res => {
-          if(res.code == 0) {
-            this.tableData = res.taskTarget.page.list;
-            this.total = res.taskTarget.page.totalCount;
-            this.taskName = res.taskTarget.taskName
-          }
-        })
-      }
+			init() {
+				let params = {
+					taskId: this.taskId,
+					limit: this.limit,
+					page: this.currentPage,
+					userId: this.userId
+				}
+				getTaskTargetList(params).then(res => {
+					if (res.code == 0) {
+						this.tableData = res.taskTarget.page.list;
+						this.total = res.taskTarget.page.totalCount;
+						this.taskName = res.taskTarget.taskName
+					}
+				})
+			}
 		}
 	}
 </script>
