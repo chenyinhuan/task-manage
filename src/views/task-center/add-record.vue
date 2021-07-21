@@ -144,20 +144,26 @@
           updateTaskRecord(params).then(res => {
             if (res.code == 0) {
               this.$message.success('修改成功！');
-              this.$router.push(`/task-center/task-dtl-list?id=${this.taskId}&date=${this.date}`)
+              if (this.$route.path.indexOf('/my-assignment/') != -1) {
+                this.$router.push(`/task-center/my-assignment/task-dtl-list?id=${this.taskId}`)
+              }else this.$router.push(`/task-center/task-dtl-list?id=${this.taskId}&date=${this.date}`)
             } else this.$message.warning(res.msg);
           })
         }else {
           saveTaskRecord(params).then(res => {
             if (res.code == 0) {
               this.$message.success('保存成功！');
-              this.$router.push(`/task-center/task-dtl-list?id=${this.taskId}&date=${this.date}`)
+              if (this.$route.path.indexOf('/my-assignment/') != -1) {
+                this.$router.push(`/task-center/my-assignment/task-dtl-list?id=${this.taskId}`)
+              }else this.$router.push(`/task-center/task-dtl-list?id=${this.taskId}&date=${this.date}`)
             } else this.$message.warning(res.msg);
           })
         }
       },
       cancel() {
-        this.$router.push(`/task-center/task-dtl-list?id=${this.taskId}&date=${this.date}`)
+        if (this.$route.path.indexOf('/my-assignment/') != -1) {
+          this.$router.push(`/task-center/my-assignment/task-dtl-list?id=${this.taskId}`)
+        }else this.$router.push(`/task-center/task-dtl-list?id=${this.taskId}&date=${this.date}`)
       },
       //上传
       successUpload(response, file, fileList) {

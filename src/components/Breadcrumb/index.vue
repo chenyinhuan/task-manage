@@ -625,7 +625,6 @@
 					this.$router.push(redirect)
 					return
 				}
-				console.log(path)
 				if (path == '/task-center/task-dtl-list') {
 					this.$router.push(`${path}?id=${this.$route.query.taskId}&date=${this.$route.query.date || ''}`)
 				}else if(path == '/task-center/my-assignment/task-dtl-list') {
