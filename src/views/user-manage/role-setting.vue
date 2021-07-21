@@ -209,7 +209,7 @@ import {getDeptList} from '@/api/user-manage/organization/index';
       display: flex;
       /*justify-content: space-between;*/
       .tree{
-        width: 403px;
+        //width: 403px;
         padding-right: 110px;
         .expanded{
           color: #D8D8D8;
@@ -244,7 +244,7 @@ import {getDeptList} from '@/api/user-manage/organization/index';
         }
       }
       .table-list{
-        width: 1192px;
+        width: calc(100% - 350px);
       }
     }
     .search{

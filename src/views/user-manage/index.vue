@@ -299,7 +299,7 @@
 
 			/*justify-content: space-between;*/
 			.tree {
-				width: 237px;
+				//width: 237px;
 				margin-right: 110px;
 
 				.expanded {
@@ -343,7 +343,7 @@
 			}
 
 			.table-list {
-				width: 1192px;
+        width: calc(100% - 350px);
 
 				.iconfont {
 					display: inline-block;

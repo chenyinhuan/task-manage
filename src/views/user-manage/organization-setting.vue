@@ -173,7 +173,7 @@
       display: flex;
       /*justify-content: space-between;*/
       .tree{
-        width: 403px;
+        //width: 403px;
         padding-right: 110px;
         .expanded{
           color: #D8D8D8;
@@ -208,7 +208,7 @@
         }
       }
       .table-list{
-        width: 1192px;
+        width: calc(100% - 350px);
       }
     }
     .search{
