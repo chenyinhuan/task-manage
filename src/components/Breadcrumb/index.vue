@@ -204,13 +204,13 @@
 								active: true
 							},
 							{
-								name: '我的任务',
-								path: '/task-center/my-task',
+								name: '我的派发任务',
+								path: '/task-center/my-assignment',
 								active: true
 							},
 							{
-								name: '任务列表',
-								path: '/task-center/task-list',
+								name: '派发任务明细',
+								path: '/task-center/my-assignment-list',
 								active: true
 							},
 							{

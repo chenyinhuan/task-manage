@@ -237,7 +237,10 @@
             color: #666777;
             margin-bottom: 4px;
           }
-
+          >>>.el-input__suffix {
+            right: unset;
+            left: 100px;
+          }
           .el-input,
           .el-input-number {
             >>>.el-input__inner {
