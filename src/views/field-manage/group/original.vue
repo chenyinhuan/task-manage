@@ -11,10 +11,12 @@
 						{{$formTypeList.find(n => n.value == scope.row.formType)?$formTypeList.find(n => n.value == scope.row.formType).label:''}}
 					</div>
 					<div v-if="item.slot && item.prop=='createUserName'">
-						{{scope.row.createUserName}}/{{scope.row.createTime}}
+						<p>{{scope.row.createUserName}}</p>
+					  <p>{{scope.row.createTime}}</p>
 					</div>
 					<div v-if="item.slot && item.prop=='updateUserName'">
-						{{scope.row.updateUserName}}/{{scope.row.updateTime}}
+						<p>{{scope.row.updateUserName}}</p>
+					  <p>{{scope.row.updateTime}}</p>
 					</div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="text" @click="editInfo(scope.row)">编辑</el-button>

@@ -19,7 +19,7 @@
             <div class="dot" :class="[scope.row.status == 1?'green':'',scope.row.status == 2?'grey':'']">
             </div><span> {{scope.row.status == 2?'未上架':''}}{{scope.row.status == 1?'正常':''}}</span>
           </div>
-          <div v-if="item.slot && item.prop=='createUserName'" class="percent">
+          <div v-if="item.slot && item.prop=='createUserName'">
             <span>{{scope.row.createUserName}}/{{scope.row.createTime}}</span>
           </div>
           <div v-if="item.slot && item.prop=='opt'">
@@ -75,6 +75,7 @@
           {
             label: '创建人/创建时间',
             prop: 'createUserName',
+            width: 300,
             slot: true,
           },
           {

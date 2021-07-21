@@ -387,8 +387,8 @@
 		}
 
 		.content {
-			width: 1390px;
-			height: 897px;
+			// width: 1390px;
+			// height: 897px;
 			margin-top: 20px;
 			background-color: #FFFFFF;
 			border-radius: 12px;

@@ -30,7 +30,8 @@
 							{{scope.row.taskState == 1?'待开始':''}}{{scope.row.taskState == 2?'进行中':''}}{{scope.row.taskState == 3?'已结束':''}}{{scope.row.taskState == 4?'已取消':''}}</span>
 					</div>
 					<div v-if="item.slot && item.prop=='createTime'">
-						{{scope.row.userName}}{{scope.row.createTime?'/'+scope.row.createTime:''}}
+						<p>{{scope.row.userName}}</p>
+            <p>{{scope.row.createTime?scope.row.createTime:''}}</p>
 					</div>
 					<div v-if="item.slot && item.prop=='taskType'">
 						{{scope.row.taskType == 1?'自建':''}}{{scope.row.taskType == 2?'上级':''}}
@@ -160,7 +161,7 @@
 					{
 						label: '创建人/创建时间',
 						prop: 'createTime',
-						width: 220,
+						width: 170,
 						slot: true,
 					},
 					{

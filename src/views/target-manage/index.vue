@@ -14,6 +14,14 @@
 					<div v-if="item.slot && item.prop=='type'">
 						<span>{{scope.row.type==1?'字段指标':'指标类指标'}}</span>
 					</div>
+          <div v-if="item.slot && item.prop=='createUserName'">
+          	<p>{{scope.row.createUserName}}</p>
+            <p>{{scope.row.createTime}}</p>
+          </div>
+          <div v-if="item.slot && item.prop=='updateUserName'">
+          	<p>{{scope.row.updateUserName}}</p>
+            <p>{{scope.row.updateTime}}</p>
+          </div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="text" @click="edit(scope.row)">编辑</el-button>
 						<el-button type="text" @click="deleteItem(scope.row)">删除</el-button>
@@ -59,10 +67,12 @@
 					{
 						label: '创建人/创建时间',
 						prop: 'createUserName',
+            slot: true,
 					},
 					{
 						label: '修改人/修改后时间',
 						prop: 'updateUserName',
+            slot: true,
 					},
 					{
 						label: '操作',
