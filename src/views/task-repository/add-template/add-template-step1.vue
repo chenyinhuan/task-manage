@@ -4,12 +4,12 @@
 		<section>
 			<p>模版名称</p>
 			<el-input :class="[showValidate && taskTplVO.taskName == ''?'validate-empty':'',
-		  showValidate && taskTplVO.taskName != '' && checkTaskName?'validate-error':'']" @blur="inputTaskName" v-model="taskTplVO.taskName"
-				placeholder="请输入模板名称" maxlength="20" show-word-limit></el-input>
-				<span class="validate-info" style="color: #FF8C00;"
-					v-if="showValidate && taskTplVO.taskName == ''">请输入模板名称</span>
-				<span class="validate-info" style="color: #C03639;"
-					v-if="showValidate && taskTplVO.taskName != '' && checkTaskName">请输入正确的模板名称，支持中文、英文、数字</span>
+		  showValidate && taskTplVO.taskName != '' && checkTaskName?'validate-error':'']" @blur="inputTaskName"
+				v-model="taskTplVO.taskName" placeholder="请输入模板名称" maxlength="20" show-word-limit></el-input>
+			<span class="validate-info" style="color: #FF8C00;"
+				v-if="showValidate && taskTplVO.taskName == ''">请输入模板名称</span>
+			<span class="validate-info" style="color: #C03639;"
+				v-if="showValidate && taskTplVO.taskName != '' && checkTaskName">请输入正确的模板名称，支持中文、英文、数字</span>
 		</section>
 		<section>
 			<p>模版说明</p>
@@ -23,8 +23,8 @@
 						<div class="field-sitem">
 							<span>{{item.fieldName}}</span>
 							<el-input v-model="item.fieldValue"
-              :placeholder="item.formType==1?`请输入${item.fieldName}`:(item.formType == 2 || item.formType ==3?`请选择${item.fieldName}`:'')"
-              disabled></el-input>
+								:placeholder="item.formType==1?`请输入${item.fieldName}`:(item.formType == 2 || item.formType ==3?`请选择${item.fieldName}`:'')"
+								disabled></el-input>
 						</div>
 						<div class="field-sitem">
 							<span>是否必填</span>
@@ -96,12 +96,12 @@
 					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 						v-for="(item, index) in tableColumn" :key="index">
 						<template slot-scope="scope">
-              <div v-if="item.slot && item.prop == 'dataType'">
-                <!-- {{dataType.find(n => n.value == scope.row[item.prop]).label}} -->
-              </div>
-              <div v-if="item.slot && item.prop == 'formType'">
-                <!-- {{formType.find(n => n.value == scope.row[item.prop]).label}} -->
-              </div>
+							<div v-if="item.slot && item.prop == 'dataType'">
+								{{dataType.find(n => n.value == scope.row[item.prop]).label}}
+							</div>
+							<div v-if="item.slot && item.prop == 'formType'">
+								{{formType.find(n => n.value == scope.row[item.prop]).label}}
+							</div>
 							<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 						</template>
 					</el-table-column>
@@ -112,6 +112,9 @@
 					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 						v-for="(item, index) in tableColumn1" :key="index">
 						<template slot-scope="scope">
+							<div v-if="item.slot && item.prop == 'dataType'">
+								{{formatDataType(scope.row)}}
+							</div>
 							<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
 						</template>
 					</el-table-column>
@@ -135,8 +138,8 @@
 	} from '@/api/filed-manage/index';
 	import {
 		saveTaskTpl,
-    getTaskTplDetail,
-    updateTaskTpl
+		getTaskTplDetail,
+		updateTaskTpl
 	} from '@/api/task-repository/index'
 	export default {
 		components: {
@@ -185,12 +188,12 @@
 					{
 						label: "数据类型",
 						prop: "dataType",
-            slot: true
+						slot: true
 					},
 					{
 						label: "表单类型",
 						prop: "formType",
-            slot: true
+						slot: true
 					},
 					{
 						label: "字段描述",
@@ -206,7 +209,7 @@
 					{
 						label: "数据类型",
 						prop: "dataType",
-            slot: true
+						slot: true
 					},
 					{
 						label: "字段描述",
@@ -220,27 +223,27 @@
 				taskTplId: '',
 				showValidate: false,
 				checkTaskName: false,
-        dataType: this.$dataTypeList,
-        formType: this.$formTypeList
+				dataType: this.$dataTypeList,
+				formType: this.$formTypeList
 			};
 		},
 		created() {
-      if(this.$route.query.id) {
-        this.taskTplId = this.$route.query.id;
-        let params = {
-          id: this.taskTplId
-        }
-        getTaskTplDetail(params).then(res => {
-          if(res.code == 0) {
-            this.taskTplVO.taskName = res.taskTpl.taskName;
-            this.taskTplVO.description = res.taskTpl.description;
-            this.taskTplVO.status = res.taskTpl.status;
-            this.taskTplVO.taskTplBasicFieldEntities = res.taskTpl.taskTplBasicFieldEntities;
-            this.taskTplVO.taskTplComplexFieldEntities = res.taskTpl.taskTplComplexFieldEntities;
-          }
-        })
-      }
-    },
+			if (this.$route.query.id) {
+				this.taskTplId = this.$route.query.id;
+				let params = {
+					id: this.taskTplId
+				}
+				getTaskTplDetail(params).then(res => {
+					if (res.code == 0) {
+						this.taskTplVO.taskName = res.taskTpl.taskName;
+						this.taskTplVO.description = res.taskTpl.description;
+						this.taskTplVO.status = res.taskTpl.status;
+						this.taskTplVO.taskTplBasicFieldEntities = res.taskTpl.taskTplBasicFieldEntities;
+						this.taskTplVO.taskTplComplexFieldEntities = res.taskTpl.taskTplComplexFieldEntities;
+					}
+				})
+			}
+		},
 		mounted() {},
 		computed: {},
 		methods: {
@@ -333,7 +336,8 @@
 				this.dialogVisible = true;
 			},
 			next() {
-				if (this.taskTplVO.taskName == '' || this.taskTplVO.taskTplBasicFieldEntities.length == 0 || this.taskTplVO.taskTplComplexFieldEntities
+				if (this.taskTplVO.taskName == '' || this.taskTplVO.taskTplBasicFieldEntities.length == 0 || this.taskTplVO
+					.taskTplComplexFieldEntities
 					.length == 0 || this.checkTaskName) return this.showValidate = true;
 				for (let i = 0; i < this.taskTplVO.taskTplBasicFieldEntities.length; i++) {
 					let item = this.taskTplVO.taskTplBasicFieldEntities[i];
@@ -343,23 +347,23 @@
 					let item = this.taskTplVO.taskTplComplexFieldEntities[i];
 					item.sort = i + 1;
 				}
-        if (this.taskTplId) {
-          let params = JSON.parse(JSON.stringify(this.taskTplVO));
-          params.id = this.taskTplId;
-        	updateTaskTpl(params).then(res => {
-            if(res.code == 0)   {
-              this.$message.success('更新成功！');
-              this.$emit("edit", this.taskTplId);
-            } else this.$message.warning(res.msg);
-          })
-        }else {
-          saveTaskTpl(this.taskTplVO).then(res => {
-          	if (res.code == 0) {
-          		this.taskTplId = res.taskTplId;
-          		this.$emit("next", res.taskTplId);
-          	} else this.$message.warning(res.msg)
-          })
-        }
+				if (this.taskTplId) {
+					let params = JSON.parse(JSON.stringify(this.taskTplVO));
+					params.id = this.taskTplId;
+					updateTaskTpl(params).then(res => {
+						if (res.code == 0) {
+							this.$message.success('更新成功！');
+							this.$emit("edit", this.taskTplId);
+						} else this.$message.warning(res.msg);
+					})
+				} else {
+					saveTaskTpl(this.taskTplVO).then(res => {
+						if (res.code == 0) {
+							this.taskTplId = res.taskTplId;
+							this.$emit("next", res.taskTplId);
+						} else this.$message.warning(res.msg)
+					})
+				}
 			},
 			handleSizeChange(val) {
 				console.log(`每页 ${val} 条`);
@@ -399,6 +403,31 @@
 				if (!regex.test(this.taskTplVO.taskName)) {
 					this.checkTaskName = true;
 				} else this.checkTaskName = false;
+			},
+			formatDataType(item) {
+				let arr = [];
+				if(item.fieldTypeDTO[0].type == 1) {
+					arr.push('number')
+				}else if(item.fieldTypeDTO[0].type == 2) {
+					arr = item.fieldTypeDTO.map(item => {
+						if(item.type == 1) {
+							if(item.dataType == 1) return 'number'
+						}else if(item.type == 2) {
+							if(item.dataType == 1) return '字符串string'
+							else if(item.dataType == 2) return '整数数值init'
+							else if(item.dataType == 3) return '小数数值float'
+							else if(item.dataType == 4) return '日期date'
+							else if(item.dataType == 5) return '时间time'
+						}else {
+							if(item.dataType == 1) return 'Json数据'
+						}
+					})
+				}else {
+					arr.push('Json数据')
+				}
+				console.log(arr)
+				// let newArr = [...new Set(arr)];
+				return arr.join('、')
 			},
 		},
 	};
@@ -451,18 +480,21 @@
 
 		section {
 			position: relative;
+
 			.validate-info1 {
-			  position: absolute;
-			  left: 0px;
-			  bottom: -20px;
-			  font-size: 12px;
+				position: absolute;
+				left: 0px;
+				bottom: -20px;
+				font-size: 12px;
 			}
+
 			.validate-info {
 				position: absolute;
 				left: 0px;
 				bottom: 9px;
 				font-size: 12px;
 			}
+
 			p {
 				font-size: 20px;
 				font-weight: 600;

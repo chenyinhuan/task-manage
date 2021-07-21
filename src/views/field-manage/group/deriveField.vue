@@ -367,10 +367,12 @@
 				}).then(res => {
 					this.form = res.field
 					this.form.name = this.form.name.replace("complex_", "");
-					console.log(this.form.ruleType)
 					if (this.form.complexMahtRuleVOs && this.form.complexMahtRuleVOs.length) {
 						this.form.fieldStartId = this.form.complexMahtRuleVOs[0].fieldStartId;
 						this.enums = this.form.complexMahtRuleVOs
+						if(this.enums.length > 0) {
+							this.enums[0].fieldStartId = this.enums[0].fieldEndId
+						}
 					} else if (this.form.fieldAPIRuleVOS && this.form.fieldAPIRuleVOS.length) {
 						// this.form.fieldAPIRuleVOS = this.form.fieldAPIRuleVOS.substr(0,this.form.fieldAPIRuleVOS.length-1);
 						this.form.responseId = this.form.fieldAPIRuleVOS.find(n => n.apiType == 2) ? this.form
