@@ -196,6 +196,116 @@
 						]
 					},
 					{
+						// 任务指标列表
+						path: '/task-center/my-assignment/task-target-list',
+						matched: [{
+								name: '任务中心',
+								path: '/task-center/my-task',
+								active: true
+							},
+							{
+								name: '我的任务',
+								path: '/task-center/my-task',
+								active: true
+							},
+							{
+								name: '任务列表',
+								path: '/task-center/task-list',
+								active: true
+							},
+							{
+								name: '任务指标列表',
+								path: '',
+								active: false
+							}
+						]
+					},
+					{
+						// 任务详情列表
+						path: '/task-center/my-assignment/task-dtl-list',
+						matched: [{
+								name: '任务中心',
+								path: '/task-center/my-task',
+								active: true
+							},
+							{
+								name: '我的派发任务',
+								path: '/task-center/my-assignment',
+								active: true
+							},
+							{
+								name: '派发任务明细',
+								path: '/task-center/my-assignment-list',
+								active: true
+							},
+							{
+								name: '任务详情',
+								path: '',
+								active: false
+							}
+						]
+					},
+					{
+						// 任务详情-查看
+						path: '/task-center/my-assignment/task-dtl',
+						matched: [{
+								name: '任务中心',
+								path: '/task-center/my-task',
+								active: true
+							},
+							{
+								name: '我的派发任务',
+								path: '/task-center/my-assignment',
+								active: true
+							},
+							{
+								name: '派发任务明细',
+								path: '/task-center/my-assignment-list',
+								active: true
+							},
+							{
+								name: '任务详情',
+								path: '/task-center/my-assignment/task-dtl-list',
+								active: true
+							},
+							{
+								name: '查看',
+								path: '',
+								active: false
+							}
+						]
+					},
+					{
+						// 任务详情-新增记录
+						path: '/task-center/my-assignment/add-record',
+						matched: [{
+								name: '任务中心',
+								path: '/task-center/my-task',
+								active: true
+							},
+							{
+								name: '我的派发任务',
+								path: '/task-center/my-assignment',
+								active: true
+							},
+							{
+								name: '派发任务明细',
+								path: '/task-center/my-assignment-list',
+								active: true
+							},
+							{
+								name: '任务详情',
+								path: '/task-center/my-assignment/task-dtl-list',
+								active: true
+							},
+							{
+								name: '新增记录',
+								path: '',
+								active: false
+							}
+						]
+					},
+					{
 						// 字段库管理
 						path: '/field-manage',
 						matched: [{
@@ -515,12 +625,21 @@
 					this.$router.push(redirect)
 					return
 				}
-        console.log(path)
-        if(path == '/task-center/task-dtl-list') {
-          this.$router.push(`${path}?id=${this.$route.query.taskId}&date=${this.$route.query.date || ''}`)
-        }else if(path == '/task-center/task-list') {
-          this.$router.push(`${path}?date=${this.$route.query.date || ''}`)
-        }
+				console.log(path)
+				if (path == '/task-center/task-dtl-list') {
+					this.$router.push(`${path}?id=${this.$route.query.taskId}&date=${this.$route.query.date || ''}`)
+				}else if(path == '/task-center/my-assignment/task-dtl-list') {
+					this.$router.push(`${path}?id=${this.$route.query.taskId}`)
+				}else if (path == '/task-center/task-list') {
+					this.$router.push(`${path}?date=${this.$route.query.date || ''}`)
+				} else if(path == '/task-center/my-assignment-list') {
+					this.$router.push({
+						path: path,
+						query: {
+							id: localStorage.getItem('assignmentListId')
+						}
+					})
+				}
 				else this.$router.push(path)
 			}
 		}

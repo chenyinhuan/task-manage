@@ -330,6 +330,7 @@
 				this.init()
 			},
 			go(row) {
+				localStorage.setItem('assignmentListId', row.id)
 				this.$router.push({
 					path: '/task-center/my-assignment-list',
 					query: {

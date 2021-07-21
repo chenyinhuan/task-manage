@@ -33,13 +33,6 @@
 	export default {
 		data() {
 			return {
-				fieldList: [{
-					name: '衍生字段名称',
-					des: '已付款'
-				}, {
-					name: '衍生字段名称1',
-					des: '已付佣金'
-				}],
 				list: [],
 				tableColumn: []
 			}

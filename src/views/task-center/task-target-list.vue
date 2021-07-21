@@ -106,13 +106,24 @@
 				this.init();
 			},
 			go(row) {
-        localStorage.setItem('recordUserId',row.userId)
-				this.$router.push({
-					path: `/task-center/task-dtl-list`,
-					query: {
-						id: this.taskId
-					}
-				})
+				localStorage.setItem('recordUserId',row.userId)
+				if(this.$route.path.indexOf('/my-assignment/') != -1) {
+					this.$router.push({
+						path: `/task-center/my-assignment/task-dtl-list`,
+						query: {
+							id: this.taskId
+						}
+					})
+				}else {
+					this.$router.push({
+						path: `/task-center/task-dtl-list`,
+						query: {
+							id: this.taskId
+						}
+					})
+				}
+				
+				
 			},
 			init() {
 				let params = {

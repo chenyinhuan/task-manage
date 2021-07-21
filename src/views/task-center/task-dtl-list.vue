@@ -48,13 +48,13 @@
 				taskId: '',
 				list: [],
 				taskTplFieldStructureDTOS: [],
-        date: '',
-        userId: localStorage.getItem('recordUserId')
+				date: '',
+				userId: localStorage.getItem('recordUserId')
 			}
 		},
 		created() {
 			if (this.$route.query.id) this.taskId = this.$route.query.id;
-      if(this.$route.query.date) this.date = this.$route.query.date;
+			if (this.$route.query.date) this.date = this.$route.query.date;
 			this.init()
 		},
 		mounted() {
@@ -70,7 +70,7 @@
 						taskId: this.taskId,
 						limit: this.limit,
 						page: this.currentPage,
-            userId: this.userId
+						userId: this.userId
 					}
 					getRecordList(params).then(res => {
 						if (res.code == 0) {
@@ -125,13 +125,24 @@
 				console.log(`当前页: ${val}`);
 			},
 			add() {
-				this.$router.push({
-					path: '/task-center/add-record',
-					query: {
-						taskId: this.taskId,
-            date: this.date
-					}
-				})
+				if (this.$route.path.indexOf('/my-assignment/') != -1) {
+					this.$router.push({
+						path: '/task-center/my-assignment/add-record',
+						query: {
+							taskId: this.taskId,
+							date: this.date
+						}
+					})
+				} else {
+					this.$router.push({
+						path: '/task-center/add-record',
+						query: {
+							taskId: this.taskId,
+							date: this.date
+						}
+					})
+				}
+				
 			},
 			go(type, row, index) {
 				if (type == 'scan') {
@@ -141,21 +152,43 @@
 					}))
 				}
 				if (type == 'scan') {
-					this.$router.push({
-						path: '/task-center/task-dtl',
-						query: {
-							id: this.list[index].id,
-							taskId: this.taskId,
-						}
-					})
+					if(this.$route.path.indexOf('/my-assignment/') != -1) {
+						this.$router.push({
+							path: '/task-center/my-assignment/task-dtl',
+							query: {
+								id: this.list[index].id,
+								taskId: this.taskId,
+							}
+						})
+					}else {
+						this.$router.push({
+							path: '/task-center/task-dtl',
+							query: {
+								id: this.list[index].id,
+								taskId: this.taskId,
+							}
+						})
+					}
+					
 				} else {
-					this.$router.push({
-						path: '/task-center/add-record',
-						query: {
-							taskId: this.taskId,
-							id: this.list[index].id,
-						}
-					})
+					if(this.$route.path.indexOf('/my-assignment/') != -1) {
+						this.$router.push({
+							path: '/task-center/my-assignment/add-record',
+							query: {
+								taskId: this.taskId,
+								id: this.list[index].id,
+							}
+						})
+					}else {
+						this.$router.push({
+							path: '/task-center/add-record',
+							query: {
+								taskId: this.taskId,
+								id: this.list[index].id,
+							}
+						})
+					}
+					
 				}
 
 			},

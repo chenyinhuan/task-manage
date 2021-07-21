@@ -130,10 +130,12 @@
 					{
 						label: '任务开始时间',
 						prop: 'startTime',
+						width: 170,
 					},
 					{
 						label: '任务结束时间',
 						prop: 'endTime',
+						width: 170,
 					},
 					{
 						label: '任务指标数',
@@ -153,13 +155,12 @@
 					{
 						label: '任务来源',
 						prop: 'taskType',
-						width: 113,
 						slot: true,
 					},
 					{
 						label: '创建人/创建时间',
 						prop: 'createTime',
-						width: 176,
+						width: 220,
 						slot: true,
 					},
 					{
