@@ -109,19 +109,25 @@
 			},
 			formatDataType(item) {
 				let arr = [];
-				arr = item.fieldTypeDTO.map(item => {
-					if(item.type == 1) {
-						if(item.dataType == 1) return 'number'
-					}else if(item.type == 2) {
-						if(item.dataType == 1) return '字符串string'
-						else if(item.dataType == 2) return '整数数值init'
-						else if(item.dataType == 3) return '小数数值float'
-						else if(item.dataType == 4) return '日期date'
-						else if(item.dataType == 5) return '时间time'
-					}else {
-						if(item.dataType == 1) return 'Json数据'
-					}
-				})
+				if(item.fieldTypeDTO[0].type == 1) {
+					arr.push('number')
+				}else if(item.fieldTypeDTO[0].type == 2) {
+					arr = item.fieldTypeDTO.map(item => {
+						if(item.type == 1) {
+							if(item.dataType == 1) return 'number'
+						}else if(item.type == 2) {
+							if(item.dataType == 1) return '字符串string'
+							else if(item.dataType == 2) return '整数数值init'
+							else if(item.dataType == 3) return '小数数值float'
+							else if(item.dataType == 4) return '日期date'
+							else if(item.dataType == 5) return '时间time'
+						}else {
+							if(item.dataType == 1) return 'Json数据'
+						}
+					})
+				}else {
+					arr.push('Json数据')
+				}
 				console.log(arr)
 				// let newArr = [...new Set(arr)];
 				return arr.join('、')

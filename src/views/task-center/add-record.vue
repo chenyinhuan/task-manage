@@ -74,7 +74,8 @@
         showValidate: false,
         isEdit: 0,
         id: '',
-        date: ''
+        date: '',
+		userId: localStorage.getItem('recordUserId')
       }
     },
     created() {
@@ -136,6 +137,7 @@
           taskRecordDetailComplexVOs: this.taskRecords.taskRecordDetailComplexVOs,
           taskTplId: this.taskRecords.taskTplId,
           taskId: this.taskId,
+		  userId: this.userId
         }
         if(this.isEdit == 1) {
           params.id = this.id;

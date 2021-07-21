@@ -313,7 +313,6 @@
 		watch: {
 			'form.fieldStartId': { //深度监听，可监听到对象、数组的变化
 				handler(val, oldVal) {
-					console.log(val, oldVal)
 					if (val && this.form.ruleType == 2 && ((this.nativeList.find(n => n.id == val) && this.nativeList.find(
 							n => n.id == val).formType == 2) || (this
 							.nativeList.find(n => n.id == val) && this
@@ -335,6 +334,8 @@
 							}
 						})
 					}
+					this.enums1 = JSON.parse(JSON.stringify(this.form.fieldComplexCastRuleVOs));
+					console.log(this.enums1)
 				},
 				immediate: true,
 				deep: true //true 深度监听
