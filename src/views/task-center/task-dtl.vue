@@ -22,14 +22,16 @@
 							v-if="list.taskRecordEntities.find(n => n.fieldId == item.fieldId).formType != 4">
 							{{list.taskRecordEntities?list.taskRecordEntities.find(n => n.fieldId == item.fieldId).fieldValue:''}}
 						</div>
-						 <el-image 
-							v-else
-						    style="width: 100px; height: 100px"
-						    :src="list.taskRecordEntities?list.taskRecordEntities.find(n => n.fieldId == item.fieldId).fieldValue:''" 
-						    :preview-src-list="list.taskRecordEntities?[list.taskRecordEntities.find(n => n.fieldId == item.fieldId).fieldValue]:[]">
-							<!-- v-else @click="scan(list.taskRecordEntities.find(n => n.fieldId == item.fieldId))" -->
-							<el-button type="text">查看</el-button></span>
-						  </el-image>
+            <div v-else>
+              <el-image
+                :ref="'img' + item.fieldId"
+                 style="max-height: 18px;max-width: 18px;display: none;"
+                 :src="list.taskRecordEntities?list.taskRecordEntities.find(n => n.fieldId == item.fieldId).fieldValue:''"
+                 :preview-src-list="list.taskRecordEntities?[list.taskRecordEntities.find(n => n.fieldId == item.fieldId).fieldValue]:[]">
+              </el-image>
+              <el-button @click="scan('img' + item.fieldId)" type="text">查看</el-button>
+            </div>
+
 					</div>
 				</template>
 			</div>
@@ -41,7 +43,8 @@
 		data() {
 			return {
 				list: [],
-				tableColumn: []
+				tableColumn: [],
+        img: require('../../images/default.png')
 			}
 		},
 		created() {
@@ -59,8 +62,9 @@
 
 		},
 		methods: {
-			scan(item) {
-				
+			scan(key) {
+        console.log(this.$refs[key])
+        this.$refs[key][0].showViewer = true
 			}
 		}
 	}
@@ -104,11 +108,13 @@
 					.tit {
 						font-size: 12px;
 						color: #CDCDD5;
+            line-height: 17px;
 					}
 
 					.des {
 						width: 260px;
 						font-size: 14px;
+            line-height: 20px;
 						color: #34335B;
 						margin-top: 8px;
 						text-overflow: ellipsis;

@@ -28,7 +28,11 @@
             <div @click="preview(item)" v-if="item.fieldValue" class="upload-img">
               <img style="max-height: 34px;max-width: 34px;cursor: pointer;" :src="item.fieldValue" />
             </div>
-            <el-upload :style="{'margin-left':item.fieldValue?'24px':''}" class="upload-demo" drag :action="uploadUrl"
+            <el-upload
+            accept=".jpg,.png,.jpeg"
+            :style="{'margin-left':item.fieldValue?'24px':''}"
+            class="upload-demo"
+            drag :action="uploadUrl"
               :show-file-list="false" :with-credentials="true" :on-success="successUpload"
               :before-upload="beforeUpload">
               <img class="img" src="@/images/my-task/upload.png">
@@ -67,7 +71,7 @@
         taskRecords: '',
         taskId: '',
         taskRecordDetailBasicVOs: [],
-        uploadUrl: `${window.$globalConfig.API_BASE_Tabel}/sys/oss/upload`,
+        uploadUrl: `${window.$globalConfig.API_BASE_Tabel}/task-admin/sys/oss/upload`,
         uploadItem: '',
         dialogVisible: false,
         url: '',
@@ -240,6 +244,7 @@
 
           .tit {
             font-size: 12px;
+            line-height: 17px;
             color: #666777;
             margin-bottom: 4px;
           }

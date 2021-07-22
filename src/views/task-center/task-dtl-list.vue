@@ -17,8 +17,13 @@
 					</div>
 					<div v-if="item.slot && item.fieldId=='createTime'">{{ scope.row.createTime }}</div>
 					<div v-if="!item.slot">
-						<span v-if="scope.row.imgId.findIdex(n => n == scope.row[item.fieldId]) == -1">{{ scope.row[item.fieldId] }}</span>
-						<img v-else :src="scope.row[item.fieldId]"/>
+						<span v-if="scope.row.imgId && scope.row.imgId.findIndex(n => n == item.fieldId) == -1">{{ scope.row[item.fieldId] }}</span>
+            <el-image
+            v-else
+               style="max-height: 20px;max-width: 20px;"
+               :src="scope.row[item.fieldId] || ''"
+               :preview-src-list="scope.row[item.fieldId]?[scope.row[item.fieldId]]:[]">
+            </el-image>
 					</div>
 				</template>
 			</el-table-column>
@@ -83,6 +88,7 @@
 							res.record.taskTplFieldStructureDTOS = [...res.record.taskTplFieldStructureDTOS, ...[{
 								fieldName: '创建时间',
 								slot: true,
+                width: 165,
 								fieldId: 'createTime'
 							}, {
 								fieldName: '操作',
@@ -148,7 +154,7 @@
 						}
 					})
 				}
-				
+
 			},
 			go(type, row, index) {
 				if (type == 'scan') {
@@ -175,7 +181,7 @@
 							}
 						})
 					}
-					
+
 				} else {
 					if(this.$route.path.indexOf('/my-assignment/') != -1) {
 						this.$router.push({
@@ -194,7 +200,7 @@
 							}
 						})
 					}
-					
+
 				}
 
 			},
