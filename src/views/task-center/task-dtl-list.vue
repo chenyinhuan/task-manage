@@ -16,7 +16,10 @@
 						<el-button type="text" @click="deleteItem(scope.row)">删除</el-button>
 					</div>
 					<div v-if="item.slot && item.fieldId=='createTime'">{{ scope.row.createTime }}</div>
-					<div v-if="!item.slot">{{ scope.row[item.fieldId] }}</div>
+					<div v-if="!item.slot">
+						<span v-if="scope.row.imgId.findIdex(n => n == scope.row[item.fieldId]) == -1">{{ scope.row[item.fieldId] }}</span>
+						<img v-else :src="scope.row[item.fieldId]"/>
+					</div>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -94,10 +97,12 @@
 							for (let i = 0; i < res.record.page.list.length; i++) {
 								let item = res.record.page.list[i];
 								let json = {};
+								let imgId = [];
 								for (let j in this.tableColumn) {
 									if (item.taskRecordEntities.find(n => n.fieldId == this.tableColumn[j]
 											.fieldId)) {
-
+										if(item.taskRecordEntities.find(n =>
+												n.fieldId == this.tableColumn[j].fieldId).formType == 4) imgId.push(this.tableColumn[j].fieldId);
 										json[`${this.tableColumn[j].fieldId}`] = item.taskRecordEntities.find(n =>
 												n.fieldId == this.tableColumn[j].fieldId)
 											.fieldValue;
@@ -105,6 +110,7 @@
 								}
 								json.createTime = item.createTime;
 								json.id = item.id;
+								json.imgId = imgId;
 								tableData.push(json)
 							}
 							this.tableData = tableData;

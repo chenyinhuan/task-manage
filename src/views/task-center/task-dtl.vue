@@ -22,7 +22,14 @@
 							v-if="list.taskRecordEntities.find(n => n.fieldId == item.fieldId).formType != 4">
 							{{list.taskRecordEntities?list.taskRecordEntities.find(n => n.fieldId == item.fieldId).fieldValue:''}}
 						</div>
-						<el-button type="text" v-else @click="scan(list.taskRecordEntities.find(n => n.fieldId == item.fieldId))">查看</el-button></span>
+						 <el-image 
+							v-else
+						    style="width: 100px; height: 100px"
+						    :src="list.taskRecordEntities?list.taskRecordEntities.find(n => n.fieldId == item.fieldId).fieldValue:''" 
+						    :preview-src-list="list.taskRecordEntities?[list.taskRecordEntities.find(n => n.fieldId == item.fieldId).fieldValue]:[]">
+							<!-- v-else @click="scan(list.taskRecordEntities.find(n => n.fieldId == item.fieldId))" -->
+							<el-button type="text">查看</el-button></span>
+						  </el-image>
 					</div>
 				</template>
 			</div>
