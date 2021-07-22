@@ -343,10 +343,12 @@
 				}, {
 					label: '未完成',
 					value: 2
-				}, {
-					label: '自定义字段',
-					value: 3
-				}],
+				}
+				// , {
+				// 	label: '自定义字段',
+				// 	value: 3
+				// }
+				],
 				testCycleList: [{
 					label: '每日',
 					value: 1

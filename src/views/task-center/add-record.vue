@@ -75,7 +75,7 @@
         isEdit: 0,
         id: '',
         date: '',
-		userId: localStorage.getItem('recordUserId')
+				userId: localStorage.getItem('recordUserId')
       }
     },
     created() {

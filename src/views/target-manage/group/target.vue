@@ -93,15 +93,7 @@
     },
     data() {
       return {
-        list: [{
-            value: 1,
-            label: '指標一'
-          },
-          {
-            value: 2,
-            label: '指標二'
-          }
-        ],
+        list: [],
         form: {
           targetName: '',
           targetQuoteEndId: '',
