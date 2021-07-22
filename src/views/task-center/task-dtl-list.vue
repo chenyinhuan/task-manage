@@ -18,12 +18,21 @@
 					<div v-if="item.slot && item.fieldId=='createTime'">{{ scope.row.createTime }}</div>
 					<div v-if="!item.slot">
 						<span v-if="scope.row.imgId && scope.row.imgId.findIndex(n => n == item.fieldId) == -1">{{ scope.row[item.fieldId] }}</span>
-            <el-image
+            <div v-else>
+              <el-image
+                :ref="'img' + item.fieldId + scope.$index"
+                 style="max-height: 20px;max-width: 20px;display: none;"
+                 :src="scope.row[item.fieldId] || ''"
+                 :preview-src-list="scope.row[item.fieldId]?[scope.row[item.fieldId]]:[]">
+              </el-image>
+              <el-button @click="scan('img' + item.fieldId + scope.$index)" type="text">查看</el-button>
+            </div>
+            <!-- <el-image
             v-else
                style="max-height: 20px;max-width: 20px;"
                :src="scope.row[item.fieldId] || ''"
                :preview-src-list="scope.row[item.fieldId]?[scope.row[item.fieldId]]:[]">
-            </el-image>
+            </el-image> -->
 					</div>
 				</template>
 			</el-table-column>
@@ -222,7 +231,11 @@
 						} else this.$message.warning(res.mag);
 					})
 				})
-			}
+			},
+      scan(key) {
+        console.log(this.$refs[key])
+        this.$refs[key][0].showViewer = true
+      }
 		}
 	}
 </script>
