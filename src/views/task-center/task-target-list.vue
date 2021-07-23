@@ -9,9 +9,9 @@
 				v-for="(item,index) in tableColumn" :key="index">
 				<template slot-scope="scope">
 					<div v-if="item.slot && item.prop=='materialName'" class="percent">
-						<div class="dot"
+						<!-- <div class="dot"
 							:class="[scope.$index == 1?'green':'',scope.$index == 0?'red':'',scope.$index == 2?'blue':'']">
-						</div><span> 完成（100%）</span>
+						</div><span> 完成（100%）</span> -->
 					</div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="primary" @click="go(scope.row)">查看关联记录</el-button>

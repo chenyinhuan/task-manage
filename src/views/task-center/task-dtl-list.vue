@@ -2,7 +2,7 @@
 	<div id="taskDtlList" :style="{'height': tableData.length==0?'661px':''}">
 		<section class="hd">
 			<p>任务详情</p>
-			<el-button type="primary" @click="add()">新增记录</el-button>
+			<el-button type="primary" @click="add()" v-if="isShowBtn">新增记录</el-button>
 		</section>
 		<el-table :data="tableData" style="width: 100%;margin-top: 10px;" v-if="tableData.length>0">
 			<el-table-column :prop="''+item.fieldId" :label="item.fieldName" :width="item.width"
@@ -12,22 +12,23 @@
 					{{scope.row.fieldValue}} -->
 					<div v-if="item.slot && item.fieldId=='opt'">
 						<el-button type="text" @click="go('scan', scope.row, scope.$index)">查看</el-button>
-						<el-button type="text" @click="go('edit', scope.row, scope.$index)">编辑</el-button>
-						<el-button type="text" @click="deleteItem(scope.row)">删除</el-button>
+						<el-button type="text" @click="go('edit', scope.row, scope.$index)" v-if="isShowBtn">编辑
+						</el-button>
+						<el-button type="text" @click="deleteItem(scope.row)" v-if="isShowBtn">删除</el-button>
 					</div>
 					<div v-if="item.slot && item.fieldId=='createTime'">{{ scope.row.createTime }}</div>
 					<div v-if="!item.slot">
-						<span v-if="scope.row.imgId && scope.row.imgId.findIndex(n => n == item.fieldId) == -1">{{ scope.row[item.fieldId] }}</span>
-            <div v-else>
-              <el-image
-                :ref="'img' + item.fieldId + scope.$index"
-                 style="max-height: 20px;max-width: 20px;display: none;"
-                 :src="scope.row[item.fieldId] || ''"
-                 :preview-src-list="scope.row[item.fieldId]?[scope.row[item.fieldId]]:[]">
-              </el-image>
-              <el-button @click="scan('img' + item.fieldId + scope.$index)" type="text">查看</el-button>
-            </div>
-            <!-- <el-image
+						<span
+							v-if="scope.row.imgId && scope.row.imgId.findIndex(n => n == item.fieldId) == -1">{{ scope.row[item.fieldId] }}</span>
+						<div v-else>
+							<el-image :ref="'img' + item.fieldId + scope.$index"
+								style="max-height: 20px;max-width: 20px;display: none;"
+								:src="scope.row[item.fieldId] || ''"
+								:preview-src-list="scope.row[item.fieldId]?[scope.row[item.fieldId]]:[]">
+							</el-image>
+							<el-button @click="scan('img' + item.fieldId + scope.$index)" type="text">查看</el-button>
+						</div>
+						<!-- <el-image
             v-else
                style="max-height: 20px;max-width: 20px;"
                :src="scope.row[item.fieldId] || ''"
@@ -66,13 +67,19 @@
 				list: [],
 				taskTplFieldStructureDTOS: [],
 				date: '',
-				userId: localStorage.getItem('recordUserId')
+				userId: localStorage.getItem('recordUserId'),
+				isShowBtn: false
 			}
 		},
 		created() {
 			if (this.$route.query.id) this.taskId = this.$route.query.id;
 			if (this.$route.query.date) this.date = this.$route.query.date;
-			this.init()
+			this.init();
+			let currentUserInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : '';
+			// 登录账户与查询用户是不是同一个人
+			console.log(currentUserInfo.userId, '---', this.userId)
+			if (currentUserInfo && currentUserInfo.userId == this.userId) this.isShowBtn = true;
+			else this.isShowBtn = false;
 		},
 		mounted() {
 
@@ -92,12 +99,11 @@
 					getRecordList(params).then(res => {
 						if (res.code == 0) {
 							this.list = JSON.parse(JSON.stringify(res.record.page.list));
-							this.taskTplFieldStructureDTOS = JSON.parse(JSON.stringify(res.record
-								.taskTplFieldStructureDTOS));
+							this.taskTplFieldStructureDTOS = JSON.parse(JSON.stringify(res.record.taskTplFieldStructureDTOS));
 							res.record.taskTplFieldStructureDTOS = [...res.record.taskTplFieldStructureDTOS, ...[{
 								fieldName: '创建时间',
 								slot: true,
-                width: 165,
+								width: 165,
 								fieldId: 'createTime'
 							}, {
 								fieldName: '操作',
@@ -116,8 +122,9 @@
 								for (let j in this.tableColumn) {
 									if (item.taskRecordEntities.find(n => n.fieldId == this.tableColumn[j]
 											.fieldId)) {
-										if(item.taskRecordEntities.find(n =>
-												n.fieldId == this.tableColumn[j].fieldId).formType == 4) imgId.push(this.tableColumn[j].fieldId);
+										if (item.taskRecordEntities.find(n =>
+												n.fieldId == this.tableColumn[j].fieldId).formType == 4) imgId
+											.push(this.tableColumn[j].fieldId);
 										json[`${this.tableColumn[j].fieldId}`] = item.taskRecordEntities.find(n =>
 												n.fieldId == this.tableColumn[j].fieldId)
 											.fieldValue;
@@ -173,7 +180,7 @@
 					}))
 				}
 				if (type == 'scan') {
-					if(this.$route.path.indexOf('/my-assignment/') != -1) {
+					if (this.$route.path.indexOf('/my-assignment/') != -1) {
 						this.$router.push({
 							path: '/task-center/my-assignment/task-dtl',
 							query: {
@@ -181,7 +188,7 @@
 								taskId: this.taskId,
 							}
 						})
-					}else {
+					} else {
 						this.$router.push({
 							path: '/task-center/task-dtl',
 							query: {
@@ -192,7 +199,7 @@
 					}
 
 				} else {
-					if(this.$route.path.indexOf('/my-assignment/') != -1) {
+					if (this.$route.path.indexOf('/my-assignment/') != -1) {
 						this.$router.push({
 							path: '/task-center/my-assignment/add-record',
 							query: {
@@ -200,7 +207,7 @@
 								id: this.list[index].id,
 							}
 						})
-					}else {
+					} else {
 						this.$router.push({
 							path: '/task-center/add-record',
 							query: {
@@ -232,10 +239,10 @@
 					})
 				})
 			},
-      scan(key) {
-        console.log(this.$refs[key])
-        this.$refs[key][0].showViewer = true
-      }
+			scan(key) {
+				console.log(this.$refs[key])
+				this.$refs[key][0].showViewer = true
+			}
 		}
 	}
 </script>
