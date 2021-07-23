@@ -6,7 +6,7 @@
       <el-radio-group v-model="type">
         <el-radio-button label="1" :disabled="targetId != '' && type != 1">根据字段创建</el-radio-button>
         <el-radio-button label="2" :disabled="targetId != '' && type != 2">根据指标创建</el-radio-button>
-        <el-radio-button label="3" :disabled="targetId != '' && type != 3">根据数据库表创建</el-radio-button>
+        <!-- <el-radio-button label="3" :disabled="targetId != '' && type != 3">根据数据库表创建</el-radio-button> -->
       </el-radio-group>
     </section>
     <field ref="field" v-show="type == 1" :targetId="targetId" :type="type"></field>
