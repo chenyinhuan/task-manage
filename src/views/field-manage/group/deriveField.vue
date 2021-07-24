@@ -110,7 +110,9 @@
 						v-if="showValidate && !form.fieldStartId">选择字段</span>
 				</div>
 				<div
-					v-if="nativeList.find(n => n.id == form.fieldStartId) && (nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3)">
+					v-if="nativeList.find(n => n.id == form.fieldStartId) &&
+          (nativeList.find(n => n.id == form.fieldStartId).formType == 2 ||
+          nativeList.find(n => n.id == form.fieldStartId).formType == 3)">
 					<div class="options" v-for="(citem,index) in form.fieldComplexCastRuleVOs">
 						<div style="position: relative;">
 							<el-input v-model="citem.enumValue" disabled>
@@ -138,7 +140,9 @@
 					</div>
 				</div>
 				<div
-					v-if="form.fieldStartId && !(nativeList.find(n => n.id == form.fieldStartId) && (nativeList.find(n => n.id == form.fieldStartId).formType == 2 || nativeList.find(n => n.id == form.fieldStartId).formType == 3))">
+					v-if="form.fieldStartId && !(nativeList.find(n => n.id == form.fieldStartId) &&
+          (nativeList.find(n => n.id == form.fieldStartId).formType == 2 ||
+          nativeList.find(n => n.id == form.fieldStartId).formType == 3))">
 					<div v-for="(item, index) in enums1" :key="index" class="options options1">
 						<div style="position: relative;">
 							<el-select v-model="item.logicAction" placeholder="运算方式" style="margin-left: 15px;">
@@ -332,9 +336,11 @@
 									})
 								}
 							}
+              this.enums1 = JSON.parse(JSON.stringify(this.form.fieldComplexCastRuleVOs));
 						})
-					}
-					this.enums1 = JSON.parse(JSON.stringify(this.form.fieldComplexCastRuleVOs));
+					}else {
+            if(this.id) this.enums1 = JSON.parse(JSON.stringify(this.form.fieldComplexCastRuleVOs));
+          }
 					console.log(this.enums1)
 				},
 				immediate: true,

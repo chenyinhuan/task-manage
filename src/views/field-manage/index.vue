@@ -22,7 +22,7 @@
 <script>
   import originField from '@/views/field-manage/group/original.vue';
   import addField from '@/views/field-manage/group/add.vue';
-  
+
   export default {
     components: {
       originField,
@@ -30,9 +30,9 @@
     },
     data() {
       return {
-        type: 1,
+        type: localStorage.getItem('fieldtype') || 1,
         keyword: '',
-		keyword1: ''
+        keyword1: ''
       }
     },
     created() {
@@ -49,13 +49,14 @@
         this.$router.push(`/field-manage/add-field?type=${this.type}`)
       },
       changeTab(type) {
+        localStorage.setItem('fieldtype', type)
         this.type = type;
       },
       search() {
 		if(this.type == 1) this.$refs.origin.search();
         else this.$refs.add.search();
       },
-      
+
     }
   }
 </script>

@@ -14,7 +14,7 @@
 			<el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
 				<div class="avatar-wrapper">
 					<img src="@/images/login/logo.png" class="user-avatar">
-					<span class="name">{{userInfo.username}}</span>
+					<span class="name" v-if="userInfo">{{userInfo.username}}</span>
 					<img class="triangle" src="@/images/my-task/triangle.png">
 				</div>
 				<el-dropdown-menu slot="dropdown">
@@ -63,7 +63,7 @@
 			async logout() {
         localStorage.removeItem('menuList');
         localStorage.removeItem('menuBtnList');
-				this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+				this.$router.push(`/login`)
 			},
 			getUserInfo() {
 				getUserInfo().then(res => {

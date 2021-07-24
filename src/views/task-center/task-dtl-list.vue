@@ -26,14 +26,8 @@
 								:src="scope.row[item.fieldId] || ''"
 								:preview-src-list="scope.row[item.fieldId]?[scope.row[item.fieldId]]:[]">
 							</el-image>
-							<el-button @click="scan('img' + item.fieldId + scope.$index)" type="text">查看</el-button>
+							<el-button @click="scan('img' + item.fieldId + scope.$index)" type="text">{{scope.row[item.fieldId]?'查看':'-'}}</el-button>
 						</div>
-						<!-- <el-image
-            v-else
-               style="max-height: 20px;max-width: 20px;"
-               :src="scope.row[item.fieldId] || ''"
-               :preview-src-list="scope.row[item.fieldId]?[scope.row[item.fieldId]]:[]">
-            </el-image> -->
 					</div>
 				</template>
 			</el-table-column>
@@ -112,7 +106,26 @@
 								slot: true
 							}]]
 							// this.tableData = res.record.page.list[0] ? res.record.page.list[0].taskRecordEntities : [];
-							this.tableColumn = res.record.taskTplFieldStructureDTOS;
+							let temp = [];
+              if(this.$route.path.indexOf('/my-assignment/') == -1) {
+                res.record.taskTplFieldStructureDTOS.forEach(item => {
+                  if(item.fieldType == 1 || (item.fieldType == 2 && item.fieldShowType == 1)) {
+                    temp.push(item);
+                  }
+                })
+                temp = [...temp,  ...[{
+								fieldName: '创建时间',
+								slot: true,
+								width: 165,
+								fieldId: 'createTime'
+							}, {
+								fieldName: '操作',
+								fieldId: 'opt',
+								width: 140,
+								slot: true
+							}]]
+                this.tableColumn = JSON.parse(JSON.stringify(temp));
+              }else this.tableColumn = JSON.parse(JSON.stringify(res.record.taskTplFieldStructureDTOS));
 							this.total = res.record.page.totalCount;
 							let tableData = []
 							for (let i = 0; i < res.record.page.list.length; i++) {

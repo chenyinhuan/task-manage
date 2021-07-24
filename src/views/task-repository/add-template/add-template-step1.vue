@@ -406,9 +406,9 @@
 			},
 			formatDataType(item) {
 				let arr = [];
-				if(item.fieldTypeDTO[0].type == 1) {
+				if(item.fieldTypeDTO && item.fieldTypeDTO[0].type == 1) {
 					arr.push('number')
-				}else if(item.fieldTypeDTO[0].type == 2) {
+				}else if(item.fieldTypeDTO && item.fieldTypeDTO[0].type == 2) {
 					arr = item.fieldTypeDTO.map(item => {
 						if(item.type == 1) {
 							if(item.dataType == 1) return 'number'
