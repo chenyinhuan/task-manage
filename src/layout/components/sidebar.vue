@@ -131,6 +131,7 @@
       },
       go(path) {
         Cookies.set('activePath', path)
+        if(path && path.indexOf('/field-manage') != -1) localStorage.setItem('fieldtype', 1)
         this.$router.push(path)
       },
       selectMenu(index, indexPath) {
