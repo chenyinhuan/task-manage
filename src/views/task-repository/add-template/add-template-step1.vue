@@ -422,10 +422,9 @@
 							if(item.dataType == 1) return 'Json数据'
 						}
 					})
-				}else {
+				}else if(item.fieldTypeDTO && item.fieldTypeDTO[0].type == 3){
 					arr.push('Json数据')
-				}
-				console.log(arr)
+				}else arr.push('')
 				// let newArr = [...new Set(arr)];
 				return arr.join('、')
 			},
