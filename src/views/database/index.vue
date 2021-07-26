@@ -70,50 +70,53 @@
 		methods: {
 			init() {
 				getPageList(this.searchParams).then(res => {
-          if(res.code == 0) {
-            let arr = [];
-            for (let i=0;i<res.apis.length;i++) {
-              let item = res.apis[i];
-              // arr.push({
-              //   apiName: item.apiName,
-              //   apiId: item.apiId,
-              //   params: item.params && item.params.length > 0?item.params[0].apiName:'',
-              //   paramsDes: item.params && item.params.length > 0?item.params[0].description:'',
-              //   responses: item.responses && item.responses.length > 0?item.responses[0].apiName:'',
-              //   responsesDes: item.responses && item.responses.length > 0?item.responses[0].description:'',
-              // })
-              let tempArr = [];
-              if(item.params && item.params.length && item.responses && item.responses.length) {
-                if(item.params.length>=item.responses.length) {
-                  tempArr = item.params.map((citem, cindex) => {
-                    return {
-                      apiName: cindex==0?item.apiName:'',
-                      apiId: item.apiId,
-                      params: citem.apiName,
-                      paramsDes: citem.description,
-                      responses: item.responses[cindex]?item.responses[cindex].apiName:'',
-                      responsesDes: item.responses[cindex]?item.responses[cindex].description:'',
-                    }
-                  })
-                }else {
-                  tempArr = item.responses.map((citem, cindex) => {
-                    return {
-                      apiName: cindex==0?item.apiName:'',
-                      apiId: item.apiId,
-                      params: item.params[cindex]?item.params[cindex].apiName:'',
-                      paramsDes: item.params[cindex]?item.params[cindex].description:'',
-                      responses: citem.apiName,
-                      responsesDes: citem.description,
-                    }
-                  })
-                }
-              }
-             console.log(tempArr)
-              arr = [...arr, ...tempArr]
-            }
-            this.tableData = JSON.parse(JSON.stringify(arr))
-            this.total = res.totalCount || 0;
-          }
+					if (res.code == 0) {
+						let arr = [];
+						for (let i = 0; i < res.apis.length; i++) {
+							let item = res.apis[i];
+							// arr.push({
+							//   apiName: item.apiName,
+							//   apiId: item.apiId,
+							//   params: item.params && item.params.length > 0?item.params[0].apiName:'',
+							//   paramsDes: item.params && item.params.length > 0?item.params[0].description:'',
+							//   responses: item.responses && item.responses.length > 0?item.responses[0].apiName:'',
+							//   responsesDes: item.responses && item.responses.length > 0?item.responses[0].description:'',
+							// })
+							let tempArr = [];
+							if (item.params && item.params.length && item.responses && item.responses.length) {
+								if (item.params.length >= item.responses.length) {
+									tempArr = item.params.map((citem, cindex) => {
+										return {
+											apiName: cindex == 0 ? item.apiName : '',
+											apiId: item.apiId,
+											params: citem.apiName,
+											paramsDes: citem.description,
+											responses: item.responses[cindex] ? item.responses[cindex]
+												.apiName : '',
+											responsesDes: item.responses[cindex] ? item.responses[cindex]
+												.description : '',
+										}
+									})
+								} else {
+									tempArr = item.responses.map((citem, cindex) => {
+										return {
+											apiName: cindex == 0 ? item.apiName : '',
+											apiId: item.apiId,
+											params: item.params[cindex] ? item.params[cindex].apiName : '',
+											paramsDes: item.params[cindex] ? item.params[cindex]
+												.description : '',
+											responses: citem.apiName,
+											responsesDes: citem.description,
+										}
+									})
+								}
+							}
+							console.log(tempArr)
+							arr = [...arr, ...tempArr]
+						}
+						this.tableData = JSON.parse(JSON.stringify(arr))
+						this.total = res.totalCount || 0;
+					}else this.$message.warning(res.msg);
 				})
 			},
 			handleSizeChange(val) {

@@ -131,7 +131,7 @@
             this.form.targeFieldVO.fieldEnumIds = res.target.targeFieldVO.fieldEnumIds;
             this.form.targeFieldVO.chooseType = res.target.targeFieldVO.chooseType;
             this.changeLogic();
-          }
+          }else this.$message.warning(res.msg)
         })
       },
       save() {
@@ -145,14 +145,14 @@
             if (res.code == 0) {
               this.$message.success('更新成功！');
               this.$router.push('/target-manage')
-            }
+            }else this.$message.warning(res.msg)
           })
         }else {
           saveTarge(params).then(res => {
             if (res.code == 0) {
               this.$message.success('保存成功！');
               this.$router.push('/target-manage')
-            }
+            }else this.$message.warning(res.msg)
           })
         }
       },
@@ -170,7 +170,7 @@
             this.nativeList = res.fields;
             let json = this.nativeList.find(n => n.id == this.form.targeFieldVO.fieldId);
             if(!json) this.form.targeFieldVO.fieldId = '';
-          }
+          }else this.$message.warning(res.msg)
         })
       },
       changeField() {

@@ -109,8 +109,7 @@
 					<span class="validate-info" style="color: #FF8C00;"
 						v-if="showValidate && !form.fieldStartId">选择字段</span>
 				</div>
-				<div
-					v-if="nativeList.find(n => n.id == form.fieldStartId) &&
+				<div v-if="nativeList.find(n => n.id == form.fieldStartId) &&
           (nativeList.find(n => n.id == form.fieldStartId).formType == 2 ||
           nativeList.find(n => n.id == form.fieldStartId).formType == 3)">
 					<div class="options" v-for="(citem,index) in form.fieldComplexCastRuleVOs">
@@ -139,8 +138,7 @@
 						</div>
 					</div>
 				</div>
-				<div
-					v-if="form.fieldStartId && !(nativeList.find(n => n.id == form.fieldStartId) &&
+				<div v-if="form.fieldStartId && !(nativeList.find(n => n.id == form.fieldStartId) &&
           (nativeList.find(n => n.id == form.fieldStartId).formType == 2 ||
           nativeList.find(n => n.id == form.fieldStartId).formType == 3))">
 					<div v-for="(item, index) in enums1" :key="index" class="options options1">
@@ -335,12 +333,12 @@
 										fieldEnumId: res.field.fieldEnumEntityList[i].id, //枚举id
 									})
 								}
-							}
-              this.enums1 = JSON.parse(JSON.stringify(this.form.fieldComplexCastRuleVOs));
+							} else this.$message.warning(res.msg)
+							this.enums1 = JSON.parse(JSON.stringify(this.form.fieldComplexCastRuleVOs));
 						})
-					}else {
-            if(this.id) this.enums1 = JSON.parse(JSON.stringify(this.form.fieldComplexCastRuleVOs));
-          }
+					} else {
+						if (this.id) this.enums1 = JSON.parse(JSON.stringify(this.form.fieldComplexCastRuleVOs));
+					}
 					console.log(this.enums1)
 				},
 				immediate: true,
@@ -376,7 +374,7 @@
 					if (this.form.complexMahtRuleVOs && this.form.complexMahtRuleVOs.length) {
 						this.form.fieldStartId = this.form.complexMahtRuleVOs[0].fieldStartId;
 						this.enums = this.form.complexMahtRuleVOs
-						if(this.enums.length > 0) {
+						if (this.enums.length > 0) {
 							this.enums[0].fieldStartId = this.enums[0].fieldEndId
 						}
 					} else if (this.form.fieldAPIRuleVOS && this.form.fieldAPIRuleVOS.length) {
@@ -403,7 +401,8 @@
 						let params = {
 							"dataTypes": [3], //数据类型，为空时取全部
 							"formTypes": [1], //表单类型，为空时取全部
-							"type": '1' //字段类型1：原生2衍生，为空时取全部
+							"type": '1' ,//字段类型1：原生2衍生，为空时取全部
+							addComplexFlag: 1
 						}
 						getNativeList(params).then(res => {
 							if (res.code == 0) {
@@ -414,7 +413,8 @@
 						let params = {
 							"dataTypes": [], //数据类型，为空时取全部
 							"formTypes": [1, 2, 3], //表单类型，为空时取全部
-							"type": '1' //字段类型1：原生2衍生，为空时取全部
+							"type": '1', //字段类型1：原生2衍生，为空时取全部
+							addComplexFlag: 1
 						}
 						getNativeList(params).then(res => {
 							if (res.code == 0) {
@@ -425,7 +425,8 @@
 						let params = {
 							"dataTypes": [], //数据类型，为空时取全部
 							"formTypes": [1, 2, 3], //表单类型，为空时取全部1, 2, 3
-							"type": '1' //字段类型1：原生2衍生，为空时取全部
+							"type": '1', //字段类型1：原生2衍生，为空时取全部
+							addComplexFlag: 1
 						}
 						getNativeList(params).then(res => {
 							if (res.code == 0) {
@@ -466,7 +467,8 @@
 					let params = {
 						"dataTypes": [3], //数据类型，为空时取全部
 						"formTypes": [1], //表单类型，为空时取全部
-						"type": '1' //字段类型1：原生2衍生，为空时取全部
+						"type": '1', //字段类型1：原生2衍生，为空时取全部
+						addComplexFlag: 1
 					}
 					getNativeList(params).then(res => {
 						if (res.code == 0) {
@@ -477,7 +479,8 @@
 					let params = {
 						"dataTypes": [], //数据类型，为空时取全部
 						"formTypes": [1, 2, 3], //表单类型，为空时取全部
-						"type": '1' //字段类型1：原生2衍生，为空时取全部
+						"type": '1', //字段类型1：原生2衍生，为空时取全部
+						addComplexFlag: 1
 					}
 					getNativeList(params).then(res => {
 						if (res.code == 0) {
@@ -488,7 +491,8 @@
 					let params = {
 						"dataTypes": [], //数据类型，为空时取全部
 						"formTypes": [1, 2, 3], //表单类型，为空时取全部 1, 2, 3
-						"type": '1' //字段类型1：原生2衍生，为空时取全部
+						"type": '1', //字段类型1：原生2衍生，为空时取全部
+						addComplexFlag: 1
 					}
 					getNativeList(params).then(res => {
 						if (res.code == 0) {
@@ -512,19 +516,20 @@
 					let complexMahtRuleVOs = [];
 					if (this.enums.length == 1) {
 						complexMahtRuleVOs = [{
-							"logicAction": this.enums[0].logicAction, //运算方式 1：加法，2：减法，3除，4乘， 5等于，6不等于，7包含， 8不包含， 9空判断，10非空判断
+							"logicAction": this.enums[0]
+							.logicAction, //运算方式 1：加法，2：减法，3除，4乘， 5等于，6不等于，7包含， 8不包含， 9空判断，10非空判断
 							"fieldStartId": this.form.fieldStartId, //第一个字段id
 							"fieldEndId": this.enums[0].fieldStartId //第二个字段id
 						}]
 					} else if (this.enums.length > 1) {
-						complexMahtRuleVOs = this.enums.map((item,index) => {
-							if(index == 0) {
+						complexMahtRuleVOs = this.enums.map((item, index) => {
+							if (index == 0) {
 								return {
 									"logicAction": item.logicAction,
 									"fieldStartId": this.form.fieldStartId, //第一个字段id
 									"fieldEndId": item.fieldStartId //第二个字段id
 								}
-							}else {
+							} else {
 								return {
 									"logicAction": item.logicAction,
 									"fieldStartId": item.fieldStartId
@@ -584,10 +589,10 @@
 					if (!this.form.apiId || !this.form.responseId) return this.showValidate = true
 					for (let i in this.form.fieldAPIRuleVOS) {
 						if (!this.form.fieldAPIRuleVOS[0].fieldApiId || !this.form.fieldAPIRuleVOS[0].fieldStartId)
-						return this.showValidate = true;
+							return this.showValidate = true;
 					}
 					let fieldAPIRuleVOS = JSON.parse(JSON.stringify(this.form.fieldAPIRuleVOS))
-          fieldAPIRuleVOS = fieldAPIRuleVOS.filter(item => item.fieldApiId && item.fieldStartId)
+					fieldAPIRuleVOS = fieldAPIRuleVOS.filter(item => item.fieldApiId && item.fieldStartId)
 					fieldAPIRuleVOS.push({
 						apiType: 2,
 						fieldId: null,

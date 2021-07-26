@@ -26,7 +26,8 @@
 								:src="scope.row[item.fieldId] || ''"
 								:preview-src-list="scope.row[item.fieldId]?[scope.row[item.fieldId]]:[]">
 							</el-image>
-							<el-button @click="scan('img' + item.fieldId + scope.$index)" type="text">{{scope.row[item.fieldId]?'查看':'-'}}</el-button>
+							<el-button @click="scan('img' + item.fieldId + scope.$index)" type="text">
+								{{scope.row[item.fieldId]?'查看':'-'}}</el-button>
 						</div>
 					</div>
 				</template>
@@ -59,7 +60,7 @@
 				isShow: false,
 				taskId: '',
 				list: [],
-				taskTplFieldStructureDTOS: [],
+				// taskTplFieldStructureDTOS: [],
 				date: '',
 				userId: localStorage.getItem('recordUserId'),
 				isShowBtn: false,
@@ -68,7 +69,7 @@
 			}
 		},
 		created() {
-			
+
 			if (this.$route.query.id) this.taskId = this.$route.query.id;
 			if (this.$route.query.date) this.date = this.$route.query.date;
 			this.init();
@@ -95,42 +96,57 @@
 						startTime: this.startTime,
 						endTime: this.endTime
 					}
+					/* 
+					, ...[{
+						fieldName: '创建时间',
+						slot: true,
+						width: 165,
+						fieldId: 'createTime'
+					}, {
+						fieldName: '操作',
+						fieldId: 'opt',
+						width: 140,
+						slot: true
+					}] 
+					 */
 					getRecordList(params).then(res => {
 						if (res.code == 0) {
 							this.list = JSON.parse(JSON.stringify(res.record.page.list));
 							this.taskTplFieldStructureDTOS = JSON.parse(JSON.stringify(res.record.taskTplFieldStructureDTOS));
-							res.record.taskTplFieldStructureDTOS = [...res.record.taskTplFieldStructureDTOS, ...[{
-								fieldName: '创建时间',
-								slot: true,
-								width: 165,
-								fieldId: 'createTime'
-							}, {
-								fieldName: '操作',
-								fieldId: 'opt',
-								width: 140,
-								slot: true
-							}]]
-							// this.tableData = res.record.page.list[0] ? res.record.page.list[0].taskRecordEntities : [];
+							let taskTplFieldStructureDTOS = res.record.taskTplFieldStructureDTOS;
+							let base = []; // 原生字段
+							let complex = []; // 衍生字段
+							let tempComplex = []; // 临时衍生字段
+							// 展示前五个原生字段与允许展示的前五个衍生字段   注：从我派发的任务查看，是可以看到自己所有创建的衍生字段的，衍生字段的不可见只针对于被派发任务对象生效）
 							let temp = [];
-              if(this.$route.path.indexOf('/my-assignment/') == -1) {
-                res.record.taskTplFieldStructureDTOS.forEach(item => {
-                  if(item.fieldType == 1 || (item.fieldType == 2 && item.fieldShowType == 1)) {
-                    temp.push(item);
-                  }
-                })
-                temp = [...temp,  ...[{
-								fieldName: '创建时间',
-								slot: true,
-								width: 165,
-								fieldId: 'createTime'
-							}, {
-								fieldName: '操作',
-								fieldId: 'opt',
-								width: 140,
-								slot: true
-							}]]
-                this.tableColumn = JSON.parse(JSON.stringify(temp));
-              }else this.tableColumn = JSON.parse(JSON.stringify(res.record.taskTplFieldStructureDTOS));
+							// 从我派发的任务不需要判断是否显示字段
+							taskTplFieldStructureDTOS.forEach(item => {
+								if(item.fieldType == 1) base.push(item);
+								else if(item.fieldType == 2) complex.push(item);
+							})
+							// 
+							temp = [...temp, ...base.slice(0,5)]
+							if (this.$route.path.indexOf('/my-assignment/') == -1) {
+								let tempIndex = 0;
+								complex.forEach((item, index) => {
+									if (item.fieldShowType == 1 && tempIndex<6) {
+										tempComplex.push(item);
+										tempIndex++
+									}
+								})
+								temp = [...temp, ...tempComplex]
+							}else temp = [...temp, ...complex]
+							this.tableColumn = JSON.parse(JSON.stringify([...temp, ...[{
+									fieldName: '创建时间',
+									slot: true,
+									width: 165,
+									fieldId: 'createTime'
+								}, {
+									fieldName: '操作',
+									fieldId: 'opt',
+									width: 140,
+									slot: true
+								}]]))
 							this.total = res.record.page.totalCount;
 							let tableData = []
 							for (let i = 0; i < res.record.page.list.length; i++) {
@@ -192,9 +208,19 @@
 			},
 			go(type, row, index) {
 				if (type == 'scan') {
+					// 详情页，查看全部的原生字段，被派发的只能查看显示状态的衍生字段
+					let taskTplFieldStructureDTOS = [];
+					let tempComplex = [];
+					if(this.$route.path.indexOf('/my-assignment/') == -1) {
+						this.taskTplFieldStructureDTOS.forEach(item => {
+							if(item.fieldType == 1 || (item.fieldType == 2 && item.fieldShowType ==1)){
+								taskTplFieldStructureDTOS.push(item);
+							}
+						})
+					}else taskTplFieldStructureDTOS = JSON.parse(JSON.stringify(this.taskTplFieldStructureDTOS));
 					localStorage.setItem('taskDtl', JSON.stringify({
 						list: this.list[index],
-						tableColumn: this.tableColumn
+						tableColumn: taskTplFieldStructureDTOS
 					}))
 				}
 				if (type == 'scan') {

@@ -120,7 +120,6 @@
 		if(menuList) {
 			this.menuList = JSON.parse(menuList);
 		}else {
-			console.log(123)
 			getNav().then(res => {
 			  if (res.code == 0) {
 			    this.menuList = res.menuList;

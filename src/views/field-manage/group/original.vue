@@ -142,7 +142,7 @@
 					if (res.code == 0) {
 						this.tableData = res.page.list;
 						this.total = res.page.totalCount;
-					}
+					}else this.$message.warning(res.msg)
 
 				})
 			},
