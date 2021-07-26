@@ -78,7 +78,7 @@
 					{
 						label: '任务ID',
 						prop: 'id',
-						width: '222'
+						width: '153'
 					},
 					{
 						label: '任务名称',
@@ -172,7 +172,10 @@
 				this.init()
 			},
 			go(row) {
-				localStorage.setItem('recordUserId',row.userId)
+				localStorage.setItem('recordUserId',row.userId);
+				localStorage.setItem('taskStartTime',row.startTime);
+				localStorage.setItem('taskEndTime',row.endTime);
+				
 				this.$router.push({
 					path: `/task-center/task-dtl-list`,
 					query: {

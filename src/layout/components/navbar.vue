@@ -34,7 +34,10 @@
 	import Breadcrumb from '@/components/Breadcrumb'
 	import Hamburger from '@/components/Hamburger'
 	import Search from '@/components/HeaderSearch';
-	import {getUserInfo} from '@/api/common/index.js'
+	import {
+		getUserInfo,
+		apiLogout
+	} from '@/api/common/index.js'
 	export default {
 		name: 'navbar',
 		data() {
@@ -61,15 +64,16 @@
 				this.toggleSideBar();
 			},
 			async logout() {
-        localStorage.removeItem('menuList');
-        localStorage.removeItem('menuBtnList');
+				let res = await apiLogout();
+				localStorage.removeItem('menuList');
+				localStorage.removeItem('menuBtnList');
 				this.$router.push(`/login`)
 			},
 			getUserInfo() {
 				getUserInfo().then(res => {
 					this.userInfo = res.user;
-					if(this.userInfo == null) this.$router.push('/login')
-          else localStorage.setItem('userInfo',JSON.stringify(this.userInfo));
+					if (this.userInfo == null) this.$router.push('/login')
+					else localStorage.setItem('userInfo', JSON.stringify(this.userInfo));
 				})
 			}
 		}
@@ -132,6 +136,7 @@
 					}
 				}
 			}
+
 			.bell {
 				width: 28px;
 				height: 30px;
@@ -149,6 +154,7 @@
 					height: 100%;
 					display: flex;
 					align-items: center;
+
 					.user-avatar {
 						cursor: pointer;
 						width: 35px;

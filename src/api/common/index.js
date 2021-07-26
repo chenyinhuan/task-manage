@@ -7,6 +7,13 @@ import api from '@/api/index';
 export const apiLogin = (params) => api.post(`/task-admin/sys/login?username=${params.username}&password=${params.password}`, params)
 
 /**
+ * 退出登录
+ * @params params
+ */
+export const apiLogout = (params) => api.get(`/task-admin/logout`, {params})
+
+
+/**
  * 获取侧边栏
  * @params params
  */

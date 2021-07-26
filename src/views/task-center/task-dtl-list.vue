@@ -62,10 +62,13 @@
 				taskTplFieldStructureDTOS: [],
 				date: '',
 				userId: localStorage.getItem('recordUserId'),
-				isShowBtn: false
+				isShowBtn: false,
+				startTime: localStorage.getItem('taskStartTime') || '',
+				endTime: localStorage.getItem('taskEndTime') || ''
 			}
 		},
 		created() {
+			
 			if (this.$route.query.id) this.taskId = this.$route.query.id;
 			if (this.$route.query.date) this.date = this.$route.query.date;
 			this.init();
@@ -88,7 +91,9 @@
 						taskId: this.taskId,
 						limit: this.limit,
 						page: this.currentPage,
-						userId: this.userId
+						userId: this.userId,
+						startTime: this.startTime,
+						endTime: this.endTime
 					}
 					getRecordList(params).then(res => {
 						if (res.code == 0) {
