@@ -18,7 +18,7 @@
 						v-model="item.fieldValue" type="date" placeholder="请填写日期">
 					</el-date-picker>
 					<el-time-picker v-if="item.formType == 1 && item.dataType == 5" v-model="item.fieldValue"
-						placeholder="请填写时间">
+						placeholder="请填写时间" value-format="HH:mm:ss">
 					</el-time-picker>
 					<el-select placeholder="请输入" v-model="item.fieldValue"
 						v-if="item.formType == 2 || item.formType == 3" :multiple="item.formType == 2?false:true">
