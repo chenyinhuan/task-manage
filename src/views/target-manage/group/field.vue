@@ -160,7 +160,8 @@
         let params = {
           "dataTypes": [], //数据类型，为空时取全部
           "formTypes": [], //表单类型，为空时取全部
-          "type": '' //字段类型1：原生2衍生，为空时取全部
+          "type": '', //字段类型1：原生2衍生，为空时取全部
+		  addComplexFlag: 1
         }
         if (this.form.targeFieldVO.logicAction != 5) {
           params.dataTypes = [2, 3]
