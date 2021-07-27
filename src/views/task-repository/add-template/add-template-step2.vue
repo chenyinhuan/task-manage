@@ -547,7 +547,7 @@
           if(item.taskTplTargetEntity.testTimeType == 2 && item.taskTplTargetEntity.testDate == '') flag = false;
           if(item.taskTplTargetEntity.testTimeType == 3 && item.taskTplTargetEntity.testCycle == '') flag = false;
           if(item.taskTplTargetEntity.testTimeType == 3 && item.taskTplTargetEntity.testCycle == 2 && item.taskTplTargetEntity.weekDay == '') flag = false;
-           if(item.taskTplTargetEntity.testTimeType == 3 && item.taskTplTargetEntity.testCycle == 3 && item.taskTplTargetEntity.testDays == '') flag = false;
+           if(item.taskTplTargetEntity.testTimeType == 3 && item.taskTplTargetEntity.testCycle == 3 && item.taskTplTargetEntity.monthDay == '') flag = false;
         })
 				if (flag == false) {
 					this.showValidate = true;

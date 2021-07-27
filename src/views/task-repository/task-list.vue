@@ -38,17 +38,17 @@
 					</div>
 					<div v-if="item.slot && item.prop=='opt'">
 						<el-button type="text" @click="getDetail(scope.row)"
-							v-if="scope.row.createUserId==userInfo.userId">查看</el-button>
+							v-if="scope.row.taskType == 1">查看</el-button>
 						<el-button type="text"
-							v-if="scope.row.createUserId==userInfo.userId && scope.row.taskState == 1"
+							v-if="scope.row.taskType == 1 && scope.row.taskState == 1"
 							@click="addTask(scope.row)">编辑</el-button>
 						<el-button type="text"
-							v-if="scope.row.createUserId==userInfo.userId && (scope.row.taskState == 1 || scope.row.taskState == 2)"
+							v-if="scope.row.taskType == 1 && (scope.row.taskState == 1 || scope.row.taskState == 2)"
 							@click="cancelCurTask(scope.row)">取消</el-button>
 						<el-button type="text" @click="viewDes(scope.row)"
-							v-if="scope.row.createUserId!=userInfo.userId">查看说明</el-button>
+							v-if="scope.row.taskType == 2">查看说明</el-button>
 						<el-button type="text"
-							v-if="scope.row.createUserId!=userInfo.userId &&(scope.row.taskState == 1 ||  scope.row.taskState == 2)"
+							v-if="scope.row.taskType == 2 &&(scope.row.taskState == 1 ||  scope.row.taskState == 2)"
 							@click="openDialog(scope.row)">派发任务</el-button>
 					</div>
 					<div v-if="!item.slot">{{ scope.row[item.prop] }}</div>
