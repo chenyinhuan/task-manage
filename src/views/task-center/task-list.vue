@@ -175,7 +175,7 @@
 				localStorage.setItem('recordUserId',row.userId);
 				localStorage.setItem('taskStartTime',row.startTime);
 				localStorage.setItem('taskEndTime',row.endTime);
-				
+				localStorage.setItem('taskState', row.taskState)
 				this.$router.push({
 					path: `/task-center/task-dtl-list`,
 					query: {

@@ -109,6 +109,7 @@
 				localStorage.setItem('recordUserId',row.userId);
 				localStorage.setItem('taskStartTime',row.startTime);
 				localStorage.setItem('taskEndTime',row.endTime);
+				localStorage.setItem('taskState', row.taskState)
 				if(this.$route.path.indexOf('/my-assignment/') != -1) {
 					this.$router.push({
 						path: `/task-center/my-assignment/task-dtl-list`,

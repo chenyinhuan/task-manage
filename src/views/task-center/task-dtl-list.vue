@@ -74,10 +74,14 @@
 			if (this.$route.query.date) this.date = this.$route.query.date;
 			this.init();
 			let currentUserInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : '';
+			let taskState = localStorage.getItem('taskState') || ''
 			// 登录账户与查询用户是不是同一个人
-			console.log(currentUserInfo.userId, '---', this.userId)
 			if (currentUserInfo && currentUserInfo.userId == this.userId) this.isShowBtn = true;
 			else this.isShowBtn = false;
+			// if (this.$route.path.indexOf('/my-assignment/') != -1) {
+			// 	if(taskState == 1 || taskState == 1) this.isShowBtn = true;
+			// 	else this.isShowBtn = false
+			// }else this.isShowBtn = false;
 		},
 		mounted() {
 

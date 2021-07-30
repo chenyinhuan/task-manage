@@ -154,7 +154,7 @@
 						<div style="position: relative;">
 							<el-input v-model="item.logicTargetValue"></el-input>
 							<span class="validate-info" style="color: #FF8C00;bottom: -20px;"
-								v-if="showValidate && !item.logicTargetValue">不能为空</span>
+								v-if="showValidate && (item.logicAction != 9 && item.logicAction != 10) && !item.logicTargetValue">不能为空</span>
 						</div>
 						<span style="margin: 0 15px">则</span>
 						<label style="margin-right: 10px">衍生字段=</label>
@@ -564,8 +564,8 @@
 							.find(n => n.id == this.form.fieldStartId).formType == 3))) { // 非选择类
 						console.log('1', this.enums1)
 						for (let i in this.enums1) {
-							if (!this.enums1[i].complexValue || !this.enums1[i].logicAction || !this.enums1[i]
-								.logicTargetValue) return this.showValidate = true;
+							if (!this.enums1[i].complexValue || !this.enums1[i].logicAction || ((this.enums1[i].logicAction != 9 && this.enums1[i].logicAction != 10 && !this.enums1[i]
+								.logicTargetValue))) return this.showValidate = true;
 						}
 						for (let i = 0; i < this.enums1.length; i++) {
 							fieldComplexCastRuleVOs.push({
