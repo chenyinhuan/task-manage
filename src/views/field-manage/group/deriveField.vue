@@ -151,7 +151,7 @@
 							<span class="validate-info" style="color: #FF8C00;bottom: -20px;left: 10px"
 								v-if="showValidate && !item.logicAction">运算方式</span>
 						</div>
-						<div style="position: relative;">
+						<div style="position: relative;" v-if="item.logicAction != 9 && item.logicAction != 10">
 							<el-input v-model="item.logicTargetValue"></el-input>
 							<span class="validate-info" style="color: #FF8C00;bottom: -20px;"
 								v-if="showValidate && (item.logicAction != 9 && item.logicAction != 10) && !item.logicTargetValue">不能为空</span>
