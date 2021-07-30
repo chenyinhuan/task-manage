@@ -171,7 +171,7 @@
 		}
 
 		.calendar {
-			width: 1390px;
+			// width: 1390px;
 			height: 100%;
 			margin-top: 20px;
 			background-color: #ffffff;
@@ -249,7 +249,7 @@
 				border: 0.8px solid #cdcdcd;
 				border-radius: 9.6px;
 				box-sizing: border-box;
-				width: 1296px;
+				// width: 1296px;
 				height: 678px;
 				position: relative;
 
