@@ -76,12 +76,13 @@
 			let currentUserInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : '';
 			let taskState = localStorage.getItem('taskState') || ''
 			// 登录账户与查询用户是不是同一个人
-			if (currentUserInfo && currentUserInfo.userId == this.userId) this.isShowBtn = true;
-			else this.isShowBtn = false;
-			// if (this.$route.path.indexOf('/my-assignment/') != -1) {
-			// 	if(taskState == 1 || taskState == 1) this.isShowBtn = true;
-			// 	else this.isShowBtn = false
-			// }else this.isShowBtn = false;
+			// if (currentUserInfo && currentUserInfo.userId == this.userId) this.isShowBtn = true;
+			// else this.isShowBtn = false;
+      // 从我的任务进入的页面
+			if (this.$route.path.indexOf('/my-assignment/') == -1) {
+				if(taskState == 2) this.isShowBtn = true;
+				else this.isShowBtn = false
+			}else this.isShowBtn = false;
 		},
 		mounted() {
 
@@ -100,7 +101,7 @@
 						startTime: this.startTime,
 						endTime: this.endTime
 					}
-					/* 
+					/*
 					, ...[{
 						fieldName: '创建时间',
 						slot: true,
@@ -111,7 +112,7 @@
 						fieldId: 'opt',
 						width: 140,
 						slot: true
-					}] 
+					}]
 					 */
 					getRecordList(params).then(res => {
 						if (res.code == 0) {
@@ -128,7 +129,7 @@
 								if(item.fieldType == 1) base.push(item);
 								else if(item.fieldType == 2) complex.push(item);
 							})
-							// 
+							//
 							temp = [...temp, ...base.slice(0,5)]
 							if (this.$route.path.indexOf('/my-assignment/') == -1) {
 								let tempIndex = 0;
