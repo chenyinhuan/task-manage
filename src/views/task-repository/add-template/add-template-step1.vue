@@ -367,7 +367,7 @@
 			search() {
 				getNativeList({
 					type: this.fieldType,
-					keyword: this.keyword
+					filedName: this.keyword
 				}).then(res => {
 					this.tableData = res.fields
 				})
