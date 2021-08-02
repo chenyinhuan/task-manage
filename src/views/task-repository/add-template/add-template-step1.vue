@@ -88,9 +88,9 @@
 		<el-dialog :title="`选择${fieldType == 1 ? '表单' : '检测'}字段（${fieldType == 1 ? '原生字段' : '衍生字段'}）`"
 			:visible.sync="dialogVisible" width="782px" :before-close="handleClose">
 			<div class="dialog-content">
-				<el-input v-model="keyword" placeholder="任务名称" @keyup.enter.native="search"><i slot="prefix"
+				<el-input v-model="keyword" placeholder="字段名称" @keyup.enter.native="search"><i slot="prefix"
 						class="el-input__icon el-icon-search"></i></el-input>
-				<el-table ref="table" :data="tableData" style="width: 100%; margin-top: 10px" @row-click="rowSelect"
+				<el-table ref="table" :data="tableData" style="width: 100%; margin-top: 10px" @row-click="rowSelect" max-height="600"
 					@selection-change="handleSelectionChange" v-if="tableData.length > 0 && fieldType == 1">
 					<el-table-column type="selection" width="55" :selectable="checkSelectable"> </el-table-column>
 					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
@@ -106,7 +106,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<el-table ref="table1" :data="tableData" style="width: 100%; margin-top: 10px" @row-click="rowSelect"
+				<el-table ref="table1" :data="tableData" style="width: 100%; margin-top: 10px" @row-click="rowSelect" max-height="600"
 					@selection-change="handleSelectionChange" v-if="tableData.length > 0 && fieldType == 2">
 					<el-table-column type="selection" width="55"> </el-table-column>
 					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
@@ -320,19 +320,12 @@
 			},
 			addField(val) {
 				this.fieldType = val;
-				if (val == 1) {
-					getNativeList({
-						type: 1
-					}).then(res => {
-						this.tableData = res.fields
-					})
-				} else {
-					getNativeList({
-						type: 2
-					}).then(res => {
-						this.tableData = res.fields
-					})
-				}
+				getNativeList({
+					type: this.fieldType,
+					keyword: this.keyword
+				}).then(res => {
+					this.tableData = res.fields
+				})
 				this.dialogVisible = true;
 			},
 			next() {
@@ -371,7 +364,14 @@
 			handleCurrentChange(val) {
 				console.log(`当前页: ${val}`);
 			},
-			search() {},
+			search() {
+				getNativeList({
+					type: this.fieldType,
+					keyword: this.keyword
+				}).then(res => {
+					this.tableData = res.fields
+				})
+			},
 			sort(index, refIndex) {
 				let list = this.originalField;
 				[list[index], list[refIndex]] = [list[refIndex], list[index]];
@@ -633,6 +633,7 @@
 		}
 
 		.dialog-content {
+			height: 100%;
 			>>>.el-input__inner {
 				height: 40px;
 				line-height: 40px;

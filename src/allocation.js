@@ -54,7 +54,7 @@ Vue.prototype.$fieldSelectContent = [
 ]
 Vue.prototype.$dataTypeList = [{value: 1,label: '字符串string'},
 // {value: 2,label: '整数数值init'},
-{value: 3,label: '小数数值float'},
+{value: 3,label: '数值型number'},
 {value: 4,label: '日期date'},
 {value: 5,label: '时间time'}]
 Vue.prototype.$formTypeList = [

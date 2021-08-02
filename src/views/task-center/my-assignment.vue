@@ -41,7 +41,7 @@
 		</section>
 		<el-dialog title="任务指标管理" :visible.sync="dialogVisible" width="820px" :before-close="handleClose">
 			<div class="dialog-content">
-				<el-table ref="table" :data="tableData1" style="width: 100%; margin-top: 10px">
+				<el-table ref="table" :data="tableData1" style="width: 100%; margin-top: 10px" max-height="600">
 					<el-table-column :prop="item.prop" :label="item.label" :width="item.width"
 						v-for="(item, index) in tableColumn1" :key="index">
 						<template slot-scope="scope">
